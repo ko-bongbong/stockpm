@@ -1,9 +1,220 @@
-.set('stockpm_positions',positions);if(!watch.includes(s)){watch.push(s);store.set('stockpm_watch',watch)}renderAll();alert('포지션 저장 완료')};
-$('saveLev').onclick=()=>{const symbol=$('levTicker').value.trim().toUpperCase();if(!symbol)return alert('Symbol을 입력하세요.');const obj={symbol,side:$('levSide').value,leverage:+$('levX').value||1,entry:+$('levEntry').value||0,size:+$('levSize').value||0,stop:+$('levStop').value||0,liq:+$('levLiq').value||0};const idx=leveragePositions.findIndex(x=>x.symbol===symbol&&x.side===obj.side);if(idx>=0)leveragePositions[idx]=obj;else leveragePositions.push(obj);store.set('stockpm_leverage',leveragePositions);renderAll();alert('레버리지 포지션 저장 완료')};
-$('deleteSpotBtn').onclick=()=>{const s=$('detailTicker').textContent;if(!positions[s])return;if(confirm(`${s} 포지션을 삭제할까요?`)){delete positions[s];store.set('stockpm_positions',positions);$('detail').classList.remove('open');renderAll()}};$('editSpotBtn').onclick=()=>{const s=$('detailTicker').textContent,p=positions[s];if(!p)return;$('posTicker').value=s;$('posQty').value=p.qty;$('posAvg').value=p.avg;$('posMax').value=p.max;gotoPage(3,true);$('detail').classList.remove('open')};
-$('deleteLevBtn').onclick=()=>{const p=leveragePositions[levDetailIndex];if(!p)return;if(confirm(`${p.symbol} 레버리지 포지션을 삭제할까요?`)){leveragePositions.splice(levDetailIndex,1);store.set('stockpm_leverage',leveragePositions);$('levDetail').classList.remove('open');renderAll()}};$('editLevBtn').onclick=()=>{const p=leveragePositions[levDetailIndex];if(!p)return;$('levTicker').value=p.symbol;$('levSide').value=p.side;$('levX').value=p.leverage;$('levEntry').value=p.entry;$('levSize').value=p.size;$('levStop').value=p.stop;$('levLiq').value=p.liq;document.querySelector('#positionMode button[data-mode="lev"]').click();gotoPage(3,true);$('levDetail').classList.remove('open')};
-$('refreshTwelve').onclick=()=>refreshMarketData(true);window.addEventListener('resize',()=>gotoPage(currentPage,false));
-$('accountEquity').value=riskSettings.equity;$('maxRiskPct').value=riskSettings.maxRiskPct;const hydrated=hydrateFromCache();renderAll();gotoPage(0,false);setApiStatus(hydrated?'cached':'loading',hydrated?String(hydrated):'');refreshMarketData(false);
-</script>
-</body>
-</html>
+선택된 파일 없음
+라이브러리
+검색
+
+새로 만들기
+
+전체
+
+이미지
+
+파일
+
+템플릿
+
+
+
+
+이름
+수정됨
+크기
+
+더 불러오기
+
+라이브러리
+/
+stockpm-v0.3.0-index.html
+더 많은 액션
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0b0d10" />
+<title>STOCKPM v0.3.0</title>
+<style>
+:root{--bg:#090b0e;--panel:#12161b;--panel2:#181d24;--panel3:#0f1318;--text:#f6f8fb;--muted:#8d97a6;--line:#252c35;--good:#31d07c;--warn:#f5b942;--bad:#ff6678;--blue:#75aaff;--violet:#9b8cff;--radius:20px;--tabh:76px;--safe-bottom:max(14px,env(safe-area-inset-bottom))}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overscroll-behavior:none}
+body{overflow:hidden}button,input,select{font:inherit}button{cursor:pointer}
+.app{height:100dvh;display:flex;flex-direction:column;overflow:hidden}.topbar{height:62px;flex:0 0 62px;padding:14px 16px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.05);background:rgba(9,11,14,.92);backdrop-filter:blur(18px);z-index:20}
+.brand{display:flex;align-items:center;gap:10px}.brand-mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#fff,#778399);color:#0b0d10;font-weight:900;display:grid;place-items:center}.brand h1{font-size:17px;line-height:1;margin:0}.brand small{display:block;color:var(--muted);margin-top:4px;font-size:10px;letter-spacing:.08em}
+.sync-chip{display:flex;align-items:center;gap:7px;padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:11px;color:var(--muted)}.dot{width:7px;height:7px;border-radius:50%;background:var(--warn);box-shadow:0 0 10px currentColor}
+.viewport{position:relative;flex:1;overflow:hidden}.track{height:100%;display:flex;will-change:transform;transform:translate3d(0,0,0)}.track.animating{transition:transform .48s cubic-bezier(.22,.85,.25,1)}
+.page{flex:0 0 100%;width:100%;height:100%;overflow-y:auto;overscroll-behavior-y:contain;padding:16px 14px calc(var(--tabh) + var(--safe-bottom) + 24px);scrollbar-width:none}.page::-webkit-scrollbar{display:none}.page-inner{max-width:980px;margin:0 auto}.page-title{font-size:26px;margin:4px 0 2px}.page-sub{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:0 8px 30px rgba(0,0,0,.12)}.soft{background:linear-gradient(180deg,#141920,#101419)}.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.section-head h3{margin:0;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#c9d0da}.section-head span{font-size:11px;color:var(--muted)}
+.badge{display:inline-flex;align-items:center;gap:7px;padding:7px 9px;border-radius:999px;font-size:10px;font-weight:900;border:1px solid}.good{color:var(--good)!important}.warn{color:var(--warn)!important}.bad{color:var(--bad)!important}.neutral{color:#c7ced8!important}.badge.good{background:#0d2118;border-color:#1d4933}.badge.warn{background:#261e0d;border-color:#5d4617}.badge.bad{background:#271216;border-color:#5a2630}.badge.neutral{background:#171c22;border-color:#2a323c}
+.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.summary-item{padding:10px;border-radius:13px;background:var(--panel2);border:1px solid var(--line);text-align:center}.summary-item small{display:block;color:var(--muted);font-size:9px}.summary-item b{display:block;font-size:18px;margin-top:3px}
+.list{display:grid;gap:8px}.ticker-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:13px 14px}.ticker-row:active{transform:scale(.995)}.ticker-name{font-weight:850}.ticker-meta{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.45}.score-circle{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#0f1419;border:1px solid var(--line);font-weight:900}.chev{color:#657080;font-size:22px}.rank{font-size:11px;color:var(--muted);width:18px;text-align:center}.pnl{font-weight:900}.empty{color:var(--muted);padding:26px 12px;text-align:center;font-size:13px}.muted{color:var(--muted)}
+.action-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}.pill{padding:5px 7px;border-radius:8px;background:#0f1419;border:1px solid var(--line);font-size:9px;font-weight:800;color:var(--muted)}
+.market-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.market-item{padding:12px;border-radius:14px;background:var(--panel2);border:1px solid var(--line)}.market-item small{color:var(--muted)}.market-item b{display:block;margin-top:5px}
+.search{display:flex;gap:8px}.field{display:grid;gap:6px;margin-bottom:10px}.field label{font-size:11px;color:var(--muted)}.field input,.field select,.search input{width:100%;border:1px solid var(--line);background:var(--panel3);color:var(--text);padding:12px 13px;border-radius:13px;outline:none}.field input:focus,.field select:focus,.search input:focus{border-color:#52647a}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.btn{border:0;border-radius:12px;padding:12px 14px;background:#f5f7fa;color:#0b0d10;font-weight:850}.btn.secondary{background:var(--panel2);border:1px solid var(--line);color:var(--text)}.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}.btn.danger{background:#2a1217;color:var(--bad);border:1px solid #5a2630}.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--panel3);border:1px solid var(--line);border-radius:12px;padding:3px;margin-bottom:12px}.seg button{border:0;background:transparent;color:var(--muted);padding:9px;border-radius:9px;font-weight:800}.seg button.active{background:var(--panel2);color:var(--text)}
+.position-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.stat{padding:12px;border-radius:13px;background:var(--panel2);border:1px solid var(--line)}.stat small{color:var(--muted);display:block}.stat b{display:block;margin-top:5px}.plan-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.plan-item{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}.plan-item small{color:var(--muted)}.plan-item b{display:block;margin-top:5px}.plan-item em{display:block;font-style:normal;margin-top:4px;color:#aeb7c4;font-size:11px;line-height:1.45}
+.risk-meter{height:9px;background:#0d1116;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-top:8px}.risk-meter span{display:block;height:100%;background:linear-gradient(90deg,#31d07c,#f5b942,#ff6678);width:0}.notice{padding:12px;border-radius:13px;background:#241b0e;border:1px solid #5a4317;color:#e6c37f;font-size:12px;line-height:1.55}.danger-box{padding:12px;border-radius:13px;background:#271216;border:1px solid #5a2630;color:#ff98a5;font-size:12px;line-height:1.55}
+.bottom-tabs{position:absolute;left:10px;right:10px;bottom:var(--safe-bottom);height:64px;border:1px solid rgba(255,255,255,.08);border-radius:22px;background:rgba(18,22,27,.92);backdrop-filter:blur(22px);display:grid;grid-template-columns:repeat(5,1fr);z-index:30;box-shadow:0 12px 35px rgba(0,0,0,.35)}.tab{border:0;background:transparent;color:#738090;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:9px;font-weight:700}.tab .ico{font-size:19px;line-height:1}.tab.active{color:var(--text)}
+.detail,.lev-detail{position:absolute;inset:0;background:var(--bg);z-index:50;transform:translate3d(100%,0,0);transition:transform .46s cubic-bezier(.22,.85,.25,1);display:flex;flex-direction:column}.detail.open,.lev-detail.open{transform:translate3d(0,0,0)}.detail-head{height:60px;flex:0 0 60px;padding:10px 14px;display:grid;grid-template-columns:42px 1fr 42px;align-items:center;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(9,11,14,.94);backdrop-filter:blur(18px)}.icon-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text)}.detail-title{text-align:center}.detail-title b{display:block}.detail-title small{color:var(--muted)}.detail-body{flex:1;overflow-y:auto;padding:14px 14px 32px}.detail-inner{max-width:980px;margin:0 auto}
+.hero-card{padding:18px;background:linear-gradient(145deg,#161b22,#101318);border:1px solid #27313d}.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.hero-score{font-size:54px;line-height:.9;font-weight:900}.hero-score small{font-size:13px;color:var(--muted);font-weight:600}.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.mini{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:11px}.mini label{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.07em}.mini b{display:block;margin-top:5px;font-size:16px}
+.tf-toggle{display:inline-grid;grid-template-columns:1fr 1fr;background:var(--panel3);border:1px solid var(--line);border-radius:12px;padding:3px}.tf-toggle button{border:0;background:transparent;color:var(--muted);padding:8px 13px;border-radius:9px;font-weight:800}.tf-toggle button.active{background:var(--panel2);color:var(--text)}.chart-wrap{position:relative;height:310px;border-radius:16px;overflow:hidden;background:linear-gradient(180deg,#0d1116,#0a0d11);border:1px solid var(--line)}.chart-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:100% 20%,12.5% 100%}.chart-svg{position:absolute;inset:0;width:100%;height:100%}.chart-legend{position:absolute;top:10px;left:10px;display:flex;gap:10px;font-size:10px;color:var(--muted)}.signal-tag{position:absolute;right:12px;top:42px;padding:7px 9px;border-radius:9px;background:#0c2519;border:1px solid #24563a;color:var(--good);font-size:10px;font-weight:900}.chart-note{position:absolute;left:12px;bottom:10px;font-size:10px;color:var(--muted)}
+.why-grid{display:grid;gap:8px}.why-item{display:grid;grid-template-columns:1fr auto;align-items:center;padding:11px 12px;border-radius:12px;background:var(--panel2);border:1px solid var(--line)}.why-item span{font-size:12px}.why-item b{font-size:13px}.why-item small{display:block;color:var(--muted);margin-top:3px}.status-line{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}.status-line:last-child{border-bottom:0}.status-left{display:flex;align-items:center;gap:9px}.status-light{width:9px;height:9px;border-radius:50%}.status-light.green{background:var(--good)}.status-light.yellow{background:var(--warn)}.status-light.red{background:var(--bad)}.changelog{display:grid;gap:10px}.change-item{padding-left:14px;border-left:2px solid #2d3743}.change-item b{font-size:13px}.change-item p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+@media(min-width:760px){.page{padding-left:22px;padding-right:22px}.detail-body{padding-left:22px;padding-right:22px}.chart-wrap{height:360px}.bottom-tabs{left:50%;right:auto;transform:translateX(-50%);width:min(620px,calc(100% - 20px))}.summary-grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar"><div class="brand"><div class="brand-mark">SP</div><div><h1>STOCKPM</h1><small>QUANT POSITION MANAGER · v0.3.0</small></div></div><div class="sync-chip"><span class="dot"></span><span id="topSync">DATA WAIT</span></div></header>
+<div class="viewport" id="viewport"><div class="track" id="track">
+<section class="page"><div class="page-inner">
+<h2 class="page-title">Today</h2><div class="page-sub">보유 포지션을 먼저 보고, 신규 매수 후보는 그 다음에 봅니다.</div>
+<div class="card"><div class="section-head"><h3>Action board</h3><span id="portfolioRiskLabel">PORTFOLIO</span></div><div class="summary-grid"><div class="summary-item"><small>ADD / BUY</small><b id="sumAdd" class="good">0</b></div><div class="summary-item"><small>HOLD</small><b id="sumHold">0</b></div><div class="summary-item"><small>REDUCE</small><b id="sumReduce" class="warn">0</b></div><div class="summary-item"><small>RISK ALERT</small><b id="sumRisk" class="bad">0</b></div></div><div class="risk-meter"><span id="portfolioHeatBar"></span></div><div class="ticker-meta" id="portfolioHeatText">Portfolio heat 계산 대기</div></div>
+<div class="card"><div class="section-head"><h3>My positions</h3><span>우선 확인</span></div><div class="list" id="homePositions"></div></div>
+<div class="card"><div class="section-head"><h3>Buy radar</h3><span>미보유 WATCH</span></div><div class="list" id="homeRadar"></div></div>
+<div class="card"><div class="section-head"><h3>Market regime</h3><span>WATCH 기반</span></div><div class="market-strip"><div class="market-item"><small>SPY</small><b id="spyState">—</b></div><div class="market-item"><small>QQQ</small><b id="qqqState">—</b></div><div class="market-item"><small>DATA</small><b id="marketDataState">CACHED</b></div></div></div>
+</div></section>
+<section class="page"><div class="page-inner"><h2 class="page-title">Watch</h2><div class="page-sub">관심종목을 Daily 방향 + 4H 타이밍으로 분석합니다.</div><div class="card"><div class="search"><input id="watchInput" placeholder="NVDA, TSLA, SOXX, BTC/USD"><button class="btn" id="addWatchBtn">추가</button></div></div><div class="card"><div class="section-head"><h3>Buy radar</h3><span>Score 순</span></div><div class="list" id="watchList"></div></div></div></section>
+<section class="page"><div class="page-inner"><h2 class="page-title">Discover</h2><div class="page-sub">자동 스캐너는 다음 단계. 지금은 WATCH 안에서 상위 Setup을 선별합니다.</div><div class="card soft"><span class="badge neutral">QUANT ENGINE v2</span><h3 style="font-size:24px;margin:14px 0 8px">Daily Gate → 4H Timing</h3><p class="muted" style="line-height:1.6;margin:0">MA200 아래는 Strong Buy 금지, 과열 구간은 OVEREXTENDED로 차단합니다. 보유 종목은 BUY 대신 ADD/HOLD/REDUCE/EXIT WATCH로 해석합니다.</p></div><div class="card"><div class="section-head"><h3>Top setups</h3><span>미보유</span></div><div class="list" id="discoverList"></div></div></div></section>
+<section class="page"><div class="page-inner"><h2 class="page-title">Position</h2><div class="page-sub">주식/현물과 크립토 레버리지를 분리해서 리스크와 분할매수까지 관리합니다.</div>
+<div class="card"><div class="section-head"><h3>Account risk settings</h3><span>LOCAL</span></div><div class="two"><div class="field"><label>Account equity (USD)</label><input id="accountEquity" type="number" step="any"></div><div class="field"><label>Max risk / trade (%)</label><input id="maxRiskPct" type="number" step="0.1"></div></div><button class="btn secondary" id="saveRiskSettings">리스크 설정 저장</button></div>
+<div class="card"><div class="seg" id="positionMode"><button class="active" data-mode="spot">STOCK / SPOT</button><button data-mode="lev">CRYPTO LEVERAGE</button></div>
+<div id="spotForm"><div class="field"><label>Ticker</label><input id="posTicker" placeholder="NVDA"></div><div class="two"><div class="field"><label>보유 수량</label><input id="posQty" type="number" step="any"></div><div class="field"><label>평단가</label><input id="posAvg" type="number" step="any"></div></div><div class="field"><label>이 종목 최대 투입금 (USD)</label><input id="posMax" type="number" step="any" placeholder="10000"></div><button class="btn" id="saveSpot">포지션 저장</button></div>
+<div id="levForm" style="display:none"><div class="notice">레버리지 포지션은 청산가만 보지 않고 Stop 손실액, 계좌 Risk, 추가매수 후 위험도까지 계산합니다. 자동주문은 하지 않습니다.</div><div class="field" style="margin-top:12px"><label>Symbol</label><input id="levTicker" placeholder="BTCUSDT"></div><div class="two"><div class="field"><label>Direction</label><select id="levSide"><option>LONG</option><option>SHORT</option></select></div><div class="field"><label>Leverage</label><input id="levX" type="number" step="1" value="5"></div></div><div class="two"><div class="field"><label>Entry</label><input id="levEntry" type="number" step="any"></div><div class="field"><label>Position size ($ notional)</label><input id="levSize" type="number" step="any"></div></div><div class="two"><div class="field"><label>Stop</label><input id="levStop" type="number" step="any"></div><div class="field"><label>Liquidation price</label><input id="levLiq" type="number" step="any"></div></div><button class="btn" id="saveLev">레버리지 포지션 저장</button></div></div>
+<div class="card"><div class="section-head"><h3>Active positions</h3><span id="positionCount">0</span></div><div class="list" id="positionList"></div></div></div></section>
+<section class="page"><div class="page-inner"><h2 class="page-title">More</h2><div class="page-sub">데이터 상태와 시스템 버전을 확인합니다.</div><div class="card"><div class="section-head"><h3>System status</h3><span>v0.3.0</span></div><div class="status-line"><div class="status-left"><span class="status-light yellow" id="twelveLight"></span><div><b>Twelve Data</b><div class="ticker-meta">Supabase market-data 경유</div></div></div><b id="twelveStatus">WAIT</b></div><div class="status-line"><div class="status-left"><span class="status-light green"></span><div><b>Supabase</b><div class="ticker-meta">Edge Function</div></div></div><b class="good">CONNECTED</b></div><div class="status-line"><div class="status-left"><span class="status-light yellow" id="syncLight"></span><div><b>Last sync</b><div class="ticker-meta">마지막 정상 갱신</div></div></div><b id="lastSync">—</b></div><button class="btn" id="refreshTwelve" style="width:100%;margin-top:10px">시장 데이터 새로고침</button></div><div class="card"><div class="section-head"><h3>Changelog</h3><span>STOCKPM</span></div><div class="changelog"><div class="change-item"><b>v0.3.0</b><p>HOME 보유종목 우선, Position Detail, Strong Buy v2, 차트 평단/Stop/Target/Buy Zone, Stock Risk Engine, Crypto Leverage Risk/Scale-in/Scale-out, ADD BLOCKED, 포트폴리오 Heat.</p></div><div class="change-item"><b>v0.2.2</b><p>Supabase Edge Function + Twelve Data, 브라우저 캐시, 오류 시 마지막 정상 데이터 유지.</p></div></div></div><div class="card"><div class="notice">STOCKPM의 신호와 리스크 계산은 의사결정 보조용입니다. 실제 주문은 거래소/증권사에서 별도로 확인하세요.</div></div></div></section>
+</div>
+<nav class="bottom-tabs"><button class="tab active" data-index="0"><span class="ico">⌂</span><span>HOME</span></button><button class="tab" data-index="1"><span class="ico">◎</span><span>WATCH</span></button><button class="tab" data-index="2"><span class="ico">✦</span><span>DISCOVER</span></button><button class="tab" data-index="3"><span class="ico">▣</span><span>POSITION</span></button><button class="tab" data-index="4"><span class="ico">•••</span><span>MORE</span></button></nav>
+<section class="detail" id="detail"><header class="detail-head"><button class="icon-btn" id="closeDetail">‹</button><div class="detail-title"><b id="detailTicker">—</b><small id="detailSubtitle">ANALYSIS</small></div><button class="icon-btn" id="nextDetail">›</button></header><div class="detail-body"><div class="detail-inner">
+<div class="card hero-card"><div class="hero-top"><div><div class="muted" style="font-size:12px" id="assetType">ASSET</div><div style="font-size:26px;font-weight:900;margin-top:4px" id="detailPrice">—</div><div class="badge neutral" style="margin-top:8px" id="detailAction">WAIT</div></div><div class="hero-score" id="detailScore">—<small>/100</small></div></div><div class="mini-grid"><div class="mini"><label>Daily</label><b id="dailyState">—</b></div><div class="mini"><label>4H</label><b id="timingState">—</b></div><div class="mini"><label>MA200 dist.</label><b id="ma200Dist">—</b></div></div></div>
+<div class="card" id="ownedSummaryCard"><div class="section-head"><h3>My position</h3><span id="ownedAction">—</span></div><div class="position-grid" id="ownedStats"></div><div class="risk-meter"><span id="stockRiskBar"></span></div><div class="ticker-meta" id="stockRiskText"></div></div>
+<div class="card"><div class="section-head"><h3>Price chart</h3><div class="tf-toggle"><button class="active" data-tf="1D">1D</button><button data-tf="4H">4H</button></div></div><div class="chart-wrap"><div class="chart-grid"></div><svg class="chart-svg" id="chartSvg" viewBox="0 0 800 300" preserveAspectRatio="none"></svg><div class="chart-legend"><span>MA20</span><span>MA50</span><span style="color:#fff;font-weight:900">MA200</span><span>AVG</span><span>STOP</span></div><div class="signal-tag" id="signalTag">WAIT</div><div class="chart-note" id="chartNote">DATA WAIT</div></div></div>
+<div class="card"><div class="section-head"><h3>Signal engine v2</h3><span>Hard gates</span></div><div class="why-grid" id="whyGrid"></div></div>
+<div class="card"><div class="section-head"><h3>Position / Scale plan</h3><span id="scaleTitle">PLAN</span></div><div class="plan-grid" id="scalePlan"></div></div>
+<div class="card"><div class="section-head"><h3>Risk plan</h3><span>R based</span></div><div class="why-grid"><div class="why-item"><div><span>Stop</span><small>기술적 무효화</small></div><b class="bad" id="stopText">—</b></div><div class="why-item"><div><span>Target 1</span><small>2R</small></div><b id="target1">—</b></div><div class="why-item"><div><span>Target 2</span><small>3R</small></div><b id="target2">—</b></div></div></div>
+<div class="card" id="spotEditCard"><div class="section-head"><h3>Manage position</h3><span>LOCAL</span></div><div class="two"><button class="btn secondary" id="editSpotBtn">현재 값 불러오기</button><button class="btn danger" id="deleteSpotBtn">포지션 삭제</button></div></div>
+</div></div></section>
+<section class="lev-detail" id="levDetail"><header class="detail-head"><button class="icon-btn" id="closeLevDetail">‹</button><div class="detail-title"><b id="levDetailTicker">BTCUSDT</b><small>CRYPTO LEVERAGE</small></div><button class="icon-btn" id="levNext">›</button></header><div class="detail-body"><div class="detail-inner">
+<div class="card hero-card"><div class="hero-top"><div><div class="muted" id="levSideLabel">LONG · 5X</div><div style="font-size:26px;font-weight:900;margin-top:4px" id="levCurrentPrice">—</div><div class="badge neutral" style="margin-top:8px" id="levRiskState">WAIT</div></div><div class="hero-score" id="levRoe">—<small>% ROE</small></div></div><div class="mini-grid"><div class="mini"><label>P/L</label><b id="levPnl">—</b></div><div class="mini"><label>Account risk</label><b id="levAccountRisk">—</b></div><div class="mini"><label>Liq buffer</label><b id="levLiqBuffer">—</b></div></div></div>
+<div class="card"><div class="section-head"><h3>Position risk</h3><span id="levRiskText">—</span></div><div class="position-grid" id="levRiskStats"></div><div class="risk-meter"><span id="levRiskBar"></span></div></div>
+<div class="card"><div class="section-head"><h3>Scale in</h3><span id="levAddState">—</span></div><div class="plan-grid" id="levScaleIn"></div></div>
+<div class="card"><div class="section-head"><h3>Scale out</h3><span>1R / 2R / 3R</span></div><div class="plan-grid" id="levScaleOut"></div></div>
+<div class="card"><div class="section-head"><h3>Scenario</h3><span>전부 체결 가정</span></div><div class="position-grid" id="levScenario"></div></div>
+<div class="card"><div class="two"><button class="btn secondary" id="editLevBtn">입력폼으로 불러오기</button><button class="btn danger" id="deleteLevBtn">포지션 삭제</button></div></div>
+</div></div></section>
+</div></div>
+<script>
+const APP_VERSION='0.3.0';
+const SUPABASE_URL='https://seuqhwmzmsqzuppemiuk.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_8T7Wafioftxn528m-T4fNA_-OZq9dwq';
+const MARKET_FUNCTION=SUPABASE_URL+'/functions/v1/market-data';
+const CACHE_KEY='stockpm_market_cache_v022';
+const DAILY_TTL=60*60*1000, H4_TTL=15*60*1000, REQUEST_GAP=8000;
+const $=id=>document.getElementById(id);
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set(k,v){localStorage.setItem(k,JSON.stringify(v))}};
+let watch=store.get('stockpm_watch',['NVDA','TSLA','SOXX','QQQ','BTC/USD']);
+let positions=store.get('stockpm_positions',{});
+let leveragePositions=store.get('stockpm_leverage',[]);
+let riskSettings=store.get('stockpm_risk_settings',{equity:100000,maxRiskPct:2});
+let marketCache=store.get(CACHE_KEY,{}),liveData={},ohlcvCache={},seriesState={},refreshRunning=false,currentPage=0,detailTf='1D',detailIndex=0,levDetailIndex=0;
+const demo={NVDA:{score:82,signal:'BUY',daily:'Bullish',timing:'Wait',price:182,ma20:179,ma50:175,ma200:165,ma200Slope:'RISING',technical:85,momentum:77,entry:72,volume:68,rr:80,market:70,relVol:1.1,volAvg:'—',stop:169,t1:208,t2:221,type:'US EQUITY',rsi:58,h4rsi:55,overextended:false},TSLA:{score:75,signal:'WATCH',daily:'Bullish',timing:'Wait',price:410,ma20:398,ma50:390,ma200:370,ma200Slope:'RISING',technical:80,momentum:70,entry:60,volume:60,rr:72,market:70,relVol:1,volAvg:'—',stop:380,t1:470,t2:500,type:'US EQUITY',rsi:61,h4rsi:58,overextended:false}};
+function fmtPrice(n){return Number.isFinite(+n)?'$'+(+n).toLocaleString(undefined,{maximumFractionDigits:2}):'—'}
+function fmtNum(n,d=2){return Number.isFinite(+n)?(+n).toLocaleString(undefined,{maximumFractionDigits:d}):'—'}
+function fmtPct(n){return Number.isFinite(+n)?((+n)>=0?'+':'')+(+n).toFixed(2)+'%':'—'}
+function avg(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:0}function sma(a,n){return a.length>=n?avg(a.slice(-n)):avg(a)}function clamp(v,a=0,b=100){return Math.max(a,Math.min(b,v))}
+function rsi(closes,n=14){if(closes.length<n+1)return 50;let g=0,l=0;for(let i=closes.length-n;i<closes.length;i++){const d=closes[i]-closes[i-1];if(d>0)g+=d;else l-=d}if(!l)return 100;const rs=(g/n)/(l/n);return 100-100/(1+rs)}
+function atr(c,n=14){if(c.length<n+1)return 0;const tr=[];for(let i=c.length-n;i<c.length;i++)tr.push(Math.max(c[i].h-c[i].l,Math.abs(c[i].h-c[i-1].c),Math.abs(c[i].l-c[i-1].c)));return avg(tr)}
+function fmtVol(v){if(!Number.isFinite(v)||v<=0)return'—';if(v>=1e9)return(v/1e9).toFixed(1)+'B';if(v>=1e6)return(v/1e6).toFixed(1)+'M';if(v>=1e3)return(v/1e3).toFixed(1)+'K';return Math.round(v).toLocaleString()}
+
