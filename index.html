@@ -19,582 +19,127 @@ body{overflow:hidden}button,input,select{font:inherit}button{cursor:pointer}
 .badge{display:inline-flex;align-items:center;gap:7px;padding:7px 9px;border-radius:999px;font-size:10px;font-weight:900;border:1px solid}.good{color:var(--good)!important}.warn{color:var(--warn)!important}.bad{color:var(--bad)!important}.neutral{color:#c7ced8!important}.badge.good{background:#0d2118;border-color:#1d4933}.badge.warn{background:#261e0d;border-color:#5d4617}.badge.bad{background:#271216;border-color:#5a2630}.badge.neutral{background:#171c22;border-color:#2a323c}
 .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.summary-item{padding:10px;border-radius:13px;background:var(--panel2);border:1px solid var(--line);text-align:center}.summary-item small{display:block;color:var(--muted);font-size:9px}.summary-item b{display:block;font-size:18px;margin-top:3px}
 .list{display:grid;gap:8px}.ticker-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:13px 14px}.ticker-row:active{transform:scale(.995)}.ticker-name{font-weight:850}.ticker-meta{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.45}.score-circle{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#0f1419;border:1px solid var(--line);font-weight:900}.chev{color:#657080;font-size:22px}.rank{font-size:11px;color:var(--muted);width:18px;text-align:center}.pnl{font-weight:900}.empty{color:var(--muted);padding:26px 12px;text-align:center;font-size:13px}.muted{color:var(--muted)}
+.action-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}.pill{padding:5px 7px;border-radius:8px;background:#0f1419;border:1px solid var(--line);font-size:9px;font-weight:800;color:var(--muted)}
 .market-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.market-item{padding:12px;border-radius:14px;background:var(--panel2);border:1px solid var(--line)}.market-item small{color:var(--muted)}.market-item b{display:block;margin-top:5px}
-.search{display:flex;gap:8px}.field{display:grid;gap:6px;margin-bottom:10px}.field label{font-size:11px;color:var(--muted)}.field input,.field select,.search input{width:100%;border:1px solid var(--line);background:var(--panel3);color:var(--text);padding:12px 13px;border-radius:13px;outline:none}.field input:focus,.field select:focus,.search input:focus{border-color:#52647a}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.btn{border:0;border-radius:12px;padding:12px 14px;background:#f5f7fa;color:#0b0d10;font-weight:850}.btn.secondary{background:var(--panel2);border:1px solid var(--line);color:var(--text)}.btn.danger{background:#2a1217;color:var(--bad);border:1px solid #5a2630}.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--panel3);border:1px solid var(--line);border-radius:12px;padding:3px;margin-bottom:12px}.seg button{border:0;background:transparent;color:var(--muted);padding:9px;border-radius:9px;font-weight:800}.seg button.active{background:var(--panel2);color:var(--text)}
+.search{display:flex;gap:8px}.field{display:grid;gap:6px;margin-bottom:10px}.field label{font-size:11px;color:var(--muted)}.field input,.field select,.search input{width:100%;border:1px solid var(--line);background:var(--panel3);color:var(--text);padding:12px 13px;border-radius:13px;outline:none}.field input:focus,.field select:focus,.search input:focus{border-color:#52647a}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.btn{border:0;border-radius:12px;padding:12px 14px;background:#f5f7fa;color:#0b0d10;font-weight:850}.btn.secondary{background:var(--panel2);border:1px solid var(--line);color:var(--text)}.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}.btn.danger{background:#2a1217;color:var(--bad);border:1px solid #5a2630}.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--panel3);border:1px solid var(--line);border-radius:12px;padding:3px;margin-bottom:12px}.seg button{border:0;background:transparent;color:var(--muted);padding:9px;border-radius:9px;font-weight:800}.seg button.active{background:var(--panel2);color:var(--text)}
 .position-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.stat{padding:12px;border-radius:13px;background:var(--panel2);border:1px solid var(--line)}.stat small{color:var(--muted);display:block}.stat b{display:block;margin-top:5px}.plan-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.plan-item{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}.plan-item small{color:var(--muted)}.plan-item b{display:block;margin-top:5px}.plan-item em{display:block;font-style:normal;margin-top:4px;color:#aeb7c4;font-size:11px;line-height:1.45}
-.risk-meter{height:9px;background:#0d1116;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-top:8px}.risk-meter span{display:block;height:100%;background:linear-gradient(90deg,#31d07c,#f5b942,#ff6678);width:0}.notice{padding:12px;border-radius:13px;background:#241b0e;border:1px solid #5a4317;color:#e6c37f;font-size:12px;line-height:1.55}
+.risk-meter{height:9px;background:#0d1116;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-top:8px}.risk-meter span{display:block;height:100%;background:linear-gradient(90deg,#31d07c,#f5b942,#ff6678);width:0}.notice{padding:12px;border-radius:13px;background:#241b0e;border:1px solid #5a4317;color:#e6c37f;font-size:12px;line-height:1.55}.danger-box{padding:12px;border-radius:13px;background:#271216;border:1px solid #5a2630;color:#ff98a5;font-size:12px;line-height:1.55}
 .bottom-tabs{position:absolute;left:10px;right:10px;bottom:var(--safe-bottom);height:64px;border:1px solid rgba(255,255,255,.08);border-radius:22px;background:rgba(18,22,27,.92);backdrop-filter:blur(22px);display:grid;grid-template-columns:repeat(5,1fr);z-index:30;box-shadow:0 12px 35px rgba(0,0,0,.35)}.tab{border:0;background:transparent;color:#738090;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:9px;font-weight:700}.tab .ico{font-size:19px;line-height:1}.tab.active{color:var(--text)}
-.detail,.lev-detail{position:absolute;inset:0;background:var(--bg);z-index:50;transform:translate3d(100%,0,0);transition:transform .46s cubic-bezier(.22,.85,.25,1);display:flex;flex-direction:column}.detail.open,.lev-detail.open{transform:translate3d(0,0,0)}.detail-head{height:60px;flex:0 0 60px;padding:10px 14px;display:grid;grid-template-columns:42px 1fr 42px;align-items:center;border-bottom:1px solid rgba(255,255,255,.06)}.icon-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text)}.detail-title{text-align:center}.detail-title b{display:block}.detail-title small{color:var(--muted)}.detail-body{flex:1;overflow-y:auto;padding:14px}.detail-inner{max-width:980px;margin:0 auto}
-.hero-card{padding:18px;background:linear-gradient(145deg,#161b22,#101318);border:1px solid #27313d}.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.hero-score{font-size:54px;line-height:.9;font-weight:900}.hero-score small{font-size:13px;color:var(--muted);font-weight:600}.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.mini{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:11px}.mini label{display:block;color:var(--muted);font-size:10px}.mini b{display:block;margin-top:5px}
-.tf-toggle{display:inline-grid;grid-template-columns:1fr 1fr;background:var(--panel3);border:1px solid var(--line);border-radius:12px;padding:3px}.tf-toggle button{border:0;background:transparent;color:var(--muted);padding:8px 13px;border-radius:9px;font-weight:800}.tf-toggle button.active{background:var(--panel2);color:var(--text)}.chart-wrap{position:relative;height:310px;border-radius:16px;overflow:hidden;background:#0d1116;border:1px solid var(--line)}.chart-svg{position:absolute;inset:0;width:100%;height:100%}.chart-legend{position:absolute;top:10px;left:10px;display:flex;gap:10px;font-size:10px;color:var(--muted)}.signal-tag{position:absolute;right:12px;top:42px;padding:7px 9px;border-radius:9px;background:#0c2519;border:1px solid #24563a;color:var(--good);font-size:10px;font-weight:900}.chart-note{position:absolute;left:12px;bottom:10px;font-size:10px;color:var(--muted)}
-.why-grid{display:grid;gap:8px}.why-item{display:grid;grid-template-columns:1fr auto;align-items:center;padding:11px 12px;border-radius:12px;background:var(--panel2);border:1px solid var(--line)}.why-item span{font-size:12px}.why-item b{font-size:13px}.why-item small{display:block;color:var(--muted);margin-top:3px}.status-line{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}.status-light{width:9px;height:9px;border-radius:50%}.status-light.green{background:var(--good)}.status-light.yellow{background:var(--warn)}
+.detail,.lev-detail{position:absolute;inset:0;background:var(--bg);z-index:50;transform:translate3d(100%,0,0);transition:transform .46s cubic-bezier(.22,.85,.25,1);display:flex;flex-direction:column}.detail.open,.lev-detail.open{transform:translate3d(0,0,0)}.detail-head{height:60px;flex:0 0 60px;padding:10px 14px;display:grid;grid-template-columns:42px 1fr 42px;align-items:center;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(9,11,14,.94);backdrop-filter:blur(18px)}.icon-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text)}.detail-title{text-align:center}.detail-title b{display:block}.detail-title small{color:var(--muted)}.detail-body{flex:1;overflow-y:auto;padding:14px 14px 32px}.detail-inner{max-width:980px;margin:0 auto}
+.hero-card{padding:18px;background:linear-gradient(145deg,#161b22,#101318);border:1px solid #27313d}.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.hero-score{font-size:54px;line-height:.9;font-weight:900}.hero-score small{font-size:13px;color:var(--muted);font-weight:600}.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.mini{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:11px}.mini label{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.07em}.mini b{display:block;margin-top:5px;font-size:16px}
+.tf-toggle{display:inline-grid;grid-template-columns:1fr 1fr;background:var(--panel3);border:1px solid var(--line);border-radius:12px;padding:3px}.tf-toggle button{border:0;background:transparent;color:var(--muted);padding:8px 13px;border-radius:9px;font-weight:800}.tf-toggle button.active{background:var(--panel2);color:var(--text)}.chart-wrap{position:relative;height:310px;border-radius:16px;overflow:hidden;background:linear-gradient(180deg,#0d1116,#0a0d11);border:1px solid var(--line)}.chart-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:100% 20%,12.5% 100%}.chart-svg{position:absolute;inset:0;width:100%;height:100%}.chart-legend{position:absolute;top:10px;left:10px;display:flex;gap:10px;font-size:10px;color:var(--muted)}.signal-tag{position:absolute;right:12px;top:42px;padding:7px 9px;border-radius:9px;background:#0c2519;border:1px solid #24563a;color:var(--good);font-size:10px;font-weight:900}.chart-note{position:absolute;left:12px;bottom:10px;font-size:10px;color:var(--muted)}
+.why-grid{display:grid;gap:8px}.why-item{display:grid;grid-template-columns:1fr auto;align-items:center;padding:11px 12px;border-radius:12px;background:var(--panel2);border:1px solid var(--line)}.why-item span{font-size:12px}.why-item b{font-size:13px}.why-item small{display:block;color:var(--muted);margin-top:3px}.status-line{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}.status-line:last-child{border-bottom:0}.status-left{display:flex;align-items:center;gap:9px}.status-light{width:9px;height:9px;border-radius:50%}.status-light.green{background:var(--good)}.status-light.yellow{background:var(--warn)}.status-light.red{background:var(--bad)}.changelog{display:grid;gap:10px}.change-item{padding-left:14px;border-left:2px solid #2d3743}.change-item b{font-size:13px}.change-item p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+@media(min-width:760px){.page{padding-left:22px;padding-right:22px}.detail-body{padding-left:22px;padding-right:22px}.chart-wrap{height:360px}.bottom-tabs{left:50%;right:auto;transform:translateX(-50%);width:min(620px,calc(100% - 20px))}.summary-grid{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
 <body>
 <div class="app">
-<header class="topbar">
-<div class="brand"><div class="brand-mark">SP</div><div><h1>STOCKPM</h1><small>QUANT POSITION MANAGER · v0.3.0</small></div></div>
-<div class="sync-chip"><span class="dot"></span><span id="topSync">DATA WAIT</span></div>
-</header>
-
+<header class="topbar"><div class="brand"><div class="brand-mark">SP</div><div><h1>STOCKPM</h1><small>QUANT POSITION MANAGER · v0.3.0</small></div></div><div class="sync-chip"><span class="dot"></span><span id="topSync">DATA WAIT</span></div></header>
 <div class="viewport" id="viewport"><div class="track" id="track">
-
 <section class="page"><div class="page-inner">
-<h2 class="page-title">Today</h2><div class="page-sub">보유 포지션을 먼저 보고 신규 매수 후보는 그 다음에 봅니다.</div>
-<div class="card"><div class="section-head"><h3>Action board</h3><span id="portfolioRiskLabel">PORTFOLIO</span></div>
-<div class="summary-grid">
-<div class="summary-item"><small>ADD / BUY</small><b id="sumAdd" class="good">0</b></div>
-<div class="summary-item"><small>HOLD</small><b id="sumHold">0</b></div>
-<div class="summary-item"><small>REDUCE</small><b id="sumReduce" class="warn">0</b></div>
-<div class="summary-item"><small>RISK ALERT</small><b id="sumRisk" class="bad">0</b></div>
-</div><div class="risk-meter"><span id="portfolioHeatBar"></span></div><div class="ticker-meta" id="portfolioHeatText">Portfolio heat 계산 대기</div></div>
+<h2 class="page-title">Today</h2><div class="page-sub">보유 포지션을 먼저 보고, 신규 매수 후보는 그 다음에 봅니다.</div>
+<div class="card"><div class="section-head"><h3>Action board</h3><span id="portfolioRiskLabel">PORTFOLIO</span></div><div class="summary-grid"><div class="summary-item"><small>ADD / BUY</small><b id="sumAdd" class="good">0</b></div><div class="summary-item"><small>HOLD</small><b id="sumHold">0</b></div><div class="summary-item"><small>REDUCE</small><b id="sumReduce" class="warn">0</b></div><div class="summary-item"><small>RISK ALERT</small><b id="sumRisk" class="bad">0</b></div></div><div class="risk-meter"><span id="portfolioHeatBar"></span></div><div class="ticker-meta" id="portfolioHeatText">Portfolio heat 계산 대기</div></div>
 <div class="card"><div class="section-head"><h3>My positions</h3><span>우선 확인</span></div><div class="list" id="homePositions"></div></div>
 <div class="card"><div class="section-head"><h3>Buy radar</h3><span>미보유 WATCH</span></div><div class="list" id="homeRadar"></div></div>
-<div class="card"><div class="section-head"><h3>Market regime</h3></div><div class="market-strip"><div class="market-item"><small>SPY</small><b id="spyState">—</b></div><div class="market-item"><small>QQQ</small><b id="qqqState">—</b></div><div class="market-item"><small>DATA</small><b id="marketDataState">CACHED</b></div></div></div>
+<div class="card"><div class="section-head"><h3>Market regime</h3><span>WATCH 기반</span></div><div class="market-strip"><div class="market-item"><small>SPY</small><b id="spyState">—</b></div><div class="market-item"><small>QQQ</small><b id="qqqState">—</b></div><div class="market-item"><small>DATA</small><b id="marketDataState">CACHED</b></div></div></div>
 </div></section>
-
-<section class="page"><div class="page-inner">
-<h2 class="page-title">Watch</h2><div class="page-sub">Daily 방향 + 4H 타이밍으로 분석합니다.</div>
-<div class="card"><div class="search"><input id="watchInput" placeholder="NVDA, TSLA, SOXX, BTC/USD"><button class="btn" id="addWatchBtn">추가</button></div></div>
-<div class="card"><div class="section-head"><h3>Buy radar</h3><span>Score 순</span></div><div class="list" id="watchList"></div></div>
-</div></section>
-
-<section class="page"><div class="page-inner">
-<h2 class="page-title">Discover</h2><div class="page-sub">WATCH 안에서 상위 Setup을 선별합니다.</div>
-<div class="card soft"><span class="badge neutral">QUANT ENGINE v2</span><h3>Daily Gate → 4H Timing</h3><p class="muted">MA200 아래는 Strong Buy 금지, 과열은 OVEREXTENDED로 차단합니다.</p></div>
-<div class="card"><div class="section-head"><h3>Top setups</h3><span>미보유</span></div><div class="list" id="discoverList"></div></div>
-</div></section>
-
-<section class="page"><div class="page-inner">
-<h2 class="page-title">Position</h2><div class="page-sub">주식/현물과 크립토 레버리지의 리스크와 분할매수를 관리합니다.</div>
-
-<div class="card"><div class="section-head"><h3>Account risk settings</h3><span>LOCAL</span></div>
-<div class="two"><div class="field"><label>Account equity (USD)</label><input id="accountEquity" type="number"></div><div class="field"><label>Max risk / trade (%)</label><input id="maxRiskPct" type="number" step=".1"></div></div>
-<button class="btn secondary" id="saveRiskSettings">리스크 설정 저장</button></div>
-
-<div class="card">
-<div class="seg" id="positionMode"><button class="active" data-mode="spot">STOCK / SPOT</button><button data-mode="lev">CRYPTO LEVERAGE</button></div>
-
-<div id="spotForm">
-<div class="field"><label>Ticker</label><input id="posTicker" placeholder="NVDA"></div>
-<div class="two"><div class="field"><label>보유 수량</label><input id="posQty" type="number"></div><div class="field"><label>평단가</label><input id="posAvg" type="number"></div></div>
-<div class="field"><label>이 종목 최대 투입금</label><input id="posMax" type="number" placeholder="10000"></div>
-<button class="btn" id="saveSpot">포지션 저장</button>
+<section class="page"><div class="page-inner"><h2 class="page-title">Watch</h2><div class="page-sub">관심종목을 Daily 방향 + 4H 타이밍으로 분석합니다.</div><div class="card"><div class="search"><input id="watchInput" placeholder="NVDA, TSLA, SOXX, BTC/USD"><button class="btn" id="addWatchBtn">추가</button></div></div><div class="card"><div class="section-head"><h3>Buy radar</h3><span>Score 순</span></div><div class="list" id="watchList"></div></div></div></section>
+<section class="page"><div class="page-inner"><h2 class="page-title">Discover</h2><div class="page-sub">자동 스캐너는 다음 단계. 지금은 WATCH 안에서 상위 Setup을 선별합니다.</div><div class="card soft"><span class="badge neutral">QUANT ENGINE v2</span><h3 style="font-size:24px;margin:14px 0 8px">Daily Gate → 4H Timing</h3><p class="muted" style="line-height:1.6;margin:0">MA200 아래는 Strong Buy 금지, 과열 구간은 OVEREXTENDED로 차단합니다. 보유 종목은 BUY 대신 ADD/HOLD/REDUCE/EXIT WATCH로 해석합니다.</p></div><div class="card"><div class="section-head"><h3>Top setups</h3><span>미보유</span></div><div class="list" id="discoverList"></div></div></div></section>
+<section class="page"><div class="page-inner"><h2 class="page-title">Position</h2><div class="page-sub">주식/현물과 크립토 레버리지를 분리해서 리스크와 분할매수까지 관리합니다.</div>
+<div class="card"><div class="section-head"><h3>Account risk settings</h3><span>LOCAL</span></div><div class="two"><div class="field"><label>Account equity (USD)</label><input id="accountEquity" type="number" step="any"></div><div class="field"><label>Max risk / trade (%)</label><input id="maxRiskPct" type="number" step="0.1"></div></div><button class="btn secondary" id="saveRiskSettings">리스크 설정 저장</button></div>
+<div class="card"><div class="seg" id="positionMode"><button class="active" data-mode="spot">STOCK / SPOT</button><button data-mode="lev">CRYPTO LEVERAGE</button></div>
+<div id="spotForm"><div class="field"><label>Ticker</label><input id="posTicker" placeholder="NVDA"></div><div class="two"><div class="field"><label>보유 수량</label><input id="posQty" type="number" step="any"></div><div class="field"><label>평단가</label><input id="posAvg" type="number" step="any"></div></div><div class="field"><label>이 종목 최대 투입금 (USD)</label><input id="posMax" type="number" step="any" placeholder="10000"></div><button class="btn" id="saveSpot">포지션 저장</button></div>
+<div id="levForm" style="display:none"><div class="notice">레버리지 포지션은 청산가만 보지 않고 Stop 손실액, 계좌 Risk, 추가매수 후 위험도까지 계산합니다. 자동주문은 하지 않습니다.</div><div class="field" style="margin-top:12px"><label>Symbol</label><input id="levTicker" placeholder="BTCUSDT"></div><div class="two"><div class="field"><label>Direction</label><select id="levSide"><option>LONG</option><option>SHORT</option></select></div><div class="field"><label>Leverage</label><input id="levX" type="number" step="1" value="5"></div></div><div class="two"><div class="field"><label>Entry</label><input id="levEntry" type="number" step="any"></div><div class="field"><label>Position size ($ notional)</label><input id="levSize" type="number" step="any"></div></div><div class="two"><div class="field"><label>Stop</label><input id="levStop" type="number" step="any"></div><div class="field"><label>Liquidation price</label><input id="levLiq" type="number" step="any"></div></div><button class="btn" id="saveLev">레버리지 포지션 저장</button></div></div>
+<div class="card"><div class="section-head"><h3>Active positions</h3><span id="positionCount">0</span></div><div class="list" id="positionList"></div></div></div></section>
+<section class="page"><div class="page-inner"><h2 class="page-title">More</h2><div class="page-sub">데이터 상태와 시스템 버전을 확인합니다.</div><div class="card"><div class="section-head"><h3>System status</h3><span>v0.3.0</span></div><div class="status-line"><div class="status-left"><span class="status-light yellow" id="twelveLight"></span><div><b>Twelve Data</b><div class="ticker-meta">Supabase market-data 경유</div></div></div><b id="twelveStatus">WAIT</b></div><div class="status-line"><div class="status-left"><span class="status-light green"></span><div><b>Supabase</b><div class="ticker-meta">Edge Function</div></div></div><b class="good">CONNECTED</b></div><div class="status-line"><div class="status-left"><span class="status-light yellow" id="syncLight"></span><div><b>Last sync</b><div class="ticker-meta">마지막 정상 갱신</div></div></div><b id="lastSync">—</b></div><button class="btn" id="refreshTwelve" style="width:100%;margin-top:10px">시장 데이터 새로고침</button></div><div class="card"><div class="section-head"><h3>Changelog</h3><span>STOCKPM</span></div><div class="changelog"><div class="change-item"><b>v0.3.0</b><p>HOME 보유종목 우선, Position Detail, Strong Buy v2, 차트 평단/Stop/Target/Buy Zone, Stock Risk Engine, Crypto Leverage Risk/Scale-in/Scale-out, ADD BLOCKED, 포트폴리오 Heat.</p></div><div class="change-item"><b>v0.2.2</b><p>Supabase Edge Function + Twelve Data, 브라우저 캐시, 오류 시 마지막 정상 데이터 유지.</p></div></div></div><div class="card"><div class="notice">STOCKPM의 신호와 리스크 계산은 의사결정 보조용입니다. 실제 주문은 거래소/증권사에서 별도로 확인하세요.</div></div></div></section>
 </div>
-
-<div id="levForm" style="display:none">
-<div class="notice">레버리지 포지션은 Stop 손실액, 계좌 Risk, 추가매수 후 위험도를 함께 계산합니다.</div>
-<div class="field"><label>Symbol</label><input id="levTicker" placeholder="BTCUSDT"></div>
-<div class="two"><div class="field"><label>Direction</label><select id="levSide"><option>LONG</option><option>SHORT</option></select></div><div class="field"><label>Leverage</label><input id="levX" type="number" value="5"></div></div>
-<div class="two"><div class="field"><label>Entry</label><input id="levEntry" type="number"></div><div class="field"><label>Position size ($)</label><input id="levSize" type="number"></div></div>
-<div class="two"><div class="field"><label>Stop</label><input id="levStop" type="number"></div><div class="field"><label>Liquidation price</label><input id="levLiq" type="number"></div></div>
-<button class="btn" id="saveLev">레버리지 포지션 저장</button>
-</div>
-</div>
-
-<div class="card"><div class="section-head"><h3>Active positions</h3><span id="positionCount">0</span></div><div class="list" id="positionList"></div></div>
-</div></section>
-
-<section class="page"><div class="page-inner">
-<h2 class="page-title">More</h2><div class="page-sub">데이터와 시스템 상태입니다.</div>
-<div class="card"><div class="section-head"><h3>System status</h3><span>v0.3.0</span></div>
-<div class="status-line"><b>Twelve Data</b><b id="twelveStatus">WAIT</b></div>
-<div class="status-line"><b>Supabase</b><b class="good">CONNECTED</b></div>
-<div class="status-line"><b>Last sync</b><b id="lastSync">—</b></div>
-<button class="btn" id="refreshTwelve" style="width:100%;margin-top:10px">시장 데이터 새로고침</button>
-</div>
-<div class="card"><div class="notice">신호와 리스크 계산은 의사결정 보조용이며 자동주문은 하지 않습니다.</div></div>
-</div></section>
-
-</div>
-
-<nav class="bottom-tabs">
-<button class="tab active" data-index="0"><span class="ico">⌂</span><span>HOME</span></button>
-<button class="tab" data-index="1"><span class="ico">◎</span><span>WATCH</span></button>
-<button class="tab" data-index="2"><span class="ico">✦</span><span>DISCOVER</span></button>
-<button class="tab" data-index="3"><span class="ico">▣</span><span>POSITION</span></button>
-<button class="tab" data-index="4"><span class="ico">•••</span><span>MORE</span></button>
-</nav>
-
-<section class="detail" id="detail">
-<header class="detail-head"><button class="icon-btn" id="closeDetail">‹</button><div class="detail-title"><b id="detailTicker">—</b><small id="detailSubtitle">ANALYSIS</small></div><button class="icon-btn" id="nextDetail">›</button></header>
-<div class="detail-body"><div class="detail-inner">
-
-<div class="card hero-card"><div class="hero-top"><div><div class="muted" id="assetType">ASSET</div><div style="font-size:26px;font-weight:900" id="detailPrice">—</div><div class="badge neutral" id="detailAction">WAIT</div></div><div class="hero-score" id="detailScore">—<small>/100</small></div></div>
-<div class="mini-grid"><div class="mini"><label>Daily</label><b id="dailyState">—</b></div><div class="mini"><label>4H</label><b id="timingState">—</b></div><div class="mini"><label>MA200 dist.</label><b id="ma200Dist">—</b></div></div></div>
-
+<nav class="bottom-tabs"><button class="tab active" data-index="0"><span class="ico">⌂</span><span>HOME</span></button><button class="tab" data-index="1"><span class="ico">◎</span><span>WATCH</span></button><button class="tab" data-index="2"><span class="ico">✦</span><span>DISCOVER</span></button><button class="tab" data-index="3"><span class="ico">▣</span><span>POSITION</span></button><button class="tab" data-index="4"><span class="ico">•••</span><span>MORE</span></button></nav>
+<section class="detail" id="detail"><header class="detail-head"><button class="icon-btn" id="closeDetail">‹</button><div class="detail-title"><b id="detailTicker">—</b><small id="detailSubtitle">ANALYSIS</small></div><button class="icon-btn" id="nextDetail">›</button></header><div class="detail-body"><div class="detail-inner">
+<div class="card hero-card"><div class="hero-top"><div><div class="muted" style="font-size:12px" id="assetType">ASSET</div><div style="font-size:26px;font-weight:900;margin-top:4px" id="detailPrice">—</div><div class="badge neutral" style="margin-top:8px" id="detailAction">WAIT</div></div><div class="hero-score" id="detailScore">—<small>/100</small></div></div><div class="mini-grid"><div class="mini"><label>Daily</label><b id="dailyState">—</b></div><div class="mini"><label>4H</label><b id="timingState">—</b></div><div class="mini"><label>MA200 dist.</label><b id="ma200Dist">—</b></div></div></div>
 <div class="card" id="ownedSummaryCard"><div class="section-head"><h3>My position</h3><span id="ownedAction">—</span></div><div class="position-grid" id="ownedStats"></div><div class="risk-meter"><span id="stockRiskBar"></span></div><div class="ticker-meta" id="stockRiskText"></div></div>
-
-<div class="card"><div class="section-head"><h3>Price chart</h3><div class="tf-toggle"><button class="active" data-tf="1D">1D</button><button data-tf="4H">4H</button></div></div>
-<div class="chart-wrap"><svg class="chart-svg" id="chartSvg" viewBox="0 0 800 300" preserveAspectRatio="none"></svg><div class="chart-legend">MA20 · MA50 · MA200 · AVG · STOP</div><div class="signal-tag" id="signalTag">WAIT</div><div class="chart-note" id="chartNote">DATA WAIT</div></div></div>
-
-<div class="card"><div class="section-head"><h3>Signal engine v2</h3></div><div class="why-grid" id="whyGrid"></div></div>
+<div class="card"><div class="section-head"><h3>Price chart</h3><div class="tf-toggle"><button class="active" data-tf="1D">1D</button><button data-tf="4H">4H</button></div></div><div class="chart-wrap"><div class="chart-grid"></div><svg class="chart-svg" id="chartSvg" viewBox="0 0 800 300" preserveAspectRatio="none"></svg><div class="chart-legend"><span>MA20</span><span>MA50</span><span style="color:#fff;font-weight:900">MA200</span><span>AVG</span><span>STOP</span></div><div class="signal-tag" id="signalTag">WAIT</div><div class="chart-note" id="chartNote">DATA WAIT</div></div></div>
+<div class="card"><div class="section-head"><h3>Signal engine v2</h3><span>Hard gates</span></div><div class="why-grid" id="whyGrid"></div></div>
 <div class="card"><div class="section-head"><h3>Position / Scale plan</h3><span id="scaleTitle">PLAN</span></div><div class="plan-grid" id="scalePlan"></div></div>
-<div class="card"><div class="why-grid"><div class="why-item"><span>Stop</span><b class="bad" id="stopText">—</b></div><div class="why-item"><span>Target 1 · 2R</span><b id="target1">—</b></div><div class="why-item"><span>Target 2 · 3R</span><b id="target2">—</b></div></div></div>
-<div class="card" id="spotEditCard"><div class="two"><button class="btn secondary" id="editSpotBtn">현재 값 불러오기</button><button class="btn danger" id="deleteSpotBtn">포지션 삭제</button></div></div>
-
-</div></div>
-</section>
-
-<section class="lev-detail" id="levDetail">
-<header class="detail-head"><button class="icon-btn" id="closeLevDetail">‹</button><div class="detail-title"><b id="levDetailTicker">BTCUSDT</b><small>CRYPTO LEVERAGE</small></div><button class="icon-btn" id="levNext">›</button></header>
-<div class="detail-body"><div class="detail-inner">
-<div class="card hero-card"><div class="hero-top"><div><div class="muted" id="levSideLabel"></div><div style="font-size:26px;font-weight:900" id="levCurrentPrice">—</div><div class="badge neutral" id="levRiskState">WAIT</div></div><div class="hero-score" id="levRoe">—<small>% ROE</small></div></div>
-<div class="mini-grid"><div class="mini"><label>P/L</label><b id="levPnl">—</b></div><div class="mini"><label>Account risk</label><b id="levAccountRisk">—</b></div><div class="mini"><label>Liq buffer</label><b id="levLiqBuffer">—</b></div></div></div>
-<div class="card"><div class="section-head"><h3>Position risk</h3><span id="levRiskText"></span></div><div class="position-grid" id="levRiskStats"></div><div class="risk-meter"><span id="levRiskBar"></span></div></div>
-<div class="card"><div class="section-head"><h3>Scale in</h3><span id="levAddState"></span></div><div class="plan-grid" id="levScaleIn"></div></div>
+<div class="card"><div class="section-head"><h3>Risk plan</h3><span>R based</span></div><div class="why-grid"><div class="why-item"><div><span>Stop</span><small>기술적 무효화</small></div><b class="bad" id="stopText">—</b></div><div class="why-item"><div><span>Target 1</span><small>2R</small></div><b id="target1">—</b></div><div class="why-item"><div><span>Target 2</span><small>3R</small></div><b id="target2">—</b></div></div></div>
+<div class="card" id="spotEditCard"><div class="section-head"><h3>Manage position</h3><span>LOCAL</span></div><div class="two"><button class="btn secondary" id="editSpotBtn">현재 값 불러오기</button><button class="btn danger" id="deleteSpotBtn">포지션 삭제</button></div></div>
+</div></div></section>
+<section class="lev-detail" id="levDetail"><header class="detail-head"><button class="icon-btn" id="closeLevDetail">‹</button><div class="detail-title"><b id="levDetailTicker">BTCUSDT</b><small>CRYPTO LEVERAGE</small></div><button class="icon-btn" id="levNext">›</button></header><div class="detail-body"><div class="detail-inner">
+<div class="card hero-card"><div class="hero-top"><div><div class="muted" id="levSideLabel">LONG · 5X</div><div style="font-size:26px;font-weight:900;margin-top:4px" id="levCurrentPrice">—</div><div class="badge neutral" style="margin-top:8px" id="levRiskState">WAIT</div></div><div class="hero-score" id="levRoe">—<small>% ROE</small></div></div><div class="mini-grid"><div class="mini"><label>P/L</label><b id="levPnl">—</b></div><div class="mini"><label>Account risk</label><b id="levAccountRisk">—</b></div><div class="mini"><label>Liq buffer</label><b id="levLiqBuffer">—</b></div></div></div>
+<div class="card"><div class="section-head"><h3>Position risk</h3><span id="levRiskText">—</span></div><div class="position-grid" id="levRiskStats"></div><div class="risk-meter"><span id="levRiskBar"></span></div></div>
+<div class="card"><div class="section-head"><h3>Scale in</h3><span id="levAddState">—</span></div><div class="plan-grid" id="levScaleIn"></div></div>
 <div class="card"><div class="section-head"><h3>Scale out</h3><span>1R / 2R / 3R</span></div><div class="plan-grid" id="levScaleOut"></div></div>
-<div class="card"><div class="section-head"><h3>Scenario</h3></div><div class="position-grid" id="levScenario"></div></div>
+<div class="card"><div class="section-head"><h3>Scenario</h3><span>전부 체결 가정</span></div><div class="position-grid" id="levScenario"></div></div>
 <div class="card"><div class="two"><button class="btn secondary" id="editLevBtn">입력폼으로 불러오기</button><button class="btn danger" id="deleteLevBtn">포지션 삭제</button></div></div>
+</div></div></section>
 </div></div>
-</section>
-</div>
-
 <script>
+const APP_VERSION='0.3.0';
 const SUPABASE_URL='https://seuqhwmzmsqzuppemiuk.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_8T7Wafioftxn528m-T4fNA_-OZq9dwq';
 const MARKET_FUNCTION=SUPABASE_URL+'/functions/v1/market-data';
 const CACHE_KEY='stockpm_market_cache_v022';
-const DAILY_TTL=3600000,H4_TTL=900000,REQUEST_GAP=8000;
-
+const DAILY_TTL=60*60*1000, H4_TTL=15*60*1000, REQUEST_GAP=8000;
 const $=id=>document.getElementById(id);
-const store={
- get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},
- set(k,v){localStorage.setItem(k,JSON.stringify(v))}
-};
-
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set(k,v){localStorage.setItem(k,JSON.stringify(v))}};
 let watch=store.get('stockpm_watch',['NVDA','TSLA','SOXX','QQQ','BTC/USD']);
 let positions=store.get('stockpm_positions',{});
 let leveragePositions=store.get('stockpm_leverage',[]);
 let riskSettings=store.get('stockpm_risk_settings',{equity:100000,maxRiskPct:2});
-let marketCache=store.get(CACHE_KEY,{});
-let liveData={},ohlcvCache={},currentPage=0,detailTf='1D',refreshRunning=false,levDetailIndex=0;
-
-const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
-const sma=(a,n)=>a.length>=n?avg(a.slice(-n)):avg(a);
-const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
-
+let marketCache=store.get(CACHE_KEY,{}),liveData={},ohlcvCache={},seriesState={},refreshRunning=false,currentPage=0,detailTf='1D',detailIndex=0,levDetailIndex=0;
+const demo={NVDA:{score:82,signal:'BUY',daily:'Bullish',timing:'Wait',price:182,ma20:179,ma50:175,ma200:165,ma200Slope:'RISING',technical:85,momentum:77,entry:72,volume:68,rr:80,market:70,relVol:1.1,volAvg:'—',stop:169,t1:208,t2:221,type:'US EQUITY',rsi:58,h4rsi:55,overextended:false},TSLA:{score:75,signal:'WATCH',daily:'Bullish',timing:'Wait',price:410,ma20:398,ma50:390,ma200:370,ma200Slope:'RISING',technical:80,momentum:70,entry:60,volume:60,rr:72,market:70,relVol:1,volAvg:'—',stop:380,t1:470,t2:500,type:'US EQUITY',rsi:61,h4rsi:58,overextended:false}};
 function fmtPrice(n){return Number.isFinite(+n)?'$'+(+n).toLocaleString(undefined,{maximumFractionDigits:2}):'—'}
+function fmtNum(n,d=2){return Number.isFinite(+n)?(+n).toLocaleString(undefined,{maximumFractionDigits:d}):'—'}
 function fmtPct(n){return Number.isFinite(+n)?((+n)>=0?'+':'')+(+n).toFixed(2)+'%':'—'}
-
-function rsi(c,n=14){
- if(c.length<n+1)return 50;
- let g=0,l=0;
- for(let i=c.length-n;i<c.length;i++){let d=c[i]-c[i-1];if(d>0)g+=d;else l-=d}
- if(!l)return 100;
- let rs=(g/n)/(l/n);
- return 100-100/(1+rs);
-}
-
-function atr(c,n=14){
- if(c.length<n+1)return 0;
- let t=[];
- for(let i=c.length-n;i<c.length;i++)
-  t.push(Math.max(c[i].h-c[i].l,Math.abs(c[i].h-c[i-1].c),Math.abs(c[i].l-c[i-1].c)));
- return avg(t);
-}
-
-function normalizeSeries(v){
- return [...v].reverse().map(x=>({dt:x.datetime,o:+x.open,h:+x.high,l:+x.low,c:+x.close,v:+x.volume||0}))
- .filter(x=>[x.o,x.h,x.l,x.c].every(Number.isFinite));
-}
-
-function normalizeCryptoSymbol(s){
- s=(s||'').toUpperCase().replace(/\s/g,'');
- if(s.includes('/'))return s;
- if(s.endsWith('USDT'))return s.slice(0,-4)+'/USD';
- if(s.endsWith('USD'))return s.slice(0,-3)+'/USD';
- return s;
-}
-
-function slot(s,i){return s+'__'+i}
-function cached(s,i){return marketCache[slot(s,i)]||null}
-function fresh(s,i){
- let r=cached(s,i);
- if(!r)return false;
- return Date.now()-r.fetchedAt<(i==='1day'?DAILY_TTL:H4_TTL);
-}
-
-async function fetchSeries(symbol,interval,force=false){
- let old=cached(symbol,interval);
- if(old&&!force&&fresh(symbol,interval))return old.values;
-
- let u=new URL(MARKET_FUNCTION);
- u.searchParams.set('symbol',symbol);
- u.searchParams.set('interval',interval);
-
- try{
-  let r=await fetch(u,{headers:{apikey:SUPABASE_PUBLISHABLE_KEY}});
-  let j=await r.json();
-  if(!r.ok||!Array.isArray(j.values))throw Error(j.message||'DATA ERROR');
-  let values=normalizeSeries(j.values);
-  marketCache[slot(symbol,interval)]={values,fetchedAt:Date.now()};
-  store.set(CACHE_KEY,marketCache);
-  return values;
- }catch(e){
-  if(old?.values?.length)return old.values;
-  throw e;
- }
-}
-
-function scoreAsset(symbol,daily,h4){
- let c=daily.map(x=>x.c),v=daily.map(x=>x.v),last=daily.at(-1);
- let price=last.c,ma20=sma(c,20),ma50=sma(c,50),ma200=sma(c,200);
- let rs=rsi(c),a=atr(daily),h4c=h4.map(x=>x.c),h4ma=sma(h4c,20),h4rsi=rsi(h4c);
- let old200=daily.length>=210?avg(c.slice(-210,-10)):ma200;
- let slope=ma200>old200?'RISING':'FALLING';
- let dailyBull=price>ma200&&ma50>ma200&&slope==='RISING';
- let ready=h4c.at(-1)>h4ma&&h4rsi>=45&&h4rsi<=70;
- let over=(price/ma20-1)*100>8||rs>74;
- let rel=avg(v.slice(-21,-1))?last.v/avg(v.slice(-21,-1)):1;
-
- let technical=clamp((price>ma200?50:10)+(ma50>ma200?25:5)+(slope==='RISING'?25:0));
- let momentum=clamp(50+(rs-50)*1.3);
- let entry=clamp(90-Math.abs(price/ma20-1)*900+(ready?10:0)-(over?30:0));
- let volume=clamp(45+(rel-1)*55);
- let rr=clamp(55+(dailyBull?20:0)+(ready?15:0));
- let score=Math.round((technical*.25+momentum*.15+entry*.15+volume*.15+rr*.15+70*.10)/.95);
-
- let stop=Math.min(ma50,price-a*2);
- if(!stop||stop>=price)stop=price*.94;
- let R=price-stop;
-
- let signal=!dailyBull?'WAIT':over?'OVEREXTENDED':score>=85&&ready?'STRONG BUY':score>=75?'BUY':'WATCH';
-
- return{
-  score,signal,price,ma20,ma50,ma200,rsi:rs,h4rsi,
-  daily:dailyBull?'Bullish':price>ma200?'Neutral':'Bearish',
-  timing:ready?'Ready':'Wait',overextended:over,relVol:rel,
-  stop,t1:price+R*2,t2:price+R*3,
-  type:symbol.includes('/')?'CRYPTO':'US EQUITY'
- };
-}
-
-function dataFor(s){
- return liveData[s]||{
-  score:50,signal:'WATCH',price:0,ma20:0,ma50:0,ma200:0,rsi:50,h4rsi:50,
-  daily:'Neutral',timing:'Wait',overextended:false,relVol:1,stop:0,t1:0,t2:0,type:'ASSET'
- };
-}
-
-function allSymbols(){
- let s=new Set([...watch,'SPY','QQQ',...Object.keys(positions)]);
- leveragePositions.forEach(p=>s.add(normalizeCryptoSymbol(p.symbol)));
- return [...s];
-}
-
-function hydrate(){
- allSymbols().forEach(s=>{
-  let d=cached(s,'1day'),h=cached(s,'4h');
-  if(d?.values&&h?.values){
-   ohlcvCache[s]={D:d.values,H4:h.values};
-   liveData[s]=scoreAsset(s,d.values,h.values);
-  }
- });
-}
-
-async function refresh(force=false){
- if(refreshRunning)return;
- refreshRunning=true;
- $('topSync').textContent='SYNCING';
-
- for(let s of allSymbols()){
-  try{
-   let h=await fetchSeries(s,'4h',force);
-   let d=await fetchSeries(s,'1day',force);
-   ohlcvCache[s]={D:d,H4:h};
-   liveData[s]=scoreAsset(s,d,h);
-   renderAll();
-  }catch(e){}
- }
-
- localStorage.setItem('stockpm_last_sync',new Date().toISOString());
- $('topSync').textContent='LIVE / CACHED';
- $('twelveStatus').textContent='CONNECTED';
- $('lastSync').textContent=new Date().toLocaleString();
- refreshRunning=false;
-}
-
-function stockAction(s){
- let d=dataFor(s),p=positions[s];
- if(!p)return d.signal;
- if(d.price<=d.stop)return'EXIT WATCH';
- if(d.daily==='Bearish'||d.price<d.ma200)return'REDUCE';
- if(d.overextended)return'HOLD';
- let pnl=p.avg?(d.price/p.avg-1)*100:0;
- if(d.score>=85&&d.timing==='Ready'&&pnl<12)return'ADD';
- return'HOLD';
-}
-
-function stockRisk(s){
- let d=dataFor(s),p=positions[s];
- if(!p)return{riskPct:0,loss:0,heat:0};
- let loss=Math.max(0,(p.avg-d.stop)*p.qty);
- let riskPct=loss/riskSettings.equity*100;
- return{loss,riskPct,heat:clamp(riskPct/riskSettings.maxRiskPct*100)};
-}
-
-function levMetrics(p){
- let entry=+p.entry,current=dataFor(normalizeCryptoSymbol(p.symbol)).price||entry,size=+p.size,lev=+p.leverage||1;
- let dir=p.side==='SHORT'?-1:1;
- let pnl=size*((current-entry)/entry)*dir;
- let margin=size/lev,roe=margin?pnl/margin*100:0;
- let stopLoss=p.stop?size*Math.abs(p.stop-entry)/entry:0;
- let accountRisk=stopLoss/riskSettings.equity*100;
- let liqBuffer=p.liq?Math.abs(current-p.liq)/current*100:999;
- let state=accountRisk>riskSettings.maxRiskPct*1.5||liqBuffer<8?'DANGER':accountRisk>riskSettings.maxRiskPct||liqBuffer<15?'HIGH':accountRisk<riskSettings.maxRiskPct*.6?'SAFE':'NORMAL';
- return{entry,current,size,lev,pnl,margin,roe,stopLoss,accountRisk,liqBuffer,state};
-}
-
-function cls(a){
- if(['STRONG BUY','BUY','ADD','SAFE'].includes(a))return'good';
- if(['REDUCE','OVEREXTENDED','HIGH'].includes(a))return'warn';
- if(['EXIT WATCH','DANGER'].includes(a))return'bad';
- return'neutral';
-}
-
-function renderHome(){
- let html='',add=0,hold=0,reduce=0,risk=0;
-
- Object.keys(positions).forEach(s=>{
-  let p=positions[s],d=dataFor(s),a=stockAction(s),r=stockRisk(s);
-  let pnl=p.avg&&d.price?(d.price/p.avg-1)*100:0;
-  if(a==='ADD')add++; else if(a==='REDUCE')reduce++; else hold++;
-  if(r.riskPct>riskSettings.maxRiskPct)risk++;
-
-  html+=`<div class="ticker-row" data-spot="${s}">
-  <div><div class="ticker-name">${s} <span class="badge ${cls(a)}">${a}</span></div>
-  <div class="ticker-meta">현재 ${fmtPrice(d.price)} · 평단 ${fmtPrice(p.avg)} · ${fmtPct(pnl)}<br>Risk ${r.riskPct.toFixed(2)}% · 4H ${d.timing}</div></div>
-  <div class="score-circle">${d.score}</div><div class="chev">›</div></div>`;
- });
-
- leveragePositions.forEach((p,i)=>{
-  let m=levMetrics(p);
-  if(['HIGH','DANGER'].includes(m.state))risk++;else hold++;
-  html+=`<div class="ticker-row" data-lev="${i}">
-  <div><div class="ticker-name">${p.symbol} <span class="badge ${cls(m.state)}">${m.state}</span></div>
-  <div class="ticker-meta">${p.side} ${m.lev}X · P/L ${fmtPrice(m.pnl)} · Risk ${m.accountRisk.toFixed(2)}%</div></div>
-  <div class="score-circle">⚡</div><div class="chev">›</div></div>`;
- });
-
- $('homePositions').innerHTML=html||'<div class="empty">POSITION 탭에서 보유종목을 등록하세요.</div>';
- $('sumAdd').textContent=add;$('sumHold').textContent=hold;$('sumReduce').textContent=reduce;$('sumRisk').textContent=risk;
-
- let owned=new Set(Object.keys(positions));
- let radar=watch.filter(s=>!owned.has(s)).sort((a,b)=>dataFor(b).score-dataFor(a).score);
- $('homeRadar').innerHTML=radar.slice(0,5).map(s=>{
-  let d=dataFor(s);
-  return `<div class="ticker-row" data-watch="${s}"><div><div class="ticker-name">${s} <span class="badge ${cls(d.signal)}">${d.signal}</span></div><div class="ticker-meta">Daily ${d.daily} · 4H ${d.timing}</div></div><div class="score-circle">${d.score}</div><div class="chev">›</div></div>`;
- }).join('');
-
- $('spyState').textContent=dataFor('SPY').daily;
- $('qqqState').textContent=dataFor('QQQ').daily;
- bindRows();
-}
-
-function renderWatch(){
- let s=[...watch].sort((a,b)=>dataFor(b).score-dataFor(a).score);
- $('watchList').innerHTML=s.map(x=>{
-  let d=dataFor(x);
-  return `<div class="ticker-row" data-watch="${x}"><div><div class="ticker-name">${x} <span class="badge ${cls(d.signal)}">${d.signal}</span></div><div class="ticker-meta">Daily ${d.daily} · 4H ${d.timing}</div></div><div class="score-circle">${d.score}</div><div class="chev">›</div></div>`;
- }).join('');
- $('discoverList').innerHTML=s.filter(x=>!positions[x]).slice(0,6).map(x=>{
-  let d=dataFor(x);
-  return `<div class="ticker-row" data-watch="${x}"><div><div class="ticker-name">${x}</div><div class="ticker-meta">${d.signal} · RSI ${Math.round(d.rsi)} · RelVol ${d.relVol.toFixed(2)}x</div></div><div class="score-circle">${d.score}</div><div class="chev">›</div></div>`;
- }).join('');
- bindRows();
-}
-
-function renderPositions(){
- let h='';
- Object.entries(positions).forEach(([s,p])=>{
-  let d=dataFor(s),a=stockAction(s);
-  h+=`<div class="ticker-row" data-spot="${s}"><div><div class="ticker-name">${s} <span class="badge ${cls(a)}">${a}</span></div><div class="ticker-meta">${p.qty} @ ${fmtPrice(p.avg)}</div></div><div class="score-circle">${d.score}</div><div class="chev">›</div></div>`;
- });
- leveragePositions.forEach((p,i)=>{
-  let m=levMetrics(p);
-  h+=`<div class="ticker-row" data-lev="${i}"><div><div class="ticker-name">${p.symbol} <span class="badge ${cls(m.state)}">${m.state}</span></div><div class="ticker-meta">${p.side} ${m.lev}X · ROE ${fmtPct(m.roe)}</div></div><div class="score-circle">⚡</div><div class="chev">›</div></div>`;
- });
- $('positionList').innerHTML=h||'<div class="empty">등록된 포지션이 없습니다.</div>';
- $('positionCount').textContent=Object.keys(positions).length+leveragePositions.length;
- bindRows();
-}
-
-function bindRows(){
- document.querySelectorAll('[data-watch]').forEach(e=>e.onclick=()=>openDetail(e.dataset.watch));
- document.querySelectorAll('[data-spot]').forEach(e=>e.onclick=()=>openDetail(e.dataset.spot));
- document.querySelectorAll('[data-lev]').forEach(e=>e.onclick=()=>openLev(+e.dataset.lev));
-}
-
-function openDetail(s){
- let d=dataFor(s),p=positions[s],a=p?stockAction(s):d.signal;
- $('detailTicker').textContent=s;$('detailPrice').textContent=fmtPrice(d.price);$('detailScore').innerHTML=d.score+'<small>/100</small>';
- $('detailAction').textContent=a;$('detailAction').className='badge '+cls(a);
- $('dailyState').textContent=d.daily;$('timingState').textContent=d.timing;
- $('ma200Dist').textContent=d.ma200?fmtPct((d.price/d.ma200-1)*100):'—';
- $('assetType').textContent=d.type;
- $('stopText').textContent=fmtPrice(d.stop);$('target1').textContent=fmtPrice(d.t1);$('target2').textContent=fmtPrice(d.t2);
- $('signalTag').textContent=a+' · '+d.score;
-
- $('whyGrid').innerHTML=[
- ['MA200 Gate',d.price>d.ma200?'PASS':'BLOCK'],
- ['Daily Trend',d.daily],
- ['4H Timing',d.timing],
- ['RSI',Math.round(d.rsi)],
- ['Relative Volume',d.relVol.toFixed(2)+'x'],
- ['Overextension',d.overextended?'BLOCK':'OK']
- ].map(x=>`<div class="why-item"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('');
-
- if(p){
-  let r=stockRisk(s),value=p.qty*d.price,cost=p.qty*p.avg,pnl=value-cost;
-  $('ownedSummaryCard').style.display='block';$('spotEditCard').style.display='block';$('ownedAction').textContent=a;
-  $('ownedStats').innerHTML=`<div class="stat"><small>Invested</small><b>${fmtPrice(cost)}</b></div><div class="stat"><small>Value</small><b>${fmtPrice(value)}</b></div><div class="stat"><small>P/L</small><b>${fmtPrice(pnl)}</b></div><div class="stat"><small>Risk</small><b>${r.riskPct.toFixed(2)}%</b></div>`;
-  $('stockRiskBar').style.width=r.heat+'%';
-  $('stockRiskText').textContent='Stop 도달 예상 손실 '+fmtPrice(r.loss);
- }else{
-  $('ownedSummaryCard').style.display='none';$('spotEditCard').style.display='none';
- }
-
- let budget=p?Math.max(0,(p.max||10000)-p.qty*p.avg):10000;
- let levels=[d.price,d.ma20,d.ma50].filter(x=>x>0);
- $('scalePlan').innerHTML=levels.map((x,i)=>`<div class="plan-item"><small>${i+1}차</small><b>${fmtPrice(x)}</b><em>예산 ${Math.round(budget/levels.length).toLocaleString()} USD</em></div>`).join('');
-
- drawChart(s);
- $('detail').classList.add('open');
-}
-
-function drawChart(s){
- let arr=(detailTf==='1D'?ohlcvCache[s]?.D:ohlcvCache[s]?.H4)||[];
- let svg=$('chartSvg');
- if(!arr.length){svg.innerHTML='';$('chartNote').textContent='CACHED DATA WAIT';return}
- arr=arr.slice(detailTf==='1D'?-55:-48);
- let min=Math.min(...arr.map(x=>x.l)),max=Math.max(...arr.map(x=>x.h)),W=800,H=300,cw=W/arr.length;
- let y=v=>H-30-(v-min)/(max-min||1)*(H-60),html='';
- arr.forEach((x,i)=>{
-  let cx=i*cw+cw/2,up=x.c>=x.o,col=up?'#31d07c':'#ff6678';
-  html+=`<line x1="${cx}" y1="${y(x.h)}" x2="${cx}" y2="${y(x.l)}" stroke="${col}"/><rect x="${cx-cw*.2}" y="${Math.min(y(x.o),y(x.c))}" width="${cw*.4}" height="${Math.max(2,Math.abs(y(x.o)-y(x.c)))}" fill="${col}"/>`;
- });
- svg.innerHTML=html;
- $('chartNote').textContent=detailTf+' · '+arr.at(-1).dt;
-}
-
-function openLev(i){
- levDetailIndex=i;
- let p=leveragePositions[i],m=levMetrics(p);
- $('levDetailTicker').textContent=p.symbol;$('levSideLabel').textContent=p.side+' · '+m.lev+'X';$('levCurrentPrice').textContent=fmtPrice(m.current);
- $('levRiskState').textContent=m.state;$('levRiskState').className='badge '+cls(m.state);$('levRoe').innerHTML=m.roe.toFixed(1)+'<small>% ROE</small>';
- $('levPnl').textContent=fmtPrice(m.pnl);$('levAccountRisk').textContent=m.accountRisk.toFixed(2)+'%';$('levLiqBuffer').textContent=m.liqBuffer===999?'—':m.liqBuffer.toFixed(1)+'%';
- $('levRiskText').textContent=m.state;
- $('levRiskStats').innerHTML=`<div class="stat"><small>Entry</small><b>${fmtPrice(m.entry)}</b></div><div class="stat"><small>Position</small><b>${fmtPrice(m.size)}</b></div><div class="stat"><small>Margin</small><b>${fmtPrice(m.margin)}</b></div><div class="stat"><small>Stop loss</small><b>${fmtPrice(m.stopLoss)}</b></div>`;
- $('levRiskBar').style.width=clamp(m.accountRisk/riskSettings.maxRiskPct*100)+'%';
-
- let range=Math.abs(p.entry-p.stop),dir=p.side==='LONG'?-1:1;
- let adds=[.25,.5,.7].map(x=>p.entry+dir*range*x);
- let addSize=p.size*.3,newSize=p.size+addSize*3,newAvg=(p.entry*p.size+adds.reduce((a,x)=>a+x*addSize,0))/newSize;
- let newRisk=newSize*Math.abs(newAvg-p.stop)/newAvg/riskSettings.equity*100,blocked=newRisk>riskSettings.maxRiskPct*1.5;
- $('levAddState').textContent=blocked?'ADD BLOCKED':'ADD AVAILABLE';
- $('levScaleIn').innerHTML=adds.map((x,i)=>`<div class="plan-item"><small>${i+1}차 ADD</small><b>${fmtPrice(x)}</b><em>${fmtPrice(addSize)} notional</em></div>`).join('');
-
- let outDir=p.side==='LONG'?1:-1;
- $('levScaleOut').innerHTML=[1,2,3,4].map((r,i)=>`<div class="plan-item"><small>${i<3?'T'+(i+1):'RUNNER'}</small><b>${fmtPrice(p.entry+outDir*range*r)}</b><em>${[25,25,30,20][i]}% 익절</em></div>`).join('');
- $('levScenario').innerHTML=`<div class="stat"><small>All-add avg</small><b>${fmtPrice(newAvg)}</b></div><div class="stat"><small>Total size</small><b>${fmtPrice(newSize)}</b></div><div class="stat"><small>Risk after adds</small><b>${newRisk.toFixed(2)}%</b></div><div class="stat"><small>Limit</small><b>${riskSettings.maxRiskPct}%</b></div>`;
- $('levDetail').classList.add('open');
-}
-
-function renderAll(){renderHome();renderWatch();renderPositions()}
-
-function gotoPage(i){
- currentPage=i;
- $('track').classList.add('animating');
- $('track').style.transform=`translate3d(${-i*100}%,0,0)`;
- document.querySelectorAll('.tab').forEach((b,n)=>b.classList.toggle('active',n===i));
-}
-
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>gotoPage(+b.dataset.index));
-
-let sx=0;
-$('viewport').addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
-$('viewport').addEventListener('touchend',e=>{
- let dx=e.changedTouches[0].clientX-sx;
- if(dx<-70&&currentPage<4)gotoPage(currentPage+1);
- if(dx>70&&currentPage>0)gotoPage(currentPage-1);
-},{passive:true});
-
-$('closeDetail').onclick=()=>$('detail').classList.remove('open');
-$('closeLevDetail').onclick=()=>$('levDetail').classList.remove('open');
-
-document.querySelectorAll('.tf-toggle button').forEach(b=>b.onclick=()=>{
- detailTf=b.dataset.tf;
- document.querySelectorAll('.tf-toggle button').forEach(x=>x.classList.toggle('active',x===b));
- drawChart($('detailTicker').textContent);
-});
-
-document.querySelectorAll('#positionMode button').forEach(b=>b.onclick=()=>{
- document.querySelectorAll('#positionMode button').forEach(x=>x.classList.toggle('active',x===b));
- let lev=b.dataset.mode==='lev';
- $('spotForm').style.display=lev?'none':'block';$('levForm').style.display=lev?'block':'none';
-});
-
-$('addWatchBtn').onclick=()=>{
- let s=$('watchInput').value.trim().toUpperCase();
- if(s&&!watch.includes(s)){watch.push(s);store.set('stockpm_watch',watch)}
- $('watchInput').value='';renderAll();
-};
-
-$('saveRiskSettings').onclick=()=>{
- riskSettings={equity:+$('accountEquity').value||100000,maxRiskPct:+$('maxRiskPct').value||2};
- store.set('stockpm_risk_settings',riskSettings);renderAll();
-};
-
-$('saveSpot').onclick=()=>{
- let s=$('posTicker').value.trim().toUpperCase();if(!s)return;
- positions[s]={qty:+$('posQty').value||0,avg:+$('posAvg').value||0,max:+$('posMax').value||10000};
- store.set('stockpm_positions',positions);
- if(!watch.includes(s)){watch.push(s);store.set('stockpm_watch',watch)}
- renderAll();
-};
-
-$('saveLev').onclick=()=>{
- let symbol=$('levTicker').value.trim().toUpperCase();if(!symbol)return;
- let p={symbol,side:$('levSide').value,leverage:+$('levX').value||1,entry:+$('levEntry').value||0,size:+$('levSize').value||0,stop:+$('levStop').value||0,liq:+$('levLiq').value||0};
- let i=leveragePositions.findIndex(x=>x.symbol===symbol&&x.side===p.side);
- if(i>=0)leveragePositions[i]=p;else leveragePositions.push(p);
- store.set('stockpm_leverage',leveragePositions);renderAll();
-};
-
-$('deleteSpotBtn').onclick=()=>{
- let s=$('detailTicker').textContent;
- if(confirm('포지션을 삭제할까요?')){delete positions[s];store.set('stockpm_positions',positions);$('detail').classList.remove('open');renderAll()}
-};
-
-$('editSpotBtn').onclick=()=>{
- let s=$('detailTicker').textContent,p=positions[s];if(!p)return;
- $('posTicker').value=s;$('posQty').value=p.qty;$('posAvg').value=p.avg;$('posMax').value=p.max;
- $('detail').classList.remove('open');gotoPage(3);
-};
-
-$('deleteLevBtn').onclick=()=>{
- if(confirm('레버리지 포지션을 삭제할까요?')){leveragePositions.splice(levDetailIndex,1);store.set('stockpm_leverage',leveragePositions);$('levDetail').classList.remove('open');renderAll()}
-};
-
-$('editLevBtn').onclick=()=>{
- let p=leveragePositions[levDetailIndex];if(!p)return;
- $('levTicker').value=p.symbol;$('levSide').value=p.side;$('levX').value=p.leverage;$('levEntry').value=p.entry;$('levSize').value=p.size;$('levStop').value=p.stop;$('levLiq').value=p.liq;
- document.querySelector('[data-mode="lev"]').click();$('levDetail').classList.remove('open');gotoPage(3);
-};
-
-$('refreshTwelve').onclick=()=>refresh(true);
-
-$('accountEquity').value=riskSettings.equity;
-$('maxRiskPct').value=riskSettings.maxRiskPct;
-
-hydrate();
-renderAll();
-gotoPage(0);
-
-let last=localStorage.getItem('stockpm_last_sync');
-if(last){$('topSync').textContent='CACHED DATA';$('lastSync').textContent=new Date(last).toLocaleString();$('twelveStatus').textContent='CACHED'}
-refresh(false);
+function avg(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:0}function sma(a,n){return a.length>=n?avg(a.slice(-n)):avg(a)}function clamp(v,a=0,b=100){return Math.max(a,Math.min(b,v))}
+function rsi(closes,n=14){if(closes.length<n+1)return 50;let g=0,l=0;for(let i=closes.length-n;i<closes.length;i++){const d=closes[i]-closes[i-1];if(d>0)g+=d;else l-=d}if(!l)return 100;const rs=(g/n)/(l/n);return 100-100/(1+rs)}
+function atr(c,n=14){if(c.length<n+1)return 0;const tr=[];for(let i=c.length-n;i<c.length;i++)tr.push(Math.max(c[i].h-c[i].l,Math.abs(c[i].h-c[i-1].c),Math.abs(c[i].l-c[i-1].c)));return avg(tr)}
+function fmtVol(v){if(!Number.isFinite(v)||v<=0)return'—';if(v>=1e9)return(v/1e9).toFixed(1)+'B';if(v>=1e6)return(v/1e6).toFixed(1)+'M';if(v>=1e3)return(v/1e3).toFixed(1)+'K';return Math.round(v).toLocaleString()}
+function normalizeSeries(values){return [...values].reverse().map(x=>({dt:x.datetime,o:+x.open,h:+x.high,l:+x.low,c:+x.close,v:+x.volume||0})).filter(x=>[x.o,x.h,x.l,x.c].every(Number.isFinite))}
+function normalizeCryptoSymbol(s){s=(s||'').trim().toUpperCase().replace(/\s/g,'');if(s.includes('/'))return s;if(s.endsWith('USDT'))return s.slice(0,-4)+'/USD';if(s.endsWith('USD'))return s.slice(0,-3)+'/USD';return s}
+function allMarketSymbols(){const set=new Set(watch);Object.keys(positions).forEach(s=>set.add(s));leveragePositions.forEach(p=>set.add(normalizeCryptoSymbol(p.symbol)));set.add('SPY');set.add('QQQ');return [...set]}
+function dataFor(s){return liveData[s]||demo[s]||{score:50,signal:'WATCH',daily:'Neutral',timing:'Wait',price:100,ma20:99,ma50:98,ma200:96,ma200Slope:'FLAT',technical:50,momentum:50,entry:50,volume:50,rr:50,market:60,relVol:1,volAvg:'—',stop:92,t1:116,t2:124,type:s.includes('/')?'CRYPTO':'US EQUITY',rsi:50,h4rsi:50,overextended:false}}
+function cacheSlot(symbol,interval){return `${symbol}__${interval}`}function getCachedSeries(symbol,interval){const row=marketCache[cacheSlot(symbol,interval)];return row?.values?.length?{values:row.values,fetchedAt:+row.fetchedAt||0}:null}function saveCachedSeries(symbol,interval,values){marketCache[cacheSlot(symbol,interval)]={values,fetchedAt:Date.now()};store.set(CACHE_KEY,marketCache)}function cacheFresh(symbol,interval){const r=getCachedSeries(symbol,interval);if(!r)return false;return Date.now()-r.fetchedAt<(interval==='1day'?DAILY_TTL:H4_TTL)}
+async function fetchSeries(symbol,interval,force=false){const cached=getCachedSeries(symbol,interval);if(cached&&!force&&cacheFresh(symbol,interval))return{values:cached.values,source:'cache',fetchedAt:cached.fetchedAt};const url=new URL(MARKET_FUNCTION);url.searchParams.set('symbol',symbol);url.searchParams.set('interval',interval);try{const r=await fetch(url,{method:'GET',headers:{apikey:SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json'}});let j={};try{j=await r.json()}catch{}if(r.status===429||j?.error==='RATE_LIMITED'){const e=new Error('RATE_LIMITED');e.code='RATE_LIMITED';throw e}if(!r.ok||j?.ok===false)throw new Error(j?.message||`HTTP ${r.status}`);if(!Array.isArray(j.values))throw new Error('NO_MARKET_DATA');const values=normalizeSeries(j.values);if(!values.length)throw new Error('EMPTY_SERIES');saveCachedSeries(symbol,interval,values);return{values,source:'live',fetchedAt:Date.now()}}catch(e){if(cached?.values?.length)return{values:cached.values,source:'stale',fetchedAt:cached.fetchedAt,error:e};throw e}}
+function scoreAsset(symbol,daily,h4){const c=daily.map(x=>x.c),v=daily.map(x=>x.v),last=daily.at(-1),price=last.c,ma20=sma(c,20),ma50=sma(c,50),ma200=sma(c,200),old200=daily.length>=210?avg(c.slice(-210,-10)):ma200,slopePct=old200?(ma200/old200-1)*100:0,ma200Slope=slopePct>.35?'RISING':slopePct<-.35?'FALLING':'FLAT',rs=rsi(c),chg20=c.length>20?(price/c.at(-21)-1)*100:0,avgv=avg(v.slice(-21,-1).filter(x=>x>0)),relVol=avgv&&last.v?last.v/avgv:1,a=atr(daily),h4c=h4.map(x=>x.c),h4price=h4c.at(-1)||price,h4ma20=sma(h4c,20),h4rsi=rsi(h4c),dailyBull=price>ma200&&ma50>ma200&&ma200Slope!=='FALLING',timingReady=h4price>h4ma20&&h4rsi>=45&&h4rsi<=70,dist20=Math.abs(price/ma20-1)*100,overextended=(price/ma20-1)*100>8||rs>74;
+let technical=clamp((price>ma200?50:10)+(ma50>ma200?25:5)+(ma200Slope==='RISING'?25:ma200Slope==='FLAT'?10:0));let momentum=clamp(50+(rs-50)*1.25+chg20*1.1);let entry=clamp(92-dist20*9+(timingReady?10:-5)-(overextended?30:0));let volume=clamp(45+(relVol-1)*55);let stop=Math.min(ma50||price-a*2,price-a*2);if(!(stop>0&&stop<price))stop=price*(dailyBull?.94:.92);const riskPer=price-stop,t1=price+riskPer*2,t2=price+riskPer*3,rr=clamp(55+(dailyBull?20:0)+(timingReady?15:0)-(overextended?10:0)),market=70;let score=Math.round(clamp((technical*.25+momentum*.15+entry*.15+volume*.15+rr*.15+market*.10)/.95));let signal='WATCH';if(!dailyBull)signal='WAIT';else if(overextended)signal='OVEREXTENDED';else if(score>=85&&timingReady)signal='STRONG BUY';else if(score>=75)signal='BUY';else signal='WATCH';return{score,signal,daily:dailyBull?'Bullish':price>ma200?'Neutral':'Bearish',timing:timingReady?'Ready':'Wait',price,ma20,ma50,ma200,ma200Slope,technical,momentum,entry,volume,rr,market,relVol,volAvg:fmtVol(avgv),stop,t1,t2,type:symbol.includes('/')?'CRYPTO':['SOXX','QQQ','SPY','TQQQ','SOXL'].includes(symbol)?'ETF':'US EQUITY',rsi:rs,h4rsi,overextended,atr:a}}
+function hydrateFromCache(){let n=0;for(const symbol of allMarketSymbols()){const d=getCachedSeries(symbol,'1day'),h=getCachedSeries(symbol,'4h');if(d?.values?.length&&h?.values?.length){ohlcvCache[symbol]={D:d.values,H4:h.values};if(d.values.length>=30&&h.values.length>=20){liveData[symbol]=scoreAsset(symbol,d.values,h.values);n++}}}return n}
+async function loadOneSeries(symbol,interval,force){const r=await fetchSeries(symbol,interval,force);seriesState[cacheSlot(symbol,interval)]=r.source;const d=getCachedSeries(symbol,'1day'),h=getCachedSeries(symbol,'4h');if(d?.values?.length&&h?.values?.length){ohlcvCache[symbol]={D:d.values,H4:h.values};if(d.values.length>=30&&h.values.length>=20)liveData[symbol]=scoreAsset(symbol,d.values,h.values)}return r}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+async function refreshMarketData(force=false){if(refreshRunning)return;refreshRunning=true;setApiStatus('loading');const syms=allMarketSymbols();const ownedPriority=[...Object.keys(positions),...leveragePositions.map(p=>normalizeCryptoSymbol(p.symbol))];const ordered=[...new Set([...ownedPriority,...syms])];const jobs=[];ordered.forEach(s=>jobs.push([s,'4h']));ordered.forEach(s=>jobs.push([s,'1day']));let live=0,ok=0,rate=false;for(let i=0;i<jobs.length;i++){const [s,tf]=jobs[i];if(!force&&cacheFresh(s,tf)){ok++;continue}try{const r=await loadOneSeries(s,tf,force);ok++;if(r.source==='live')live++}catch(e){if(e.code==='RATE_LIMITED'||e.message==='RATE_LIMITED')rate=true}renderAll();setApiStatus('loading',`${i+1}/${jobs.length}`);if(i<jobs.length-1)await sleep(REQUEST_GAP)}localStorage.setItem('stockpm_last_sync',new Date().toISOString());setApiStatus(rate?'rate':live?'ok':'cached',`${ok}/${jobs.length}`);refreshRunning=false}
+function stockAction(symbol){const d=dataFor(symbol),p=positions[symbol];if(!p)return d.signal;if(d.price<=d.stop)return'EXIT WATCH';if(d.daily==='Bearish'||d.price<d.ma200)return'REDUCE';if(d.overextended)return'HOLD';const pnl=p.avg?(d.price/p.avg-1)*100:0;if(d.score>=85&&d.timing==='Ready'&&pnl<12)return'ADD';if(d.score<60||d.timing==='Wait'&&d.price<d.ma50)return'REDUCE';return'HOLD'}
+function stockRisk(symbol){const d=dataFor(symbol),p=positions[symbol],equity=+riskSettings.equity||1;if(!p)return{loss:0,riskPct:0,maxShares:0,heat:0};const qty=+p.qty||0,avgP=+p.avg||d.price,stop=d.stop,loss=Math.max(0,(avgP-stop)*qty),riskPct=loss/equity*100,allowed=equity*(+riskSettings.maxRiskPct||2)/100,perShare=Math.max(.0001,d.price-stop),maxShares=Math.floor(allowed/perShare),heat=clamp(riskPct/(+riskSettings.maxRiskPct||2)*100);return{loss,riskPct,maxShares,heat}}
+function portfolioHeat(){let risk=0;Object.keys(positions).forEach(s=>risk+=stockRisk(s).riskPct);leveragePositions.forEach(p=>risk+=levMetrics(p).accountRisk);const max=Math.max(1,(+riskSettings.maxRiskPct||2)*Math.max(1,Object.keys(positions).length+leveragePositions.length));return{risk,heat:clamp(risk/max*100)}}
+function getMarketPriceForLev(p){const s=normalizeCryptoSymbol(p.symbol),d=dataFor(s);return d.price||+p.entry||0}
+function levMetrics(p){const side=(p.side||'LONG').toUpperCase(),entry=+p.entry||0,current=getMarketPriceForLev(p),size=+p.size||0,lev=Math.max(1,+p.leverage||1),stop=+p.stop||0,liq=+p.liq||0,equity=+riskSettings.equity||1,dir=side==='LONG'?1:-1,pnl=size*((current-entry)/entry)*dir,margin=size/lev,roe=margin?pnl/margin*100:0,stopLoss=stop&&entry?size*Math.abs(stop-entry)/entry:0,accountRisk=stopLoss/equity*100,liqBuffer=liq&&current?Math.abs(current-liq)/current*100:999;let state='NORMAL';if(!stop)state='HIGH';if(accountRisk>(+riskSettings.maxRiskPct||2)*1.5||liqBuffer<8)state='DANGER';else if(accountRisk>(+riskSettings.maxRiskPct||2)||liqBuffer<15)state='HIGH';else if(accountRisk<=(+riskSettings.maxRiskPct||2)*.6&&liqBuffer>20)state='SAFE';return{side,entry,current,size,lev,stop,liq,pnl,margin,roe,stopLoss,accountRisk,liqBuffer,state,dir}}
+function levScalePlan(p){const m=levMetrics(p),entry=m.entry,stop=m.stop||entry*(m.side==='LONG'?.92:1.08),range=Math.abs(entry-stop),dir=m.side==='LONG'?-1:1,levels=[entry+dir*range*.25,entry+dir*range*.5,entry+dir*range*.72],weights=[.35,.35,.30],adds=weights.map((w,i)=>({price:levels[i],notional:m.size*w}));let totalSize=m.size,weighted=m.entry*m.size;adds.forEach(a=>{totalSize+=a.notional;weighted+=a.price*a.notional});const newAvg=totalSize?weighted/totalSize:m.entry,newStopLoss=totalSize*Math.abs(newAvg-stop)/newAvg,newRisk=newStopLoss/(+riskSettings.equity||1)*100,blocked=newRisk>(+riskSettings.maxRiskPct||2)*1.5;return{adds,totalSize,newAvg,newRisk,blocked,stop}}
+function actionClass(a){if(['STRONG BUY','BUY','ADD','SAFE'].includes(a))return'good';if(['REDUCE','OVEREXTENDED','HIGH'].includes(a))return'warn';if(['EXIT WATCH','DANGER'].includes(a))return'bad';return'neutral'}
+function renderHome(){const spot=Object.keys(positions).map(s=>({kind:'spot',s,action:stockAction(s),risk:stockRisk(s)}));const lev=leveragePositions.map((p,i)=>({kind:'lev',i,p,m:levMetrics(p)}));let add=0,hold=0,reduce=0,risk=0;spot.forEach(x=>{if(x.action==='ADD')add++;else if(x.action==='HOLD')hold++;else if(x.action==='REDUCE')reduce++;if(x.risk.riskPct>(+riskSettings.maxRiskPct||2))risk++});lev.forEach(x=>{if(x.m.state==='DANGER'||x.m.state==='HIGH')risk++;else hold++});$('sumAdd').textContent=add;$('sumHold').textContent=hold;$('sumReduce').textContent=reduce;$('sumRisk').textContent=risk;const ph=portfolioHeat();$('portfolioHeatBar').style.width=ph.heat+'%';$('portfolioHeatText').textContent=`Estimated portfolio risk ${ph.risk.toFixed(2)}% · Heat ${Math.round(ph.heat)}/100`;$('portfolioRiskLabel').textContent=ph.heat>75?'HIGH':ph.heat>45?'NORMAL':'LOW';
+let html='';spot.forEach(x=>{const d=dataFor(x.s),p=positions[x.s],pnl=p.avg?(d.price/p.avg-1)*100:0;html+=`<div class="ticker-row" data-spot="${x.s}"><div><div class="ticker-name">${x.s} <span class="badge ${actionClass(x.action)}">${x.action}</span></div><div class="ticker-meta">현재 ${fmtPrice(d.price)} · 평단 ${fmtPrice(p.avg)} · <span class="pnl ${pnl>=0?'good':'bad'}">${fmtPct(pnl)}</span><br>Risk ${x.risk.riskPct.toFixed(2)}% · 4H ${d.timing}</div></div><div class="score-circle">${d.score}</div><div class="chev">›</div></div>`});lev.forEach(x=>{html+=`<div class="ticker-row" data-lev="${x.i}"><div><div class="ticker-name">${x.p.symbol} <span class="badge ${actionClass(x.m.state)}">${x.m.state}</span></div><div class="ticker-meta">${x.m.side} ${x.m.lev}X · P/L <span class="${x.m.pnl>=0?'good':'bad'}">${fmtPrice(x.m.pnl)}</span> · Risk ${x.m.accountRisk.toFixed(2)}%</div></div><div class="score-circle">⚡</div><div class="chev">›</div></div>`});$('homePositions').innerHTML=html||'<div class="empty">POSITION 탭에서 보유종목을 등록하세요.</div>';
+const owned=new Set(Object.keys(positions));const radar=watch.filter(s=>!owned.has(s)).sort((a,b)=>dataFor(b).score-dataFor(a).score).slice(0,5);$('homeRadar').innerHTML=radar.map(s=>{const d=dataFor(s);return`<div class="ticker-row" data-watch="${s}"><div><div class="ticker-name">${s} <span class="badge ${actionClass(d.signal)}">${d.signal}</span></div><div class="ticker-meta">Daily ${d.daily} · 4H ${d.timing} · RSI ${Math.round(d.rsi)}</div></div><div class="score-circle">${d.score}</div><div class="chev">›</div></div>`}).join('')||'<div class="empty">미보유 WATCH가 없습니다.</div>';$('spyState').textContent=dataFor('SPY').daily;$('qqqState').textContent=dataFor('QQQ').daily;$('marketDataState').textContent=$('topSync').textContent.includes('LIVE')?'LIVE':'CACHED';bindRows()}
+function renderWatch(){const sorted=[...watch].sort((a,b)=>dataFor(b).score-dataFor(a).score);$('watchList').innerHTML=sorted.map((s,i)=>{const d=dataFor(s);return`<div class="ticker-row" data-watch="${s}"><div><div class="ticker-name"><span class="rank">${i+1}</span> ${s} <span class="badge ${actionClass(d.signal)}">${d.signal}</span></div><div class="ticker-meta">Daily ${d.daily} · 4H ${d.timing} · MA200 ${d.price>d.ma200?'Above':'Below'}</div></div><div class="score-circle">${d.score}</div><div class="chev">›</div></div>`}).join('');$('discoverList').innerHTML=sorted.filter(s=>!positions[s]).slice(0,6).map(s=>{const d=dataFor(s);return`<div class="ticker-row" data-watch="${s}"><div><div class="ticker-name">${s}</div><div class="ticker-meta">${d.signal} · RSI ${Math.round(d.rsi)} · RelVol ${d.relVol.toFixed(2)}x</div></div><div class="score-circle">${d.score}</div><div class="chev">›</div></div>`}).join('');bindRows()}
+function renderPositions(){const spot=Object.entries(positions),lev=leveragePositions;$('positionCount').textContent=spot.length+lev.length;let html='';spot.forEach(([s,p])=>{const d=dataFor(s),a=stockAction(s),r=stockRisk(s),pnl=p.avg?(d.price/p.avg-1)*100:0;html+=`<div class="ticker-row" data-spot="${s}"><div><div class="ticker-name">${s} <span class="badge ${actionClass(a)}">${a}</span></div><div class="ticker-meta">${p.qty} @ ${fmtPrice(p.avg)} · P/L ${fmtPct(pnl)} · Risk ${r.riskPct.toFixed(2)}%</div></div><div class="score-circle">${d.score}</div><div class="chev">›</div></div>`});lev.forEach((p,i)=>{const m=levMetrics(p);html+=`<div class="ticker-row" data-lev="${i}"><div><div class="ticker-name">${p.symbol} <span class="badge ${actionClass(m.state)}">${m.state}</span></div><div class="ticker-meta">${m.side} ${m.lev}X · ROE ${fmtPct(m.roe)} · Liq buffer ${m.liqBuffer===999?'—':m.liqBuffer.toFixed(1)+'%'}</div></div><div class="score-circle">⚡</div><div class="chev">›</div></div>`});$('positionList').innerHTML=html||'<div class="empty">등록된 포지션이 없습니다.</div>';bindRows()}
+function bindRows(){document.querySelectorAll('[data-watch]').forEach(x=>x.onclick=()=>openDetail(x.dataset.watch));document.querySelectorAll('[data-spot]').forEach(x=>x.onclick=()=>openDetail(x.dataset.spot,true));document.querySelectorAll('[data-lev]').forEach(x=>x.onclick=()=>openLevDetail(+x.dataset.lev))}
+function renderAll(){renderHome();renderWatch();renderPositions();if($('detail').classList.contains('open'))fillDetail($('detailTicker').textContent);if($('levDetail').classList.contains('open'))fillLevDetail(levDetailIndex)}
+function whyRows(d){return[['Daily MA200 Gate',d.price>d.ma200?'PASS':'BLOCK',`Price ${d.price>d.ma200?'above':'below'} MA200 · ${d.ma200Slope}`],['MA50 Structure',d.ma50>d.ma200?'PASS':'WEAK',`MA50 ${d.ma50>d.ma200?'>':'<'} MA200`],['4H Timing',d.timing==='Ready'?'READY':'WAIT',`4H RSI ${Math.round(d.h4rsi)}`],['Overextension',d.overextended?'BLOCK':'OK',`Daily RSI ${Math.round(d.rsi)} · MA20 dist ${((d.price/d.ma20-1)*100).toFixed(1)}%`],['Relative Volume',`${d.relVol.toFixed(2)}x`,d.volAvg+' 20D avg'],['Risk / Reward',`${Math.round(d.rr)}/100`,`Stop ${fmtPrice(d.stop)} · T1 ${fmtPrice(d.t1)}`]]}
+function openDetail(symbol,owned=false){detailIndex=Math.max(0,watch.indexOf(symbol));$('detailSubtitle').textContent=owned||positions[symbol]?'POSITION DETAIL':'WATCH DETAIL';fillDetail(symbol);$('detail').classList.add('open')}
+function fillDetail(symbol){const d=dataFor(symbol),p=positions[symbol],action=p?stockAction(symbol):d.signal;$('detailTicker').textContent=symbol;$('assetType').textContent=d.type;$('detailPrice').textContent=fmtPrice(d.price);$('detailScore').innerHTML=`${d.score}<small>/100</small>`;$('detailAction').textContent=action;$('detailAction').className=`badge ${actionClass(action)}`;$('dailyState').textContent=d.daily;$('dailyState').className=d.daily==='Bullish'?'good':d.daily==='Bearish'?'bad':'warn';$('timingState').textContent=d.timing;$('timingState').className=d.timing==='Ready'?'good':'warn';const dist=(d.price/d.ma200-1)*100;$('ma200Dist').textContent=fmtPct(dist);$('whyGrid').innerHTML=whyRows(d).map(x=>`<div class="why-item"><div><span>${x[0]}</span><small>${x[2]}</small></div><b class="${x[1]==='BLOCK'?'bad':x[1]==='PASS'||x[1]==='READY'?'good':''}">${x[1]}</b></div>`).join('');$('signalTag').textContent=`${action} · ${d.score}`;$('stopText').textContent=fmtPrice(d.stop);$('target1').textContent=fmtPrice(d.t1);$('target2').textContent=fmtPrice(d.t2);if(p){const invested=(+p.qty||0)*(+p.avg||0),value=(+p.qty||0)*d.price,pnl=value-invested,pnlPct=invested?pnl/invested*100:0,r=stockRisk(symbol),available=Math.max(0,(+p.max||0)-invested);$('ownedSummaryCard').style.display='block';$('spotEditCard').style.display='block';$('ownedAction').textContent=action;$('ownedStats').innerHTML=`<div class="stat"><small>Invested</small><b>${fmtPrice(invested)}</b></div><div class="stat"><small>Market value</small><b>${fmtPrice(value)}</b></div><div class="stat"><small>P/L</small><b class="${pnl>=0?'good':'bad'}">${fmtPrice(pnl)} · ${fmtPct(pnlPct)}</b></div><div class="stat"><small>Risk to stop</small><b>${fmtPrice(r.loss)} · ${r.riskPct.toFixed(2)}%</b></div><div class="stat"><small>Max shares by risk</small><b>${fmtNum(r.maxShares,0)}</b></div><div class="stat"><small>Available budget</small><b>${fmtPrice(available)}</b></div>`;$('stockRiskBar').style.width=r.heat+'%';$('stockRiskText').textContent=`Trade risk limit ${riskSettings.maxRiskPct}% · current ${r.riskPct.toFixed(2)}%`;$('scaleTitle').textContent='ADD PLAN';renderStockScale(d,p,available)}else{$('ownedSummaryCard').style.display='none';$('spotEditCard').style.display='none';$('scaleTitle').textContent='ENTRY PLAN';renderStockScale(d,null,Math.min((+riskSettings.equity||100000)*.1,10000))}drawChart(symbol,detailTf)}
+function renderStockScale(d,p,available){const base=d.price,levels=[base,Math.max(d.ma20,base*.97),Math.max(d.ma50,base*.94),base*1.02],weights=[.25,.30,.30,.15],labels=['1차','2차','3차','돌파'];let qtyBase=+p?.qty||0,cost=qtyBase*(+p?.avg||0);$('scalePlan').innerHTML=levels.map((price,i)=>{const budget=available*weights[i],qty=budget/price,newQty=qtyBase+qty,newAvg=newQty?(cost+budget)/newQty:price;qtyBase=newQty;cost+=budget;return`<div class="plan-item"><small>${labels[i]}</small><b>${fmtPrice(price)} · ${qty.toFixed(3)}</b><em>${p?`체결 후 예상 평단 ${fmtPrice(newAvg)}`:`예산 ${(weights[i]*100).toFixed(0)}%`}<br>Stop ${fmtPrice(d.stop)}</em></div>`}).join('')}
+function drawChart(symbol,tf){const d=dataFor(symbol),svg=$('chartSvg'),source=tf==='1D'?ohlcvCache[symbol]?.D:ohlcvCache[symbol]?.H4;if(!source?.length){svg.innerHTML='';$('chartNote').textContent='CACHED/DEMO · 실제 시계열 대기';return}const W=800,H=300,N=tf==='1D'?58:50,all=source,arr=all.slice(-N),cl=all.map(x=>x.c),maLine=n=>arr.map((_,i)=>{const g=all.length-arr.length+i+1;return g>=n?avg(cl.slice(g-n,g)):null}),m20=maLine(20),m50=maLine(50),m200=maLine(200);let guides=[d.stop,d.t1,d.t2];const p=positions[symbol];if(p?.avg)guides.push(+p.avg);const vals=arr.flatMap(x=>[x.h,x.l]).concat(m20,m50,m200,guides).filter(Number.isFinite),min=Math.min(...vals)*.995,max=Math.max(...vals)*1.005,y=v=>H-38-(v-min)/(max-min||1)*(H-65),cw=W/N;let html='';const buyLow=Math.max(d.ma50,d.stop),buyHigh=Math.min(d.ma20,d.price);if(buyHigh>buyLow){const y1=y(buyHigh),y2=y(buyLow);html+=`<rect x="0" y="${Math.min(y1,y2)}" width="800" height="${Math.abs(y2-y1)}" fill="#31d07c" opacity=".05"/><text x="10" y="${Math.min(y1,y2)+12}" fill="#31d07c" font-size="10">BUY ZONE</text>`}arr.forEach((x,i)=>{const cx=i*cw+cw*.5,yo=y(x.o),yc=y(x.c),yh=y(x.h),yl=y(x.l),up=x.c>=x.o,col=up?'#31d07c':'#ff6678';html+=`<line x1="${cx}" y1="${yh}" x2="${cx}" y2="${yl}" stroke="${col}" stroke-width="1"/><rect x="${cx-cw*.23}" y="${Math.min(yo,yc)}" width="${Math.max(2,cw*.46)}" height="${Math.max(2,Math.abs(yo-yc))}" fill="${col}" rx="1"/>`});function path(vals,color,w=1.2,op=.9){const pts=[];vals.forEach((v,i)=>{if(Number.isFinite(v))pts.push(`${i*cw+cw*.5},${y(v)}`)});if(pts.length>1)html+=`<polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="${w}" opacity="${op}"/>`}path(m20,'#75aaff');path(m50,'#9b8cff');path(m200,'#f6f8fb',1.7);function guide(v,label,color){if(!Number.isFinite(+v))return;const yy=y(+v);html+=`<line x1="0" y1="${yy}" x2="800" y2="${yy}" stroke="${color}" stroke-width="1" stroke-dasharray="6 5" opacity=".8"/><text x="724" y="${yy-4}" fill="${color}" font-size="10">${label}</text>`}if(p?.avg)guide(+p.avg,'AVG','#f5b942');guide(d.stop,'STOP','#ff6678');guide(d.t1,'T1','#31d07c');guide(d.t2,'T2','#31d07c');svg.innerHTML=html;$('chartNote').textContent=`${tf} · ${arr.at(-1).dt} · RSI ${Math.round(tf==='1D'?d.rsi:d.h4rsi)}`}
+function openLevDetail(i){levDetailIndex=i;fillLevDetail(i);$('levDetail').classList.add('open')}
+function fillLevDetail(i){const p=leveragePositions[i];if(!p)return;const m=levMetrics(p),plan=levScalePlan(p);$('levDetailTicker').textContent=p.symbol;$('levSideLabel').textContent=`${m.side} · ${m.lev}X`;$('levCurrentPrice').textContent=fmtPrice(m.current);$('levRiskState').textContent=m.state;$('levRiskState').className=`badge ${actionClass(m.state)}`;$('levRoe').innerHTML=`${m.roe.toFixed(1)}<small>% ROE</small>`;$('levPnl').textContent=fmtPrice(m.pnl);$('levPnl').className=m.pnl>=0?'good':'bad';$('levAccountRisk').textContent=m.accountRisk.toFixed(2)+'%';$('levLiqBuffer').textContent=m.liqBuffer===999?'—':m.liqBuffer.toFixed(1)+'%';$('levRiskText').textContent=m.state;$('levRiskStats').innerHTML=`<div class="stat"><small>Entry</small><b>${fmtPrice(m.entry)}</b></div><div class="stat"><small>Stop</small><b>${fmtPrice(m.stop)}</b></div><div class="stat"><small>Position</small><b>${fmtPrice(m.size)}</b></div><div class="stat"><small>Margin</small><b>${fmtPrice(m.margin)}</b></div><div class="stat"><small>Stop loss</small><b>${fmtPrice(m.stopLoss)}</b></div><div class="stat"><small>Liquidation</small><b>${fmtPrice(m.liq)}</b></div>`;$('levRiskBar').style.width=clamp(m.accountRisk/(+riskSettings.maxRiskPct||2)*100)+'%';$('levAddState').textContent=plan.blocked?'ADD BLOCKED':'ADD AVAILABLE';$('levAddState').className=plan.blocked?'bad':'good';$('levScaleIn').innerHTML=plan.adds.map((a,idx)=>`<div class="plan-item"><small>${idx+1}차 ADD</small><b>${fmtPrice(a.price)}</b><em>추가 notional ${fmtPrice(a.notional)}<br>${plan.blocked?'Risk limit 초과 가능':'체결 후 risk 재계산'}</em></div>`).join('');const R=Math.abs(m.entry-(m.stop||plan.stop)),dir=m.side==='LONG'?1:-1,outs=[{l:'T1',p:m.entry+dir*R,w:25},{l:'T2',p:m.entry+dir*R*2,w:25},{l:'T3',p:m.entry+dir*R*3,w:30},{l:'RUNNER',p:m.entry+dir*R*4,w:20}];$('levScaleOut').innerHTML=outs.map(o=>`<div class="plan-item"><small>${o.l}</small><b>${fmtPrice(o.p)}</b><em>${o.w}% 분할익절</em></div>`).join('');$('levScenario').innerHTML=`<div class="stat"><small>All adds avg</small><b>${fmtPrice(plan.newAvg)}</b></div><div class="stat"><small>Total notional</small><b>${fmtPrice(plan.totalSize)}</b></div><div class="stat"><small>Risk after adds</small><b class="${plan.blocked?'bad':'good'}">${plan.newRisk.toFixed(2)}%</b></div><div class="stat"><small>Risk limit</small><b>${riskSettings.maxRiskPct}%</b></div>`}
+function setApiStatus(state,count=''){const st=$('twelveStatus'),tl=$('twelveLight'),sl=$('syncLight'),ls=$('lastSync'),top=$('topSync');tl.className='status-light '+(state==='error'?'red':state==='ok'||state==='cached'?'green':'yellow');st.textContent=state==='ok'?`LIVE ${count}`:state==='cached'?`CACHED ${count}`:state==='rate'?`RATE LIMITED ${count}`:state==='loading'?`SYNC ${count}`:'ERROR';const last=localStorage.getItem('stockpm_last_sync');if(last){sl.className='status-light green';ls.textContent=new Date(last).toLocaleString();top.textContent=state==='ok'?'LIVE DATA':state==='rate'?'RATE LIMITED':'CACHED DATA'}else{sl.className='status-light yellow';ls.textContent='—';top.textContent=state==='error'?'DATA ERROR':'DATA WAIT'}}
+function gotoPage(i,animate=true){i=Math.max(0,Math.min(4,i));currentPage=i;$('track').classList.toggle('animating',animate);$('track').style.transform=`translate3d(${-i*100}%,0,0)`;document.querySelectorAll('.tab').forEach((b,n)=>b.classList.toggle('active',n===i))}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>gotoPage(+b.dataset.index,true));let startX=0,startY=0,dragging=false,baseX=0;$('viewport').addEventListener('touchstart',e=>{if($('detail').classList.contains('open')||$('levDetail').classList.contains('open'))return;const t=e.touches[0];startX=t.clientX;startY=t.clientY;baseX=-currentPage*window.innerWidth;dragging=true;$('track').classList.remove('animating')},{passive:true});$('viewport').addEventListener('touchmove',e=>{if(!dragging)return;const t=e.touches[0],dx=t.clientX-startX,dy=t.clientY-startY;if(Math.abs(dy)>Math.abs(dx)*1.15)return;let x=baseX+dx;if(currentPage===0&&dx>0)x=baseX+dx*.28;if(currentPage===4&&dx<0)x=baseX+dx*.28;$('track').style.transform=`translate3d(${x}px,0,0)`},{passive:true});$('viewport').addEventListener('touchend',e=>{if(!dragging)return;dragging=false;const dx=e.changedTouches[0].clientX-startX,threshold=Math.min(90,window.innerWidth*.22);if(dx<-threshold&&currentPage<4)currentPage++;else if(dx>threshold&&currentPage>0)currentPage--;gotoPage(currentPage,true)},{passive:true});
+$('closeDetail').onclick=()=>$('detail').classList.remove('open');$('closeLevDetail').onclick=()=>$('levDetail').classList.remove('open');$('nextDetail').onclick=()=>{if(!watch.length)return;detailIndex=(detailIndex+1)%watch.length;openDetail(watch[detailIndex])};$('levNext').onclick=()=>{if(!leveragePositions.length)return;levDetailIndex=(levDetailIndex+1)%leveragePositions.length;fillLevDetail(levDetailIndex)};document.querySelectorAll('.tf-toggle button').forEach(b=>b.onclick=()=>{detailTf=b.dataset.tf;document.querySelectorAll('.tf-toggle button').forEach(x=>x.classList.toggle('active',x===b));fillDetail($('detailTicker').textContent)});
+$('addWatchBtn').onclick=()=>{const s=$('watchInput').value.trim().toUpperCase();if(!s)return;if(!watch.includes(s)){watch.push(s);store.set('stockpm_watch',watch)}$('watchInput').value='';renderAll()};$('watchInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('addWatchBtn').click()});
+document.querySelectorAll('#positionMode button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#positionMode button').forEach(x=>x.classList.toggle('active',x===b));const lev=b.dataset.mode==='lev';$('spotForm').style.display=lev?'none':'block';$('levForm').style.display=lev?'block':'none'});
+$('saveRiskSettings').onclick=()=>{riskSettings={equity:+$('accountEquity').value||100000,maxRiskPct:+$('maxRiskPct').value||2};store.set('stockpm_risk_settings',riskSettings);renderAll();alert('리스크 설정 저장 완료')};
+$('saveSpot').onclick=()=>{const s=$('posTicker').value.trim().toUpperCase();if(!s)return alert('Ticker를 입력하세요.');positions[s]={qty:+$('posQty').value||0,avg:+$('posAvg').value||0,max:+$('posMax').value||10000};store.set('stockpm_positions',positions);if(!watch.includes(s)){watch.push(s);store.set('stockpm_watch',watch)}renderAll();alert('포지션 저장 완료')};
+$('saveLev').onclick=()=>{const symbol=$('levTicker').value.trim().toUpperCase();if(!symbol)return alert('Symbol을 입력하세요.');const obj={symbol,side:$('levSide').value,leverage:+$('levX').value||1,entry:+$('levEntry').value||0,size:+$('levSize').value||0,stop:+$('levStop').value||0,liq:+$('levLiq').value||0};const idx=leveragePositions.findIndex(x=>x.symbol===symbol&&x.side===obj.side);if(idx>=0)leveragePositions[idx]=obj;else leveragePositions.push(obj);store.set('stockpm_leverage',leveragePositions);renderAll();alert('레버리지 포지션 저장 완료')};
+$('deleteSpotBtn').onclick=()=>{const s=$('detailTicker').textContent;if(!positions[s])return;if(confirm(`${s} 포지션을 삭제할까요?`)){delete positions[s];store.set('stockpm_positions',positions);$('detail').classList.remove('open');renderAll()}};$('editSpotBtn').onclick=()=>{const s=$('detailTicker').textContent,p=positions[s];if(!p)return;$('posTicker').value=s;$('posQty').value=p.qty;$('posAvg').value=p.avg;$('posMax').value=p.max;gotoPage(3,true);$('detail').classList.remove('open')};
+$('deleteLevBtn').onclick=()=>{const p=leveragePositions[levDetailIndex];if(!p)return;if(confirm(`${p.symbol} 레버리지 포지션을 삭제할까요?`)){leveragePositions.splice(levDetailIndex,1);store.set('stockpm_leverage',leveragePositions);$('levDetail').classList.remove('open');renderAll()}};$('editLevBtn').onclick=()=>{const p=leveragePositions[levDetailIndex];if(!p)return;$('levTicker').value=p.symbol;$('levSide').value=p.side;$('levX').value=p.leverage;$('levEntry').value=p.entry;$('levSize').value=p.size;$('levStop').value=p.stop;$('levLiq').value=p.liq;document.querySelector('#positionMode button[data-mode="lev"]').click();gotoPage(3,true);$('levDetail').classList.remove('open')};
+$('refreshTwelve').onclick=()=>refreshMarketData(true);window.addEventListener('resize',()=>gotoPage(currentPage,false));
+$('accountEquity').value=riskSettings.equity;$('maxRiskPct').value=riskSettings.maxRiskPct;const hydrated=hydrateFromCache();renderAll();gotoPage(0,false);setApiStatus(hydrated?'cached':'loading',hydrated?String(hydrated):'');refreshMarketData(false);
 </script>
 </body>
 </html>
