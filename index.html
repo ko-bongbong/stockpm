@@ -4,947 +4,2377 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#0b0d10" />
-<title>STOCKPM v0.2.0</title>
+<title>STOCKPM v0.2.1</title>
+
 <style>
 :root{
-  --bg:#090b0e;--panel:#12161b;--panel2:#181d24;--panel3:#0f1318;--text:#f6f8fb;--muted:#8d97a6;
-  --line:#252c35;--good:#31d07c;--warn:#f5b942;--bad:#ff6678;--blue:#75aaff;--violet:#9b8cff;
-  --radius:20px;--tabh:76px;--safe-bottom:max(14px,env(safe-area-inset-bottom));
+  --bg:#090b0e;
+  --panel:#12161b;
+  --panel2:#181d24;
+  --panel3:#0f1318;
+  --text:#f6f8fb;
+  --muted:#8d97a6;
+  --line:#252c35;
+  --good:#31d07c;
+  --warn:#f5b942;
+  --bad:#ff6678;
+  --blue:#75aaff;
+  --violet:#9b8cff;
+  --radius:20px;
+  --tabh:76px;
+  --safe-bottom:max(14px,env(safe-area-inset-bottom));
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overscroll-behavior:none}
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  overscroll-behavior:none;
+}
+
 body{overflow:hidden}
+
 button,input{font:inherit}
 button{cursor:pointer}
-.app{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
-.topbar{height:62px;flex:0 0 62px;padding:14px 16px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.05);background:rgba(9,11,14,.92);backdrop-filter:blur(18px);z-index:20}
-.brand{display:flex;align-items:center;gap:10px}
-.brand-mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#fff,#778399);color:#0b0d10;font-weight:900;display:grid;place-items:center}
-.brand h1{font-size:17px;line-height:1;margin:0}
-.brand small{display:block;color:var(--muted);margin-top:4px;font-size:10px;letter-spacing:.08em}
-.sync-chip{display:flex;align-items:center;gap:7px;padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:11px;color:var(--muted)}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--warn);box-shadow:0 0 10px currentColor}
 
-.viewport{position:relative;flex:1;overflow:hidden}
-.track{height:100%;display:flex;will-change:transform;transform:translate3d(0,0,0)}
-.track.animating{transition:transform .48s cubic-bezier(.22,.85,.25,1)}
+.app{
+  height:100dvh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
 
-.page{flex:0 0 100%;width:100%;height:100%;overflow-y:auto;overscroll-behavior-y:contain;padding:16px 14px calc(var(--tabh) + var(--safe-bottom) + 24px);scrollbar-width:none}
+.topbar{
+  height:62px;
+  flex:0 0 62px;
+  padding:14px 16px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  background:rgba(9,11,14,.92);
+  backdrop-filter:blur(18px);
+  z-index:20;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.brand-mark{
+  width:34px;
+  height:34px;
+  border-radius:11px;
+  background:linear-gradient(135deg,#fff,#778399);
+  color:#0b0d10;
+  font-weight:900;
+  display:grid;
+  place-items:center;
+}
+
+.brand h1{
+  font-size:17px;
+  line-height:1;
+  margin:0;
+}
+
+.brand small{
+  display:block;
+  color:var(--muted);
+  margin-top:4px;
+  font-size:10px;
+  letter-spacing:.08em;
+}
+
+.sync-chip{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:8px 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  font-size:11px;
+  color:var(--muted);
+}
+
+.dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--warn);
+  box-shadow:0 0 10px currentColor;
+}
+
+.viewport{
+  position:relative;
+  flex:1;
+  overflow:hidden;
+}
+
+.track{
+  height:100%;
+  display:flex;
+  will-change:transform;
+  transform:translate3d(0,0,0);
+}
+
+.track.animating{
+  transition:transform .48s cubic-bezier(.22,.85,.25,1);
+}
+
+.page{
+  flex:0 0 100%;
+  width:100%;
+  height:100%;
+  overflow-y:auto;
+  overscroll-behavior-y:contain;
+  padding:16px 14px calc(var(--tabh) + var(--safe-bottom) + 24px);
+  scrollbar-width:none;
+}
+
 .page::-webkit-scrollbar{display:none}
-.page-inner{max-width:980px;margin:0 auto}
-.page-title{font-size:26px;margin:4px 0 2px}
-.page-sub{color:var(--muted);font-size:13px;margin-bottom:16px}
 
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:0 8px 30px rgba(0,0,0,.12)}
-.card.soft{background:linear-gradient(180deg,#141920,#101419)}
-.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.section-head h3{margin:0;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#c9d0da}
-.section-head span{font-size:11px;color:var(--muted)}
+.page-inner{
+  max-width:980px;
+  margin:0 auto;
+}
 
-.hero-card{padding:18px;background:linear-gradient(145deg,#161b22,#101318);border:1px solid #27313d}
-.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.hero-score{font-size:54px;line-height:.9;font-weight:900}
-.hero-score small{font-size:13px;color:var(--muted);font-weight:600}
+.page-title{
+  font-size:26px;
+  margin:4px 0 2px;
+}
 
-.badge{display:inline-flex;align-items:center;gap:7px;padding:8px 10px;border-radius:999px;font-size:11px;font-weight:800;border:1px solid}
-.badge.good{color:var(--good);background:#0d2118;border-color:#1d4933}
-.badge.warn{color:var(--warn);background:#261e0d;border-color:#5d4617}
-.badge.bad{color:var(--bad);background:#271216;border-color:#5a2630}
-.badge.neutral{color:#c7ced8;background:#171c22;border-color:#2a323c}
+.page-sub{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:16px;
+}
 
-.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
-.mini{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:11px}
-.mini label{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.07em}
-.mini b{display:block;margin-top:5px;font-size:17px}
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:16px;
+  margin-bottom:12px;
+  box-shadow:0 8px 30px rgba(0,0,0,.12);
+}
 
-.search{display:flex;gap:8px}
-.search input,.field input{width:100%;border:1px solid var(--line);background:var(--panel3);color:var(--text);padding:13px 14px;border-radius:13px;outline:none}
-.search input:focus,.field input:focus{border-color:#52647a}
+.card.soft{
+  background:linear-gradient(180deg,#141920,#101419);
+}
 
-.btn{border:0;border-radius:12px;padding:12px 14px;background:#f5f7fa;color:#0b0d10;font-weight:850}
-.btn.secondary{background:var(--panel2);border:1px solid var(--line);color:var(--text)}
-.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
 
-.list{display:grid;gap:8px}
-.ticker-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:13px 14px}
-.ticker-row:active{transform:scale(.995)}
-.ticker-name{font-weight:850}
-.ticker-meta{font-size:11px;color:var(--muted);margin-top:3px}
-.score-circle{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#0f1419;border:1px solid var(--line);font-weight:900}
-.chev{color:#657080;font-size:22px}
-.rank{font-size:11px;color:var(--muted);width:18px;text-align:center}
+.section-head h3{
+  margin:0;
+  font-size:13px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#c9d0da;
+}
 
-.market-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.market-item{padding:12px;border-radius:14px;background:var(--panel2);border:1px solid var(--line)}
-.market-item small{color:var(--muted)}
-.market-item b{display:block;margin-top:5px}
+.section-head span{
+  font-size:11px;
+  color:var(--muted);
+}
 
-.empty{color:var(--muted);padding:30px 12px;text-align:center;font-size:13px}
+.hero-card{
+  padding:18px;
+  background:linear-gradient(145deg,#161b22,#101318);
+  border:1px solid #27313d;
+}
+
+.hero-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.hero-score{
+  font-size:54px;
+  line-height:.9;
+  font-weight:900;
+}
+
+.hero-score small{
+  font-size:13px;
+  color:var(--muted);
+  font-weight:600;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:8px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:800;
+  border:1px solid;
+}
+
+.badge.good{
+  color:var(--good);
+  background:#0d2118;
+  border-color:#1d4933;
+}
+
+.badge.warn{
+  color:var(--warn);
+  background:#261e0d;
+  border-color:#5d4617;
+}
+
+.badge.bad{
+  color:var(--bad);
+  background:#271216;
+  border-color:#5a2630;
+}
+
+.badge.neutral{
+  color:#c7ced8;
+  background:#171c22;
+  border-color:#2a323c;
+}
+
+.mini-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:14px;
+}
+
+.mini{
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:11px;
+}
+
+.mini label{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+}
+
+.mini b{
+  display:block;
+  margin-top:5px;
+  font-size:17px;
+}
+
+.search{
+  display:flex;
+  gap:8px;
+}
+
+.search input,
+.field input{
+  width:100%;
+  border:1px solid var(--line);
+  background:var(--panel3);
+  color:var(--text);
+  padding:13px 14px;
+  border-radius:13px;
+  outline:none;
+}
+
+.search input:focus,
+.field input:focus{
+  border-color:#52647a;
+}
+
+.btn{
+  border:0;
+  border-radius:12px;
+  padding:12px 14px;
+  background:#f5f7fa;
+  color:#0b0d10;
+  font-weight:850;
+}
+
+.btn.secondary{
+  background:var(--panel2);
+  border:1px solid var(--line);
+  color:var(--text);
+}
+
+.btn.ghost{
+  background:transparent;
+  color:var(--muted);
+  border:1px solid var(--line);
+}
+
+.list{
+  display:grid;
+  gap:8px;
+}
+
+.ticker-row{
+  display:grid;
+  grid-template-columns:1fr auto auto;
+  gap:10px;
+  align-items:center;
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:13px 14px;
+}
+
+.ticker-row:active{
+  transform:scale(.995);
+}
+
+.ticker-name{
+  font-weight:850;
+}
+
+.ticker-meta{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+.score-circle{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#0f1419;
+  border:1px solid var(--line);
+  font-weight:900;
+}
+
+.chev{
+  color:#657080;
+  font-size:22px;
+}
+
+.rank{
+  font-size:11px;
+  color:var(--muted);
+  width:18px;
+  text-align:center;
+}
+
+.market-strip{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.market-item{
+  padding:12px;
+  border-radius:14px;
+  background:var(--panel2);
+  border:1px solid var(--line);
+}
+
+.market-item small{
+  color:var(--muted);
+}
+
+.market-item b{
+  display:block;
+  margin-top:5px;
+}
+
+.empty{
+  color:var(--muted);
+  padding:30px 12px;
+  text-align:center;
+  font-size:13px;
+}
+
 .muted{color:var(--muted)}
 .good-text{color:var(--good)}
 .warn-text{color:var(--warn)}
 .bad-text{color:var(--bad)}
 
-.bottom-tabs{position:absolute;left:10px;right:10px;bottom:var(--safe-bottom);height:64px;border:1px solid rgba(255,255,255,.08);border-radius:22px;background:rgba(18,22,27,.92);backdrop-filter:blur(22px);display:grid;grid-template-columns:repeat(5,1fr);z-index:30;box-shadow:0 12px 35px rgba(0,0,0,.35)}
-.tab{border:0;background:transparent;color:#738090;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:9px;font-weight:700}
-.tab .ico{font-size:19px;line-height:1}
-.tab.active{color:var(--text)}
+.bottom-tabs{
+  position:absolute;
+  left:10px;
+  right:10px;
+  bottom:var(--safe-bottom);
+  height:64px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:22px;
+  background:rgba(18,22,27,.92);
+  backdrop-filter:blur(22px);
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  z-index:30;
+  box-shadow:0 12px 35px rgba(0,0,0,.35);
+}
 
-.detail{position:absolute;inset:0;background:var(--bg);z-index:50;transform:translate3d(100%,0,0);transition:transform .46s cubic-bezier(.22,.85,.25,1);display:flex;flex-direction:column}
-.detail.open{transform:translate3d(0,0,0)}
-.detail-head{height:60px;flex:0 0 60px;padding:10px 14px;display:grid;grid-template-columns:42px 1fr 42px;align-items:center;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(9,11,14,.94);backdrop-filter:blur(18px)}
-.icon-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text)}
-.detail-title{text-align:center}
-.detail-title b{display:block}
-.detail-title small{color:var(--muted)}
-.detail-body{flex:1;overflow-y:auto;padding:14px 14px 32px}
-.detail-inner{max-width:980px;margin:0 auto}
+.tab{
+  border:0;
+  background:transparent;
+  color:#738090;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  font-size:9px;
+  font-weight:700;
+}
 
-.tf-toggle{display:inline-grid;grid-template-columns:1fr 1fr;background:var(--panel3);border:1px solid var(--line);border-radius:12px;padding:3px}
-.tf-toggle button{border:0;background:transparent;color:var(--muted);padding:8px 13px;border-radius:9px;font-weight:800}
-.tf-toggle button.active{background:var(--panel2);color:var(--text)}
+.tab .ico{
+  font-size:19px;
+  line-height:1;
+}
 
-.chart-wrap{position:relative;height:300px;border-radius:16px;overflow:hidden;background:linear-gradient(180deg,#0d1116,#0a0d11);border:1px solid var(--line)}
-.chart-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:100% 20%,12.5% 100%}
-.chart-svg{position:absolute;inset:0;width:100%;height:100%}
-.chart-legend{position:absolute;top:10px;left:10px;display:flex;gap:10px;font-size:10px;color:var(--muted)}
-.signal-tag{position:absolute;right:12px;top:46px;padding:7px 9px;border-radius:9px;background:#0c2519;border:1px solid #24563a;color:var(--good);font-size:10px;font-weight:900}
-.chart-note{position:absolute;left:12px;bottom:10px;font-size:10px;color:var(--muted)}
+.tab.active{
+  color:var(--text);
+}
 
-.why-grid{display:grid;gap:8px}
-.why-item{display:grid;grid-template-columns:1fr auto;align-items:center;padding:11px 12px;border-radius:12px;background:var(--panel2);border:1px solid var(--line)}
-.why-item span{font-size:12px}
-.why-item b{font-size:13px}
-.why-item small{display:block;color:var(--muted);margin-top:3px}
+.detail{
+  position:absolute;
+  inset:0;
+  background:var(--bg);
+  z-index:50;
+  transform:translate3d(100%,0,0);
+  transition:transform .46s cubic-bezier(.22,.85,.25,1);
+  display:flex;
+  flex-direction:column;
+}
 
-.position-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.stat{padding:12px;border-radius:13px;background:var(--panel2);border:1px solid var(--line)}
-.stat small{color:var(--muted);display:block}
-.stat b{display:block;margin-top:5px}
+.detail.open{
+  transform:translate3d(0,0,0);
+}
 
-.plan-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.plan-item{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}
-.plan-item small{color:var(--muted)}
-.plan-item b{display:block;margin-top:5px}
-.plan-item em{display:block;font-style:normal;margin-top:4px;color:#aeb7c4;font-size:11px}
+.detail-head{
+  height:60px;
+  flex:0 0 60px;
+  padding:10px 14px;
+  display:grid;
+  grid-template-columns:42px 1fr 42px;
+  align-items:center;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  background:rgba(9,11,14,.94);
+  backdrop-filter:blur(18px);
+}
 
-.status-line{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}
-.status-line:last-child{border-bottom:0}
-.status-left{display:flex;align-items:center;gap:9px}
-.status-light{width:9px;height:9px;border-radius:50%}
+.icon-btn{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:var(--text);
+}
+
+.detail-title{
+  text-align:center;
+}
+
+.detail-title b{
+  display:block;
+}
+
+.detail-title small{
+  color:var(--muted);
+}
+
+.detail-body{
+  flex:1;
+  overflow-y:auto;
+  padding:14px 14px 32px;
+}
+
+.detail-inner{
+  max-width:980px;
+  margin:0 auto;
+}
+
+.tf-toggle{
+  display:inline-grid;
+  grid-template-columns:1fr 1fr;
+  background:var(--panel3);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:3px;
+}
+
+.tf-toggle button{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:8px 13px;
+  border-radius:9px;
+  font-weight:800;
+}
+
+.tf-toggle button.active{
+  background:var(--panel2);
+  color:var(--text);
+}
+
+.chart-wrap{
+  position:relative;
+  height:300px;
+  border-radius:16px;
+  overflow:hidden;
+  background:linear-gradient(180deg,#0d1116,#0a0d11);
+  border:1px solid var(--line);
+}
+
+.chart-grid{
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:100% 20%,12.5% 100%;
+}
+
+.chart-svg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
+
+.chart-legend{
+  position:absolute;
+  top:10px;
+  left:10px;
+  display:flex;
+  gap:10px;
+  font-size:10px;
+  color:var(--muted);
+}
+
+.signal-tag{
+  position:absolute;
+  right:12px;
+  top:46px;
+  padding:7px 9px;
+  border-radius:9px;
+  background:#0c2519;
+  border:1px solid #24563a;
+  color:var(--good);
+  font-size:10px;
+  font-weight:900;
+}
+
+.chart-note{
+  position:absolute;
+  left:12px;
+  bottom:10px;
+  font-size:10px;
+  color:var(--muted);
+}
+
+.why-grid{
+  display:grid;
+  gap:8px;
+}
+
+.why-item{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  padding:11px 12px;
+  border-radius:12px;
+  background:var(--panel2);
+  border:1px solid var(--line);
+}
+
+.why-item span{
+  font-size:12px;
+}
+
+.why-item b{
+  font-size:13px;
+}
+
+.why-item small{
+  display:block;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+.position-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+}
+
+.stat{
+  padding:12px;
+  border-radius:13px;
+  background:var(--panel2);
+  border:1px solid var(--line);
+}
+
+.stat small{
+  color:var(--muted);
+  display:block;
+}
+
+.stat b{
+  display:block;
+  margin-top:5px;
+}
+
+.plan-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+}
+
+.plan-item{
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:12px;
+}
+
+.plan-item small{
+  color:var(--muted);
+}
+
+.plan-item b{
+  display:block;
+  margin-top:5px;
+}
+
+.plan-item em{
+  display:block;
+  font-style:normal;
+  margin-top:4px;
+  color:#aeb7c4;
+  font-size:11px;
+}
+
+.status-line{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.status-line:last-child{
+  border-bottom:0;
+}
+
+.status-left{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.status-light{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+}
+
 .status-light.green{background:var(--good)}
 .status-light.yellow{background:var(--warn)}
 .status-light.red{background:var(--bad)}
 
-.field{display:grid;gap:6px;margin-bottom:10px}
-.field label{font-size:11px;color:var(--muted)}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.field{
+  display:grid;
+  gap:6px;
+  margin-bottom:10px;
+}
 
-.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--panel3);border:1px solid var(--line);border-radius:12px;padding:3px;margin-bottom:12px}
-.seg button{border:0;background:transparent;color:var(--muted);padding:9px;border-radius:9px;font-weight:800}
-.seg button.active{background:var(--panel2);color:var(--text)}
+.field label{
+  font-size:11px;
+  color:var(--muted);
+}
 
-.leverage-warning{padding:12px;border-radius:13px;background:#241b0e;border:1px solid #5a4317;color:#e6c37f;font-size:12px;line-height:1.5}
+.two{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
 
-.changelog{display:grid;gap:10px}
-.change-item{padding-left:14px;border-left:2px solid #2d3743}
-.change-item b{font-size:13px}
-.change-item p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+.seg{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  background:var(--panel3);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:3px;
+  margin-bottom:12px;
+}
+
+.seg button{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:9px;
+  border-radius:9px;
+  font-weight:800;
+}
+
+.seg button.active{
+  background:var(--panel2);
+  color:var(--text);
+}
+
+.leverage-warning{
+  padding:12px;
+  border-radius:13px;
+  background:#241b0e;
+  border:1px solid #5a4317;
+  color:#e6c37f;
+  font-size:12px;
+  line-height:1.5;
+}
+
+.changelog{
+  display:grid;
+  gap:10px;
+}
+
+.change-item{
+  padding-left:14px;
+  border-left:2px solid #2d3743;
+}
+
+.change-item b{
+  font-size:13px;
+}
+
+.change-item p{
+  margin:5px 0 0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
 
 @media(min-width:760px){
-  .page{padding-left:22px;padding-right:22px}
-  .home-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}
-  .home-grid>.card{margin-bottom:0}
-  .detail-body{padding-left:22px;padding-right:22px}
-  .chart-wrap{height:360px}
-  .bottom-tabs{left:50%;right:auto;transform:translateX(-50%);width:min(620px,calc(100% - 20px))}
+  .page{
+    padding-left:22px;
+    padding-right:22px;
+  }
+
+  .home-grid{
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    gap:12px;
+  }
+
+  .home-grid>.card{
+    margin-bottom:0;
+  }
+
+  .detail-body{
+    padding-left:22px;
+    padding-right:22px;
+  }
+
+  .chart-wrap{
+    height:360px;
+  }
+
+  .bottom-tabs{
+    left:50%;
+    right:auto;
+    transform:translateX(-50%);
+    width:min(620px,calc(100% - 20px));
+  }
 }
 </style>
 </head>
 
 <body>
+
 <div class="app">
 
-  <header class="topbar">
-    <div class="brand">
-      <div class="brand-mark">SP</div>
-      <div>
-        <h1>STOCKPM</h1>
-        <small>QUANT POSITION MANAGER · v0.2.0</small>
-      </div>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark">SP</div>
+
+    <div>
+      <h1>STOCKPM</h1>
+      <small>QUANT POSITION MANAGER · v0.2.1</small>
     </div>
-    <div class="sync-chip">
-      <span class="dot"></span>
-      <span id="topSync">DATA WAIT</span>
-    </div>
-  </header>
-
-  <div class="viewport" id="viewport">
-
-    <div class="track" id="track">
-
-      <!-- HOME -->
-      <section class="page" data-page="HOME">
-        <div class="page-inner">
-
-          <h2 class="page-title">Today</h2>
-          <div class="page-sub">
-            강한 신호만 실제 매수 검토 · Daily가 방향, 4H가 타이밍을 확인합니다.
-          </div>
-
-          <div class="home-grid">
-
-            <div class="card hero-card">
-              <div class="hero-top">
-
-                <div>
-                  <div class="muted" style="font-size:12px">TOP SETUP</div>
-                  <div style="font-size:29px;font-weight:900;margin-top:4px">NVDA</div>
-                  <div class="badge good" style="margin-top:8px">● STRONG BUY</div>
-                </div>
-
-                <div class="hero-score">
-                  89<small>/100</small>
-                </div>
-
-              </div>
-
-              <div class="mini-grid">
-
-                <div class="mini">
-                  <label>Daily</label>
-                  <b class="good-text">Bullish</b>
-                </div>
-
-                <div class="mini">
-                  <label>4H timing</label>
-                  <b class="warn-text">Wait</b>
-                </div>
-
-                <div class="mini">
-                  <label>MA200</label>
-                  <b>Above</b>
-                </div>
-
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="section-head">
-                <h3>Market regime</h3>
-                <span>연결 전 DEMO</span>
-              </div>
-
-              <div class="market-strip">
-                <div class="market-item">
-                  <small>SPY</small>
-                  <b class="good-text">Risk On</b>
-                </div>
-
-                <div class="market-item">
-                  <small>QQQ</small>
-                  <b class="good-text">Bullish</b>
-                </div>
-
-                <div class="market-item">
-                  <small>VIX</small>
-                  <b>—</b>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="card" style="margin-top:12px">
-            <div class="section-head">
-              <h3>Today's candidates</h3>
-              <span>WATCH 기준</span>
-            </div>
-            <div class="list" id="homeCandidates"></div>
-          </div>
-
-          <div class="card">
-            <div class="section-head">
-              <h3>Portfolio guard</h3>
-              <span>V1 구조</span>
-            </div>
-
-            <div class="status-line">
-              <div class="status-left">
-                <span class="status-light green"></span>
-                <div>
-                  <b>Position limits</b>
-                  <div class="ticker-meta">종목 최대투입 한도 적용</div>
-                </div>
-              </div>
-              <b>ON</b>
-            </div>
-
-            <div class="status-line">
-              <div class="status-left">
-                <span class="status-light yellow"></span>
-                <div>
-                  <b>Portfolio risk</b>
-                  <div class="ticker-meta">Supabase 연결 후 통합 계산</div>
-                </div>
-              </div>
-              <b>WAIT</b>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-
-      <!-- WATCH -->
-      <section class="page" data-page="WATCH">
-        <div class="page-inner">
-
-          <h2 class="page-title">Watch</h2>
-          <div class="page-sub">
-            내 관심종목만 분석합니다. 종목을 터치하면 상세 분석으로 들어갑니다.
-          </div>
-
-          <div class="card">
-            <div class="search">
-              <input id="watchInput" placeholder="NVDA, TSLA, SOXX, BTC/USD">
-              <button class="btn" id="addWatchBtn">추가</button>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="section-head">
-              <h3>Buy radar</h3>
-              <span>Entry score 순</span>
-            </div>
-            <div class="list" id="watchList"></div>
-          </div>
-
-        </div>
-      </section>
-
-
-      <!-- DISCOVER -->
-      <section class="page" data-page="DISCOVER">
-        <div class="page-inner">
-
-          <h2 class="page-title">Discover</h2>
-          <div class="page-sub">
-            향후 NASDAQ-100 / 주요 ETF 자동 스캔 영역입니다.
-          </div>
-
-          <div class="card soft">
-            <div class="badge neutral">COMING NEXT</div>
-
-            <h3 style="font-size:24px;margin:14px 0 8px">
-              System Discovery
-            </h3>
-
-            <p class="muted" style="line-height:1.6;margin:0">
-              WATCH 밖의 종목을 자동으로 스캔해 Entry Score 상위 후보를 제안합니다.
-              Twelve Data 호출 제한과 백테스트 구조를 맞춘 뒤 활성화합니다.
-            </p>
-          </div>
-
-          <div class="card">
-            <div class="section-head">
-              <h3>Planned universe</h3>
-              <span>초기 후보</span>
-            </div>
-
-            <div class="market-strip">
-              <div class="market-item">
-                <small>Universe</small>
-                <b>NASDAQ-100</b>
-              </div>
-
-              <div class="market-item">
-                <small>ETFs</small>
-                <b>Major</b>
-              </div>
-
-              <div class="market-item">
-                <small>Crypto</small>
-                <b>Top Liquid</b>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-
-      <!-- POSITION -->
-      <section class="page" data-page="POSITION">
-        <div class="page-inner">
-
-          <h2 class="page-title">Position</h2>
-          <div class="page-sub">
-            실제 체결한 포지션만 기록합니다. 시장가격은 API가 담당합니다.
-          </div>
-
-          <div class="card">
-
-            <div class="seg" id="positionMode">
-              <button class="active" data-mode="spot">SPOT</button>
-              <button data-mode="lev">BYBIT LEVERAGE</button>
-            </div>
-
-            <div id="spotForm">
-
-              <div class="field">
-                <label>Ticker</label>
-                <input id="posTicker" placeholder="NVDA">
-              </div>
-
-              <div class="two">
-
-                <div class="field">
-                  <label>보유 수량</label>
-                  <input id="posQty" type="number" step="any" placeholder="40">
-                </div>
-
-                <div class="field">
-                  <label>평단가</label>
-                  <input id="posAvg" type="number" step="any" placeholder="162.50">
-                </div>
-
-              </div>
-
-              <div class="field">
-                <label>이 종목 최대 투입금 (USD)</label>
-                <input id="posMax" type="number" step="any" placeholder="10000">
-              </div>
-
-              <button class="btn" id="saveSpot">
-                포지션 저장
-              </button>
-
-            </div>
-
-            <div id="levForm" style="display:none">
-
-              <div class="leverage-warning">
-                레버리지 모드는 별도 Risk Engine으로 관리합니다.
-                V0.2에서는 구조와 입력 UI만 준비하며 자동주문은 하지 않습니다.
-              </div>
-
-              <div class="field" style="margin-top:12px">
-                <label>Symbol</label>
-                <input id="levTicker" placeholder="BTCUSDT">
-              </div>
-
-              <div class="two">
-
-                <div class="field">
-                  <label>Direction</label>
-                  <input id="levSide" placeholder="LONG">
-                </div>
-
-                <div class="field">
-                  <label>Leverage</label>
-                  <input id="levX" type="number" placeholder="5">
-                </div>
-
-              </div>
-
-              <div class="two">
-
-                <div class="field">
-                  <label>Entry</label>
-                  <input id="levEntry" type="number" step="any">
-                </div>
-
-                <div class="field">
-                  <label>Position size ($)</label>
-                  <input id="levSize" type="number" step="any">
-                </div>
-
-              </div>
-
-              <div class="field">
-                <label>Liquidation price (현재는 수동)</label>
-                <input id="levLiq" type="number" step="any">
-              </div>
-
-              <button class="btn secondary" id="saveLev">
-                레버리지 포지션 저장
-              </button>
-
-            </div>
-
-          </div>
-
-          <div class="card">
-
-            <div class="section-head">
-              <h3>Active positions</h3>
-              <span id="positionCount">0</span>
-            </div>
-
-            <div class="list" id="positionList"></div>
-
-          </div>
-
-        </div>
-      </section>
-
-
-      <!-- MORE -->
-      <section class="page" data-page="MORE">
-        <div class="page-inner">
-
-          <h2 class="page-title">More</h2>
-          <div class="page-sub">
-            데이터 상태, 버전, 연결 설정과 변경 이력을 확인합니다.
-          </div>
-
-          <div class="card">
-
-            <div class="section-head">
-              <h3>System status</h3>
-              <span>v0.2.0</span>
-            </div>
-
-            <div class="status-line">
-              <div class="status-left">
-                <span class="status-light yellow"></span>
-                <div>
-                  <b>Twelve Data</b>
-                  <div class="ticker-meta">Market API</div>
-                </div>
-              </div>
-              <b>NOT CONNECTED</b>
-            </div>
-
-            <div class="status-line">
-              <div class="status-left">
-                <span class="status-light yellow"></span>
-                <div>
-                  <b>Supabase</b>
-                  <div class="ticker-meta">Sync / Signal Log / Positions</div>
-                </div>
-              </div>
-              <b>NOT CONNECTED</b>
-            </div>
-
-            <div class="status-line">
-              <div class="status-left">
-                <span class="status-light red"></span>
-                <div>
-                  <b>Last successful sync</b>
-                  <div class="ticker-meta">최신 데이터 연결 후 활성화</div>
-                </div>
-              </div>
-              <b>—</b>
-            </div>
-
-          </div>
-
-          <div class="card">
-
-            <div class="section-head">
-              <h3>Data safety rule</h3>
-              <span>예정</span>
-            </div>
-
-            <div class="why-grid">
-
-              <div class="why-item">
-                <div>
-                  <span>0–60분</span>
-                  <small>정상 판단</small>
-                </div>
-                <b class="good-text">FRESH</b>
-              </div>
-
-              <div class="why-item">
-                <div>
-                  <span>60–180분</span>
-                  <small>경고 표시</small>
-                </div>
-                <b class="warn-text">STALE</b>
-              </div>
-
-              <div class="why-item">
-                <div>
-                  <span>180분 이상</span>
-                  <small>신규 BUY 판단 중지</small>
-                </div>
-                <b class="bad-text">BLOCK</b>
-              </div>
-
-            </div>
-
-          </div>
-
-          <div class="card">
-
-            <div class="section-head">
-              <h3>Changelog</h3>
-              <span>STOCKPM</span>
-            </div>
-
-            <div class="changelog">
-
-              <div class="change-item">
-                <b>v0.2.0</b>
-                <p>
-                  좌우 페이지 스와이프, WATCH 상세, 1D/4H 차트 구조,
-                  MA200 Gate, Volume/WHY, Signal marker,
-                  Position/Bybit UI, Sync/Version 상태 추가.
-                </p>
-              </div>
-
-              <div class="change-item">
-                <b>v0.1.0</b>
-                <p>
-                  Watchlist, Entry Score, 기술적 분석,
-                  기본 Position Plan 구조.
-                </p>
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-    </div>
-
-
-    <!-- BOTTOM NAV -->
-    <nav class="bottom-tabs" id="tabs">
-
-      <button class="tab active" data-index="0">
-        <span class="ico">⌂</span>
-        <span>HOME</span>
-      </button>
-
-      <button class="tab" data-index="1">
-        <span class="ico">◎</span>
-        <span>WATCH</span>
-      </button>
-
-      <button class="tab" data-index="2">
-        <span class="ico">✦</span>
-        <span>DISCOVER</span>
-      </button>
-
-      <button class="tab" data-index="3">
-        <span class="ico">▣</span>
-        <span>POSITION</span>
-      </button>
-
-      <button class="tab" data-index="4">
-        <span class="ico">•••</span>
-        <span>MORE</span>
-      </button>
-
-    </nav>
-
-
-    <!-- DETAIL -->
-    <section class="detail" id="detail">
-
-      <header class="detail-head">
-
-        <button class="icon-btn" id="closeDetail">‹</button>
-
-        <div class="detail-title">
-          <b id="detailTicker">NVDA</b>
-          <small id="detailSubtitle">WATCH DETAIL</small>
-        </div>
-
-        <button class="icon-btn" id="nextDetail">›</button>
-
-      </header>
-
-
-      <div class="detail-body">
-
-        <div class="detail-inner">
-
-
-          <div class="card hero-card">
-
-            <div class="hero-top">
-
-              <div>
-                <div class="muted" style="font-size:12px" id="assetType">
-                  US EQUITY
-                </div>
-
-                <div style="font-size:26px;font-weight:900;margin-top:4px" id="detailPrice">
-                  $—
-                </div>
-
-                <div class="badge good" style="margin-top:8px" id="detailSignal">
-                  STRONG BUY
-                </div>
-              </div>
-
-              <div class="hero-score" id="detailScore">
-                89<small>/100</small>
-              </div>
-
-            </div>
-
-            <div class="mini-grid">
-
-              <div class="mini">
-                <label>Daily</label>
-                <b class="good-text" id="dailyState">Bullish</b>
-              </div>
-
-              <div class="mini">
-                <label>4H timing</label>
-                <b class="warn-text" id="timingState">Wait</b>
-              </div>
-
-              <div class="mini">
-                <label>MA200 dist.</label>
-                <b id="ma200Dist">+8.2%</b>
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <div class="card">
-
-            <div class="section-head">
-
-              <h3>Price chart</h3>
-
-              <div class="tf-toggle">
-                <button class="active" data-tf="1D">1D</button>
-                <button data-tf="4H">4H</button>
-              </div>
-
-            </div>
-
-            <div class="chart-wrap" id="chartWrap">
-
-              <div class="chart-grid"></div>
-
-              <svg
-                class="chart-svg"
-                id="chartSvg"
-                viewBox="0 0 800 300"
-                preserveAspectRatio="none">
-              </svg>
-
-              <div class="chart-legend">
-                <span>MA20</span>
-                <span>MA50</span>
-                <span style="color:#fff;font-weight:900">MA200</span>
-                <span>VOL</span>
-              </div>
-
-              <div class="signal-tag" id="signalTag">
-                ▲ STRONG BUY · 89
-              </div>
-
-              <div class="chart-note">
-                DEMO CHART · Twelve Data 연결 후 실제 OHLCV로 교체
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <div class="card">
-
-            <div class="section-head">
-              <h3>MA200 gate</h3>
-              <span>Long-term filter</span>
-            </div>
-
-            <div class="why-grid">
-
-              <div class="why-item">
-                <div>
-                  <span>Price vs MA200</span>
-                  <small>장기 추세 필터</small>
-                </div>
-                <b class="good-text" id="priceVs200">ABOVE</b>
-              </div>
-
-              <div class="why-item">
-                <div>
-                  <span>MA200 slope</span>
-                  <small>상승/횡보/하락</small>
-                </div>
-                <b class="good-text" id="ma200Slope">RISING</b>
-              </div>
-
-              <div class="why-item">
-                <div>
-                  <span>MA50 vs MA200</span>
-                  <small>중장기 구조</small>
-                </div>
-                <b id="maCross">MA50 &gt; MA200</b>
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <div class="card">
-
-            <div class="section-head">
-              <h3>Why this score?</h3>
-              <span>설명 가능한 점수</span>
-            </div>
-
-            <div class="why-grid" id="whyGrid"></div>
-
-          </div>
-
-
-          <div class="card">
-
-            <div class="section-head">
-              <h3>Volume</h3>
-              <span>Daily confirmation</span>
-            </div>
-
-            <div class="position-grid">
-
-              <div class="stat">
-                <small>20D AVG</small>
-                <b id="volAvg">—</b>
-              </div>
-
-              <div class="stat">
-                <small>RELATIVE VOL</small>
-                <b id="relVol">—</b>
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <div class="card">
-
-            <div class="section-head">
-              <h3>Options sentiment</h3>
-              <span>API 미연결</span>
-            </div>
-
-            <div class="empty">
-              Options 데이터 공급자 확정 후
-              Call/Put, IV, OI를 보조점수로 연결합니다.
-            </div>
-
-          </div>
-
-
-          <div class="card">
-
-            <div class="section-head">
-              <h3>Position plan</h3>
-              <span id="positionModeText">NOT OWNED</span>
-            </div>
-
-            <div class="position-grid" id="positionStats"></div>
-
-            <div style="height:10px"></div>
-
-            <div class="plan-grid" id="scalePlan"></div>
-
-          </div>
-
-
-          <div class="card">
-
-            <div class="section-head">
-              <h3>Risk plan</h3>
-              <span>R/R Gate</span>
-            </div>
-
-            <div class="why-grid">
-
-              <div class="why-item">
-                <div>
-                  <span>Invalidation / Stop</span>
-                  <small>기술적 무효화 기준</small>
-                </div>
-                <b class="bad-text" id="stopText">—</b>
-              </div>
-
-              <div class="why-item">
-                <div>
-                  <span>Target 1</span>
-                  <small>2R 기준</small>
-                </div>
-                <b id="target1">—</b>
-              </div>
-
-              <div class="why-item">
-                <div>
-                  <span>Target 2</span>
-                  <small>3R 기준</small>
-                </div>
-                <b id="target2">—</b>
-              </div>
-
-            </div>
-
-          </div>
-
-
-        </div>
-
-      </div>
-
-    </section>
-
   </div>
+
+  <div class="sync-chip">
+    <span class="dot"></span>
+    <span id="topSync">DATA WAIT</span>
+  </div>
+</header>
+
+
+<div class="viewport" id="viewport">
+
+<div class="track" id="track">
+
+
+<section class="page" data-page="HOME">
+
+<div class="page-inner">
+
+<h2 class="page-title">Today</h2>
+
+<div class="page-sub">
+강한 신호만 실제 매수 검토 · Daily가 방향, 4H가 타이밍을 확인합니다.
+</div>
+
+
+<div class="home-grid">
+
+<div class="card hero-card">
+
+<div class="hero-top">
+
+<div>
+
+<div class="muted" style="font-size:12px">
+TOP SETUP
+</div>
+
+<div style="font-size:29px;font-weight:900;margin-top:4px">
+NVDA
+</div>
+
+<div class="badge good" style="margin-top:8px">
+● STRONG BUY
+</div>
+
+</div>
+
+<div class="hero-score">
+89
+<small>/100</small>
+</div>
 
 </div>
 
 
+<div class="mini-grid">
+
+<div class="mini">
+<label>Daily</label>
+<b class="good-text">Bullish</b>
+</div>
+
+<div class="mini">
+<label>4H timing</label>
+<b class="warn-text">Wait</b>
+</div>
+
+<div class="mini">
+<label>MA200</label>
+<b>Above</b>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="section-head">
+<h3>Market regime</h3>
+<span>연결 전 DEMO</span>
+</div>
+
+<div class="market-strip">
+
+<div class="market-item">
+<small>SPY</small>
+<b class="good-text">Risk On</b>
+</div>
+
+<div class="market-item">
+<small>QQQ</small>
+<b class="good-text">Bullish</b>
+</div>
+
+<div class="market-item">
+<small>VIX</small>
+<b>—</b>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card" style="margin-top:12px">
+
+<div class="section-head">
+<h3>Today's candidates</h3>
+<span>WATCH 기준</span>
+</div>
+
+<div class="list" id="homeCandidates"></div>
+
+</div>
+
+
+<div class="card">
+
+<div class="section-head">
+<h3>Portfolio guard</h3>
+<span>V1 구조</span>
+</div>
+
+
+<div class="status-line">
+
+<div class="status-left">
+
+<span class="status-light green"></span>
+
+<div>
+<b>Position limits</b>
+<div class="ticker-meta">종목 최대투입 한도 적용</div>
+</div>
+
+</div>
+
+<b>ON</b>
+
+</div>
+
+
+<div class="status-line">
+
+<div class="status-left">
+
+<span class="status-light yellow"></span>
+
+<div>
+<b>Portfolio risk</b>
+<div class="ticker-meta">Supabase 연결 후 통합 계산</div>
+</div>
+
+</div>
+
+<b>WAIT</b>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<section class="page" data-page="WATCH">
+
+<div class="page-inner">
+
+<h2 class="page-title">Watch</h2>
+
+<div class="page-sub">
+내 관심종목만 분석합니다. 종목을 터치하면 상세 분석으로 들어갑니다.
+</div>
+
+
+<div class="card">
+
+<div class="search">
+
+<input
+id="watchInput"
+placeholder="NVDA, TSLA, SOXX, BTC/USD"
+/>
+
+<button class="btn" id="addWatchBtn">
+추가
+</button>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="section-head">
+
+<h3>Buy radar</h3>
+
+<span>Entry score 순</span>
+
+</div>
+
+<div class="list" id="watchList"></div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<section class="page" data-page="DISCOVER">
+
+<div class="page-inner">
+
+<h2 class="page-title">
+Discover
+</h2>
+
+<div class="page-sub">
+향후 NASDAQ-100 / 주요 ETF 자동 스캔 영역입니다.
+</div>
+
+
+<div class="card soft">
+
+<div class="badge neutral">
+COMING NEXT
+</div>
+
+<h3 style="font-size:24px;margin:14px 0 8px">
+System Discovery
+</h3>
+
+<p class="muted" style="line-height:1.6;margin:0">
+WATCH 밖의 종목을 자동으로 스캔해 Entry Score 상위 후보를 제안합니다.
+Twelve Data 호출 제한과 백테스트 구조를 맞춘 뒤 활성화합니다.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="section-head">
+
+<h3>Planned universe</h3>
+
+<span>초기 후보</span>
+
+</div>
+
+
+<div class="market-strip">
+
+<div class="market-item">
+<small>Universe</small>
+<b>NASDAQ-100</b>
+</div>
+
+<div class="market-item">
+<small>ETFs</small>
+<b>Major</b>
+</div>
+
+<div class="market-item">
+<small>Crypto</small>
+<b>Top Liquid</b>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<section class="page" data-page="POSITION">
+
+<div class="page-inner">
+
+<h2 class="page-title">
+Position
+</h2>
+
+<div class="page-sub">
+실제 체결한 포지션만 기록합니다. 시장가격은 API가 담당합니다.
+</div>
+
+
+<div class="card">
+
+<div class="seg" id="positionMode">
+
+<button
+class="active"
+data-mode="spot">
+SPOT
+</button>
+
+<button
+data-mode="lev">
+BYBIT LEVERAGE
+</button>
+
+</div>
+
+
+<div id="spotForm">
+
+<div class="field">
+
+<label>Ticker</label>
+
+<input
+id="posTicker"
+placeholder="NVDA"
+/>
+
+</div>
+
+
+<div class="two">
+
+<div class="field">
+
+<label>보유 수량</label>
+
+<input
+id="posQty"
+type="number"
+step="any"
+placeholder="40"
+/>
+
+</div>
+
+
+<div class="field">
+
+<label>평단가</label>
+
+<input
+id="posAvg"
+type="number"
+step="any"
+placeholder="162.50"
+/>
+
+</div>
+
+</div>
+
+
+<div class="field">
+
+<label>
+이 종목 최대 투입금 (USD)
+</label>
+
+<input
+id="posMax"
+type="number"
+step="any"
+placeholder="10000"
+/>
+
+</div>
+
+
+<button
+class="btn"
+id="saveSpot">
+포지션 저장
+</button>
+
+</div>
+
+
+<div
+id="levForm"
+style="display:none"
+>
+
+<div class="leverage-warning">
+
+레버리지 모드는 별도 Risk Engine으로 관리합니다.
+V0.2에서는 구조와 입력 UI만 준비하며 자동주문은 하지 않습니다.
+
+</div>
+
+
+<div
+class="field"
+style="margin-top:12px"
+>
+
+<label>
+Symbol
+</label>
+
+<input
+id="levTicker"
+placeholder="BTCUSDT"
+/>
+
+</div>
+
+
+<div class="two">
+
+<div class="field">
+
+<label>
+Direction
+</label>
+
+<input
+id="levSide"
+placeholder="LONG"
+/>
+
+</div>
+
+
+<div class="field">
+
+<label>
+Leverage
+</label>
+
+<input
+id="levX"
+type="number"
+placeholder="5"
+/>
+
+</div>
+
+</div>
+
+
+<div class="two">
+
+<div class="field">
+
+<label>
+Entry
+</label>
+
+<input
+id="levEntry"
+type="number"
+step="any"
+/>
+
+</div>
+
+
+<div class="field">
+
+<label>
+Position size ($)
+</label>
+
+<input
+id="levSize"
+type="number"
+step="any"
+/>
+
+</div>
+
+</div>
+
+
+<div class="field">
+
+<label>
+Liquidation price (현재는 수동)
+</label>
+
+<input
+id="levLiq"
+type="number"
+step="any"
+/>
+
+</div>
+
+
+<button
+class="btn secondary"
+id="saveLev"
+>
+레버리지 포지션 저장
+</button>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="section-head">
+
+<h3>
+Active positions
+</h3>
+
+<span id="positionCount">
+0
+</span>
+
+</div>
+
+<div
+class="list"
+id="positionList">
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<section class="page" data-page="MORE">
+
+<div class="page-inner">
+
+<h2 class="page-title">
+More
+</h2>
+
+<div class="page-sub">
+데이터 상태, 버전, 연결 설정과 변경 이력을 확인합니다.
+</div>
+
+
+<div class="card">
+
+<div class="section-head">
+
+<h3>
+System status
+</h3>
+
+<span>
+v0.2.1
+</span>
+
+</div>
+
+
+<div class="status-line">
+
+<div class="status-left">
+
+<span
+class="status-light yellow"
+id="twelveLight">
+</span>
+
+<div>
+
+<b>
+Twelve Data
+</b>
+
+<div class="ticker-meta">
+1D + 4H OHLCV
+</div>
+
+</div>
+
+</div>
+
+<b id="twelveStatus">
+NOT CONNECTED
+</b>
+
+</div>
+
+
+<div class="status-line">
+
+<div class="status-left">
+
+<span class="status-light yellow"></span>
+
+<div>
+
+<b>
+Supabase
+</b>
+
+<div class="ticker-meta">
+프로젝트 생성 완료 · 다음 단계에서 Sync 연결
+</div>
+
+</div>
+
+</div>
+
+<b>
+READY
+</b>
+
+</div>
+
+
+<div class="status-line">
+
+<div class="status-left">
+
+<span
+class="status-light red"
+id="syncLight">
+</span>
+
+<div>
+
+<b>
+Last successful sync
+</b>
+
+<div class="ticker-meta">
+Twelve Data 마지막 갱신
+</div>
+
+</div>
+
+</div>
+
+<b id="lastSync">
+—
+</b>
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="section-head">
+
+<h3>
+Twelve Data connection
+</h3>
+
+<span>
+REST API
+</span>
+
+</div>
+
+
+<div class="field">
+
+<label>
+API Key · 이 브라우저에만 저장
+</label>
+
+<input
+id="twelveKey"
+type="password"
+autocomplete="off"
+placeholder="Twelve Data API key"
+/>
+
+</div>
+
+
+<div class="two">
+
+<button
+class="btn secondary"
+id="saveTwelve">
+저장 + 연결 테스트
+</button>
+
+<button
+class="btn"
+id="refreshTwelve">
+시장 데이터 새로고침
+</button>
+
+</div>
+
+
+<div
+class="ticker-meta"
+style="margin-top:10px"
+>
+
+GitHub 코드에는 키가 들어가지 않습니다.
+1D 260개 + 4H 260개를 불러와 MA20/50/200, RSI, 거래량,
+리스크/목표가를 브라우저에서 계산합니다.
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="section-head">
+
+<h3>
+Data safety rule
+</h3>
+
+<span>
+예정
+</span>
+
+</div>
+
+
+<div class="why-grid">
+
+<div class="why-item">
+
+<div>
+
+<span>
+0–60분
+</span>
+
+<small>
+정상 판단
+</small>
+
+</div>
+
+<b class="good-text">
+FRESH
+</b>
+
+</div>
+
+
+<div class="why-item">
+
+<div>
+
+<span>
+60–180분
+</span>
+
+<small>
+경고 표시
+</small>
+
+</div>
+
+<b class="warn-text">
+STALE
+</b>
+
+</div>
+
+
+<div class="why-item">
+
+<div>
+
+<span>
+180분 이상
+</span>
+
+<small>
+신규 BUY 판단 중지
+</small>
+
+</div>
+
+<b class="bad-text">
+BLOCK
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="section-head">
+
+<h3>
+Changelog
+</h3>
+
+<span>
+STOCKPM
+</span>
+
+</div>
+
+
+<div class="changelog">
+
+<div class="change-item">
+
+<b>
+v0.2.1
+</b>
+
+<p>
+Twelve Data REST 연결,
+실제 1D/4H OHLCV,
+MA20/50/200,
+RSI,
+Relative Volume,
+ATR 기반 Risk Plan,
+실제 캔들 차트 및 데이터 상태 표시 추가.
+</p>
+
+</div>
+
+
+<div class="change-item">
+
+<b>
+v0.2.0
+</b>
+
+<p>
+좌우 페이지 스와이프,
+WATCH 상세,
+1D/4H 차트 구조,
+MA200 Gate,
+Volume/WHY,
+Signal marker,
+Position/Bybit UI,
+Sync/Version 상태 추가.
+</p>
+
+</div>
+
+
+<div class="change-item">
+
+<b>
+v0.1.0
+</b>
+
+<p>
+Watchlist,
+Entry Score,
+기술적 분석,
+기본 Position Plan 구조.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+
+
+<nav
+class="bottom-tabs"
+id="tabs"
+>
+
+<button
+class="tab active"
+data-index="0"
+>
+
+<span class="ico">
+⌂
+</span>
+
+<span>
+HOME
+</span>
+
+</button>
+
+
+<button
+class="tab"
+data-index="1"
+>
+
+<span class="ico">
+◎
+</span>
+
+<span>
+WATCH
+</span>
+
+</button>
+
+
+<button
+class="tab"
+data-index="2"
+>
+
+<span class="ico">
+✦
+</span>
+
+<span>
+DISCOVER
+</span>
+
+</button>
+
+
+<button
+class="tab"
+data-index="3"
+>
+
+<span class="ico">
+▣
+</span>
+
+<span>
+POSITION
+</span>
+
+</button>
+
+
+<button
+class="tab"
+data-index="4"
+>
+
+<span class="ico">
+•••
+</span>
+
+<span>
+MORE
+</span>
+
+</button>
+
+</nav>
+
+
+
+<section
+class="detail"
+id="detail"
+>
+
+<header class="detail-head">
+
+<button
+class="icon-btn"
+id="closeDetail"
+>
+‹
+</button>
+
+
+<div class="detail-title">
+
+<b id="detailTicker">
+NVDA
+</b>
+
+<small id="detailSubtitle">
+WATCH DETAIL
+</small>
+
+</div>
+
+
+<button
+class="icon-btn"
+id="nextDetail"
+>
+›
+</button>
+
+</header>
+
+
+<div class="detail-body">
+
+<div class="detail-inner">
+
+
+<div class="card hero-card">
+
+<div class="hero-top">
+
+<div>
+
+<div
+class="muted"
+style="font-size:12px"
+id="assetType"
+>
+US EQUITY
+</div>
+
+<div
+style="font-size:26px;font-weight:900;margin-top:4px"
+id="detailPrice"
+>
+$—
+</div>
+
+<div
+class="badge good"
+style="margin-top:8px"
+id="detailSignal"
+>
+STRONG BUY
+</div>
+
+</div>
+
+
+<div
+class="hero-score"
+id="detailScore"
+>
+89
+<small>/100</small>
+</div>
+
+</div>
+
+
+<div class="mini-grid">
+
+<div class="mini">
+
+<label>
+Daily
+</label>
+
+<b
+class="good-text"
+id="dailyState"
+>
+Bullish
+</b>
+
+</div>
+
+
+<div class="mini">
+
+<label>
+4H timing
+</label>
+
+<b
+class="warn-text"
+id="timingState"
+>
+Wait
+</b>
+
+</div>
+
+
+<div class="mini">
+
+<label>
+MA200 dist.
+</label>
+
+<b id="ma200Dist">
++8.2%
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="section-head">
+
+<h3>
+Price chart
+</h3>
+
+
+<div class="tf-toggle">
+
+<button
+class="active"
+data-tf="1D"
+>
+1D
+</button>
+
+<button
+data-tf="4H"
+>
+4H
+</button>
+
+</div>
+
+</div>
+
+
+<div
+class="chart-wrap"
+id="chartWrap"
+>
+
+<div class="chart-grid"></div>
+
+<svg
+class="chart-svg"
+id="chartSvg"
+viewBox="0 0 800 300"
+preserveAspectRatio="none"
+></svg>
+
+
+<div class="chart-legend">
+
+<span>
+MA20
+</span>
+
+<span>
+MA50
+</span>
+
+<span style="color:#fff;font-weight:900">
+MA200
+</span>
+
+<span>
+VOL
+</span>
+
+</div>
+
+
+<div
+class="signal-tag"
+id="signalTag"
+>
+▲ STRONG BUY · 89
+</div>
+
+
+<div class="chart-note">
+
+<span id="chartNote">
+DEMO · Twelve Data API Key를 연결하세요
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="section-head">
+
+<h3>
+MA200 gate
+</h3>
+
+<span>
+Long-term filter
+</span>
+
+</div>
+
+
+<div class="why-grid">
+
+<div class="why-item">
+
+<div>
+
+<span>
+Price vs MA200
+</span>
+
+<small>
+장기 추세 필터
+</small>
+
+</div>
+
+<b
+class="good-text"
+id="priceVs200"
+>
+ABOVE
+</b>
+
+</div>
+
+
+<div class="why-item">
+
+<div>
+
+<span>
+MA200 slope
+</span>
+
+<small>
+상승/횡보/하락
+</small>
+
+</div>
+
+<b
+class="good-text"
+id="ma200Slope"
+>
+RISING
+</b>
+
+</div>
+
+
+<div class="why-item">
+
+<div>
+
+<span>
+MA50 vs MA200
+</span>
+
+<small>
+중장기 구조
+</small>
+
+</div>
+
+<b id="maCross">
+MA50 &gt; MA200
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="section-head">
+
+<h3>
+Why this score?
+</h3>
+
+<span>
+설명 가능한 점수
+</span>
+
+</div>
+
+<div
+class="why-grid"
+id="whyGrid"
+></div>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="section-head">
+
+<h3>
+Volume
+</h3>
+
+<span>
+Daily confirmation
+</span>
+
+</div>
+
+
+<div class="position-grid">
+
+<div class="stat">
+
+<small>
+20D AVG
+</small>
+
+<b id="volAvg">
+—
+</b>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+RELATIVE VOL
+</small>
+
+<b id="relVol">
+—
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="section-head">
+
+<h3>
+Options sentiment
+</h3>
+
+<span>
+API 미연결
+</span>
+
+</div>
+
+<div class="empty">
+
+Options 데이터 공급자 확정 후
+Call/Put, IV, OI를 보조점수로 연결합니다.
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="section-head">
+
+<h3>
+Position plan
+</h3>
+
+<span id="positionModeText">
+NOT OWNED
+</span>
+
+</div>
+
+<div
+class="position-grid"
+id="positionStats"
+></div>
+
+<div style="height:10px"></div>
+
+<div
+class="plan-grid"
+id="scalePlan"
+></div>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="section-head">
+
+<h3>
+Risk plan
+</h3>
+
+<span>
+R/R Gate
+</span>
+
+</div>
+
+
+<div class="why-grid">
+
+<div class="why-item">
+
+<div>
+
+<span>
+Invalidation / Stop
+</span>
+
+<small>
+기술적 무효화 기준
+</small>
+
+</div>
+
+<b
+class="bad-text"
+id="stopText"
+>
+—
+</b>
+
+</div>
+
+
+<div class="why-item">
+
+<div>
+
+<span>
+Target 1
+</span>
+
+<small>
+2R 기준
+</small>
+
+</div>
+
+<b id="target1">
+—
+</b>
+
+</div>
+
+
+<div class="why-item">
+
+<div>
+
+<span>
+Target 2
+</span>
+
+<small>
+3R 기준
+</small>
+
+</div>
+
+<b id="target2">
+—
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+</div>
+
+
+
 <script>
 
-const APP_VERSION='0.2.0';
+const APP_VERSION='0.2.1';
 
 const $=id=>document.getElementById(id);
 
 const store={
   get(k,d){
     try{
-      return JSON.parse(localStorage.getItem(k))??d
+      return JSON.parse(localStorage.getItem(k))??d;
     }catch{
-      return d
+      return d;
     }
   },
+
   set(k,v){
-    localStorage.setItem(k,JSON.stringify(v))
+    localStorage.setItem(k,JSON.stringify(v));
   }
 };
+
 
 let currentPage=0;
 let detailIndex=0;
 let detailTf='1D';
 
+
 let watch=store.get(
   'stockpm_watch',
-  ['NVDA','TSLA','SOXX','QQQ','BTC/USD']
+  [
+    'NVDA',
+    'TSLA',
+    'SOXX',
+    'QQQ',
+    'BTC/USD'
+  ]
 );
+
 
 let positions=store.get(
   'stockpm_positions',
   {}
 );
+
 
 let leveragePositions=store.get(
   'stockpm_leverage',
@@ -952,411 +2382,1466 @@ let leveragePositions=store.get(
 );
 
 
+
 const demo={
 
-  'NVDA':{
-    score:89,
-    signal:'STRONG BUY',
-    daily:'Bullish',
-    timing:'Wait',
-    price:182.4,
-    ma200:168.6,
-    ma200Slope:'RISING',
-    technical:92,
-    momentum:86,
-    entry:88,
-    volume:84,
-    rr:82,
-    market:78,
-    risk:58,
-    relVol:1.46,
-    volAvg:'42.1M',
-    stop:168.2,
-    t1:210.8,
-    t2:225.0,
-    type:'US EQUITY'
-  },
+'NVDA':{
+score:89,
+signal:'STRONG BUY',
+daily:'Bullish',
+timing:'Wait',
+price:182.4,
+ma200:168.6,
+ma50:176,
+ma200Slope:'RISING',
+technical:92,
+momentum:86,
+entry:88,
+volume:84,
+rr:82,
+market:78,
+risk:58,
+relVol:1.46,
+volAvg:'42.1M',
+stop:168.2,
+t1:210.8,
+t2:225.0,
+type:'US EQUITY'
+},
 
-  'TSLA':{
-    score:81,
-    signal:'BUY CANDIDATE',
-    daily:'Bullish',
-    timing:'Ready',
-    price:410.2,
-    ma200:382.5,
-    ma200Slope:'RISING',
-    technical:85,
-    momentum:79,
-    entry:80,
-    volume:72,
-    rr:74,
-    market:78,
-    risk:72,
-    relVol:1.21,
-    volAvg:'96.4M',
-    stop:374.0,
-    t1:482.6,
-    t2:518.8,
-    type:'US EQUITY'
-  },
 
-  'SOXX':{
-    score:77,
-    signal:'BUY CANDIDATE',
-    daily:'Bullish',
-    timing:'Wait',
-    price:286.1,
-    ma200:273.8,
-    ma200Slope:'RISING',
-    technical:83,
-    momentum:73,
-    entry:75,
-    volume:67,
-    rr:71,
-    market:81,
-    risk:51,
-    relVol:1.08,
-    volAvg:'3.8M',
-    stop:268.5,
-    t1:321.3,
-    t2:338.9,
-    type:'ETF'
-  },
+'TSLA':{
+score:81,
+signal:'BUY CANDIDATE',
+daily:'Bullish',
+timing:'Ready',
+price:410.2,
+ma200:382.5,
+ma50:397,
+ma200Slope:'RISING',
+technical:85,
+momentum:79,
+entry:80,
+volume:72,
+rr:74,
+market:78,
+risk:72,
+relVol:1.21,
+volAvg:'96.4M',
+stop:374.0,
+t1:482.6,
+t2:518.8,
+type:'US EQUITY'
+},
 
-  'QQQ':{
-    score:69,
-    signal:'WATCH',
-    daily:'Bullish',
-    timing:'Wait',
-    price:612.5,
-    ma200:574.2,
-    ma200Slope:'RISING',
-    technical:80,
-    momentum:68,
-    entry:63,
-    volume:61,
-    rr:62,
-    market:80,
-    risk:39,
-    relVol:.94,
-    volAvg:'49.7M',
-    stop:584.0,
-    t1:669.5,
-    t2:698.0,
-    type:'ETF'
-  },
 
-  'BTC/USD':{
-    score:73,
-    signal:'WATCH',
-    daily:'Bullish',
-    timing:'Ready',
-    price:78500,
-    ma200:72100,
-    ma200Slope:'RISING',
-    technical:82,
-    momentum:74,
-    entry:69,
-    volume:71,
-    rr:65,
-    market:66,
-    risk:84,
-    relVol:1.18,
-    volAvg:'—',
-    stop:70400,
-    t1:94700,
-    t2:102800,
-    type:'CRYPTO'
-  }
+'SOXX':{
+score:77,
+signal:'BUY CANDIDATE',
+daily:'Bullish',
+timing:'Wait',
+price:286.1,
+ma200:273.8,
+ma50:281,
+ma200Slope:'RISING',
+technical:83,
+momentum:73,
+entry:75,
+volume:67,
+rr:71,
+market:81,
+risk:51,
+relVol:1.08,
+volAvg:'3.8M',
+stop:268.5,
+t1:321.3,
+t2:338.9,
+type:'ETF'
+},
+
+
+'QQQ':{
+score:69,
+signal:'WATCH',
+daily:'Bullish',
+timing:'Wait',
+price:612.5,
+ma200:574.2,
+ma50:600,
+ma200Slope:'RISING',
+technical:80,
+momentum:68,
+entry:63,
+volume:61,
+rr:62,
+market:80,
+risk:39,
+relVol:.94,
+volAvg:'49.7M',
+stop:584.0,
+t1:669.5,
+t2:698.0,
+type:'ETF'
+},
+
+
+'BTC/USD':{
+score:73,
+signal:'WATCH',
+daily:'Bullish',
+timing:'Ready',
+price:78500,
+ma200:72100,
+ma50:75500,
+ma200Slope:'RISING',
+technical:82,
+momentum:74,
+entry:69,
+volume:71,
+rr:65,
+market:66,
+risk:84,
+relVol:1.18,
+volAvg:'—',
+stop:70400,
+t1:94700,
+t2:102800,
+type:'CRYPTO'
+}
 
 };
 
 
+
+let liveData={};
+let ohlcvCache={};
+
+let twelveKey=
+localStorage.getItem('stockpm_twelve_key')||'';
+
+
+
 function dataFor(s){
 
-  return demo[s]||{
-    score:68,
-    signal:'WATCH',
-    daily:'Neutral',
-    timing:'Wait',
-    price:100,
-    ma200:96,
-    ma200Slope:'FLAT',
-    technical:70,
-    momentum:64,
-    entry:66,
-    volume:60,
-    rr:65,
-    market:67,
-    risk:55,
-    relVol:1.0,
-    volAvg:'—',
-    stop:92,
-    t1:116,
-    t2:124,
-    type:'US EQUITY'
-  }
+return liveData[s]||
+demo[s]||
+{
+score:50,
+signal:'WATCH',
+daily:'Neutral',
+timing:'Wait',
+price:100,
+ma200:96,
+ma50:98,
+ma200Slope:'FLAT',
+technical:50,
+momentum:50,
+entry:50,
+volume:50,
+rr:50,
+market:60,
+risk:50,
+relVol:1.0,
+volAvg:'—',
+stop:92,
+t1:116,
+t2:124,
+type:s.includes('/')?'CRYPTO':'US EQUITY'
+};
 
 }
+
+
+
+function avg(a){
+
+return a.length
+?
+a.reduce((x,y)=>x+y,0)/a.length
+:
+0;
+
+}
+
+
+
+function sma(a,n){
+
+return a.length>=n
+?
+avg(a.slice(-n))
+:
+avg(a);
+
+}
+
+
+
+function rsi(closes,n=14){
+
+if(closes.length<n+1)
+return 50;
+
+
+let g=0;
+let l=0;
+
+
+for(
+let i=closes.length-n;
+i<closes.length;
+i++
+){
+
+const d=
+closes[i]-closes[i-1];
+
+
+if(d>0)
+g+=d;
+else
+l-=d;
+
+}
+
+
+if(!l)
+return 100;
+
+
+const rs=
+(g/n)/(l/n);
+
+
+return
+100-
+100/(1+rs);
+
+}
+
+
+
+function atr(c,n=14){
+
+if(c.length<n+1)
+return 0;
+
+
+let tr=[];
+
+
+for(
+let i=c.length-n;
+i<c.length;
+i++
+){
+
+tr.push(
+
+Math.max(
+
+c[i].h-c[i].l,
+
+Math.abs(
+c[i].h-c[i-1].c
+),
+
+Math.abs(
+c[i].l-c[i-1].c
+)
+
+)
+
+);
+
+}
+
+
+return avg(tr);
+
+}
+
+
+
+function clamp(
+v,
+a=0,
+b=100
+){
+
+return Math.max(
+a,
+Math.min(b,v)
+);
+
+}
+
+
+
+function fmtVol(v){
+
+if(
+!Number.isFinite(v)
+||
+v<=0
+)
+return '—';
+
+
+if(v>=1e9)
+return (v/1e9).toFixed(1)+'B';
+
+
+if(v>=1e6)
+return (v/1e6).toFixed(1)+'M';
+
+
+if(v>=1e3)
+return (v/1e3).toFixed(1)+'K';
+
+
+return
+Math.round(v).toLocaleString();
+
+}
+
+
+
+function normalizeSeries(values){
+
+return [...values]
+.reverse()
+.map(x=>({
+
+dt:x.datetime,
+
+o:+x.open,
+
+h:+x.high,
+
+l:+x.low,
+
+c:+x.close,
+
+v:+x.volume||0
+
+}))
+.filter(
+x=>
+[
+x.o,
+x.h,
+x.l,
+x.c
+]
+.every(Number.isFinite)
+);
+
+}
+
+
+
+async function fetchSeries(
+symbol,
+interval
+){
+
+if(!twelveKey)
+throw new Error(
+'API_KEY_REQUIRED'
+);
+
+
+const url=
+new URL(
+'https://api.twelvedata.com/time_series'
+);
+
+
+url.searchParams.set(
+'symbol',
+symbol
+);
+
+url.searchParams.set(
+'interval',
+interval
+);
+
+url.searchParams.set(
+'outputsize',
+'260'
+);
+
+url.searchParams.set(
+'apikey',
+twelveKey
+);
+
+
+const r=
+await fetch(url);
+
+
+if(!r.ok)
+throw new Error(
+'HTTP '+r.status
+);
+
+
+const j=
+await r.json();
+
+
+if(
+j.status==='error'
+||
+!j.values
+)
+throw new Error(
+j.message||
+'Twelve Data error'
+);
+
+
+return normalizeSeries(
+j.values
+);
+
+}
+
+
+
+function scoreAsset(
+symbol,
+daily,
+h4
+){
+
+const c=
+daily.map(x=>x.c);
+
+const v=
+daily.map(x=>x.v);
+
+const last=
+daily.at(-1);
+
+const price=
+last.c;
+
+
+const ma20=
+sma(c,20);
+
+const ma50=
+sma(c,50);
+
+const ma200=
+sma(c,200);
+
+
+const old200=
+daily.length>=210
+?
+avg(
+c.slice(-210,-10)
+)
+:
+ma200;
+
+
+const slopePct=
+old200
+?
+((ma200/old200)-1)*100
+:
+0;
+
+
+const ma200Slope=
+slopePct>.35
+?
+'RISING'
+:
+slopePct<-.35
+?
+'FALLING'
+:
+'FLAT';
+
+
+const rs=
+rsi(c);
+
+
+const chg20=
+c.length>20
+?
+(price/c.at(-21)-1)*100
+:
+0;
+
+
+const avgv=
+avg(
+v.slice(-21,-1)
+.filter(x=>x>0)
+);
+
+
+const relVol=
+avgv&&last.v
+?
+last.v/avgv
+:
+1;
+
+
+const a=
+atr(daily);
+
+
+const h4c=
+h4.map(x=>x.c);
+
+
+const h4price=
+h4c.at(-1)||
+price;
+
+
+const h4ma20=
+sma(h4c,20);
+
+
+const h4rsi=
+rsi(h4c);
+
+
+const dailyBull=
+price>ma200
+&&
+ma50>ma200;
+
+
+const timingReady=
+h4price>h4ma20
+&&
+h4rsi>=45
+&&
+h4rsi<=72;
+
+
+
+let technical=
+clamp(
+
+(price>ma200?55:20)
+
++
+
+(ma50>ma200?25:5)
+
++
+
+(
+ma200Slope==='RISING'
+?
+20
+:
+ma200Slope==='FLAT'
+?
+10
+:
+0
+)
+
+);
+
+
+let momentum=
+clamp(
+50
++
+(rs-50)*1.3
++
+chg20*1.2
+);
+
+
+let dist20=
+Math.abs(
+price/ma20-1
+)*100;
+
+
+let entry=
+clamp(
+90
+-
+dist20*9
++
+(timingReady?10:-5)
+);
+
+
+let volume=
+clamp(
+45
++
+(relVol-1)*55
+);
+
+
+let stop=
+Math.min(
+ma50||
+price-a*2,
+price-a*2
+);
+
+
+if(
+!(
+stop>0
+&&
+stop<price
+)
+)
+stop=
+price*
+(
+dailyBull
+?
+.94
+:
+.92
+);
+
+
+let riskPer=
+price-stop;
+
+
+let t1=
+price+
+riskPer*2;
+
+
+let t2=
+price+
+riskPer*3;
+
+
+let rr=
+clamp(
+55
++
+(dailyBull?20:0)
++
+(timingReady?15:0)
+);
+
+
+let market=70;
+
+
+let score=
+Math.round(
+clamp(
+
+(
+technical*.25
++
+momentum*.15
++
+entry*.15
++
+volume*.15
++
+rr*.15
++
+market*.10
+)
+/.95
+
+)
+);
+
+
+let signal=
+
+score>=85
+&&
+dailyBull
+&&
+timingReady
+
+?
+
+'STRONG BUY'
+
+:
+
+score>=75
+&&
+dailyBull
+
+?
+
+'BUY CANDIDATE'
+
+:
+
+'WATCH';
+
+
+
+return {
+
+score,
+
+signal,
+
+daily:
+dailyBull
+?
+'Bullish'
+:
+price>ma200
+?
+'Neutral'
+:
+'Bearish',
+
+timing:
+timingReady
+?
+'Ready'
+:
+'Wait',
+
+price,
+
+ma20,
+
+ma50,
+
+ma200,
+
+ma200Slope,
+
+technical,
+
+momentum,
+
+entry,
+
+volume,
+
+rr,
+
+market,
+
+risk:
+clamp(
+(a/price)*100*25
+),
+
+relVol,
+
+volAvg:
+fmtVol(avgv),
+
+stop,
+
+t1,
+
+t2,
+
+type:
+symbol.includes('/')
+?
+'CRYPTO'
+:
+(
+[
+'SOXX',
+'QQQ',
+'SPY',
+'TQQQ',
+'SOXL'
+]
+.includes(symbol)
+?
+'ETF'
+:
+'US EQUITY'
+),
+
+rsi:rs,
+
+h4rsi
+
+};
+
+}
+
+
+
+async function loadSymbol(symbol){
+
+const [
+daily,
+h4
+]
+=
+await Promise.all(
+[
+fetchSeries(
+symbol,
+'1day'
+),
+
+fetchSeries(
+symbol,
+'4h'
+)
+]
+);
+
+
+if(
+daily.length<30
+||
+h4.length<20
+)
+throw new Error(
+'Not enough OHLCV'
+);
+
+
+ohlcvCache[symbol]={
+D:daily,
+H4:h4
+};
+
+
+liveData[symbol]=
+scoreAsset(
+symbol,
+daily,
+h4
+);
+
+
+return liveData[symbol];
+
+}
+
+
+
+async function refreshMarketData(){
+
+if(!twelveKey){
+
+setApiStatus(
+'key'
+);
+
+return;
+
+}
+
+
+setApiStatus(
+'loading'
+);
+
+
+let ok=0;
+
+let errors=[];
+
+
+for(
+const s of watch
+){
+
+try{
+
+await loadSymbol(s);
+
+ok++;
+
+}catch(e){
+
+errors.push(
+`${s}: ${e.message}`
+);
+
+}
+
+}
+
+
+renderWatch();
+
+renderHome();
+
+renderPositions();
+
+
+if(
+$('detail')
+.classList
+.contains('open')
+)
+fillDetail(
+$('detailTicker')
+.textContent
+);
+
+
+if(ok){
+
+const now=
+new Date();
+
+
+localStorage.setItem(
+'stockpm_last_sync',
+now.toISOString()
+);
+
+
+setApiStatus(
+'ok',
+`${ok}/${watch.length}`
+);
+
+}else{
+
+setApiStatus(
+'error'
+);
+
+}
+
+
+if(errors.length)
+console.warn(
+'Twelve Data',
+errors
+);
+
+}
+
+
+
+function setApiStatus(
+state,
+count=''
+){
+
+const st=
+$('twelveStatus');
+
+const tl=
+$('twelveLight');
+
+const sl=
+$('syncLight');
+
+const ls=
+$('lastSync');
+
+const top=
+$('topSync');
+
+
+if(!st)
+return;
+
+
+tl.className=
+'status-light '
++
+(
+state==='ok'
+?
+'green'
+:
+state==='error'
+?
+'red'
+:
+'yellow'
+);
+
+
+st.textContent=
+
+state==='ok'
+?
+`CONNECTED ${count}`
+
+:
+
+state==='loading'
+?
+'LOADING…'
+
+:
+
+state==='key'
+?
+'API KEY NEEDED'
+
+:
+
+'ERROR';
+
+
+const last=
+localStorage.getItem(
+'stockpm_last_sync'
+);
+
+
+if(last){
+
+sl.className=
+'status-light green';
+
+
+ls.textContent=
+new Date(last)
+.toLocaleString();
+
+
+top.textContent=
+state==='ok'
+?
+'LIVE DATA'
+:
+'CACHED DATA';
+
+}else{
+
+sl.className=
+'status-light red';
+
+
+ls.textContent=
+'—';
+
+
+top.textContent=
+'DATA WAIT';
+
+}
+
+}
+
 
 
 function signalClass(s){
 
-  return s.includes('STRONG')||s.includes('BUY')
-    ?'good'
-    :s==='WATCH'
-      ?'warn'
-      :'neutral';
+return
+s.includes('STRONG')
+||
+s.includes('BUY')
+?
+'good'
+:
+s==='WATCH'
+?
+'warn'
+:
+'neutral';
 
 }
 
 
-function fmtPrice(n,type='US EQUITY'){
 
-  if(!Number.isFinite(+n)) return '—';
+function fmtPrice(
+n,
+type='US EQUITY'
+){
 
-  return '$'+(+n).toLocaleString(
-    undefined,
-    {maximumFractionDigits:2}
-  );
+if(
+!Number.isFinite(+n)
+)
+return '—';
+
+
+return '$'
++
+(+n)
+.toLocaleString(
+undefined,
+{
+maximumFractionDigits:2
+}
+);
 
 }
+
 
 
 function renderWatch(){
 
-  const sorted=[...watch].sort(
-    (a,b)=>dataFor(b).score-dataFor(a).score
-  );
-
-  $('watchList').innerHTML=sorted.map((s,i)=>{
-
-    const d=dataFor(s);
-
-    return `
-      <div class="ticker-row" data-symbol="${s}">
-
-        <div>
-
-          <div style="display:flex;gap:8px;align-items:center">
-
-            <span class="rank">${i+1}</span>
-
-            <div>
-              <div class="ticker-name">${s}</div>
-              <div class="ticker-meta">
-                ${d.signal} · ${d.daily} / 4H ${d.timing}
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="score-circle">
-          ${d.score}
-        </div>
-
-        <div class="chev">›</div>
-
-      </div>
-    `;
-
-  }).join('');
+const sorted=
+[...watch]
+.sort(
+(a,b)=>
+dataFor(b).score
+-
+dataFor(a).score
+);
 
 
-  document.querySelectorAll(
-    '#watchList .ticker-row'
-  ).forEach(x=>
+$('watchList').innerHTML=
 
-    x.onclick=()=>
-      openDetail(x.dataset.symbol)
+sorted
+.map(
+(s,i)=>{
 
-  );
+const d=
+dataFor(s);
+
+
+return `
+
+<div
+class="ticker-row"
+data-symbol="${s}"
+>
+
+<div>
+
+<div
+style="display:flex;gap:8px;align-items:center"
+>
+
+<span class="rank">
+${i+1}
+</span>
+
+<div>
+
+<div class="ticker-name">
+${s}
+</div>
+
+<div class="ticker-meta">
+${d.signal} · ${d.daily} / 4H ${d.timing}
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="score-circle">
+${d.score}
+</div>
+
+
+<div class="chev">
+›
+</div>
+
+</div>
+
+`;
 
 }
+)
+.join('');
+
+
+document
+.querySelectorAll(
+'#watchList .ticker-row'
+)
+.forEach(
+x=>
+x.onclick=
+()=>
+openDetail(
+x.dataset.symbol
+)
+);
+
+}
+
 
 
 function renderHome(){
 
-  const top=[...watch]
-    .sort(
-      (a,b)=>dataFor(b).score-dataFor(a).score
-    )
-    .slice(0,4);
+const top=
+[...watch]
+.sort(
+(a,b)=>
+dataFor(b).score
+-
+dataFor(a).score
+)
+.slice(0,4);
 
 
-  $('homeCandidates').innerHTML=top.map((s,i)=>{
+$('homeCandidates').innerHTML=
 
-    const d=dataFor(s);
+top
+.map(
+s=>{
 
-    return `
-      <div class="ticker-row" data-symbol="${s}">
-
-        <div>
-
-          <div class="ticker-name">
-            ${s}
-          </div>
-
-          <div class="ticker-meta">
-            ${d.signal} · 4H ${d.timing}
-          </div>
-
-        </div>
-
-        <div class="score-circle">
-          ${d.score}
-        </div>
-
-        <div class="chev">›</div>
-
-      </div>
-    `;
-
-  }).join('');
+const d=
+dataFor(s);
 
 
-  document.querySelectorAll(
-    '#homeCandidates .ticker-row'
-  ).forEach(x=>
+return `
 
-    x.onclick=()=>
-      openDetail(x.dataset.symbol)
+<div
+class="ticker-row"
+data-symbol="${s}"
+>
 
-  );
+<div>
+
+<div class="ticker-name">
+${s}
+</div>
+
+<div class="ticker-meta">
+${d.signal} · 4H ${d.timing}
+</div>
+
+</div>
+
+
+<div class="score-circle">
+${d.score}
+</div>
+
+
+<div class="chev">
+›
+</div>
+
+</div>
+
+`;
 
 }
+)
+.join('');
+
+
+document
+.querySelectorAll(
+'#homeCandidates .ticker-row'
+)
+.forEach(
+x=>
+x.onclick=
+()=>
+openDetail(
+x.dataset.symbol
+)
+);
+
+}
+
 
 
 function renderPositions(){
 
-  const spot=Object.entries(positions);
-  const lev=leveragePositions;
-
-  $('positionCount').textContent=
-    `${spot.length+lev.length}`;
-
-  let html='';
+const spot=
+Object.entries(
+positions
+);
 
 
-  spot.forEach(([s,p])=>{
-
-    html+=`
-      <div class="ticker-row" data-symbol="${s}">
-
-        <div>
-
-          <div class="ticker-name">
-            ${s}
-          </div>
-
-          <div class="ticker-meta">
-            SPOT · ${p.qty} @ ${p.avg}
-          </div>
-
-        </div>
-
-        <div class="score-circle">
-          ${dataFor(s).score}
-        </div>
-
-        <div class="chev">›</div>
-
-      </div>
-    `;
-
-  });
+const lev=
+leveragePositions;
 
 
-  lev.forEach(p=>{
-
-    html+=`
-      <div class="ticker-row">
-
-        <div>
-
-          <div class="ticker-name">
-            ${p.symbol}
-          </div>
-
-          <div class="ticker-meta">
-            BYBIT ${p.side} ·
-            ${p.leverage}x ·
-            Entry ${p.entry}
-          </div>
-
-        </div>
-
-        <div class="score-circle">
-          ⚡
-        </div>
-
-        <div class="chev">›</div>
-
-      </div>
-    `;
-
-  });
+$('positionCount').textContent=
+`${spot.length+lev.length}`;
 
 
-  $('positionList').innerHTML=
-    html||
-    '<div class="empty">실제 체결 포지션을 등록하면 여기에 표시됩니다.</div>';
+let html='';
 
 
-  document.querySelectorAll(
-    '#positionList [data-symbol]'
-  ).forEach(x=>
+spot.forEach(
+([s,p])=>{
 
-    x.onclick=()=>
-      openDetail(x.dataset.symbol)
+html+=`
 
-  );
+<div
+class="ticker-row"
+data-symbol="${s}"
+>
+
+<div>
+
+<div class="ticker-name">
+${s}
+</div>
+
+<div class="ticker-meta">
+SPOT · ${p.qty} @ ${p.avg}
+</div>
+
+</div>
+
+<div class="score-circle">
+${dataFor(s).score}
+</div>
+
+<div class="chev">
+›
+</div>
+
+</div>
+
+`;
+
+}
+);
+
+
+lev.forEach(
+p=>{
+
+html+=`
+
+<div class="ticker-row">
+
+<div>
+
+<div class="ticker-name">
+${p.symbol}
+</div>
+
+<div class="ticker-meta">
+BYBIT ${p.side} · ${p.leverage}x · Entry ${p.entry}
+</div>
+
+</div>
+
+<div class="score-circle">
+⚡
+</div>
+
+<div class="chev">
+›
+</div>
+
+</div>
+
+`;
+
+}
+);
+
+
+$('positionList').innerHTML=
+
+html
+||
+`
+<div class="empty">
+실제 체결 포지션을 등록하면 여기에 표시됩니다.
+</div>
+`;
+
+
+document
+.querySelectorAll(
+'#positionList [data-symbol]'
+)
+.forEach(
+x=>
+x.onclick=
+()=>
+openDetail(
+x.dataset.symbol
+)
+);
 
 }
 
 
-function gotoPage(i,animate=true){
 
-  i=Math.max(
-    0,
-    Math.min(4,i)
-  );
+function gotoPage(
+i,
+animate=true
+){
 
-  currentPage=i;
+i=
+Math.max(
+0,
+Math.min(
+4,
+i
+)
+);
 
-  const t=$('track');
 
-  t.classList.toggle(
-    'animating',
-    animate
-  );
+currentPage=i;
 
-  t.style.transform=
-    `translate3d(${-i*100}%,0,0)`;
 
-  document.querySelectorAll('.tab')
-    .forEach(
-      (b,n)=>
-        b.classList.toggle(
-          'active',
-          n===i
-        )
-    );
+const t=
+$('track');
+
+
+t.classList.toggle(
+'animating',
+animate
+);
+
+
+t.style.transform=
+`translate3d(${-i*100}%,0,0)`;
+
+
+document
+.querySelectorAll(
+'.tab'
+)
+.forEach(
+(b,n)=>
+b.classList.toggle(
+'active',
+n===i
+)
+);
 
 }
 
 
-document.querySelectorAll('.tab')
-  .forEach(
-    b=>
-      b.onclick=()=>
-        gotoPage(
-          +b.dataset.index,
-          true
-        )
-  );
+
+document
+.querySelectorAll(
+'.tab'
+)
+.forEach(
+b=>
+b.onclick=
+()=>
+gotoPage(
++b.dataset.index,
+true
+)
+);
+
 
 
 let startX=0;
@@ -1365,1187 +3850,1804 @@ let dragging=false;
 let baseX=0;
 
 
-$('viewport').addEventListener(
-  'touchstart',
-  e=>{
 
-    if(
-      $('detail')
-      .classList
-      .contains('open')
-    ) return;
+$('viewport')
+.addEventListener(
+'touchstart',
+e=>{
 
-    const t=e.touches[0];
+if(
+$('detail')
+.classList
+.contains('open')
+)
+return;
 
-    startX=t.clientX;
-    startY=t.clientY;
 
-    baseX=
-      -currentPage*
-      window.innerWidth;
+const t=
+e.touches[0];
 
-    dragging=true;
 
-    $('track')
-      .classList
-      .remove('animating');
+startX=
+t.clientX;
 
-  },
-  {passive:true}
+
+startY=
+t.clientY;
+
+
+baseX=
+-currentPage*
+window.innerWidth;
+
+
+dragging=true;
+
+
+$('track')
+.classList
+.remove(
+'animating'
+);
+
+},
+{
+passive:true
+}
 );
 
 
-$('viewport').addEventListener(
-  'touchmove',
-  e=>{
 
-    if(!dragging) return;
+$('viewport')
+.addEventListener(
+'touchmove',
+e=>{
 
-    const t=e.touches[0];
+if(!dragging)
+return;
 
-    const dx=
-      t.clientX-startX;
 
-    const dy=
-      t.clientY-startY;
+const t=
+e.touches[0];
 
-    if(
-      Math.abs(dy)>
-      Math.abs(dx)*1.15
-    ) return;
 
-    let x=
-      baseX+dx;
+const dx=
+t.clientX-
+startX;
 
-    if(
-      currentPage===0 &&
-      dx>0
-    ){
-      x=baseX+dx*.28;
-    }
 
-    if(
-      currentPage===4 &&
-      dx<0
-    ){
-      x=baseX+dx*.28;
-    }
+const dy=
+t.clientY-
+startY;
 
-    $('track')
-      .style
-      .transform=
-      `translate3d(${x}px,0,0)`;
 
-  },
-  {passive:true}
+if(
+Math.abs(dy)
+>
+Math.abs(dx)*1.15
+)
+return;
+
+
+let x=
+baseX+dx;
+
+
+if(
+currentPage===0
+&&
+dx>0
+)
+x=
+baseX+
+dx*.28;
+
+
+if(
+currentPage===4
+&&
+dx<0
+)
+x=
+baseX+
+dx*.28;
+
+
+$('track').style.transform=
+`translate3d(${x}px,0,0)`;
+
+},
+{
+passive:true
+}
 );
 
 
-$('viewport').addEventListener(
-  'touchend',
-  e=>{
 
-    if(!dragging) return;
+$('viewport')
+.addEventListener(
+'touchend',
+e=>{
 
-    dragging=false;
+if(!dragging)
+return;
 
-    const dx=
-      e.changedTouches[0].clientX-
-      startX;
 
-    const threshold=
-      Math.min(
-        90,
-        window.innerWidth*.22
-      );
+dragging=false;
 
-    if(
-      dx<-threshold &&
-      currentPage<4
-    ){
-      currentPage++;
-    }
 
-    else if(
-      dx>threshold &&
-      currentPage>0
-    ){
-      currentPage--;
-    }
+const dx=
+e.changedTouches[0].clientX
+-
+startX;
 
-    gotoPage(
-      currentPage,
-      true
-    );
 
-  },
-  {passive:true}
+const threshold=
+Math.min(
+90,
+window.innerWidth*.22
 );
 
 
-function drawDemoChart(symbol,tf){
-
-  const d=dataFor(symbol);
-
-  const svg=$('chartSvg');
-
-  const W=800;
-  const H=300;
-
-  const N=
-    tf==='1D'
-    ?54
-    :44;
+if(
+dx<-threshold
+&&
+currentPage<4
+)
+currentPage++;
 
 
-  let seed=
-    [...symbol]
-      .reduce(
-        (a,c)=>
-          a+c.charCodeAt(0),
-        0
-      )+
-    (tf==='4H'?19:0);
+else if(
+dx>threshold
+&&
+currentPage>0
+)
+currentPage--;
 
 
-  function rnd(){
+gotoPage(
+currentPage,
+true
+);
 
-    seed=
-      (seed*9301+49297)
-      %233280;
-
-    return seed/233280;
-
-  }
-
-
-  let p=d.price*.86;
-
-  let arr=[];
+},
+{
+passive:true
+}
+);
 
 
-  for(
-    let i=0;
-    i<N;
-    i++
-  ){
 
-    const drift=
-      (d.price-p)/
-      (N-i)*
-      .18;
+function drawDemoChart(
+symbol,
+tf
+){
 
-    let o=p;
-
-    let c=Math.max(
-      1,
-      o+
-      drift+
-      (rnd()-.47)*
-      d.price*.018
-    );
-
-    let h=
-      Math.max(o,c)+
-      rnd()*
-      d.price*.011;
-
-    let l=
-      Math.min(o,c)-
-      rnd()*
-      d.price*.011;
-
-    arr.push({
-      o,
-      h,
-      l,
-      c,
-      v:.35+rnd()*.65
-    });
-
-    p=c;
-
-  }
+const d=
+dataFor(symbol);
 
 
-  const min=
-    Math.min(
-      ...arr.map(x=>x.l),
-      d.ma200
-    )*.97;
+const svg=
+$('chartSvg');
 
 
-  const max=
-    Math.max(
-      ...arr.map(x=>x.h),
-      d.ma200
-    )*1.03;
+const note=
+$('chartNote');
 
 
-  const y=v=>
-    H-40-
-    (v-min)/
-    (max-min)*
-    (H-70);
+const source=
+
+tf==='1D'
+
+?
+
+ohlcvCache[symbol]?.D
+
+:
+
+ohlcvCache[symbol]?.H4;
 
 
-  const cw=W/N;
 
-  let html='';
+if(
+!source?.length
+){
 
-
-  const ma200Y=
-    y(d.ma200);
-
-
-  html+=`
-    <line
-      x1="0"
-      y1="${ma200Y}"
-      x2="800"
-      y2="${ma200Y}"
-      stroke="#f6f8fb"
-      stroke-width="2"
-      opacity=".8"
-    />
-
-    <text
-      x="706"
-      y="${ma200Y-6}"
-      fill="#f6f8fb"
-      font-size="10">
-      MA200
-    </text>
-  `;
+drawFallbackChart(
+symbol,
+tf
+);
 
 
-  arr.forEach((x,i)=>{
-
-    const cx=
-      i*cw+
-      cw*.5;
-
-    const yo=y(x.o);
-    const yc=y(x.c);
-    const yh=y(x.h);
-    const yl=y(x.l);
-
-    const up=
-      x.c>=x.o;
-
-    const col=
-      up
-      ?'#31d07c'
-      :'#ff6678';
+if(note)
+note.textContent=
+'DEMO · Twelve Data API Key를 연결하세요';
 
 
-    html+=`
-      <line
-        x1="${cx}"
-        y1="${yh}"
-        x2="${cx}"
-        y2="${yl}"
-        stroke="${col}"
-        stroke-width="1"
-      />
-
-      <rect
-        x="${cx-cw*.23}"
-        y="${Math.min(yo,yc)}"
-        width="${Math.max(2,cw*.46)}"
-        height="${Math.max(2,Math.abs(yo-yc))}"
-        fill="${col}"
-        rx="1"
-      />
-    `;
-
-
-    const vh=
-      x.v*25;
-
-
-    html+=`
-      <rect
-        x="${cx-cw*.32}"
-        y="${H-vh-3}"
-        width="${cw*.64}"
-        height="${vh}"
-        fill="${col}"
-        opacity=".28"
-      />
-    `;
-
-  });
-
-
-  const markerX=W*.73;
-
-  const markerY=
-    y(
-      arr[
-        Math.floor(N*.73)
-      ].l
-    )-9;
-
-
-  html+=`
-    <path
-      d="M ${markerX} ${markerY} l -7 -12 h 14 z"
-      fill="#31d07c"
-    />
-
-    <line
-      x1="${markerX}"
-      y1="${markerY}"
-      x2="${markerX}"
-      y2="${markerY+18}"
-      stroke="#31d07c"
-      opacity=".75"
-    />
-  `;
-
-
-  svg.innerHTML=html;
+return;
 
 }
+
+
+const W=800;
+const H=300;
+
+const N=
+tf==='1D'
+?
+54
+:
+48;
+
+
+const all=
+source;
+
+
+const arr=
+all.slice(-N);
+
+
+const cl=
+all.map(x=>x.c);
+
+
+const maLine=
+n=>
+arr.map(
+(_,i)=>{
+
+const global=
+all.length
+-
+arr.length
++
+i
++
+1;
+
+
+return global>=n
+?
+avg(
+cl.slice(
+global-n,
+global
+)
+)
+:
+null;
+
+}
+);
+
+
+const m20=
+maLine(20);
+
+
+const m50=
+maLine(50);
+
+
+const m200=
+maLine(200);
+
+
+const vals=
+arr
+.flatMap(
+x=>[
+x.h,
+x.l
+]
+)
+.concat(
+[
+m20,
+m50,
+m200
+]
+.flat()
+.filter(
+Number.isFinite
+)
+);
+
+
+const min=
+Math.min(...vals)
+*.995;
+
+
+const max=
+Math.max(...vals)
+*1.005;
+
+
+const y=
+v=>
+H
+-
+38
+-
+(v-min)
+/
+(max-min||1)
+*
+(H-65);
+
+
+const cw=
+W/N;
+
+
+let html='';
+
+
+arr.forEach(
+(x,i)=>{
+
+const cx=
+i*cw+
+cw*.5;
+
+
+const yo=
+y(x.o);
+
+
+const yc=
+y(x.c);
+
+
+const yh=
+y(x.h);
+
+
+const yl=
+y(x.l);
+
+
+const up=
+x.c>=x.o;
+
+
+const col=
+up
+?
+'#31d07c'
+:
+'#ff6678';
+
+
+html+=`
+
+<line
+x1="${cx}"
+y1="${yh}"
+x2="${cx}"
+y2="${yl}"
+stroke="${col}"
+stroke-width="1"
+/>
+
+<rect
+x="${cx-cw*.23}"
+y="${Math.min(yo,yc)}"
+width="${Math.max(2,cw*.46)}"
+height="${Math.max(2,Math.abs(yo-yc))}"
+fill="${col}"
+rx="1"
+/>
+
+`;
+
+
+const maxv=
+Math.max(
+...arr.map(
+q=>q.v||0
+)
+)
+||1;
+
+
+const vh=
+(x.v||0)
+/
+maxv
+*
+24;
+
+
+html+=`
+
+<rect
+x="${cx-cw*.32}"
+y="${H-vh-3}"
+width="${cw*.64}"
+height="${vh}"
+fill="${col}"
+opacity=".25"
+/>
+
+`;
+
+}
+);
+
+
+
+function path(
+vals,
+color,
+width=1.4,
+op=.9
+){
+
+let pts=[];
+
+
+vals.forEach(
+(v,i)=>{
+
+if(
+Number.isFinite(v)
+)
+pts.push(
+`${i*cw+cw*.5},${y(v)}`
+);
+
+}
+);
+
+
+if(
+pts.length>1
+)
+html+=`
+
+<polyline
+points="${pts.join(' ')}"
+fill="none"
+stroke="${color}"
+stroke-width="${width}"
+opacity="${op}"
+/>
+
+`;
+
+}
+
+
+
+path(
+m20,
+'#75aaff',
+1.2,
+.85
+);
+
+
+path(
+m50,
+'#9b8cff',
+1.3,
+.85
+);
+
+
+path(
+m200,
+'#f6f8fb',
+1.7,
+.9
+);
+
+
+
+if(
+d.signal.includes('BUY')
+){
+
+const i=
+arr.length-1;
+
+
+const mx=
+i*cw+
+cw*.5;
+
+
+const my=
+y(
+arr[i].l
+)
+-
+8;
+
+
+html+=`
+
+<path
+d="M ${mx} ${my} l -7 -12 h 14 z"
+fill="#31d07c"
+/>
+
+`;
+
+}
+
+
+svg.innerHTML=
+html;
+
+
+if(note)
+note.textContent=
+
+`LIVE ${tf} · ${arr.at(-1).dt} · RSI ${Math.round(tf==='1D'?d.rsi:d.h4rsi)}`;
+
+}
+
+
+
+function drawFallbackChart(
+symbol,
+tf
+){
+
+const d=
+dataFor(symbol);
+
+
+const svg=
+$('chartSvg');
+
+
+const W=800;
+const H=300;
+
+
+const N=
+tf==='1D'
+?
+54
+:
+44;
+
+
+let seed=
+[...symbol]
+.reduce(
+(a,c)=>
+a+
+c.charCodeAt(0),
+0
+)
++
+(
+tf==='4H'
+?
+19
+:
+0
+);
+
+
+function rnd(){
+
+seed=
+(
+seed*9301
++
+49297
+)
+%
+233280;
+
+
+return seed/233280;
+
+}
+
+
+let p=
+d.price*.86;
+
+
+let arr=[];
+
+
+for(
+let i=0;
+i<N;
+i++
+){
+
+let o=p;
+
+
+let c=
+Math.max(
+1,
+o
++
+(rnd()-.47)
+*
+d.price
+*
+.018
+);
+
+
+let h=
+Math.max(
+o,
+c
+)
++
+rnd()
+*
+d.price
+*
+.011;
+
+
+let l=
+Math.min(
+o,
+c
+)
+-
+rnd()
+*
+d.price
+*
+.011;
+
+
+arr.push(
+{
+o,
+h,
+l,
+c,
+v:.35+rnd()*.65
+}
+);
+
+
+p=c;
+
+}
+
+
+const min=
+Math.min(
+...arr.map(x=>x.l),
+d.ma200
+)
+*
+.97;
+
+
+const max=
+Math.max(
+...arr.map(x=>x.h),
+d.ma200
+)
+*
+1.03;
+
+
+const y=
+v=>
+H
+-
+40
+-
+(v-min)
+/
+(max-min)
+*
+(H-70);
+
+
+const cw=
+W/N;
+
+
+let html=
+
+`
+<line
+x1="0"
+y1="${y(d.ma200)}"
+x2="800"
+y2="${y(d.ma200)}"
+stroke="#f6f8fb"
+stroke-width="2"
+opacity=".8"
+/>
+`;
+
+
+arr.forEach(
+(x,i)=>{
+
+const cx=
+i*cw+
+cw*.5;
+
+
+const yo=
+y(x.o);
+
+
+const yc=
+y(x.c);
+
+
+const up=
+x.c>=x.o;
+
+
+const col=
+up
+?
+'#31d07c'
+:
+'#ff6678';
+
+
+html+=`
+
+<line
+x1="${cx}"
+y1="${y(x.h)}"
+x2="${cx}"
+y2="${y(x.l)}"
+stroke="${col}"
+/>
+
+<rect
+x="${cx-cw*.23}"
+y="${Math.min(yo,yc)}"
+width="${Math.max(2,cw*.46)}"
+height="${Math.max(2,Math.abs(yo-yc))}"
+fill="${col}"
+/>
+
+`;
+
+}
+);
+
+
+svg.innerHTML=
+html;
+
+}
+
 
 
 function whyRows(d){
 
-  return [
+return [
 
-    [
-      'MA200 / Long trend',
-      d.technical>=80
-      ?'+23 / 25'
-      :'+18 / 25',
-      `Price ${
-        d.price>d.ma200
-        ?'above'
-        :'below'
-      } MA200 · slope ${d.ma200Slope}`
-    ],
+[
+'MA200 / Long trend',
 
-    [
-      'Momentum',
-      `+${
-        Math.round(
-          d.momentum/100*15
-        )
-      } / 15`,
-      'RSI / MACD / 최근 가격 탄력'
-    ],
+d.technical>=80
+?
+'+23 / 25'
+:
+'+18 / 25',
 
-    [
-      'Entry / Pullback',
-      `+${
-        Math.round(
-          d.entry/100*15
-        )
-      } / 15`,
-      '현재 위치와 지지구간'
-    ],
+`Price ${d.price>d.ma200?'above':'below'} MA200 · slope ${d.ma200Slope}`
+],
 
-    [
-      'Volume',
-      `+${
-        Math.round(
-          d.volume/100*15
-        )
-      } / 15`,
-      `Relative volume ${
-        d.relVol.toFixed(2)
-      }x`
-    ],
 
-    [
-      'Risk / Reward',
-      `+${
-        Math.round(
-          d.rr/100*15
-        )
-      } / 15`,
-      'Stop과 목표가 기준'
-    ],
+[
+'Momentum',
 
-    [
-      'Market regime',
-      `+${
-        Math.round(
-          d.market/100*10
-        )
-      } / 10`,
-      'SPY / QQQ 시장환경'
-    ],
+`+${Math.round(d.momentum/100*15)} / 15`,
 
-    [
-      'Options',
-      '— / 5',
-      '데이터 공급자 연결 전 제외'
-    ]
+'RSI / MACD / 최근 가격 탄력'
+],
 
-  ];
+
+[
+'Entry / Pullback',
+
+`+${Math.round(d.entry/100*15)} / 15`,
+
+'현재 위치와 지지구간'
+],
+
+
+[
+'Volume',
+
+`+${Math.round(d.volume/100*15)} / 15`,
+
+`Relative volume ${d.relVol.toFixed(2)}x`
+],
+
+
+[
+'Risk / Reward',
+
+`+${Math.round(d.rr/100*15)} / 15`,
+
+'Stop과 목표가 기준'
+],
+
+
+[
+'Market regime',
+
+`+${Math.round(d.market/100*10)} / 10`,
+
+'SPY / QQQ 시장환경'
+],
+
+
+[
+'Options',
+
+'— / 5',
+
+'데이터 공급자 연결 전 제외'
+]
+
+];
 
 }
+
 
 
 function openDetail(symbol){
 
-  detailIndex=
-    Math.max(
-      0,
-      watch.indexOf(symbol)
-    );
+detailIndex=
+Math.max(
+0,
+watch.indexOf(symbol)
+);
 
-  if(detailIndex<0){
-    detailIndex=0;
-  }
 
-  fillDetail(symbol);
+if(detailIndex<0)
+detailIndex=0;
 
-  $('detail')
-    .classList
-    .add('open');
+
+fillDetail(symbol);
+
+
+$('detail')
+.classList
+.add('open');
 
 }
+
 
 
 function fillDetail(symbol){
 
-  const d=dataFor(symbol);
+const d=
+dataFor(symbol);
 
-  const p=
-    positions[symbol];
 
+const p=
+positions[symbol];
 
-  $('detailTicker')
-    .textContent=symbol;
 
+$('detailTicker').textContent=
+symbol;
 
-  $('assetType')
-    .textContent=d.type;
 
+$('assetType').textContent=
+d.type;
 
-  $('detailPrice')
-    .textContent=
-    fmtPrice(
-      d.price,
-      d.type
-    );
 
+$('detailPrice').textContent=
+fmtPrice(
+d.price,
+d.type
+);
 
-  $('detailScore')
-    .innerHTML=
-    `${d.score}<small>/100</small>`;
 
+$('detailScore').innerHTML=
+`${d.score}<small>/100</small>`;
 
-  $('detailSignal')
-    .textContent=
-    d.signal;
 
+$('detailSignal').textContent=
+d.signal;
 
-  $('detailSignal')
-    .className=
-    `badge ${signalClass(d.signal)}`;
 
+$('detailSignal').className=
+`badge ${signalClass(d.signal)}`;
 
-  $('dailyState')
-    .textContent=
-    d.daily;
 
+$('dailyState').textContent=
+d.daily;
 
-  $('timingState')
-    .textContent=
-    d.timing;
 
+$('timingState').textContent=
+d.timing;
 
-  $('timingState')
-    .className=
-    d.timing==='Ready'
-    ?'good-text'
-    :'warn-text';
 
+$('timingState').className=
+d.timing==='Ready'
+?
+'good-text'
+:
+'warn-text';
 
-  const dist=
-    (
-      d.price/
-      d.ma200-
-      1
-    )*100;
 
+const dist=
+(
+d.price/d.ma200
+-
+1
+)
+*
+100;
 
-  $('ma200Dist')
-    .textContent=
-    `${dist>=0?'+':''}${dist.toFixed(1)}%`;
 
+$('ma200Dist').textContent=
+`${dist>=0?'+':''}${dist.toFixed(1)}%`;
 
-  $('priceVs200')
-    .textContent=
-    d.price>d.ma200
-    ?'ABOVE'
-    :'BELOW';
 
+$('priceVs200').textContent=
+d.price>d.ma200
+?
+'ABOVE'
+:
+'BELOW';
 
-  $('priceVs200')
-    .className=
-    d.price>d.ma200
-    ?'good-text'
-    :'bad-text';
 
+$('priceVs200').className=
+d.price>d.ma200
+?
+'good-text'
+:
+'bad-text';
 
-  $('ma200Slope')
-    .textContent=
-    d.ma200Slope;
 
+$('ma200Slope').textContent=
+d.ma200Slope;
 
-  $('ma200Slope')
-    .className=
-    d.ma200Slope==='RISING'
-    ?'good-text'
-    :d.ma200Slope==='FLAT'
-      ?'warn-text'
-      :'bad-text';
 
+$('ma200Slope').className=
 
-  $('maCross')
-    .textContent=
-    d.price>d.ma200
-    ?'MA50 > MA200'
-    :'CHECK TREND';
+d.ma200Slope==='RISING'
 
+?
 
-  $('whyGrid')
-    .innerHTML=
-    whyRows(d)
-      .map(
-        x=>`
-          <div class="why-item">
+'good-text'
 
-            <div>
-              <span>${x[0]}</span>
-              <small>${x[2]}</small>
-            </div>
+:
 
-            <b>${x[1]}</b>
+d.ma200Slope==='FLAT'
 
-          </div>
-        `
-      )
-      .join('');
+?
 
+'warn-text'
 
-  $('volAvg')
-    .textContent=
-    d.volAvg;
+:
 
+'bad-text';
 
-  $('relVol')
-    .textContent=
-    `${d.relVol.toFixed(2)}x`;
 
+$('maCross').textContent=
+d.ma50>d.ma200
+?
+'MA50 > MA200'
+:
+'MA50 < MA200';
 
-  $('signalTag')
-    .textContent=
-    `▲ ${d.signal} · ${d.score}`;
 
+$('whyGrid').innerHTML=
 
-  $('stopText')
-    .textContent=
-    fmtPrice(
-      d.stop,
-      d.type
-    );
+whyRows(d)
+.map(
+x=>`
 
+<div class="why-item">
 
-  $('target1')
-    .textContent=
-    fmtPrice(
-      d.t1,
-      d.type
-    );
+<div>
 
+<span>
+${x[0]}
+</span>
 
-  $('target2')
-    .textContent=
-    fmtPrice(
-      d.t2,
-      d.type
-    );
+<small>
+${x[2]}
+</small>
 
+</div>
 
-  if(p){
+<b>
+${x[1]}
+</b>
 
-    const invested=
-      (+p.qty||0)*
-      (+p.avg||0);
+</div>
 
+`
+)
+.join('');
 
-    const available=
-      Math.max(
-        0,
-        (+p.max||0)-
-        invested
-      );
 
+$('volAvg').textContent=
+d.volAvg;
 
-    const pnl=
-      p.avg
-      ?(
-        (
-          d.price/
-          p.avg-
-          1
-        )*100
-      )
-      :0;
 
+$('relVol').textContent=
+`${d.relVol.toFixed(2)}x`;
 
-    $('positionModeText')
-      .textContent=
-      'OWNED';
 
+$('signalTag').textContent=
+`▲ ${d.signal} · ${d.score}`;
 
-    $('positionStats')
-      .innerHTML=`
 
-        <div class="stat">
-          <small>Shares</small>
-          <b>${p.qty}</b>
-        </div>
+$('stopText').textContent=
+fmtPrice(
+d.stop,
+d.type
+);
 
-        <div class="stat">
-          <small>Average</small>
-          <b>${fmtPrice(+p.avg,d.type)}</b>
-        </div>
 
-        <div class="stat">
-          <small>P/L</small>
-          <b class="${pnl>=0?'good-text':'bad-text'}">
-            ${pnl>=0?'+':''}${pnl.toFixed(2)}%
-          </b>
-        </div>
+$('target1').textContent=
+fmtPrice(
+d.t1,
+d.type
+);
 
-        <div class="stat">
-          <small>Available</small>
-          <b>$${available.toLocaleString()}</b>
-        </div>
 
-      `;
+$('target2').textContent=
+fmtPrice(
+d.t2,
+d.type
+);
 
 
-    renderScale(
-      d,
-      available,
-      p
-    );
 
-  }
+if(p){
 
-  else{
+const invested=
+(+p.qty||0)
+*
+(+p.avg||0);
 
-    $('positionModeText')
-      .textContent=
-      'NOT OWNED';
 
+const available=
+Math.max(
+0,
+(+p.max||0)
+-
+invested
+);
 
-    $('positionStats')
-      .innerHTML=`
 
-        <div class="stat">
-          <small>Status</small>
-          <b>Watch only</b>
-        </div>
+const pnl=
+p.avg
+?
+(
+d.price/p.avg
+-
+1
+)
+*
+100
+:
+0;
 
-        <div class="stat">
-          <small>Strong-buy rule</small>
-          <b>
-            ${d.score>=85?'ELIGIBLE':'WAIT'}
-          </b>
-        </div>
 
-      `;
+$('positionModeText').textContent=
+'OWNED';
 
 
-    renderScale(
-      d,
-      10000,
-      null
-    );
+$('positionStats').innerHTML=
 
-  }
+`
 
+<div class="stat">
 
-  drawDemoChart(
-    symbol,
-    detailTf
-  );
+<small>
+Shares
+</small>
+
+<b>
+${p.qty}
+</b>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+Average
+</small>
+
+<b>
+${fmtPrice(+p.avg,d.type)}
+</b>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+P/L
+</small>
+
+<b class="${pnl>=0?'good-text':'bad-text'}">
+
+${pnl>=0?'+':''}${pnl.toFixed(2)}%
+
+</b>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+Available
+</small>
+
+<b>
+$${available.toLocaleString()}
+</b>
+
+</div>
+
+`;
+
+
+renderScale(
+d,
+available,
+p
+);
+
+
+}else{
+
+
+$('positionModeText').textContent=
+'NOT OWNED';
+
+
+$('positionStats').innerHTML=
+
+`
+
+<div class="stat">
+
+<small>
+Status
+</small>
+
+<b>
+Watch only
+</b>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+Strong-buy rule
+</small>
+
+<b>
+${d.score>=85?'ELIGIBLE':'WAIT'}
+</b>
+
+</div>
+
+`;
+
+
+renderScale(
+d,
+10000,
+null
+);
 
 }
+
+
+drawDemoChart(
+symbol,
+detailTf
+);
+
+}
+
 
 
 function renderScale(
-  d,
-  available,
-  p
+d,
+available,
+p
 ){
 
-  const prices=[
-    d.price,
-    d.price*.97,
-    Math.max(
-      d.ma200,
-      d.price*.93
-    ),
-    d.price*1.035
-  ];
+const prices=
+[
+d.price,
+d.price*.97,
+Math.max(
+d.ma200,
+d.price*.93
+),
+d.price*1.035
+];
 
 
-  const weights=[
-    .25,
-    .30,
-    .30,
-    .15
-  ];
+const weights=
+[
+.25,
+.30,
+.30,
+.15
+];
 
 
-  const labels=[
-    '1차',
-    '2차',
-    '3차',
-    '돌파'
-  ];
+const labels=
+[
+'1차',
+'2차',
+'3차',
+'돌파'
+];
 
 
-  let qtyBase=
-    +p?.qty||0;
+let qtyBase=
++p?.qty||0;
 
 
-  let avg=
-    +p?.avg||0;
+let avg=
++p?.avg||0;
 
 
-  let cost=
-    qtyBase*avg;
+let cost=
+qtyBase*avg;
 
 
-  $('scalePlan')
-    .innerHTML=
-    prices.map(
-      (price,i)=>{
+$('scalePlan').innerHTML=
 
-        const budget=
-          available*
-          weights[i];
+prices
+.map(
+(price,i)=>{
 
-
-        const qty=
-          budget/
-          price;
+const budget=
+available
+*
+weights[i];
 
 
-        const newQty=
-          qtyBase+
-          qty;
+const qty=
+budget
+/
+price;
 
 
-        const newAvg=
-          newQty
-          ?(
-            cost+
-            budget
-          )/
-          newQty
-          :price;
+const newQty=
+qtyBase
++
+qty;
 
 
-        qtyBase=
-          newQty;
+const newAvg=
+newQty
+?
+(
+cost
++
+budget
+)
+/
+newQty
+:
+price;
 
 
-        cost+=
-          budget;
+qtyBase=
+newQty;
 
 
-        return `
-          <div class="plan-item">
+cost+=
+budget;
 
-            <small>
-              ${labels[i]}
-            </small>
 
-            <b>
-              ${fmtPrice(price,d.type)}
-              ·
-              ${qty.toFixed(3)}
-            </b>
+return `
 
-            <em>
-              ${
-                p
-                ?`체결 후 예상 평단 ${fmtPrice(newAvg,d.type)}`
-                :`예산 ${(weights[i]*100).toFixed(0)}%`
-              }
-            </em>
+<div class="plan-item">
 
-          </div>
-        `;
+<small>
+${labels[i]}
+</small>
 
-      }
-    )
-    .join('');
+<b>
+${fmtPrice(price,d.type)} · ${qty.toFixed(3)}
+</b>
+
+<em>
+
+${
+p
+?
+`체결 후 예상 평단 ${fmtPrice(newAvg,d.type)}`
+:
+`예산 ${(weights[i]*100).toFixed(0)}%`
+}
+
+</em>
+
+</div>
+
+`;
+
+}
+)
+.join('');
 
 }
 
 
-$('closeDetail')
-  .onclick=
-  ()=>
-    $('detail')
-      .classList
-      .remove('open');
+
+$('closeDetail').onclick=
+()=>
+$('detail')
+.classList
+.remove('open');
 
 
-$('nextDetail')
-  .onclick=
-  ()=>{
 
-    if(!watch.length) return;
+$('nextDetail').onclick=
+()=>{
 
-    detailIndex=
-      (
-        detailIndex+
-        1
-      )%
-      watch.length;
-
-    fillDetail(
-      watch[detailIndex]
-    );
-
-  };
+if(!watch.length)
+return;
 
 
-document.querySelectorAll(
-  '.tf-toggle button'
-).forEach(
-  b=>
-    b.onclick=
-    ()=>{
+detailIndex=
+(
+detailIndex+1
+)
+%
+watch.length;
 
-      detailTf=
-        b.dataset.tf;
 
-      document.querySelectorAll(
-        '.tf-toggle button'
-      ).forEach(
-        x=>
-          x.classList.toggle(
-            'active',
-            x===b
-          )
-      );
-
-      fillDetail(
-        $('detailTicker')
-          .textContent
-      );
-
-    }
+fillDetail(
+watch[detailIndex]
 );
+
+};
+
+
+
+document
+.querySelectorAll(
+'.tf-toggle button'
+)
+.forEach(
+b=>
+b.onclick=
+()=>{
+
+detailTf=
+b.dataset.tf;
+
+
+document
+.querySelectorAll(
+'.tf-toggle button'
+)
+.forEach(
+x=>
+x.classList.toggle(
+'active',
+x===b
+)
+);
+
+
+fillDetail(
+$('detailTicker')
+.textContent
+);
+
+}
+);
+
 
 
 let dStartX=0;
 let dDragging=false;
 
 
-$('detail').addEventListener(
-  'touchstart',
-  e=>{
 
-    dStartX=
-      e.touches[0]
-      .clientX;
+$('detail')
+.addEventListener(
+'touchstart',
+e=>{
 
-    dDragging=true;
+dStartX=
+e.touches[0]
+.clientX;
 
-  },
-  {passive:true}
+
+dDragging=true;
+
+},
+{
+passive:true
+}
 );
 
 
-$('detail').addEventListener(
-  'touchend',
-  e=>{
 
-    if(!dDragging) return;
+$('detail')
+.addEventListener(
+'touchend',
+e=>{
 
-    dDragging=false;
-
-    const dx=
-      e.changedTouches[0]
-      .clientX-
-      dStartX;
-
-    if(
-      Math.abs(dx)<80
-    ) return;
+if(!dDragging)
+return;
 
 
-    if(dx<0){
-
-      detailIndex=
-        (
-          detailIndex+
-          1
-        )%
-        watch.length;
-
-    }
-
-    else{
-
-      detailIndex=
-        (
-          detailIndex-
-          1+
-          watch.length
-        )%
-        watch.length;
-
-    }
+dDragging=false;
 
 
-    fillDetail(
-      watch[detailIndex]
-    );
+const dx=
+e.changedTouches[0]
+.clientX
+-
+dStartX;
 
-  },
-  {passive:true}
+
+if(
+Math.abs(dx)<80
+)
+return;
+
+
+if(dx<0){
+
+detailIndex=
+(
+detailIndex+1
+)
+%
+watch.length;
+
+}else{
+
+detailIndex=
+(
+detailIndex
+-
+1
++
+watch.length
+)
+%
+watch.length;
+
+}
+
+
+fillDetail(
+watch[detailIndex]
+);
+
+},
+{
+passive:true
+}
 );
 
 
-$('addWatchBtn')
-  .onclick=
-  ()=>{
 
-    let s=
-      $('watchInput')
-        .value
-        .trim()
-        .toUpperCase();
+$('addWatchBtn').onclick=
+()=>{
 
-    if(!s) return;
-
-
-    if(
-      !watch.includes(s)
-    ){
-
-      watch.push(s);
-
-      store.set(
-        'stockpm_watch',
-        watch
-      );
-
-    }
-
-
-    $('watchInput')
-      .value='';
-
-
-    renderWatch();
-    renderHome();
-
-  };
-
-
+let s=
 $('watchInput')
-  .addEventListener(
-    'keydown',
-    e=>{
-
-      if(
-        e.key==='Enter'
-      ){
-
-        $('addWatchBtn')
-          .click();
-
-      }
-
-    }
-  );
+.value
+.trim()
+.toUpperCase();
 
 
-document.querySelectorAll(
-  '#positionMode button'
-).forEach(
-  b=>
-    b.onclick=
-    ()=>{
-
-      document.querySelectorAll(
-        '#positionMode button'
-      ).forEach(
-        x=>
-          x.classList.toggle(
-            'active',
-            x===b
-          )
-      );
+if(!s)
+return;
 
 
-      const lev=
-        b.dataset.mode==='lev';
+if(
+!watch.includes(s)
+){
+
+watch.push(s);
 
 
-      $('spotForm')
-        .style
-        .display=
-        lev
-        ?'none'
-        :'block';
-
-
-      $('levForm')
-        .style
-        .display=
-        lev
-        ?'block'
-        :'none';
-
-    }
+store.set(
+'stockpm_watch',
+watch
 );
 
-
-$('saveSpot')
-  .onclick=
-  ()=>{
-
-    const s=
-      $('posTicker')
-        .value
-        .trim()
-        .toUpperCase();
+}
 
 
-    if(!s){
-      return alert(
-        'Ticker를 입력하세요.'
-      );
-    }
-
-
-    positions[s]={
-
-      qty:
-        +$('posQty').value||0,
-
-      avg:
-        +$('posAvg').value||0,
-
-      max:
-        +$('posMax').value||
-        10000
-
-    };
-
-
-    store.set(
-      'stockpm_positions',
-      positions
-    );
-
-
-    renderPositions();
-
-
-    alert(
-      '포지션 저장 완료'
-    );
-
-  };
-
-
-$('saveLev')
-  .onclick=
-  ()=>{
-
-    const symbol=
-      $('levTicker')
-        .value
-        .trim()
-        .toUpperCase();
-
-
-    if(!symbol){
-      return alert(
-        'Symbol을 입력하세요.'
-      );
-    }
-
-
-    leveragePositions.push({
-
-      symbol,
-
-      side:
-        $('levSide')
-          .value
-          .trim()
-          .toUpperCase()||
-        'LONG',
-
-      leverage:
-        +$('levX').value||
-        1,
-
-      entry:
-        +$('levEntry').value||
-        0,
-
-      size:
-        +$('levSize').value||
-        0,
-
-      liq:
-        +$('levLiq').value||
-        0
-
-    });
-
-
-    store.set(
-      'stockpm_leverage',
-      leveragePositions
-    );
-
-
-    renderPositions();
-
-
-    alert(
-      '레버리지 포지션 저장 완료'
-    );
-
-  };
-
-
-window.addEventListener(
-  'resize',
-  ()=>gotoPage(
-    currentPage,
-    false
-  )
-);
+$('watchInput').value='';
 
 
 renderWatch();
 renderHome();
+
+};
+
+
+
+$('watchInput')
+.addEventListener(
+'keydown',
+e=>{
+
+if(
+e.key==='Enter'
+)
+$('addWatchBtn').click();
+
+}
+);
+
+
+
+document
+.querySelectorAll(
+'#positionMode button'
+)
+.forEach(
+b=>
+b.onclick=
+()=>{
+
+document
+.querySelectorAll(
+'#positionMode button'
+)
+.forEach(
+x=>
+x.classList.toggle(
+'active',
+x===b
+)
+);
+
+
+const lev=
+b.dataset.mode==='lev';
+
+
+$('spotForm').style.display=
+lev
+?
+'none'
+:
+'block';
+
+
+$('levForm').style.display=
+lev
+?
+'block'
+:
+'none';
+
+}
+);
+
+
+
+$('saveSpot').onclick=
+()=>{
+
+const s=
+$('posTicker')
+.value
+.trim()
+.toUpperCase();
+
+
+if(!s)
+return alert(
+'Ticker를 입력하세요.'
+);
+
+
+positions[s]={
+
+qty:
++$('posQty').value||0,
+
+avg:
++$('posAvg').value||0,
+
+max:
++$('posMax').value||10000
+
+};
+
+
+store.set(
+'stockpm_positions',
+positions
+);
+
+
 renderPositions();
-gotoPage(0,false);
+
+
+alert(
+'포지션 저장 완료'
+);
+
+};
+
+
+
+$('saveLev').onclick=
+()=>{
+
+const symbol=
+$('levTicker')
+.value
+.trim()
+.toUpperCase();
+
+
+if(!symbol)
+return alert(
+'Symbol을 입력하세요.'
+);
+
+
+leveragePositions.push(
+{
+
+symbol,
+
+side:
+$('levSide')
+.value
+.trim()
+.toUpperCase()
+||
+'LONG',
+
+leverage:
++$('levX').value||1,
+
+entry:
++$('levEntry').value||0,
+
+size:
++$('levSize').value||0,
+
+liq:
++$('levLiq').value||0
+
+}
+);
+
+
+store.set(
+'stockpm_leverage',
+leveragePositions
+);
+
+
+renderPositions();
+
+
+alert(
+'레버리지 포지션 저장 완료'
+);
+
+};
+
+
+
+window
+.addEventListener(
+'resize',
+()=>gotoPage(
+currentPage,
+false
+)
+);
+
+
+
+$('twelveKey').value=
+twelveKey;
+
+
+
+$('saveTwelve').onclick=
+async()=>{
+
+twelveKey=
+$('twelveKey')
+.value
+.trim();
+
+
+if(!twelveKey){
+
+localStorage.removeItem(
+'stockpm_twelve_key'
+);
+
+
+setApiStatus(
+'key'
+);
+
+
+return;
+
+}
+
+
+localStorage.setItem(
+'stockpm_twelve_key',
+twelveKey
+);
+
+
+await refreshMarketData();
+
+};
+
+
+
+$('refreshTwelve').onclick=
+refreshMarketData;
+
+
+
+renderWatch();
+
+renderHome();
+
+renderPositions();
+
+gotoPage(
+0,
+false
+);
+
+
+setApiStatus(
+twelveKey
+?
+'loading'
+:
+'key'
+);
+
+
+if(twelveKey)
+refreshMarketData();
 
 </script>
 
