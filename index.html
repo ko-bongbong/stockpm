@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0d12">
+
+  <title>STOCK PM</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #090b10;
+      color: #f5f7fb;
+      min-height: 100vh;
+    }
+
+    button,
+    input {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      max-width: 520px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding-bottom: 95px;
+    }
+
+    .header {
+      padding: 26px 20px 18px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(9, 11, 16, 0.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid #171b24;
+    }
+
+    .brand {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .brand h1 {
+      font-size: 21px;
+      letter-spacing: -0.5px;
+    }
+
+    .brand span {
+      font-size: 11px;
+      color: #6f7889;
+      letter-spacing: 1.5px;
+    }
+
+    .search-wrap {
+      display: flex;
+      gap: 8px;
+    }
+
+    .search-wrap input {
+      flex: 1;
+      height: 48px;
+      border-radius: 14px;
+      border: 1px solid #242a36;
+      background: #11151d;
+      color: white;
+      padding: 0 15px;
+      outline: none;
+      font-size: 15px;
+      text-transform: uppercase;
+    }
+
+    .search-wrap input:focus {
+      border-color: #596273;
+    }
+
+    .search-wrap button {
+      border: 0;
+      border-radius: 14px;
+      background: #f3f5f8;
+      color: #0b0d12;
+      padding: 0 18px;
+      font-weight: 800;
+    }
+
+    .content {
+      padding: 20px;
+    }
+
+    .hero {
+      padding: 22px;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at top right, rgba(91, 106, 255, 0.18), transparent 42%),
+        #11151d;
+      border: 1px solid #1e2430;
+      margin-bottom: 25px;
+    }
+
+    .hero-small {
+      color: #747e90;
+      font-size: 11px;
+      letter-spacing: 1.3px;
+      margin-bottom: 8px;
+    }
+
+    .hero-title {
+      font-size: 27px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .hero-desc {
+      margin-top: 10px;
+      color: #8e97a8;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .section-title {
+      font-size: 12px;
+      color: #747e90;
+      letter-spacing: 1.2px;
+      margin: 26px 2px 12px;
+    }
+
+    .card {
+      background: #11151d;
+      border: 1px solid #1e2430;
+      border-radius: 18px;
+      padding: 17px;
+      margin-bottom: 10px;
+    }
+
+    .stock-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .ticker {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .stock-name {
+      color: #7f899a;
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .score-box {
+      text-align: right;
+    }
+
+    .score {
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .score-label {
+      color: #717b8d;
+      font-size: 10px;
+      margin-top: 2px;
+    }
+
+    .action {
+      display: inline-flex;
+      margin-top: 9px;
+      padding: 5px 9px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .buy {
+      background: rgba(59, 214, 130, 0.12);
+      color: #54db96;
+    }
+
+    .watch {
+      background: rgba(255, 194, 71, 0.12);
+      color: #ffca63;
+    }
+
+    .wait {
+      background: #1c212b;
+      color: #8b94a5;
+    }
+
+    .add-btn {
+      width: 100%;
+      height: 48px;
+      border-radius: 14px;
+      border: 1px dashed #303746;
+      background: transparent;
+      color: #a4adbd;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .position-card {
+      cursor: pointer;
+    }
+
+    .position-top {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .profit {
+      font-weight: 800;
+      color: #54db96;
+    }
+
+    .loss {
+      font-weight: 800;
+      color: #ff6d78;
+    }
+
+    .position-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .mini {
+      background: #0c1016;
+      padding: 11px;
+      border-radius: 12px;
+    }
+
+    .mini-label {
+      color: #687285;
+      font-size: 9px;
+      margin-bottom: 5px;
+    }
+
+    .mini-value {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px 15px;
+      color: #687285;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.72);
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal.show {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .sheet {
+      width: 100%;
+      max-width: 520px;
+      background: #11151d;
+      border: 1px solid #252c39;
+      border-radius: 25px 25px 18px 18px;
+      padding: 22px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .sheet-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .sheet-title h2 {
+      font-size: 21px;
+    }
+
+    .close {
+      border: 0;
+      background: #202631;
+      color: white;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      font-size: 18px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      color: #7c8697;
+      font-size: 11px;
+      margin-bottom: 7px;
+    }
+
+    .field input {
+      width: 100%;
+      height: 48px;
+      border: 1px solid #252c39;
+      border-radius: 13px;
+      background: #0b0f15;
+      color: white;
+      padding: 0 14px;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .save {
+      width: 100%;
+      height: 50px;
+      border: 0;
+      border-radius: 14px;
+      background: #f3f5f8;
+      color: #090b10;
+      font-weight: 900;
+      margin-top: 8px;
+    }
+
+    .delete {
+      width: 100%;
+      height: 45px;
+      border: 0;
+      background: transparent;
+      color: #ff6d78;
+      margin-top: 8px;
+    }
+
+    .plan {
+      margin-top: 20px;
+      border-top: 1px solid #242a36;
+      padding-top: 18px;
+    }
+
+    .plan-title {
+      font-size: 12px;
+      color: #7c8697;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .plan-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 11px 0;
+      border-bottom: 1px solid #1b202a;
+      font-size: 13px;
+    }
+
+    .plan-row span:first-child {
+      color: #7f899a;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 520px;
+      height: 72px;
+      background: rgba(11, 14, 20, 0.96);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid #1d222d;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      z-index: 50;
+    }
+
+    .nav-item {
+      border: 0;
+      background: transparent;
+      color: #626c7e;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .nav-item.active {
+      color: #f5f7fb;
+    }
+
+    .nav-icon {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .notice {
+      border: 1px solid #292f3b;
+      background: #0d1118;
+      color: #7d8797;
+      font-size: 11px;
+      line-height: 1.6;
+      padding: 13px;
+      border-radius: 13px;
+      margin-top: 22px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <header class="header">
+
+    <div class="brand">
+      <div>
+        <h1>STOCK PM</h1>
+        <span>POSITION MANAGER</span>
+      </div>
+      <div style="font-size:20px;">◉</div>
+    </div>
+
+    <div class="search-wrap">
+      <input
+        id="tickerInput"
+        placeholder="NVDA · TSLA · SOXX · BTC/USD"
+        autocomplete="off"
+      >
+      <button onclick="searchTicker()">검색</button>
+    </div>
+
+  </header>
+
+
+  <!-- HOME -->
+
+  <main id="homePage" class="content">
+
+    <section class="hero">
+
+      <div class="hero-small">
+        POSITION INTELLIGENCE
+      </div>
+
+      <div class="hero-title">
+        오늘 무엇을<br>
+        해야 하는가.
+      </div>
+
+      <div class="hero-desc">
+        관심종목의 매수 매력도를 비교하고,
+        현재 보유 포지션을 기준으로 다음 행동을 관리합니다.
+      </div>
+
+    </section>
+
+
+    <div class="section-title">
+      TODAY'S BUY CANDIDATES
+    </div>
+
+    <div id="candidateList"></div>
+
+
+    <div class="section-title">
+      MY POSITIONS
+    </div>
+
+    <div id="positionList"></div>
+
+    <button class="add-btn" onclick="openNewPosition()">
+      + 보유 포지션 추가
+    </button>
+
+
+    <div class="notice">
+      V1은 포지션 관리 구조를 먼저 테스트하는 버전입니다.
+      다음 단계에서 Twelve Data를 연결하면 실제 일봉 데이터로
+      Entry Score, ATR, 분할매수 가격 및 시장 판단이 자동 계산됩니다.
+    </div>
+
+  </main>
+
+
+  <!-- WATCHLIST -->
+
+  <main id="watchPage" class="content hidden">
+
+    <div class="section-title">
+      WATCHLIST
+    </div>
+
+    <div id="watchList"></div>
+
+  </main>
+
+
+  <!-- PORTFOLIO -->
+
+  <main id="portfolioPage" class="content hidden">
+
+    <div class="section-title">
+      PORTFOLIO
+    </div>
+
+    <div class="card">
+
+      <div class="mini-label">
+        CURRENT INVESTED CAPITAL
+      </div>
+
+      <div
+        id="totalInvested"
+        style="font-size:30px;font-weight:900;margin-top:5px;"
+      >
+        $0
+      </div>
+
+      <div
+        style="color:#727c8d;font-size:12px;margin-top:7px;"
+      >
+        등록된 포지션의 평단 × 수량 기준
+      </div>
+
+    </div>
+
+    <div id="portfolioPositions"></div>
+
+  </main>
+
+
+  <!-- BOTTOM NAV -->
+
+  <nav class="bottom-nav">
+
+    <button
+      class="nav-item active"
+      onclick="showPage('home',this)"
+    >
+      <span class="nav-icon">⌂</span>
+      HOME
+    </button>
+
+    <button
+      class="nav-item"
+      onclick="showPage('watch',this)"
+    >
+      <span class="nav-icon">◎</span>
+      WATCH
+    </button>
+
+    <button
+      class="nav-item"
+      onclick="showPage('portfolio',this)"
+    >
+      <span class="nav-icon">▦</span>
+      PORTFOLIO
+    </button>
+
+  </nav>
+
+</div>
+
+
+<!-- POSITION MODAL -->
+
+<div id="positionModal" class="modal">
+
+  <div class="sheet">
+
+    <div class="sheet-title">
+
+      <div>
+        <div
+          style="color:#6e7889;font-size:10px;margin-bottom:4px;"
+        >
+          POSITION
+        </div>
+
+        <h2 id="modalTicker">
+          NEW
+        </h2>
+      </div>
+
+      <button
+        class="close"
+        onclick="closeModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="field">
+      <label>TICKER</label>
+      <input
+        id="positionTicker"
+        placeholder="NVDA"
+      >
+    </div>
+
+
+    <div class="field">
+      <label>보유 수량</label>
+      <input
+        id="positionQty"
+        type="number"
+        step="any"
+        placeholder="40"
+      >
+    </div>
+
+
+    <div class="field">
+      <label>평균 단가 ($)</label>
+      <input
+        id="positionAvg"
+        type="number"
+        step="any"
+        placeholder="142.50"
+      >
+    </div>
+
+
+    <div class="field">
+      <label>현재 가격 ($) — V1 수동 입력</label>
+      <input
+        id="positionPrice"
+        type="number"
+        step="any"
+        placeholder="160"
+        oninput="updatePlanPreview()"
+      >
+    </div>
+
+
+    <div class="field">
+      <label>이 종목 최대 투입금 ($)</label>
+      <input
+        id="positionMax"
+        type="number"
+        step="any"
+        placeholder="10000"
+        oninput="updatePlanPreview()"
+      >
+    </div>
+
+
+    <div class="plan">
+
+      <div class="plan-title">
+        POSITION PLAN
+      </div>
+
+      <div class="plan-row">
+        <span>현재 투입금</span>
+        <strong id="previewInvested">$0</strong>
+      </div>
+
+      <div class="plan-row">
+        <span>추가 가능금</span>
+        <strong id="previewAvailable">$0</strong>
+      </div>
+
+      <div class="plan-row">
+        <span>1차 추가매수</span>
+        <strong id="previewBuy1">-</strong>
+      </div>
+
+      <div class="plan-row">
+        <span>2차 추가매수</span>
+        <strong id="previewBuy2">-</strong>
+      </div>
+
+      <div class="plan-row">
+        <span>3차 추가매수</span>
+        <strong id="previewBuy3">-</strong>
+      </div>
+
+      <div class="plan-row">
+        <span>돌파 추가</span>
+        <strong id="previewBuy4">-</strong>
+      </div>
+
+    </div>
+
+
+    <button
+      class="save"
+      onclick="savePosition()"
+    >
+      포지션 저장
+    </button>
+
+    <button
+      id="deleteButton"
+      class="delete"
+      onclick="deletePosition()"
+    >
+      포지션 삭제
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+  const DEFAULT_WATCHLIST = [
+    {
+      ticker: "NVDA",
+      name: "NVIDIA",
+      score: 87
+    },
+    {
+      ticker: "GOOGL",
+      name: "Alphabet",
+      score: 82
+    },
+    {
+      ticker: "TSLA",
+      name: "Tesla",
+      score: 76
+    },
+    {
+      ticker: "SOXX",
+      name: "Semiconductor ETF",
+      score: 69
+    },
+    {
+      ticker: "BTC/USD",
+      name: "Bitcoin",
+      score: 74
+    }
+  ];
+
+
+  let watchlist =
+    JSON.parse(localStorage.getItem("stockpm_watchlist"))
+    || DEFAULT_WATCHLIST;
+
+
+  let positions =
+    JSON.parse(localStorage.getItem("stockpm_positions"))
+    || [];
+
+
+  let editingTicker = null;
+
+
+  function money(value) {
+
+    const number = Number(value || 0);
+
+    return "$" + number.toLocaleString(
+      undefined,
+      {
+        maximumFractionDigits: 2
+      }
+    );
+
+  }
+
+
+  function getAction(score) {
+
+    if (score >= 85) {
+      return {
+        text: "STRONG BUY",
+        cls: "buy"
+      };
+    }
+
+    if (score >= 75) {
+      return {
+        text: "BUY CANDIDATE",
+        cls: "buy"
+      };
+    }
+
+    if (score >= 65) {
+      return {
+        text: "WATCH",
+        cls: "watch"
+      };
+    }
+
+    return {
+      text: "WAIT",
+      cls: "wait"
+    };
+
+  }
+
+
+  function renderCandidates() {
+
+    const container =
+      document.getElementById("candidateList");
+
+    const sorted =
+      [...watchlist]
+      .sort((a,b) => b.score - a.score)
+      .slice(0,5);
+
+    container.innerHTML =
+      sorted.map((item,index) => {
+
+        const action =
+          getAction(item.score);
+
+        return `
+          <div class="card">
+
+            <div class="stock-row">
+
+              <div>
+
+                <div
+                  style="
+                    color:#626c7d;
+                    font-size:10px;
+                    margin-bottom:5px;
+                  "
+                >
+                  #${index + 1}
+                </div>
+
+                <div class="ticker">
+                  ${item.ticker}
+                </div>
+
+                <div class="stock-name">
+                  ${item.name}
+                </div>
+
+                <div class="action ${action.cls}">
+                  ${action.text}
+                </div>
+
+              </div>
+
+              <div class="score-box">
+
+                <div class="score">
+                  ${item.score}
+                </div>
+
+                <div class="score-label">
+                  ENTRY
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        `;
+
+      }).join("");
+
+  }
+
+
+  function renderWatchlist() {
+
+    const container =
+      document.getElementById("watchList");
+
+    if (!watchlist.length) {
+
+      container.innerHTML =
+        `<div class="empty">
+          관심종목이 없습니다.
+        </div>`;
+
+      return;
+    }
+
+
+    container.innerHTML =
+      watchlist.map(item => {
+
+        const action =
+          getAction(item.score);
+
+        return `
+          <div class="card">
+
+            <div class="stock-row">
+
+              <div>
+
+                <div class="ticker">
+                  ${item.ticker}
+                </div>
+
+                <div class="stock-name">
+                  ${item.name}
+                </div>
+
+                <div class="action ${action.cls}">
+                  ${action.text}
+                </div>
+
+              </div>
+
+              <div class="score-box">
+
+                <div class="score">
+                  ${item.score}
+                </div>
+
+                <div class="score-label">
+                  ENTRY
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        `;
+
+      }).join("");
+
+  }
+
+
+  function renderPositions() {
+
+    const container =
+      document.getElementById("positionList");
+
+    const portfolioContainer =
+      document.getElementById("portfolioPositions");
+
+
+    if (!positions.length) {
+
+      container.innerHTML =
+        `<div class="empty">
+          아직 보유 포지션이 없습니다.<br>
+          수량과 평단을 등록해보세요.
+        </div>`;
+
+      portfolioContainer.innerHTML =
+        `<div class="empty">
+          등록된 포지션이 없습니다.
+        </div>`;
+
+      document.getElementById(
+        "totalInvested"
+      ).textContent = "$0";
+
+      return;
+
+    }
+
+
+    let totalInvested = 0;
+
+
+    const html =
+      positions.map(p => {
+
+        const invested =
+          p.qty * p.avg;
+
+        const marketValue =
+          p.qty * p.price;
+
+        const pnl =
+          invested > 0
+          ? ((marketValue - invested) / invested) * 100
+          : 0;
+
+        totalInvested += invested;
+
+
+        return `
+          <div
+            class="card position-card"
+            onclick="editPosition('${p.ticker}')"
+          >
+
+            <div class="position-top">
+
+              <div>
+
+                <div class="ticker">
+                  ${p.ticker}
+                </div>
+
+                <div class="stock-name">
+                  ${p.qty} units · AVG ${money(p.avg)}
+                </div>
+
+              </div>
+
+              <div
+                class="${pnl >= 0 ? "profit" : "loss"}"
+              >
+                ${pnl >= 0 ? "+" : ""}
+                ${pnl.toFixed(2)}%
+              </div>
+
+            </div>
+
+
+            <div class="position-grid">
+
+              <div class="mini">
+
+                <div class="mini-label">
+                  INVESTED
+                </div>
+
+                <div class="mini-value">
+                  ${money(invested)}
+                </div>
+
+              </div>
+
+
+              <div class="mini">
+
+                <div class="mini-label">
+                  VALUE
+                </div>
+
+                <div class="mini-value">
+                  ${money(marketValue)}
+                </div>
+
+              </div>
+
+
+              <div class="mini">
+
+                <div class="mini-label">
+                  MAX
+                </div>
+
+                <div class="mini-value">
+                  ${money(p.max)}
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        `;
+
+      }).join("");
+
+
+    container.innerHTML = html;
+
+    portfolioContainer.innerHTML = html;
+
+    document.getElementById(
+      "totalInvested"
+    ).textContent =
+      money(totalInvested);
+
+  }
+
+
+  function searchTicker() {
+
+    const input =
+      document.getElementById("tickerInput");
+
+    const ticker =
+      input.value
+      .trim()
+      .toUpperCase();
+
+
+    if (!ticker) return;
+
+
+    const exists =
+      watchlist.find(
+        item => item.ticker === ticker
+      );
+
+
+    if (!exists) {
+
+      watchlist.push({
+        ticker: ticker,
+        name: "Custom Asset",
+        score: 0
+      });
+
+      localStorage.setItem(
+        "stockpm_watchlist",
+        JSON.stringify(watchlist)
+      );
+
+    }
+
+
+    input.value = "";
+
+    renderAll();
+
+    showPage(
+      "watch",
+      document.querySelectorAll(".nav-item")[1]
+    );
+
+  }
+
+
+  function openNewPosition() {
+
+    editingTicker = null;
+
+    document.getElementById(
+      "modalTicker"
+    ).textContent = "NEW POSITION";
+
+    document.getElementById(
+      "positionTicker"
+    ).value = "";
+
+    document.getElementById(
+      "positionQty"
+    ).value = "";
+
+    document.getElementById(
+      "positionAvg"
+    ).value = "";
+
+    document.getElementById(
+      "positionPrice"
+    ).value = "";
+
+    document.getElementById(
+      "positionMax"
+    ).value = "";
+
+    document.getElementById(
+      "deleteButton"
+    ).style.display = "none";
+
+    updatePlanPreview();
+
+    document.getElementById(
+      "positionModal"
+    ).classList.add("show");
+
+  }
+
+
+  function editPosition(ticker) {
+
+    const p =
+      positions.find(
+        item => item.ticker === ticker
+      );
+
+    if (!p) return;
+
+
+    editingTicker = ticker;
+
+
+    document.getElementById(
+      "modalTicker"
+    ).textContent = ticker;
+
+
+    document.getElementById(
+      "positionTicker"
+    ).value = p.ticker;
+
+
+    document.getElementById(
+      "positionQty"
+    ).value = p.qty;
+
+
+    document.getElementById(
+      "positionAvg"
+    ).value = p.avg;
+
+
+    document.getElementById(
+      "positionPrice"
+    ).value = p.price;
+
+
+    document.getElementById(
+      "positionMax"
+    ).value = p.max;
+
+
+    document.getElementById(
+      "deleteButton"
+    ).style.display = "block";
+
+
+    updatePlanPreview();
+
+
+    document.getElementById(
+      "positionModal"
+    ).classList.add("show");
+
+  }
+
+
+  function closeModal() {
+
+    document.getElementById(
+      "positionModal"
+    ).classList.remove("show");
+
+  }
+
+
+  function updatePlanPreview() {
+
+    const qty =
+      Number(
+        document.getElementById(
+          "positionQty"
+        ).value || 0
+      );
+
+
+    const avg =
+      Number(
+        document.getElementById(
+          "positionAvg"
+        ).value || 0
+      );
+
+
+    const price =
+      Number(
+        document.getElementById(
+          "positionPrice"
+        ).value || 0
+      );
+
+
+    const max =
+      Number(
+        document.getElementById(
+          "positionMax"
+        ).value || 0
+      );
+
+
+    const invested =
+      qty * avg;
+
+
+    const available =
+      Math.max(
+        max - invested,
+        0
+      );
+
+
+    document.getElementById(
+      "previewInvested"
+    ).textContent =
+      money(invested);
+
+
+    document.getElementById(
+      "previewAvailable"
+    ).textContent =
+      money(available);
+
+
+    if (!price || !available) {
+
+      document.getElementById(
+        "previewBuy1"
+      ).textContent = "-";
+
+      document.getElementById(
+        "previewBuy2"
+      ).textContent = "-";
+
+      document.getElementById(
+        "previewBuy3"
+      ).textContent = "-";
+
+      document.getElementById(
+        "previewBuy4"
+      ).textContent = "-";
+
+      return;
+
+    }
+
+
+    const plans = [
+      {
+        pct: 0.25,
+        price: price
+      },
+      {
+        pct: 0.30,
+        price: price * 0.95
+      },
+      {
+        pct: 0.30,
+        price: price * 0.90
+      },
+      {
+        pct: 0.15,
+        price: price * 1.05
+      }
+    ];
+
+
+    plans.forEach((plan,index) => {
+
+      const amount =
+        available * plan.pct;
+
+
+      const units =
+        amount / plan.price;
+
+
+      document.getElementById(
+        "previewBuy" + (index + 1)
+      ).textContent =
+        `${money(plan.price)} · ${units.toFixed(2)} units`;
+
+    });
+
+  }
+
+
+  function savePosition() {
+
+    const ticker =
+      document.getElementById(
+        "positionTicker"
+      ).value
+      .trim()
+      .toUpperCase();
+
+
+    const qty =
+      Number(
+        document.getElementById(
+          "positionQty"
+        ).value
+      );
+
+
+    const avg =
+      Number(
+        document.getElementById(
+          "positionAvg"
+        ).value
+      );
+
+
+    const price =
+      Number(
+        document.getElementById(
+          "positionPrice"
+        ).value
+      );
+
+
+    const max =
+      Number(
+        document.getElementById(
+          "positionMax"
+        ).value
+      );
+
+
+    if (!ticker) {
+
+      alert("티커를 입력해주세요.");
+
+      return;
+
+    }
+
+
+    const position = {
+      ticker,
+      qty,
+      avg,
+      price,
+      max
+    };
+
+
+    if (editingTicker) {
+
+      const index =
+        positions.findIndex(
+          p => p.ticker === editingTicker
+        );
+
+
+      if (index >= 0) {
+        positions[index] = position;
+      }
+
+    } else {
+
+      const exists =
+        positions.findIndex(
+          p => p.ticker === ticker
+        );
+
+
+      if (exists >= 0) {
+        positions[exists] = position;
+      } else {
+        positions.push(position);
+      }
+
+    }
+
+
+    localStorage.setItem(
+      "stockpm_positions",
+      JSON.stringify(positions)
+    );
+
+
+    if (
+      !watchlist.find(
+        item => item.ticker === ticker
+      )
+    ) {
+
+      watchlist.push({
+        ticker,
+        name: "Portfolio Asset",
+        score: 0
+      });
+
+
+      localStorage.setItem(
+        "stockpm_watchlist",
+        JSON.stringify(watchlist)
+      );
+
+    }
+
+
+    closeModal();
+
+    renderAll();
+
+  }
+
+
+  function deletePosition() {
+
+    if (!editingTicker) return;
+
+
+    if (
+      !confirm(
+        editingTicker +
+        " 포지션을 삭제할까요?"
+      )
+    ) {
+      return;
+    }
+
+
+    positions =
+      positions.filter(
+        p => p.ticker !== editingTicker
+      );
+
+
+    localStorage.setItem(
+      "stockpm_positions",
+      JSON.stringify(positions)
+    );
+
+
+    closeModal();
+
+    renderAll();
+
+  }
+
+
+  function showPage(page,button) {
+
+    document.getElementById(
+      "homePage"
+    ).classList.add("hidden");
+
+    document.getElementById(
+      "watchPage"
+    ).classList.add("hidden");
+
+    document.getElementById(
+      "portfolioPage"
+    ).classList.add("hidden");
+
+
+    if (page === "home") {
+
+      document.getElementById(
+        "homePage"
+      ).classList.remove("hidden");
+
+    }
+
+
+    if (page === "watch") {
+
+      document.getElementById(
+        "watchPage"
+      ).classList.remove("hidden");
+
+    }
+
+
+    if (page === "portfolio") {
+
+      document.getElementById(
+        "portfolioPage"
+      ).classList.remove("hidden");
+
+    }
+
+
+    document.querySelectorAll(
+      ".nav-item"
+    ).forEach(
+      item =>
+        item.classList.remove("active")
+    );
+
+
+    if (button) {
+      button.classList.add("active");
+    }
+
+  }
+
+
+  function renderAll() {
+
+    renderCandidates();
+
+    renderWatchlist();
+
+    renderPositions();
+
+  }
+
+
+  document.getElementById(
+    "tickerInput"
+  ).addEventListener(
+    "keydown",
+    function(event) {
+
+      if (event.key === "Enter") {
+        searchTicker();
+      }
+
+    }
+  );
+
+
+  document.getElementById(
+    "positionModal"
+  ).addEventListener(
+    "click",
+    function(event) {
+
+      if (
+        event.target.id ===
+        "positionModal"
+      ) {
+        closeModal();
+      }
+
+    }
+  );
+
+
+  renderAll();
+
+</script>
+
+</body>
+</html>
