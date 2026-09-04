@@ -1,1905 +1,2551 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0b0d12" />
-  <title>STOCKPM</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: #0b0d12;
-      color: #f4f6fb;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      overscroll-behavior: none;
-    }
-
-    body {
-      min-height: 100vh;
-      overflow: hidden;
-    }
-
-    button,
-    input,
-    select {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    :root {
-      --bg: #0b0d12;
-      --panel: #131720;
-      --panel2: #171c26;
-      --line: #262c39;
-      --muted: #8993a5;
-      --text: #f4f6fb;
-      --green: #28d17c;
-      --yellow: #f3c34d;
-      --red: #ff5b6e;
-      --blue: #5f8cff;
-      --purple: #9d79ff;
-      --cyan: #59d0ff;
-      --orange: #ff9e58;
-    }
-
-    #app {
-      height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at top right, rgba(95, 140, 255, .10), transparent 26%),
-        var(--bg);
-    }
-
-    .topbar {
-      height: 76px;
-      padding: 14px 18px 10px;
-      padding-top: max(14px, env(safe-area-inset-top));
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid rgba(255,255,255,.04);
-      flex-shrink: 0;
-      z-index: 20;
-      background: rgba(11,13,18,.88);
-      backdrop-filter: blur(18px);
-    }
-
-    .brand-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .brand {
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: .7px;
-    }
-
-    .version {
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .sync-pill {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 12px;
-      color: #cdd4df;
-      background: #171b23;
-      border: 1px solid #272d39;
-      padding: 7px 10px;
-      border-radius: 999px;
-    }
-
-    .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--yellow);
-      box-shadow: 0 0 10px rgba(243,195,77,.6);
-    }
-
-    .dot.green {
-      background: var(--green);
-      box-shadow: 0 0 10px rgba(40,209,124,.55);
-    }
-
-    .dot.red {
-      background: var(--red);
-      box-shadow: 0 0 10px rgba(255,91,110,.55);
-    }
-
-    .viewport {
-      flex: 1;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .pages {
-      height: 100%;
-      width: 500%;
-      display: flex;
-      will-change: transform;
-      transition: transform .42s cubic-bezier(.22,.8,.2,1);
-    }
-
-    .page {
-      width: 20%;
-      height: 100%;
-      overflow-y: auto;
-      padding: 16px 16px 118px;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .page::-webkit-scrollbar {
-      display: none;
-    }
-
-    .section-title {
-      font-size: 14px;
-      color: var(--muted);
-      margin: 2px 2px 10px;
-      font-weight: 650;
-      letter-spacing: .2px;
-    }
-
-    .hero {
-      border: 1px solid #222936;
-      border-radius: 24px;
-      padding: 20px;
-      background:
-        linear-gradient(145deg, rgba(95,140,255,.15), rgba(157,121,255,.06)),
-        #131720;
-      box-shadow: 0 12px 40px rgba(0,0,0,.18);
-    }
-
-    .hero .small {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .hero .value {
-      margin-top: 7px;
-      font-size: 31px;
-      font-weight: 780;
-      letter-spacing: -.7px;
-    }
-
-    .hero-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .hero-stat {
-      flex: 1;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.05);
-      border-radius: 16px;
-      padding: 12px;
-    }
-
-    .hero-stat .label {
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .hero-stat .num {
-      margin-top: 4px;
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid #202633;
-      border-radius: 20px;
-      padding: 15px;
-      margin-bottom: 11px;
-    }
-
-    .card.clickable {
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
-    }
-
-    .card.clickable:active {
-      transform: scale(.985);
-      background: #171c26;
-    }
-
-    .row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .ticker {
-      font-weight: 780;
-      font-size: 17px;
-    }
-
-    .sub {
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 4px;
-    }
-
-    .price {
-      text-align: right;
-    }
-
-    .price strong {
-      display: block;
-      font-size: 15px;
-    }
-
-    .up {
-      color: var(--green);
-    }
-
-    .down {
-      color: var(--red);
-    }
-
-    .score {
-      min-width: 56px;
-      height: 56px;
-      border-radius: 18px;
-      background: #1c2230;
-      border: 1px solid #2a3242;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-left: auto;
-    }
-
-    .score strong {
-      font-size: 20px;
-      line-height: 1;
-    }
-
-    .score span {
-      font-size: 9px;
-      color: var(--muted);
-      margin-top: 3px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 6px 9px;
-      border-radius: 999px;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: .3px;
-      border: 1px solid transparent;
-      white-space: nowrap;
-    }
-
-    .badge.strong {
-      background: rgba(40,209,124,.12);
-      color: #56e99b;
-      border-color: rgba(40,209,124,.22);
-    }
-
-    .badge.buy {
-      background: rgba(95,140,255,.13);
-      color: #82a5ff;
-      border-color: rgba(95,140,255,.25);
-    }
-
-    .badge.watch {
-      background: rgba(243,195,77,.12);
-      color: #ffd76f;
-      border-color: rgba(243,195,77,.2);
-    }
-
-    .badge.wait {
-      background: rgba(137,147,165,.10);
-      color: #aab2c0;
-      border-color: rgba(137,147,165,.18);
-    }
-
-    .badge.risk {
-      background: rgba(255,91,110,.11);
-      color: #ff7e8c;
-      border-color: rgba(255,91,110,.20);
-    }
-
-    .mini-bar {
-      margin-top: 12px;
-      height: 4px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: #202633;
-    }
-
-    .mini-bar > div {
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--blue), var(--green));
-    }
-
-    .grid2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-
-    .grid3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 9px;
-    }
-
-    .metric {
-      background: #171c26;
-      border: 1px solid #242b38;
-      border-radius: 16px;
-      padding: 12px;
-    }
-
-    .metric .label {
-      font-size: 10px;
-      color: var(--muted);
-    }
-
-    .metric .value {
-      font-size: 17px;
-      margin-top: 5px;
-      font-weight: 750;
-    }
-
-    .metric .hint {
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 4px;
-      line-height: 1.45;
-    }
-
-    .search-wrap {
-      display: flex;
-      gap: 9px;
-      margin-bottom: 14px;
-    }
-
-    .search-wrap input,
-    .form-grid input,
-    .form-grid select {
-      width: 100%;
-      border: 1px solid #293140;
-      background: #151a23;
-      color: var(--text);
-      padding: 12px 13px;
-      border-radius: 14px;
-      outline: none;
-    }
-
-    .search-wrap input:focus,
-    .form-grid input:focus {
-      border-color: #567bd5;
-    }
-
-    .btn {
-      border: 0;
-      border-radius: 14px;
-      padding: 11px 14px;
-      font-weight: 750;
-      color: white;
-      background: var(--blue);
-    }
-
-    .btn.secondary {
-      background: #1c2230;
-      border: 1px solid #2c3444;
-    }
-
-    .btn.green {
-      background: #1d9f63;
-    }
-
-    .btn.red {
-      background: #8e3947;
-    }
-
-    .bottom-nav {
-      position: fixed;
-      left: 10px;
-      right: 10px;
-      bottom: max(10px, env(safe-area-inset-bottom));
-      height: 72px;
-      z-index: 30;
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      background: rgba(17,20,27,.94);
-      backdrop-filter: blur(24px);
-      border: 1px solid rgba(255,255,255,.07);
-      border-radius: 22px;
-      box-shadow: 0 12px 35px rgba(0,0,0,.35);
-      overflow: hidden;
-    }
-
-    .nav-item {
-      border: 0;
-      background: transparent;
-      color: #687284;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 3px;
-      font-size: 9px;
-      font-weight: 700;
-    }
-
-    .nav-item .icon {
-      font-size: 20px;
-      line-height: 1;
-      transition: transform .18s ease;
-    }
-
-    .nav-item.active {
-      color: white;
-    }
-
-    .nav-item.active .icon {
-      transform: translateY(-1px) scale(1.06);
-    }
-
-    .detail {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      background: #0b0d12;
-      transform: translateX(100%);
-      transition: transform .38s cubic-bezier(.22,.8,.2,1);
-      overflow-y: auto;
-      padding-bottom: 32px;
-    }
-
-    .detail.open {
-      transform: translateX(0);
-    }
-
-    .detail-header {
-      position: sticky;
-      top: 0;
-      z-index: 5;
-      padding: max(14px, env(safe-area-inset-top)) 16px 13px;
-      background: rgba(11,13,18,.91);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid #1f2530;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .back {
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
-      border: 1px solid #29303d;
-      background: #151a23;
-      color: white;
-      font-size: 19px;
-    }
-
-    .detail-body {
-      padding: 15px;
-    }
-
-    .detail-hero {
-      background:
-        radial-gradient(circle at 85% 15%, rgba(40,209,124,.10), transparent 34%),
-        #131720;
-      border: 1px solid #212836;
-      border-radius: 24px;
-      padding: 18px;
-    }
-
-    .big-price {
-      font-size: 31px;
-      font-weight: 800;
-      letter-spacing: -.7px;
-      margin-top: 6px;
-    }
-
-    .score-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 9px;
-      margin-top: 14px;
-    }
-
-    .score-box {
-      border: 1px solid #252d3b;
-      background: #171c26;
-      border-radius: 17px;
-      padding: 12px 8px;
-      text-align: center;
-    }
-
-    .score-box .name {
-      color: var(--muted);
-      font-size: 9px;
-    }
-
-    .score-box strong {
-      display: block;
-      font-size: 21px;
-      margin-top: 4px;
-    }
-
-    .why-row,
-    .plan-row,
-    .status-row {
-      border-bottom: 1px solid #242a35;
-      padding: 11px 0;
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-      align-items: center;
-    }
-
-    .why-row:last-child,
-    .plan-row:last-child,
-    .status-row:last-child {
-      border-bottom: 0;
-    }
-
-    .why-title {
-      font-size: 13px;
-      font-weight: 650;
-    }
-
-    .why-desc {
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 3px;
-      line-height: 1.4;
-    }
-
-    .points {
-      font-weight: 800;
-      font-size: 14px;
-    }
-
-    .ma200-card {
-      border: 1px solid rgba(95,140,255,.32);
-      background: linear-gradient(145deg, rgba(95,140,255,.12), rgba(95,140,255,.03));
-      border-radius: 19px;
-      padding: 15px;
-      margin-bottom: 11px;
-    }
-
-    .ma200-main {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      margin-top: 9px;
-    }
-
-    .ma200-main strong {
-      font-size: 24px;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 9px;
-      margin-top: 10px;
-    }
-
-    .form-grid .full {
-      grid-column: 1 / -1;
-    }
-
-    label {
-      display: block;
-      font-size: 10px;
-      color: var(--muted);
-      margin: 0 0 5px 2px;
-    }
-
-    .note {
-      font-size: 11px;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .status-good {
-      color: var(--green);
-    }
-
-    .status-warn {
-      color: var(--yellow);
-    }
-
-    .status-bad {
-      color: var(--red);
-    }
-
-    .empty {
-      padding: 28px 15px;
-      color: var(--muted);
-      text-align: center;
-      font-size: 13px;
-      line-height: 1.7;
-    }
-
-    .leverage-card {
-      border: 1px solid rgba(255,158,88,.24);
-      background: linear-gradient(145deg, rgba(255,158,88,.08), rgba(255,255,255,.01));
-    }
-
-    .divider {
-      height: 1px;
-      background: #252b36;
-      margin: 13px 0;
-    }
-
-    .tiny {
-      font-size: 10px;
-      color: var(--muted);
-    }
-
-    .mt16 {
-      margin-top: 16px;
-    }
-
-    .mt10 {
-      margin-top: 10px;
-    }
-
-    @media (min-width: 760px) {
-      #app {
-        max-width: 520px;
-        margin: 0 auto;
-        border-left: 1px solid #1b202a;
-        border-right: 1px solid #1b202a;
-      }
-
-      .bottom-nav {
-        max-width: 500px;
-        margin: 0 auto;
-      }
-
-      .detail {
-        max-width: 520px;
-        left: 50%;
-        right: auto;
-        width: 520px;
-        transform: translateX(100%);
-      }
-
-      .detail.open {
-        transform: translateX(-50%);
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0b0d10" />
+<title>STOCKPM v0.2.0</title>
+<style>
+:root{
+  --bg:#090b0e;--panel:#12161b;--panel2:#181d24;--panel3:#0f1318;--text:#f6f8fb;--muted:#8d97a6;
+  --line:#252c35;--good:#31d07c;--warn:#f5b942;--bad:#ff6678;--blue:#75aaff;--violet:#9b8cff;
+  --radius:20px;--tabh:76px;--safe-bottom:max(14px,env(safe-area-inset-bottom));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overscroll-behavior:none}
+body{overflow:hidden}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:62px;flex:0 0 62px;padding:14px 16px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.05);background:rgba(9,11,14,.92);backdrop-filter:blur(18px);z-index:20}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#fff,#778399);color:#0b0d10;font-weight:900;display:grid;place-items:center}
+.brand h1{font-size:17px;line-height:1;margin:0}
+.brand small{display:block;color:var(--muted);margin-top:4px;font-size:10px;letter-spacing:.08em}
+.sync-chip{display:flex;align-items:center;gap:7px;padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:11px;color:var(--muted)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--warn);box-shadow:0 0 10px currentColor}
+
+.viewport{position:relative;flex:1;overflow:hidden}
+.track{height:100%;display:flex;will-change:transform;transform:translate3d(0,0,0)}
+.track.animating{transition:transform .48s cubic-bezier(.22,.85,.25,1)}
+
+.page{flex:0 0 100%;width:100%;height:100%;overflow-y:auto;overscroll-behavior-y:contain;padding:16px 14px calc(var(--tabh) + var(--safe-bottom) + 24px);scrollbar-width:none}
+.page::-webkit-scrollbar{display:none}
+.page-inner{max-width:980px;margin:0 auto}
+.page-title{font-size:26px;margin:4px 0 2px}
+.page-sub{color:var(--muted);font-size:13px;margin-bottom:16px}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:0 8px 30px rgba(0,0,0,.12)}
+.card.soft{background:linear-gradient(180deg,#141920,#101419)}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-head h3{margin:0;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#c9d0da}
+.section-head span{font-size:11px;color:var(--muted)}
+
+.hero-card{padding:18px;background:linear-gradient(145deg,#161b22,#101318);border:1px solid #27313d}
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.hero-score{font-size:54px;line-height:.9;font-weight:900}
+.hero-score small{font-size:13px;color:var(--muted);font-weight:600}
+
+.badge{display:inline-flex;align-items:center;gap:7px;padding:8px 10px;border-radius:999px;font-size:11px;font-weight:800;border:1px solid}
+.badge.good{color:var(--good);background:#0d2118;border-color:#1d4933}
+.badge.warn{color:var(--warn);background:#261e0d;border-color:#5d4617}
+.badge.bad{color:var(--bad);background:#271216;border-color:#5a2630}
+.badge.neutral{color:#c7ced8;background:#171c22;border-color:#2a323c}
+
+.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.mini{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:11px}
+.mini label{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.07em}
+.mini b{display:block;margin-top:5px;font-size:17px}
+
+.search{display:flex;gap:8px}
+.search input,.field input{width:100%;border:1px solid var(--line);background:var(--panel3);color:var(--text);padding:13px 14px;border-radius:13px;outline:none}
+.search input:focus,.field input:focus{border-color:#52647a}
+
+.btn{border:0;border-radius:12px;padding:12px 14px;background:#f5f7fa;color:#0b0d10;font-weight:850}
+.btn.secondary{background:var(--panel2);border:1px solid var(--line);color:var(--text)}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+
+.list{display:grid;gap:8px}
+.ticker-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:13px 14px}
+.ticker-row:active{transform:scale(.995)}
+.ticker-name{font-weight:850}
+.ticker-meta{font-size:11px;color:var(--muted);margin-top:3px}
+.score-circle{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#0f1419;border:1px solid var(--line);font-weight:900}
+.chev{color:#657080;font-size:22px}
+.rank{font-size:11px;color:var(--muted);width:18px;text-align:center}
+
+.market-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.market-item{padding:12px;border-radius:14px;background:var(--panel2);border:1px solid var(--line)}
+.market-item small{color:var(--muted)}
+.market-item b{display:block;margin-top:5px}
+
+.empty{color:var(--muted);padding:30px 12px;text-align:center;font-size:13px}
+.muted{color:var(--muted)}
+.good-text{color:var(--good)}
+.warn-text{color:var(--warn)}
+.bad-text{color:var(--bad)}
+
+.bottom-tabs{position:absolute;left:10px;right:10px;bottom:var(--safe-bottom);height:64px;border:1px solid rgba(255,255,255,.08);border-radius:22px;background:rgba(18,22,27,.92);backdrop-filter:blur(22px);display:grid;grid-template-columns:repeat(5,1fr);z-index:30;box-shadow:0 12px 35px rgba(0,0,0,.35)}
+.tab{border:0;background:transparent;color:#738090;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:9px;font-weight:700}
+.tab .ico{font-size:19px;line-height:1}
+.tab.active{color:var(--text)}
+
+.detail{position:absolute;inset:0;background:var(--bg);z-index:50;transform:translate3d(100%,0,0);transition:transform .46s cubic-bezier(.22,.85,.25,1);display:flex;flex-direction:column}
+.detail.open{transform:translate3d(0,0,0)}
+.detail-head{height:60px;flex:0 0 60px;padding:10px 14px;display:grid;grid-template-columns:42px 1fr 42px;align-items:center;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(9,11,14,.94);backdrop-filter:blur(18px)}
+.icon-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text)}
+.detail-title{text-align:center}
+.detail-title b{display:block}
+.detail-title small{color:var(--muted)}
+.detail-body{flex:1;overflow-y:auto;padding:14px 14px 32px}
+.detail-inner{max-width:980px;margin:0 auto}
+
+.tf-toggle{display:inline-grid;grid-template-columns:1fr 1fr;background:var(--panel3);border:1px solid var(--line);border-radius:12px;padding:3px}
+.tf-toggle button{border:0;background:transparent;color:var(--muted);padding:8px 13px;border-radius:9px;font-weight:800}
+.tf-toggle button.active{background:var(--panel2);color:var(--text)}
+
+.chart-wrap{position:relative;height:300px;border-radius:16px;overflow:hidden;background:linear-gradient(180deg,#0d1116,#0a0d11);border:1px solid var(--line)}
+.chart-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:100% 20%,12.5% 100%}
+.chart-svg{position:absolute;inset:0;width:100%;height:100%}
+.chart-legend{position:absolute;top:10px;left:10px;display:flex;gap:10px;font-size:10px;color:var(--muted)}
+.signal-tag{position:absolute;right:12px;top:46px;padding:7px 9px;border-radius:9px;background:#0c2519;border:1px solid #24563a;color:var(--good);font-size:10px;font-weight:900}
+.chart-note{position:absolute;left:12px;bottom:10px;font-size:10px;color:var(--muted)}
+
+.why-grid{display:grid;gap:8px}
+.why-item{display:grid;grid-template-columns:1fr auto;align-items:center;padding:11px 12px;border-radius:12px;background:var(--panel2);border:1px solid var(--line)}
+.why-item span{font-size:12px}
+.why-item b{font-size:13px}
+.why-item small{display:block;color:var(--muted);margin-top:3px}
+
+.position-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.stat{padding:12px;border-radius:13px;background:var(--panel2);border:1px solid var(--line)}
+.stat small{color:var(--muted);display:block}
+.stat b{display:block;margin-top:5px}
+
+.plan-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.plan-item{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}
+.plan-item small{color:var(--muted)}
+.plan-item b{display:block;margin-top:5px}
+.plan-item em{display:block;font-style:normal;margin-top:4px;color:#aeb7c4;font-size:11px}
+
+.status-line{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}
+.status-line:last-child{border-bottom:0}
+.status-left{display:flex;align-items:center;gap:9px}
+.status-light{width:9px;height:9px;border-radius:50%}
+.status-light.green{background:var(--good)}
+.status-light.yellow{background:var(--warn)}
+.status-light.red{background:var(--bad)}
+
+.field{display:grid;gap:6px;margin-bottom:10px}
+.field label{font-size:11px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--panel3);border:1px solid var(--line);border-radius:12px;padding:3px;margin-bottom:12px}
+.seg button{border:0;background:transparent;color:var(--muted);padding:9px;border-radius:9px;font-weight:800}
+.seg button.active{background:var(--panel2);color:var(--text)}
+
+.leverage-warning{padding:12px;border-radius:13px;background:#241b0e;border:1px solid #5a4317;color:#e6c37f;font-size:12px;line-height:1.5}
+
+.changelog{display:grid;gap:10px}
+.change-item{padding-left:14px;border-left:2px solid #2d3743}
+.change-item b{font-size:13px}
+.change-item p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+
+@media(min-width:760px){
+  .page{padding-left:22px;padding-right:22px}
+  .home-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}
+  .home-grid>.card{margin-bottom:0}
+  .detail-body{padding-left:22px;padding-right:22px}
+  .chart-wrap{height:360px}
+  .bottom-tabs{left:50%;right:auto;transform:translateX(-50%);width:min(620px,calc(100% - 20px))}
+}
+</style>
 </head>
 
 <body>
-
-<div id="app">
+<div class="app">
 
   <header class="topbar">
-    <div class="brand-wrap">
-      <div class="brand">STOCKPM</div>
-      <div class="version" id="versionText">v0.2.0 · Position Intelligence</div>
+    <div class="brand">
+      <div class="brand-mark">SP</div>
+      <div>
+        <h1>STOCKPM</h1>
+        <small>QUANT POSITION MANAGER · v0.2.0</small>
+      </div>
     </div>
-
-    <div class="sync-pill" id="syncPill">
-      <span class="dot" id="syncDot"></span>
-      <span id="syncLabel">LOCAL MODE</span>
+    <div class="sync-chip">
+      <span class="dot"></span>
+      <span id="topSync">DATA WAIT</span>
     </div>
   </header>
 
-  <main class="viewport" id="viewport">
-    <div class="pages" id="pages">
+  <div class="viewport" id="viewport">
+
+    <div class="track" id="track">
 
       <!-- HOME -->
-      <section class="page">
-        <div class="hero">
-          <div class="small">Portfolio Overview</div>
-          <div class="value" id="portfolioValue">$34,900</div>
+      <section class="page" data-page="HOME">
+        <div class="page-inner">
 
-          <div class="hero-row">
-            <div class="hero-stat">
-              <div class="label">Cash</div>
-              <div class="num">$12,500</div>
-            </div>
-            <div class="hero-stat">
-              <div class="label">Risk</div>
-              <div class="num status-warn">MEDIUM</div>
-            </div>
-            <div class="hero-stat">
-              <div class="label">Positions</div>
-              <div class="num" id="positionCount">2</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="section-title mt16">오늘의 매수 후보</div>
-        <div id="homeCandidates"></div>
-
-        <div class="section-title mt16">Market / Model Status</div>
-
-        <div class="card">
-          <div class="status-row">
-            <div>
-              <div class="why-title">Model</div>
-              <div class="why-desc">MA200 중심 Entry Engine</div>
-            </div>
-            <div><strong>v0.2</strong></div>
+          <h2 class="page-title">Today</h2>
+          <div class="page-sub">
+            강한 신호만 실제 매수 검토 · Daily가 방향, 4H가 타이밍을 확인합니다.
           </div>
 
-          <div class="status-row">
-            <div>
-              <div class="why-title">Market Data</div>
-              <div class="why-desc">Twelve Data 연결 예정</div>
+          <div class="home-grid">
+
+            <div class="card hero-card">
+              <div class="hero-top">
+
+                <div>
+                  <div class="muted" style="font-size:12px">TOP SETUP</div>
+                  <div style="font-size:29px;font-weight:900;margin-top:4px">NVDA</div>
+                  <div class="badge good" style="margin-top:8px">● STRONG BUY</div>
+                </div>
+
+                <div class="hero-score">
+                  89<small>/100</small>
+                </div>
+
+              </div>
+
+              <div class="mini-grid">
+
+                <div class="mini">
+                  <label>Daily</label>
+                  <b class="good-text">Bullish</b>
+                </div>
+
+                <div class="mini">
+                  <label>4H timing</label>
+                  <b class="warn-text">Wait</b>
+                </div>
+
+                <div class="mini">
+                  <label>MA200</label>
+                  <b>Above</b>
+                </div>
+
+              </div>
             </div>
-            <div class="status-warn"><strong>MOCK</strong></div>
+
+            <div class="card">
+              <div class="section-head">
+                <h3>Market regime</h3>
+                <span>연결 전 DEMO</span>
+              </div>
+
+              <div class="market-strip">
+                <div class="market-item">
+                  <small>SPY</small>
+                  <b class="good-text">Risk On</b>
+                </div>
+
+                <div class="market-item">
+                  <small>QQQ</small>
+                  <b class="good-text">Bullish</b>
+                </div>
+
+                <div class="market-item">
+                  <small>VIX</small>
+                  <b>—</b>
+                </div>
+              </div>
+            </div>
+
           </div>
 
-          <div class="status-row">
-            <div>
-              <div class="why-title">Supabase</div>
-              <div class="why-desc">Cloud Sync 연결 예정</div>
+          <div class="card" style="margin-top:12px">
+            <div class="section-head">
+              <h3>Today's candidates</h3>
+              <span>WATCH 기준</span>
             </div>
-            <div class="status-warn"><strong>OFFLINE</strong></div>
+            <div class="list" id="homeCandidates"></div>
           </div>
+
+          <div class="card">
+            <div class="section-head">
+              <h3>Portfolio guard</h3>
+              <span>V1 구조</span>
+            </div>
+
+            <div class="status-line">
+              <div class="status-left">
+                <span class="status-light green"></span>
+                <div>
+                  <b>Position limits</b>
+                  <div class="ticker-meta">종목 최대투입 한도 적용</div>
+                </div>
+              </div>
+              <b>ON</b>
+            </div>
+
+            <div class="status-line">
+              <div class="status-left">
+                <span class="status-light yellow"></span>
+                <div>
+                  <b>Portfolio risk</b>
+                  <div class="ticker-meta">Supabase 연결 후 통합 계산</div>
+                </div>
+              </div>
+              <b>WAIT</b>
+            </div>
+
+          </div>
+
         </div>
       </section>
+
 
       <!-- WATCH -->
-      <section class="page">
-        <div class="search-wrap">
-          <input id="watchTickerInput" placeholder="Ticker · NVDA / TSLA / BTC" />
-          <button class="btn" onclick="addWatchTicker()">추가</button>
-        </div>
+      <section class="page" data-page="WATCH">
+        <div class="page-inner">
 
-        <div class="section-title">WATCH · Entry Score 순</div>
-        <div id="watchList"></div>
+          <h2 class="page-title">Watch</h2>
+          <div class="page-sub">
+            내 관심종목만 분석합니다. 종목을 터치하면 상세 분석으로 들어갑니다.
+          </div>
+
+          <div class="card">
+            <div class="search">
+              <input id="watchInput" placeholder="NVDA, TSLA, SOXX, BTC/USD">
+              <button class="btn" id="addWatchBtn">추가</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-head">
+              <h3>Buy radar</h3>
+              <span>Entry score 순</span>
+            </div>
+            <div class="list" id="watchList"></div>
+          </div>
+
+        </div>
       </section>
+
 
       <!-- DISCOVER -->
-      <section class="page">
-        <div class="hero">
-          <div class="small">DISCOVER</div>
-          <div class="value" style="font-size:24px">Market Scanner</div>
-          <div class="note mt10">
-            나중에 NASDAQ-100 / 주요 ETF / Crypto를 자동 스캔해서
-            Entry Score 상위 종목을 찾아주는 기능이 들어갈 자리야.
+      <section class="page" data-page="DISCOVER">
+        <div class="page-inner">
+
+          <h2 class="page-title">Discover</h2>
+          <div class="page-sub">
+            향후 NASDAQ-100 / 주요 ETF 자동 스캔 영역입니다.
           </div>
-        </div>
 
-        <div class="section-title mt16">Preview</div>
+          <div class="card soft">
+            <div class="badge neutral">COMING NEXT</div>
 
-        <div class="card">
-          <div class="row">
-            <div>
-              <div class="ticker">NASDAQ 100</div>
-              <div class="sub">자동 스캔 예정</div>
+            <h3 style="font-size:24px;margin:14px 0 8px">
+              System Discovery
+            </h3>
+
+            <p class="muted" style="line-height:1.6;margin:0">
+              WATCH 밖의 종목을 자동으로 스캔해 Entry Score 상위 후보를 제안합니다.
+              Twelve Data 호출 제한과 백테스트 구조를 맞춘 뒤 활성화합니다.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="section-head">
+              <h3>Planned universe</h3>
+              <span>초기 후보</span>
             </div>
-            <span class="badge wait">COMING</span>
-          </div>
-        </div>
 
-        <div class="card">
-          <div class="row">
-            <div>
-              <div class="ticker">ETF Radar</div>
-              <div class="sub">SOXX · QQQ · SMH · TQQQ 등</div>
-            </div>
-            <span class="badge wait">COMING</span>
-          </div>
-        </div>
+            <div class="market-strip">
+              <div class="market-item">
+                <small>Universe</small>
+                <b>NASDAQ-100</b>
+              </div>
 
-        <div class="card">
-          <div class="row">
-            <div>
-              <div class="ticker">Crypto Radar</div>
-              <div class="sub">BTC · ETH · SOL 등</div>
+              <div class="market-item">
+                <small>ETFs</small>
+                <b>Major</b>
+              </div>
+
+              <div class="market-item">
+                <small>Crypto</small>
+                <b>Top Liquid</b>
+              </div>
             </div>
-            <span class="badge wait">COMING</span>
+
           </div>
+
         </div>
       </section>
+
 
       <!-- POSITION -->
-      <section class="page">
-        <div class="section-title">SPOT / STOCK POSITIONS</div>
-        <div id="positionList"></div>
+      <section class="page" data-page="POSITION">
+        <div class="page-inner">
 
-        <div class="section-title mt16">BYBIT · LEVERAGE MODE</div>
-
-        <div class="card leverage-card">
-          <div class="row">
-            <div>
-              <div class="ticker">BTCUSDT</div>
-              <div class="sub">BYBIT PERP · LONG 5x</div>
-            </div>
-            <span class="badge watch">MANUAL</span>
+          <h2 class="page-title">Position</h2>
+          <div class="page-sub">
+            실제 체결한 포지션만 기록합니다. 시장가격은 API가 담당합니다.
           </div>
 
-          <div class="grid3 mt16">
-            <div class="metric">
-              <div class="label">ENTRY</div>
-              <div class="value">$72,400</div>
+          <div class="card">
+
+            <div class="seg" id="positionMode">
+              <button class="active" data-mode="spot">SPOT</button>
+              <button data-mode="lev">BYBIT LEVERAGE</button>
             </div>
 
-            <div class="metric">
-              <div class="label">LEVERAGE</div>
-              <div class="value">5x</div>
+            <div id="spotForm">
+
+              <div class="field">
+                <label>Ticker</label>
+                <input id="posTicker" placeholder="NVDA">
+              </div>
+
+              <div class="two">
+
+                <div class="field">
+                  <label>보유 수량</label>
+                  <input id="posQty" type="number" step="any" placeholder="40">
+                </div>
+
+                <div class="field">
+                  <label>평단가</label>
+                  <input id="posAvg" type="number" step="any" placeholder="162.50">
+                </div>
+
+              </div>
+
+              <div class="field">
+                <label>이 종목 최대 투입금 (USD)</label>
+                <input id="posMax" type="number" step="any" placeholder="10000">
+              </div>
+
+              <button class="btn" id="saveSpot">
+                포지션 저장
+              </button>
+
             </div>
 
-            <div class="metric">
-              <div class="label">RISK</div>
-              <div class="value status-warn">HIGH</div>
+            <div id="levForm" style="display:none">
+
+              <div class="leverage-warning">
+                레버리지 모드는 별도 Risk Engine으로 관리합니다.
+                V0.2에서는 구조와 입력 UI만 준비하며 자동주문은 하지 않습니다.
+              </div>
+
+              <div class="field" style="margin-top:12px">
+                <label>Symbol</label>
+                <input id="levTicker" placeholder="BTCUSDT">
+              </div>
+
+              <div class="two">
+
+                <div class="field">
+                  <label>Direction</label>
+                  <input id="levSide" placeholder="LONG">
+                </div>
+
+                <div class="field">
+                  <label>Leverage</label>
+                  <input id="levX" type="number" placeholder="5">
+                </div>
+
+              </div>
+
+              <div class="two">
+
+                <div class="field">
+                  <label>Entry</label>
+                  <input id="levEntry" type="number" step="any">
+                </div>
+
+                <div class="field">
+                  <label>Position size ($)</label>
+                  <input id="levSize" type="number" step="any">
+                </div>
+
+              </div>
+
+              <div class="field">
+                <label>Liquidation price (현재는 수동)</label>
+                <input id="levLiq" type="number" step="any">
+              </div>
+
+              <button class="btn secondary" id="saveLev">
+                레버리지 포지션 저장
+              </button>
+
             </div>
+
           </div>
 
-          <div class="note mt10">
-            Bybit API 연결 후 진입가 · 레버리지 · 청산가 · PnL · 증거금 정보를
-            읽기 전용으로 자동 불러오는 구조로 확장 예정.
+          <div class="card">
+
+            <div class="section-head">
+              <h3>Active positions</h3>
+              <span id="positionCount">0</span>
+            </div>
+
+            <div class="list" id="positionList"></div>
+
           </div>
+
         </div>
       </section>
+
 
       <!-- MORE -->
-      <section class="page">
-        <div class="section-title">SYSTEM STATUS</div>
+      <section class="page" data-page="MORE">
+        <div class="page-inner">
 
-        <div class="card">
-          <div class="status-row">
-            <div>
-              <div class="why-title">App Version</div>
-              <div class="why-desc">Current build</div>
+          <h2 class="page-title">More</h2>
+          <div class="page-sub">
+            데이터 상태, 버전, 연결 설정과 변경 이력을 확인합니다.
+          </div>
+
+          <div class="card">
+
+            <div class="section-head">
+              <h3>System status</h3>
+              <span>v0.2.0</span>
             </div>
-            <strong>v0.2.0</strong>
-          </div>
 
-          <div class="status-row">
-            <div>
-              <div class="why-title">Twelve Data</div>
-              <div class="why-desc">Market price / OHLCV</div>
+            <div class="status-line">
+              <div class="status-left">
+                <span class="status-light yellow"></span>
+                <div>
+                  <b>Twelve Data</b>
+                  <div class="ticker-meta">Market API</div>
+                </div>
+              </div>
+              <b>NOT CONNECTED</b>
             </div>
-            <strong class="status-warn">NOT CONNECTED</strong>
-          </div>
 
-          <div class="status-row">
-            <div>
-              <div class="why-title">Supabase</div>
-              <div class="why-desc">Position / Signal / Sync DB</div>
+            <div class="status-line">
+              <div class="status-left">
+                <span class="status-light yellow"></span>
+                <div>
+                  <b>Supabase</b>
+                  <div class="ticker-meta">Sync / Signal Log / Positions</div>
+                </div>
+              </div>
+              <b>NOT CONNECTED</b>
             </div>
-            <strong class="status-warn">NOT CONNECTED</strong>
-          </div>
 
-          <div class="status-row">
-            <div>
-              <div class="why-title">Last Data Update</div>
-              <div class="why-desc">현재는 샘플 데이터</div>
+            <div class="status-line">
+              <div class="status-left">
+                <span class="status-light red"></span>
+                <div>
+                  <b>Last successful sync</b>
+                  <div class="ticker-meta">최신 데이터 연결 후 활성화</div>
+                </div>
+              </div>
+              <b>—</b>
             </div>
-            <strong id="lastUpdate">MOCK</strong>
+
           </div>
-        </div>
 
-        <div class="section-title mt16">MODEL RULES</div>
+          <div class="card">
 
-        <div class="card">
-          <div class="why-row">
-            <div>
-              <div class="why-title">Strong Buy</div>
-              <div class="why-desc">Entry ≥ 85 + MA200 Gate 통과</div>
+            <div class="section-head">
+              <h3>Data safety rule</h3>
+              <span>예정</span>
             </div>
-            <span class="badge strong">85+</span>
-          </div>
 
-          <div class="why-row">
-            <div>
-              <div class="why-title">Buy Candidate</div>
-              <div class="why-desc">Entry 75~84</div>
+            <div class="why-grid">
+
+              <div class="why-item">
+                <div>
+                  <span>0–60분</span>
+                  <small>정상 판단</small>
+                </div>
+                <b class="good-text">FRESH</b>
+              </div>
+
+              <div class="why-item">
+                <div>
+                  <span>60–180분</span>
+                  <small>경고 표시</small>
+                </div>
+                <b class="warn-text">STALE</b>
+              </div>
+
+              <div class="why-item">
+                <div>
+                  <span>180분 이상</span>
+                  <small>신규 BUY 판단 중지</small>
+                </div>
+                <b class="bad-text">BLOCK</b>
+              </div>
+
             </div>
-            <span class="badge buy">75+</span>
+
           </div>
 
-          <div class="why-row">
-            <div>
-              <div class="why-title">Watch</div>
-              <div class="why-desc">Entry 65~74</div>
+          <div class="card">
+
+            <div class="section-head">
+              <h3>Changelog</h3>
+              <span>STOCKPM</span>
             </div>
-            <span class="badge watch">65+</span>
-          </div>
 
-          <div class="why-row">
-            <div>
-              <div class="why-title">Wait</div>
-              <div class="why-desc">Entry &lt; 65</div>
+            <div class="changelog">
+
+              <div class="change-item">
+                <b>v0.2.0</b>
+                <p>
+                  좌우 페이지 스와이프, WATCH 상세, 1D/4H 차트 구조,
+                  MA200 Gate, Volume/WHY, Signal marker,
+                  Position/Bybit UI, Sync/Version 상태 추가.
+                </p>
+              </div>
+
+              <div class="change-item">
+                <b>v0.1.0</b>
+                <p>
+                  Watchlist, Entry Score, 기술적 분석,
+                  기본 Position Plan 구조.
+                </p>
+              </div>
+
             </div>
-            <span class="badge wait">&lt;65</span>
-          </div>
-        </div>
 
-        <div class="section-title mt16">CHANGELOG</div>
-
-        <div class="card">
-          <div class="why-title">v0.2.0</div>
-          <div class="note mt10">
-            • HOME / WATCH / DISCOVER / POSITION / MORE<br>
-            • 좌우 스와이프 탭 전환<br>
-            • MA200 중심 Entry Gate<br>
-            • Volume / Options 분석 영역<br>
-            • 포지션 수량 / 평단 / 최대 시드 저장<br>
-            • 추가매수 및 예상 평단 계산<br>
-            • Bybit 레버리지 모드 UI<br>
-            • 버전 / 데이터 연결 상태 표시
           </div>
+
         </div>
       </section>
 
     </div>
-  </main>
-
-  <nav class="bottom-nav">
-    <button class="nav-item active" onclick="goPage(0)">
-      <span class="icon">⌂</span>
-      HOME
-    </button>
-
-    <button class="nav-item" onclick="goPage(1)">
-      <span class="icon">◎</span>
-      WATCH
-    </button>
-
-    <button class="nav-item" onclick="goPage(2)">
-      <span class="icon">◇</span>
-      DISCOVER
-    </button>
-
-    <button class="nav-item" onclick="goPage(3)">
-      <span class="icon">▤</span>
-      POSITION
-    </button>
-
-    <button class="nav-item" onclick="goPage(4)">
-      <span class="icon">•••</span>
-      MORE
-    </button>
-  </nav>
-
-</div>
 
 
-<!-- DETAIL -->
-<div class="detail" id="detailPanel">
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-tabs" id="tabs">
 
-  <div class="detail-header">
-    <button class="back" onclick="closeDetail()">‹</button>
-
-    <div>
-      <div class="ticker" id="detailTicker">NVDA</div>
-      <div class="sub" id="detailType">US STOCK</div>
-    </div>
-  </div>
-
-  <div class="detail-body">
-
-    <div class="detail-hero">
-      <div class="sub">Current Market Price</div>
-
-      <div class="row">
-        <div>
-          <div class="big-price" id="detailPrice">$182.40</div>
-          <div class="up" id="detailChange">+1.8%</div>
-        </div>
-
-        <span class="badge strong" id="detailSignal">STRONG BUY</span>
-      </div>
-
-      <div class="score-row">
-        <div class="score-box">
-          <div class="name">ENTRY</div>
-          <strong id="entryScore">88</strong>
-        </div>
-
-        <div class="score-box">
-          <div class="name">TECHNICAL</div>
-          <strong id="technicalScore">91</strong>
-        </div>
-
-        <div class="score-box">
-          <div class="name">RISK</div>
-          <strong id="riskScore">54</strong>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-title mt16">MA200 · LONG TERM GATE</div>
-
-    <div class="ma200-card">
-      <div class="sub">200-Day Moving Average</div>
-
-      <div class="ma200-main">
-        <strong id="ma200Value">$142.10</strong>
-        <span class="badge strong" id="ma200Status">BULLISH</span>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="grid2">
-        <div>
-          <div class="tiny">MA200 Distance</div>
-          <strong id="ma200Distance">+28.4%</strong>
-        </div>
-
-        <div>
-          <div class="tiny">MA200 Slope</div>
-          <strong class="status-good">RISING ↑</strong>
-        </div>
-      </div>
-
-      <div class="note mt10">
-        STOCKPM은 MA200을 단순 가점이 아니라 장기 추세 Gate로 사용한다.
-        가격이 MA200 아래이고 MA200이 하락 중이면 Strong Buy 신호를 제한한다.
-      </div>
-    </div>
-
-    <div class="section-title">TECHNICAL SNAPSHOT</div>
-
-    <div class="grid2">
-      <div class="metric">
-        <div class="label">MA20</div>
-        <div class="value" id="ma20Value">$177.2</div>
-      </div>
-
-      <div class="metric">
-        <div class="label">MA50</div>
-        <div class="value" id="ma50Value">$166.4</div>
-      </div>
-
-      <div class="metric">
-        <div class="label">RSI 14</div>
-        <div class="value" id="rsiValue">61</div>
-      </div>
-
-      <div class="metric">
-        <div class="label">ATR 14</div>
-        <div class="value" id="atrValue">$5.8</div>
-      </div>
-    </div>
-
-    <div class="section-title mt16">VOLUME</div>
-
-    <div class="card">
-      <div class="grid3">
-        <div class="metric">
-          <div class="label">TODAY</div>
-          <div class="value" id="volumeToday">61M</div>
-        </div>
-
-        <div class="metric">
-          <div class="label">20D AVG</div>
-          <div class="value" id="volume20">42M</div>
-        </div>
-
-        <div class="metric">
-          <div class="label">REL VOL</div>
-          <div class="value status-good" id="relativeVolume">1.45x</div>
-        </div>
-      </div>
-
-      <div class="note mt10">
-        상승일 거래량 증가와 조정일 거래량 감소 여부를 Entry Score 보조 신호로 사용.
-      </div>
-    </div>
-
-    <div class="section-title mt16">OPTIONS SENTIMENT</div>
-
-    <div class="card">
-      <div class="grid3">
-        <div class="metric">
-          <div class="label">CALL / PUT</div>
-          <div class="value">1.73</div>
-        </div>
-
-        <div class="metric">
-          <div class="label">IV</div>
-          <div class="value">41%</div>
-        </div>
-
-        <div class="metric">
-          <div class="label">SIGNAL</div>
-          <div class="value status-good">BULL</div>
-        </div>
-      </div>
-
-      <div class="note mt10">
-        옵션 정보는 추세를 뒤집는 핵심 조건이 아니라 보조 확신 신호로 사용한다.
-        실제 옵션 API는 후속 버전에서 연결 예정.
-      </div>
-    </div>
-
-    <div class="section-title mt16">WHY THIS SCORE?</div>
-
-    <div class="card">
-      <div class="why-row">
-        <div>
-          <div class="why-title">MA200 / Long Trend</div>
-          <div class="why-desc">가격 > MA200 · MA200 상승</div>
-        </div>
-        <div class="points status-good">+23</div>
-      </div>
-
-      <div class="why-row">
-        <div>
-          <div class="why-title">Momentum</div>
-          <div class="why-desc">RSI / MACD / 최근 수익률</div>
-        </div>
-        <div class="points status-good">+14</div>
-      </div>
-
-      <div class="why-row">
-        <div>
-          <div class="why-title">Pullback / Entry</div>
-          <div class="why-desc">MA20과 현재가 위치</div>
-        </div>
-        <div class="points">+13</div>
-      </div>
-
-      <div class="why-row">
-        <div>
-          <div class="why-title">Volume</div>
-          <div class="why-desc">20일 평균 대비 1.45x</div>
-        </div>
-        <div class="points status-good">+14</div>
-      </div>
-
-      <div class="why-row">
-        <div>
-          <div class="why-title">Risk / Reward</div>
-          <div class="why-desc">예상 R/R 약 2.6</div>
-        </div>
-        <div class="points">+12</div>
-      </div>
-
-      <div class="why-row">
-        <div>
-          <div class="why-title">Options</div>
-          <div class="why-desc">보조 심리 신호</div>
-        </div>
-        <div class="points">+4</div>
-      </div>
-    </div>
-
-    <div class="section-title mt16">POSITION MANAGER</div>
-
-    <div class="card">
-
-      <div class="form-grid">
-        <div>
-          <label>보유수량</label>
-          <input id="positionQty" type="number" step="0.0001" placeholder="0" />
-        </div>
-
-        <div>
-          <label>평단가</label>
-          <input id="positionAvg" type="number" step="0.01" placeholder="0" />
-        </div>
-
-        <div class="full">
-          <label>이 종목 최대 투입금</label>
-          <input id="positionMax" type="number" step="1" placeholder="예: 25000" />
-        </div>
-      </div>
-
-      <button class="btn green mt10" style="width:100%" onclick="savePosition()">
-        포지션 저장
+      <button class="tab active" data-index="0">
+        <span class="ico">⌂</span>
+        <span>HOME</span>
       </button>
 
-      <div id="positionSummary" class="mt16"></div>
-    </div>
+      <button class="tab" data-index="1">
+        <span class="ico">◎</span>
+        <span>WATCH</span>
+      </button>
 
-    <div class="section-title mt16">BUY PLAN</div>
+      <button class="tab" data-index="2">
+        <span class="ico">✦</span>
+        <span>DISCOVER</span>
+      </button>
 
-    <div class="card" id="buyPlan"></div>
+      <button class="tab" data-index="3">
+        <span class="ico">▣</span>
+        <span>POSITION</span>
+      </button>
 
-    <div class="section-title mt16">SIGNAL LOG</div>
+      <button class="tab" data-index="4">
+        <span class="ico">•••</span>
+        <span>MORE</span>
+      </button>
 
-    <div class="card">
-      <div class="note">
-        Strong Buy / Buy Candidate 신호는 실제 매수 여부와 상관없이 향후 Supabase에 기록한다.
-        이후 5일 / 20일 / 60일 성과를 비교해 모델 개선에 사용한다.
+    </nav>
+
+
+    <!-- DETAIL -->
+    <section class="detail" id="detail">
+
+      <header class="detail-head">
+
+        <button class="icon-btn" id="closeDetail">‹</button>
+
+        <div class="detail-title">
+          <b id="detailTicker">NVDA</b>
+          <small id="detailSubtitle">WATCH DETAIL</small>
+        </div>
+
+        <button class="icon-btn" id="nextDetail">›</button>
+
+      </header>
+
+
+      <div class="detail-body">
+
+        <div class="detail-inner">
+
+
+          <div class="card hero-card">
+
+            <div class="hero-top">
+
+              <div>
+                <div class="muted" style="font-size:12px" id="assetType">
+                  US EQUITY
+                </div>
+
+                <div style="font-size:26px;font-weight:900;margin-top:4px" id="detailPrice">
+                  $—
+                </div>
+
+                <div class="badge good" style="margin-top:8px" id="detailSignal">
+                  STRONG BUY
+                </div>
+              </div>
+
+              <div class="hero-score" id="detailScore">
+                89<small>/100</small>
+              </div>
+
+            </div>
+
+            <div class="mini-grid">
+
+              <div class="mini">
+                <label>Daily</label>
+                <b class="good-text" id="dailyState">Bullish</b>
+              </div>
+
+              <div class="mini">
+                <label>4H timing</label>
+                <b class="warn-text" id="timingState">Wait</b>
+              </div>
+
+              <div class="mini">
+                <label>MA200 dist.</label>
+                <b id="ma200Dist">+8.2%</b>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="section-head">
+
+              <h3>Price chart</h3>
+
+              <div class="tf-toggle">
+                <button class="active" data-tf="1D">1D</button>
+                <button data-tf="4H">4H</button>
+              </div>
+
+            </div>
+
+            <div class="chart-wrap" id="chartWrap">
+
+              <div class="chart-grid"></div>
+
+              <svg
+                class="chart-svg"
+                id="chartSvg"
+                viewBox="0 0 800 300"
+                preserveAspectRatio="none">
+              </svg>
+
+              <div class="chart-legend">
+                <span>MA20</span>
+                <span>MA50</span>
+                <span style="color:#fff;font-weight:900">MA200</span>
+                <span>VOL</span>
+              </div>
+
+              <div class="signal-tag" id="signalTag">
+                ▲ STRONG BUY · 89
+              </div>
+
+              <div class="chart-note">
+                DEMO CHART · Twelve Data 연결 후 실제 OHLCV로 교체
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="section-head">
+              <h3>MA200 gate</h3>
+              <span>Long-term filter</span>
+            </div>
+
+            <div class="why-grid">
+
+              <div class="why-item">
+                <div>
+                  <span>Price vs MA200</span>
+                  <small>장기 추세 필터</small>
+                </div>
+                <b class="good-text" id="priceVs200">ABOVE</b>
+              </div>
+
+              <div class="why-item">
+                <div>
+                  <span>MA200 slope</span>
+                  <small>상승/횡보/하락</small>
+                </div>
+                <b class="good-text" id="ma200Slope">RISING</b>
+              </div>
+
+              <div class="why-item">
+                <div>
+                  <span>MA50 vs MA200</span>
+                  <small>중장기 구조</small>
+                </div>
+                <b id="maCross">MA50 &gt; MA200</b>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="section-head">
+              <h3>Why this score?</h3>
+              <span>설명 가능한 점수</span>
+            </div>
+
+            <div class="why-grid" id="whyGrid"></div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="section-head">
+              <h3>Volume</h3>
+              <span>Daily confirmation</span>
+            </div>
+
+            <div class="position-grid">
+
+              <div class="stat">
+                <small>20D AVG</small>
+                <b id="volAvg">—</b>
+              </div>
+
+              <div class="stat">
+                <small>RELATIVE VOL</small>
+                <b id="relVol">—</b>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="section-head">
+              <h3>Options sentiment</h3>
+              <span>API 미연결</span>
+            </div>
+
+            <div class="empty">
+              Options 데이터 공급자 확정 후
+              Call/Put, IV, OI를 보조점수로 연결합니다.
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="section-head">
+              <h3>Position plan</h3>
+              <span id="positionModeText">NOT OWNED</span>
+            </div>
+
+            <div class="position-grid" id="positionStats"></div>
+
+            <div style="height:10px"></div>
+
+            <div class="plan-grid" id="scalePlan"></div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="section-head">
+              <h3>Risk plan</h3>
+              <span>R/R Gate</span>
+            </div>
+
+            <div class="why-grid">
+
+              <div class="why-item">
+                <div>
+                  <span>Invalidation / Stop</span>
+                  <small>기술적 무효화 기준</small>
+                </div>
+                <b class="bad-text" id="stopText">—</b>
+              </div>
+
+              <div class="why-item">
+                <div>
+                  <span>Target 1</span>
+                  <small>2R 기준</small>
+                </div>
+                <b id="target1">—</b>
+              </div>
+
+              <div class="why-item">
+                <div>
+                  <span>Target 2</span>
+                  <small>3R 기준</small>
+                </div>
+                <b id="target2">—</b>
+              </div>
+
+            </div>
+
+          </div>
+
+
+        </div>
+
       </div>
-    </div>
+
+    </section>
 
   </div>
+
 </div>
 
 
 <script>
 
-const APP_VERSION = "0.2.0";
-
-let currentPage = 0;
-let detailTicker = null;
-
-const watchDefaults = [
-  {
-    ticker: "NVDA",
-    type: "US STOCK",
-    price: 182.40,
-    change: 1.8,
-    entry: 88,
-    technical: 91,
-    risk: 54,
-    ma20: 177.20,
-    ma50: 166.40,
-    ma200: 142.10,
-    rsi: 61,
-    atr: 5.80,
-    vol: "61M",
-    vol20: "42M",
-    relvol: "1.45x"
-  },
-  {
-    ticker: "GOOGL",
-    type: "US STOCK",
-    price: 205.30,
-    change: .6,
-    entry: 82,
-    technical: 87,
-    risk: 46,
-    ma20: 201.10,
-    ma50: 194.90,
-    ma200: 171.30,
-    rsi: 58,
-    atr: 4.20,
-    vol: "28M",
-    vol20: "25M",
-    relvol: "1.12x"
-  },
-  {
-    ticker: "TSLA",
-    type: "US STOCK",
-    price: 418.20,
-    change: -1.2,
-    entry: 76,
-    technical: 81,
-    risk: 72,
-    ma20: 405.20,
-    ma50: 386.10,
-    ma200: 341.40,
-    rsi: 68,
-    atr: 18.70,
-    vol: "94M",
-    vol20: "78M",
-    relvol: "1.21x"
-  },
-  {
-    ticker: "SOXX",
-    type: "ETF",
-    price: 307.40,
-    change: .4,
-    entry: 71,
-    technical: 79,
-    risk: 58,
-    ma20: 303.80,
-    ma50: 295.10,
-    ma200: 267.30,
-    rsi: 57,
-    atr: 6.40,
-    vol: "4.8M",
-    vol20: "4.1M",
-    relvol: "1.17x"
-  },
-  {
-    ticker: "BTC",
-    type: "CRYPTO",
-    price: 78450,
-    change: 2.1,
-    entry: 69,
-    technical: 74,
-    risk: 79,
-    ma20: 76800,
-    ma50: 74100,
-    ma200: 66800,
-    rsi: 63,
-    atr: 2650,
-    vol: "—",
-    vol20: "—",
-    relvol: "—"
-  }
-];
-
-let watchList = JSON.parse(localStorage.getItem("stockpm_watchlist") || "null") || watchDefaults;
-let positions = JSON.parse(localStorage.getItem("stockpm_positions") || "{}");
-
-function signalFromScore(score, stock) {
-  const maGate = stock.price > stock.ma200;
-
-  if (score >= 85 && maGate) {
-    return {
-      text: "STRONG BUY",
-      cls: "strong"
-    };
-  }
-
-  if (score >= 75 && maGate) {
-    return {
-      text: "BUY CANDIDATE",
-      cls: "buy"
-    };
-  }
-
-  if (score >= 65) {
-    return {
-      text: "WATCH",
-      cls: "watch"
-    };
-  }
-
-  return {
-    text: "WAIT",
-    cls: "wait"
-  };
-}
-
-function money(v, type = "US STOCK") {
-  if (type === "CRYPTO") {
-    return "$" + Number(v).toLocaleString(undefined, {
-      maximumFractionDigits: 0
-    });
-  }
-
-  return "$" + Number(v).toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
-}
-
-function renderWatch() {
-  const list = document.getElementById("watchList");
-
-  const sorted = [...watchList].sort((a,b) => b.entry - a.entry);
-
-  list.innerHTML = sorted.map(stock => {
-    const signal = signalFromScore(stock.entry, stock);
-
-    return `
-      <div class="card clickable" onclick="openDetail('${stock.ticker}')">
-        <div class="row">
-
-          <div>
-            <div class="ticker">${stock.ticker}</div>
-            <div class="sub">
-              ${stock.type} · ${money(stock.price, stock.type)}
-              <span class="${stock.change >= 0 ? "up" : "down"}">
-                ${stock.change >= 0 ? "+" : ""}${stock.change}%
-              </span>
-            </div>
-          </div>
-
-          <div class="score">
-            <strong>${stock.entry}</strong>
-            <span>ENTRY</span>
-          </div>
-
-          <span class="badge ${signal.cls}">
-            ${signal.text}
-          </span>
-
-        </div>
-
-        <div class="mini-bar">
-          <div style="width:${stock.entry}%"></div>
-        </div>
-      </div>
-    `;
-  }).join("");
-}
-
-function renderHome() {
-  const el = document.getElementById("homeCandidates");
-
-  const candidates = [...watchList]
-    .sort((a,b) => b.entry - a.entry)
-    .slice(0,3);
-
-  el.innerHTML = candidates.map((stock, index) => {
-    const signal = signalFromScore(stock.entry, stock);
-
-    return `
-      <div class="card clickable" onclick="openDetail('${stock.ticker}')">
-        <div class="row">
-
-          <div style="min-width:28px;font-weight:800;color:#657087">
-            ${index + 1}
-          </div>
-
-          <div style="flex:1">
-            <div class="ticker">${stock.ticker}</div>
-            <div class="sub">${signal.text}</div>
-          </div>
-
-          <div style="text-align:right">
-            <strong style="font-size:22px">${stock.entry}</strong>
-            <div class="tiny">ENTRY</div>
-          </div>
-
-        </div>
-      </div>
-    `;
-  }).join("");
-}
-
-function renderPositions() {
-  const el = document.getElementById("positionList");
-
-  const entries = Object.entries(positions);
-
-  document.getElementById("positionCount").textContent = entries.length;
-
-  if (!entries.length) {
-    el.innerHTML = `
-      <div class="card empty">
-        아직 등록된 보유 포지션이 없어.<br>
-        WATCH 종목을 눌러 보유수량과 평단을 입력하면 여기에 나타나.
-      </div>
-    `;
-    return;
-  }
-
-  el.innerHTML = entries.map(([ticker, p]) => {
-
-    const stock = watchList.find(s => s.ticker === ticker);
-
-    if (!stock) return "";
-
-    const currentValue = stock.price * p.qty;
-    const invested = p.avg * p.qty;
-    const pnl = invested > 0 ? ((currentValue / invested) - 1) * 100 : 0;
-
-    return `
-      <div class="card clickable" onclick="openDetail('${ticker}')">
-
-        <div class="row">
-          <div>
-            <div class="ticker">${ticker}</div>
-            <div class="sub">
-              ${p.qty} units · AVG ${money(p.avg, stock.type)}
-            </div>
-          </div>
-
-          <div class="${pnl >= 0 ? "up" : "down"}" style="font-weight:800">
-            ${pnl >= 0 ? "+" : ""}${pnl.toFixed(2)}%
-          </div>
-        </div>
-
-        <div class="grid3 mt16">
-          <div class="metric">
-            <div class="label">INVESTED</div>
-            <div class="value">
-              ${money(invested, stock.type)}
-            </div>
-          </div>
-
-          <div class="metric">
-            <div class="label">VALUE</div>
-            <div class="value">
-              ${money(currentValue, stock.type)}
-            </div>
-          </div>
-
-          <div class="metric">
-            <div class="label">ENTRY</div>
-            <div class="value">
-              ${stock.entry}
-            </div>
-          </div>
-        </div>
-
-      </div>
-    `;
-  }).join("");
-}
-
-function openDetail(ticker) {
-  const stock = watchList.find(s => s.ticker === ticker);
-
-  if (!stock) return;
-
-  detailTicker = ticker;
-
-  const signal = signalFromScore(stock.entry, stock);
-
-  document.getElementById("detailTicker").textContent = stock.ticker;
-  document.getElementById("detailType").textContent = stock.type;
-  document.getElementById("detailPrice").textContent = money(stock.price, stock.type);
-
-  const change = document.getElementById("detailChange");
-  change.textContent = `${stock.change >= 0 ? "+" : ""}${stock.change}%`;
-  change.className = stock.change >= 0 ? "up" : "down";
-
-  const signalEl = document.getElementById("detailSignal");
-  signalEl.textContent = signal.text;
-  signalEl.className = `badge ${signal.cls}`;
-
-  document.getElementById("entryScore").textContent = stock.entry;
-  document.getElementById("technicalScore").textContent = stock.technical;
-  document.getElementById("riskScore").textContent = stock.risk;
-
-  document.getElementById("ma20Value").textContent = money(stock.ma20, stock.type);
-  document.getElementById("ma50Value").textContent = money(stock.ma50, stock.type);
-  document.getElementById("ma200Value").textContent = money(stock.ma200, stock.type);
-  document.getElementById("rsiValue").textContent = stock.rsi;
-  document.getElementById("atrValue").textContent = money(stock.atr, stock.type);
-
-  const dist = ((stock.price / stock.ma200) - 1) * 100;
-  document.getElementById("ma200Distance").textContent =
-    `${dist >= 0 ? "+" : ""}${dist.toFixed(1)}%`;
-
-  const maStatus = document.getElementById("ma200Status");
-
-  if (stock.price > stock.ma200) {
-    maStatus.textContent = "BULLISH";
-    maStatus.className = "badge strong";
-  } else {
-    maStatus.textContent = "BELOW MA200";
-    maStatus.className = "badge risk";
-  }
-
-  document.getElementById("volumeToday").textContent = stock.vol;
-  document.getElementById("volume20").textContent = stock.vol20;
-  document.getElementById("relativeVolume").textContent = stock.relvol;
-
-  const p = positions[ticker] || {
-    qty: 0,
-    avg: 0,
-    max: 0
-  };
-
-  document.getElementById("positionQty").value = p.qty || "";
-  document.getElementById("positionAvg").value = p.avg || "";
-  document.getElementById("positionMax").value = p.max || "";
-
-  renderPositionSummary(stock, p);
-  renderBuyPlan(stock, p);
-
-  document.getElementById("detailPanel").classList.add("open");
-}
-
-function closeDetail() {
-  document.getElementById("detailPanel").classList.remove("open");
-}
-
-function savePosition() {
-  if (!detailTicker) return;
-
-  const qty = Number(document.getElementById("positionQty").value) || 0;
-  const avg = Number(document.getElementById("positionAvg").value) || 0;
-  const max = Number(document.getElementById("positionMax").value) || 0;
-
-  if (qty <= 0) {
-    delete positions[detailTicker];
-  } else {
-    positions[detailTicker] = {
-      qty,
-      avg,
-      max
-    };
-  }
-
-  localStorage.setItem("stockpm_positions", JSON.stringify(positions));
-
-  const stock = watchList.find(s => s.ticker === detailTicker);
-
-  renderPositionSummary(stock, positions[detailTicker] || {qty:0,avg:0,max:0});
-  renderBuyPlan(stock, positions[detailTicker] || {qty:0,avg:0,max:0});
-
-  renderPositions();
-  renderHome();
-}
-
-function renderPositionSummary(stock, p) {
-  const el = document.getElementById("positionSummary");
-
-  if (!p.qty || !p.avg) {
-    el.innerHTML = `
-      <div class="note">
-        미보유 상태 · 현재 신호는 신규진입 플랜 기준으로 계산됨.
-      </div>
-    `;
-    return;
-  }
-
-  const invested = p.qty * p.avg;
-  const currentValue = p.qty * stock.price;
-
-  const pnl = ((stock.price / p.avg) - 1) * 100;
-  const remain = Math.max(0, (p.max || 0) - invested);
-
-  el.innerHTML = `
-    <div class="grid2">
-
-      <div class="metric">
-        <div class="label">투입금</div>
-        <div class="value">${money(invested, stock.type)}</div>
-      </div>
-
-      <div class="metric">
-        <div class="label">평가금</div>
-        <div class="value">${money(currentValue, stock.type)}</div>
-      </div>
-
-      <div class="metric">
-        <div class="label">수익률</div>
-        <div class="value ${pnl >= 0 ? "up" : "down"}">
-          ${pnl >= 0 ? "+" : ""}${pnl.toFixed(2)}%
-        </div>
-      </div>
-
-      <div class="metric">
-        <div class="label">추가 가능</div>
-        <div class="value">${money(remain, stock.type)}</div>
-      </div>
-
-    </div>
-  `;
-}
-
-function renderBuyPlan(stock, p) {
-  const el = document.getElementById("buyPlan");
-
-  const signal = signalFromScore(stock.entry, stock);
-
-  const atr = stock.atr;
-
-  const prices = [
-    stock.price,
-    Math.max(stock.ma20, stock.price - atr),
-    Math.max(stock.ma50, stock.price - atr * 2)
-  ];
-
-  const invalidation = Math.min(stock.ma50, stock.price - atr * 2.2);
-
-  const target1 = stock.price + (stock.price - invalidation) * 2;
-  const target2 = stock.price + (stock.price - invalidation) * 3;
-
-  const max = p.max || 0;
-  const invested = (p.qty || 0) * (p.avg || 0);
-  const remaining = Math.max(0, max - invested);
-
-  const allocations = [0.25, 0.30, 0.30];
-
-  let html = `
-    <div class="row">
-      <div>
-        <div class="why-title">Current Action</div>
-        <div class="why-desc">
-          ${signal.text}
-        </div>
-      </div>
-
-      <span class="badge ${signal.cls}">
-        ${stock.entry}
-      </span>
-    </div>
-
-    <div class="divider"></div>
-  `;
-
-  prices.forEach((price, i) => {
-
-    const amount = remaining
-      ? remaining * allocations[i]
-      : 0;
-
-    const qty = amount
-      ? amount / price
-      : 0;
-
-    let projectedAvg = 0;
-
-    if (p.qty && p.avg && qty) {
-      projectedAvg =
-        ((p.qty * p.avg) + (qty * price)) /
-        (p.qty + qty);
+const APP_VERSION='0.2.0';
+
+const $=id=>document.getElementById(id);
+
+const store={
+  get(k,d){
+    try{
+      return JSON.parse(localStorage.getItem(k))??d
+    }catch{
+      return d
     }
+  },
+  set(k,v){
+    localStorage.setItem(k,JSON.stringify(v))
+  }
+};
 
-    html += `
-      <div class="plan-row">
+let currentPage=0;
+let detailIndex=0;
+let detailTf='1D';
+
+let watch=store.get(
+  'stockpm_watch',
+  ['NVDA','TSLA','SOXX','QQQ','BTC/USD']
+);
+
+let positions=store.get(
+  'stockpm_positions',
+  {}
+);
+
+let leveragePositions=store.get(
+  'stockpm_leverage',
+  []
+);
+
+
+const demo={
+
+  'NVDA':{
+    score:89,
+    signal:'STRONG BUY',
+    daily:'Bullish',
+    timing:'Wait',
+    price:182.4,
+    ma200:168.6,
+    ma200Slope:'RISING',
+    technical:92,
+    momentum:86,
+    entry:88,
+    volume:84,
+    rr:82,
+    market:78,
+    risk:58,
+    relVol:1.46,
+    volAvg:'42.1M',
+    stop:168.2,
+    t1:210.8,
+    t2:225.0,
+    type:'US EQUITY'
+  },
+
+  'TSLA':{
+    score:81,
+    signal:'BUY CANDIDATE',
+    daily:'Bullish',
+    timing:'Ready',
+    price:410.2,
+    ma200:382.5,
+    ma200Slope:'RISING',
+    technical:85,
+    momentum:79,
+    entry:80,
+    volume:72,
+    rr:74,
+    market:78,
+    risk:72,
+    relVol:1.21,
+    volAvg:'96.4M',
+    stop:374.0,
+    t1:482.6,
+    t2:518.8,
+    type:'US EQUITY'
+  },
+
+  'SOXX':{
+    score:77,
+    signal:'BUY CANDIDATE',
+    daily:'Bullish',
+    timing:'Wait',
+    price:286.1,
+    ma200:273.8,
+    ma200Slope:'RISING',
+    technical:83,
+    momentum:73,
+    entry:75,
+    volume:67,
+    rr:71,
+    market:81,
+    risk:51,
+    relVol:1.08,
+    volAvg:'3.8M',
+    stop:268.5,
+    t1:321.3,
+    t2:338.9,
+    type:'ETF'
+  },
+
+  'QQQ':{
+    score:69,
+    signal:'WATCH',
+    daily:'Bullish',
+    timing:'Wait',
+    price:612.5,
+    ma200:574.2,
+    ma200Slope:'RISING',
+    technical:80,
+    momentum:68,
+    entry:63,
+    volume:61,
+    rr:62,
+    market:80,
+    risk:39,
+    relVol:.94,
+    volAvg:'49.7M',
+    stop:584.0,
+    t1:669.5,
+    t2:698.0,
+    type:'ETF'
+  },
+
+  'BTC/USD':{
+    score:73,
+    signal:'WATCH',
+    daily:'Bullish',
+    timing:'Ready',
+    price:78500,
+    ma200:72100,
+    ma200Slope:'RISING',
+    technical:82,
+    momentum:74,
+    entry:69,
+    volume:71,
+    rr:65,
+    market:66,
+    risk:84,
+    relVol:1.18,
+    volAvg:'—',
+    stop:70400,
+    t1:94700,
+    t2:102800,
+    type:'CRYPTO'
+  }
+
+};
+
+
+function dataFor(s){
+
+  return demo[s]||{
+    score:68,
+    signal:'WATCH',
+    daily:'Neutral',
+    timing:'Wait',
+    price:100,
+    ma200:96,
+    ma200Slope:'FLAT',
+    technical:70,
+    momentum:64,
+    entry:66,
+    volume:60,
+    rr:65,
+    market:67,
+    risk:55,
+    relVol:1.0,
+    volAvg:'—',
+    stop:92,
+    t1:116,
+    t2:124,
+    type:'US EQUITY'
+  }
+
+}
+
+
+function signalClass(s){
+
+  return s.includes('STRONG')||s.includes('BUY')
+    ?'good'
+    :s==='WATCH'
+      ?'warn'
+      :'neutral';
+
+}
+
+
+function fmtPrice(n,type='US EQUITY'){
+
+  if(!Number.isFinite(+n)) return '—';
+
+  return '$'+(+n).toLocaleString(
+    undefined,
+    {maximumFractionDigits:2}
+  );
+
+}
+
+
+function renderWatch(){
+
+  const sorted=[...watch].sort(
+    (a,b)=>dataFor(b).score-dataFor(a).score
+  );
+
+  $('watchList').innerHTML=sorted.map((s,i)=>{
+
+    const d=dataFor(s);
+
+    return `
+      <div class="ticker-row" data-symbol="${s}">
 
         <div>
-          <div class="why-title">
-            ${i + 1}차 분할매수
-          </div>
 
-          <div class="why-desc">
-            ${money(price, stock.type)}
-            ${amount ? `· 약 ${qty.toFixed(stock.type === "CRYPTO" ? 4 : 2)} units` : ""}
-          </div>
+          <div style="display:flex;gap:8px;align-items:center">
 
-          ${
-            projectedAvg
-            ? `<div class="why-desc">예상 평단 ${money(projectedAvg, stock.type)}</div>`
-            : ""
-          }
+            <span class="rank">${i+1}</span>
+
+            <div>
+              <div class="ticker-name">${s}</div>
+              <div class="ticker-meta">
+                ${d.signal} · ${d.daily} / 4H ${d.timing}
+              </div>
+            </div>
+
+          </div>
 
         </div>
 
-        <div style="text-align:right">
-          <strong>${[25,30,30][i]}%</strong>
+        <div class="score-circle">
+          ${d.score}
         </div>
+
+        <div class="chev">›</div>
 
       </div>
     `;
+
+  }).join('');
+
+
+  document.querySelectorAll(
+    '#watchList .ticker-row'
+  ).forEach(x=>
+
+    x.onclick=()=>
+      openDetail(x.dataset.symbol)
+
+  );
+
+}
+
+
+function renderHome(){
+
+  const top=[...watch]
+    .sort(
+      (a,b)=>dataFor(b).score-dataFor(a).score
+    )
+    .slice(0,4);
+
+
+  $('homeCandidates').innerHTML=top.map((s,i)=>{
+
+    const d=dataFor(s);
+
+    return `
+      <div class="ticker-row" data-symbol="${s}">
+
+        <div>
+
+          <div class="ticker-name">
+            ${s}
+          </div>
+
+          <div class="ticker-meta">
+            ${d.signal} · 4H ${d.timing}
+          </div>
+
+        </div>
+
+        <div class="score-circle">
+          ${d.score}
+        </div>
+
+        <div class="chev">›</div>
+
+      </div>
+    `;
+
+  }).join('');
+
+
+  document.querySelectorAll(
+    '#homeCandidates .ticker-row'
+  ).forEach(x=>
+
+    x.onclick=()=>
+      openDetail(x.dataset.symbol)
+
+  );
+
+}
+
+
+function renderPositions(){
+
+  const spot=Object.entries(positions);
+  const lev=leveragePositions;
+
+  $('positionCount').textContent=
+    `${spot.length+lev.length}`;
+
+  let html='';
+
+
+  spot.forEach(([s,p])=>{
+
+    html+=`
+      <div class="ticker-row" data-symbol="${s}">
+
+        <div>
+
+          <div class="ticker-name">
+            ${s}
+          </div>
+
+          <div class="ticker-meta">
+            SPOT · ${p.qty} @ ${p.avg}
+          </div>
+
+        </div>
+
+        <div class="score-circle">
+          ${dataFor(s).score}
+        </div>
+
+        <div class="chev">›</div>
+
+      </div>
+    `;
+
   });
 
-  html += `
-    <div class="plan-row">
-      <div>
-        <div class="why-title">돌파 추가</div>
-        <div class="why-desc">
-          최근 전고점 돌파 + 거래량 증가 시
+
+  lev.forEach(p=>{
+
+    html+=`
+      <div class="ticker-row">
+
+        <div>
+
+          <div class="ticker-name">
+            ${p.symbol}
+          </div>
+
+          <div class="ticker-meta">
+            BYBIT ${p.side} ·
+            ${p.leverage}x ·
+            Entry ${p.entry}
+          </div>
+
         </div>
-      </div>
-      <strong>15%</strong>
-    </div>
 
-    <div class="divider"></div>
-
-    <div class="grid2">
-      <div class="metric">
-        <div class="label">INVALIDATION</div>
-        <div class="value down">
-          ${money(invalidation, stock.type)}
+        <div class="score-circle">
+          ⚡
         </div>
-      </div>
 
-      <div class="metric">
-        <div class="label">R/R</div>
-        <div class="value">~2.0+</div>
-      </div>
+        <div class="chev">›</div>
 
-      <div class="metric">
-        <div class="label">TARGET 1</div>
-        <div class="value">
-          ${money(target1, stock.type)}
-        </div>
       </div>
+    `;
 
-      <div class="metric">
-        <div class="label">TARGET 2</div>
-        <div class="value">
-          ${money(target2, stock.type)}
-        </div>
-      </div>
-    </div>
+  });
 
-    <div class="note mt10">
-      가격이 내려갔다고 무조건 추가매수하지 않는다.
-      MA200 Gate · 추세 · 거래량 · Entry Score가 유지되는 경우에만 추가매수를 허용한다.
-    </div>
+
+  $('positionList').innerHTML=
+    html||
+    '<div class="empty">실제 체결 포지션을 등록하면 여기에 표시됩니다.</div>';
+
+
+  document.querySelectorAll(
+    '#positionList [data-symbol]'
+  ).forEach(x=>
+
+    x.onclick=()=>
+      openDetail(x.dataset.symbol)
+
+  );
+
+}
+
+
+function gotoPage(i,animate=true){
+
+  i=Math.max(
+    0,
+    Math.min(4,i)
+  );
+
+  currentPage=i;
+
+  const t=$('track');
+
+  t.classList.toggle(
+    'animating',
+    animate
+  );
+
+  t.style.transform=
+    `translate3d(${-i*100}%,0,0)`;
+
+  document.querySelectorAll('.tab')
+    .forEach(
+      (b,n)=>
+        b.classList.toggle(
+          'active',
+          n===i
+        )
+    );
+
+}
+
+
+document.querySelectorAll('.tab')
+  .forEach(
+    b=>
+      b.onclick=()=>
+        gotoPage(
+          +b.dataset.index,
+          true
+        )
+  );
+
+
+let startX=0;
+let startY=0;
+let dragging=false;
+let baseX=0;
+
+
+$('viewport').addEventListener(
+  'touchstart',
+  e=>{
+
+    if(
+      $('detail')
+      .classList
+      .contains('open')
+    ) return;
+
+    const t=e.touches[0];
+
+    startX=t.clientX;
+    startY=t.clientY;
+
+    baseX=
+      -currentPage*
+      window.innerWidth;
+
+    dragging=true;
+
+    $('track')
+      .classList
+      .remove('animating');
+
+  },
+  {passive:true}
+);
+
+
+$('viewport').addEventListener(
+  'touchmove',
+  e=>{
+
+    if(!dragging) return;
+
+    const t=e.touches[0];
+
+    const dx=
+      t.clientX-startX;
+
+    const dy=
+      t.clientY-startY;
+
+    if(
+      Math.abs(dy)>
+      Math.abs(dx)*1.15
+    ) return;
+
+    let x=
+      baseX+dx;
+
+    if(
+      currentPage===0 &&
+      dx>0
+    ){
+      x=baseX+dx*.28;
+    }
+
+    if(
+      currentPage===4 &&
+      dx<0
+    ){
+      x=baseX+dx*.28;
+    }
+
+    $('track')
+      .style
+      .transform=
+      `translate3d(${x}px,0,0)`;
+
+  },
+  {passive:true}
+);
+
+
+$('viewport').addEventListener(
+  'touchend',
+  e=>{
+
+    if(!dragging) return;
+
+    dragging=false;
+
+    const dx=
+      e.changedTouches[0].clientX-
+      startX;
+
+    const threshold=
+      Math.min(
+        90,
+        window.innerWidth*.22
+      );
+
+    if(
+      dx<-threshold &&
+      currentPage<4
+    ){
+      currentPage++;
+    }
+
+    else if(
+      dx>threshold &&
+      currentPage>0
+    ){
+      currentPage--;
+    }
+
+    gotoPage(
+      currentPage,
+      true
+    );
+
+  },
+  {passive:true}
+);
+
+
+function drawDemoChart(symbol,tf){
+
+  const d=dataFor(symbol);
+
+  const svg=$('chartSvg');
+
+  const W=800;
+  const H=300;
+
+  const N=
+    tf==='1D'
+    ?54
+    :44;
+
+
+  let seed=
+    [...symbol]
+      .reduce(
+        (a,c)=>
+          a+c.charCodeAt(0),
+        0
+      )+
+    (tf==='4H'?19:0);
+
+
+  function rnd(){
+
+    seed=
+      (seed*9301+49297)
+      %233280;
+
+    return seed/233280;
+
+  }
+
+
+  let p=d.price*.86;
+
+  let arr=[];
+
+
+  for(
+    let i=0;
+    i<N;
+    i++
+  ){
+
+    const drift=
+      (d.price-p)/
+      (N-i)*
+      .18;
+
+    let o=p;
+
+    let c=Math.max(
+      1,
+      o+
+      drift+
+      (rnd()-.47)*
+      d.price*.018
+    );
+
+    let h=
+      Math.max(o,c)+
+      rnd()*
+      d.price*.011;
+
+    let l=
+      Math.min(o,c)-
+      rnd()*
+      d.price*.011;
+
+    arr.push({
+      o,
+      h,
+      l,
+      c,
+      v:.35+rnd()*.65
+    });
+
+    p=c;
+
+  }
+
+
+  const min=
+    Math.min(
+      ...arr.map(x=>x.l),
+      d.ma200
+    )*.97;
+
+
+  const max=
+    Math.max(
+      ...arr.map(x=>x.h),
+      d.ma200
+    )*1.03;
+
+
+  const y=v=>
+    H-40-
+    (v-min)/
+    (max-min)*
+    (H-70);
+
+
+  const cw=W/N;
+
+  let html='';
+
+
+  const ma200Y=
+    y(d.ma200);
+
+
+  html+=`
+    <line
+      x1="0"
+      y1="${ma200Y}"
+      x2="800"
+      y2="${ma200Y}"
+      stroke="#f6f8fb"
+      stroke-width="2"
+      opacity=".8"
+    />
+
+    <text
+      x="706"
+      y="${ma200Y-6}"
+      fill="#f6f8fb"
+      font-size="10">
+      MA200
+    </text>
   `;
 
-  el.innerHTML = html;
-}
 
-function addWatchTicker() {
-  const input = document.getElementById("watchTickerInput");
+  arr.forEach((x,i)=>{
 
-  const ticker = input.value.trim().toUpperCase();
+    const cx=
+      i*cw+
+      cw*.5;
 
-  if (!ticker) return;
+    const yo=y(x.o);
+    const yc=y(x.c);
+    const yh=y(x.h);
+    const yl=y(x.l);
 
-  if (watchList.some(x => x.ticker === ticker)) {
-    input.value = "";
-    return;
-  }
+    const up=
+      x.c>=x.o;
 
-  watchList.push({
-    ticker,
-    type: ticker.includes("BTC") || ticker.includes("ETH") ? "CRYPTO" : "US STOCK",
-    price: 100,
-    change: 0,
-    entry: 50,
-    technical: 50,
-    risk: 50,
-    ma20: 98,
-    ma50: 95,
-    ma200: 85,
-    rsi: 50,
-    atr: 3,
-    vol: "—",
-    vol20: "—",
-    relvol: "—"
+    const col=
+      up
+      ?'#31d07c'
+      :'#ff6678';
+
+
+    html+=`
+      <line
+        x1="${cx}"
+        y1="${yh}"
+        x2="${cx}"
+        y2="${yl}"
+        stroke="${col}"
+        stroke-width="1"
+      />
+
+      <rect
+        x="${cx-cw*.23}"
+        y="${Math.min(yo,yc)}"
+        width="${Math.max(2,cw*.46)}"
+        height="${Math.max(2,Math.abs(yo-yc))}"
+        fill="${col}"
+        rx="1"
+      />
+    `;
+
+
+    const vh=
+      x.v*25;
+
+
+    html+=`
+      <rect
+        x="${cx-cw*.32}"
+        y="${H-vh-3}"
+        width="${cw*.64}"
+        height="${vh}"
+        fill="${col}"
+        opacity=".28"
+      />
+    `;
+
   });
 
-  localStorage.setItem("stockpm_watchlist", JSON.stringify(watchList));
 
-  input.value = "";
+  const markerX=W*.73;
 
-  renderWatch();
-  renderHome();
+  const markerY=
+    y(
+      arr[
+        Math.floor(N*.73)
+      ].l
+    )-9;
+
+
+  html+=`
+    <path
+      d="M ${markerX} ${markerY} l -7 -12 h 14 z"
+      fill="#31d07c"
+    />
+
+    <line
+      x1="${markerX}"
+      y1="${markerY}"
+      x2="${markerX}"
+      y2="${markerY+18}"
+      stroke="#31d07c"
+      opacity=".75"
+    />
+  `;
+
+
+  svg.innerHTML=html;
+
 }
 
-function goPage(index) {
-  currentPage = Math.max(0, Math.min(4, index));
 
-  document.getElementById("pages").style.transform =
-    `translateX(-${currentPage * 20}%)`;
+function whyRows(d){
 
-  document.querySelectorAll(".nav-item")
-    .forEach((el, i) => el.classList.toggle("active", i === currentPage));
+  return [
+
+    [
+      'MA200 / Long trend',
+      d.technical>=80
+      ?'+23 / 25'
+      :'+18 / 25',
+      `Price ${
+        d.price>d.ma200
+        ?'above'
+        :'below'
+      } MA200 · slope ${d.ma200Slope}`
+    ],
+
+    [
+      'Momentum',
+      `+${
+        Math.round(
+          d.momentum/100*15
+        )
+      } / 15`,
+      'RSI / MACD / 최근 가격 탄력'
+    ],
+
+    [
+      'Entry / Pullback',
+      `+${
+        Math.round(
+          d.entry/100*15
+        )
+      } / 15`,
+      '현재 위치와 지지구간'
+    ],
+
+    [
+      'Volume',
+      `+${
+        Math.round(
+          d.volume/100*15
+        )
+      } / 15`,
+      `Relative volume ${
+        d.relVol.toFixed(2)
+      }x`
+    ],
+
+    [
+      'Risk / Reward',
+      `+${
+        Math.round(
+          d.rr/100*15
+        )
+      } / 15`,
+      'Stop과 목표가 기준'
+    ],
+
+    [
+      'Market regime',
+      `+${
+        Math.round(
+          d.market/100*10
+        )
+      } / 10`,
+      'SPY / QQQ 시장환경'
+    ],
+
+    [
+      'Options',
+      '— / 5',
+      '데이터 공급자 연결 전 제외'
+    ]
+
+  ];
+
 }
 
-let touchStartX = 0;
-let touchCurrentX = 0;
-let isDragging = false;
 
-const viewport = document.getElementById("viewport");
+function openDetail(symbol){
 
-viewport.addEventListener("touchstart", e => {
-  touchStartX = e.touches[0].clientX;
-  touchCurrentX = touchStartX;
-  isDragging = true;
-}, {
-  passive: true
-});
+  detailIndex=
+    Math.max(
+      0,
+      watch.indexOf(symbol)
+    );
 
-viewport.addEventListener("touchmove", e => {
-  if (!isDragging) return;
-
-  touchCurrentX = e.touches[0].clientX;
-}, {
-  passive: true
-});
-
-viewport.addEventListener("touchend", () => {
-  if (!isDragging) return;
-
-  const dx = touchCurrentX - touchStartX;
-
-  if (Math.abs(dx) > 55) {
-    if (dx < 0) {
-      goPage(currentPage + 1);
-    } else {
-      goPage(currentPage - 1);
-    }
+  if(detailIndex<0){
+    detailIndex=0;
   }
 
-  isDragging = false;
-});
+  fillDetail(symbol);
 
-function init() {
-  renderWatch();
-  renderHome();
-  renderPositions();
+  $('detail')
+    .classList
+    .add('open');
 
-  document.getElementById("versionText").textContent =
-    `v${APP_VERSION} · Position Intelligence`;
 }
 
-init();
+
+function fillDetail(symbol){
+
+  const d=dataFor(symbol);
+
+  const p=
+    positions[symbol];
+
+
+  $('detailTicker')
+    .textContent=symbol;
+
+
+  $('assetType')
+    .textContent=d.type;
+
+
+  $('detailPrice')
+    .textContent=
+    fmtPrice(
+      d.price,
+      d.type
+    );
+
+
+  $('detailScore')
+    .innerHTML=
+    `${d.score}<small>/100</small>`;
+
+
+  $('detailSignal')
+    .textContent=
+    d.signal;
+
+
+  $('detailSignal')
+    .className=
+    `badge ${signalClass(d.signal)}`;
+
+
+  $('dailyState')
+    .textContent=
+    d.daily;
+
+
+  $('timingState')
+    .textContent=
+    d.timing;
+
+
+  $('timingState')
+    .className=
+    d.timing==='Ready'
+    ?'good-text'
+    :'warn-text';
+
+
+  const dist=
+    (
+      d.price/
+      d.ma200-
+      1
+    )*100;
+
+
+  $('ma200Dist')
+    .textContent=
+    `${dist>=0?'+':''}${dist.toFixed(1)}%`;
+
+
+  $('priceVs200')
+    .textContent=
+    d.price>d.ma200
+    ?'ABOVE'
+    :'BELOW';
+
+
+  $('priceVs200')
+    .className=
+    d.price>d.ma200
+    ?'good-text'
+    :'bad-text';
+
+
+  $('ma200Slope')
+    .textContent=
+    d.ma200Slope;
+
+
+  $('ma200Slope')
+    .className=
+    d.ma200Slope==='RISING'
+    ?'good-text'
+    :d.ma200Slope==='FLAT'
+      ?'warn-text'
+      :'bad-text';
+
+
+  $('maCross')
+    .textContent=
+    d.price>d.ma200
+    ?'MA50 > MA200'
+    :'CHECK TREND';
+
+
+  $('whyGrid')
+    .innerHTML=
+    whyRows(d)
+      .map(
+        x=>`
+          <div class="why-item">
+
+            <div>
+              <span>${x[0]}</span>
+              <small>${x[2]}</small>
+            </div>
+
+            <b>${x[1]}</b>
+
+          </div>
+        `
+      )
+      .join('');
+
+
+  $('volAvg')
+    .textContent=
+    d.volAvg;
+
+
+  $('relVol')
+    .textContent=
+    `${d.relVol.toFixed(2)}x`;
+
+
+  $('signalTag')
+    .textContent=
+    `▲ ${d.signal} · ${d.score}`;
+
+
+  $('stopText')
+    .textContent=
+    fmtPrice(
+      d.stop,
+      d.type
+    );
+
+
+  $('target1')
+    .textContent=
+    fmtPrice(
+      d.t1,
+      d.type
+    );
+
+
+  $('target2')
+    .textContent=
+    fmtPrice(
+      d.t2,
+      d.type
+    );
+
+
+  if(p){
+
+    const invested=
+      (+p.qty||0)*
+      (+p.avg||0);
+
+
+    const available=
+      Math.max(
+        0,
+        (+p.max||0)-
+        invested
+      );
+
+
+    const pnl=
+      p.avg
+      ?(
+        (
+          d.price/
+          p.avg-
+          1
+        )*100
+      )
+      :0;
+
+
+    $('positionModeText')
+      .textContent=
+      'OWNED';
+
+
+    $('positionStats')
+      .innerHTML=`
+
+        <div class="stat">
+          <small>Shares</small>
+          <b>${p.qty}</b>
+        </div>
+
+        <div class="stat">
+          <small>Average</small>
+          <b>${fmtPrice(+p.avg,d.type)}</b>
+        </div>
+
+        <div class="stat">
+          <small>P/L</small>
+          <b class="${pnl>=0?'good-text':'bad-text'}">
+            ${pnl>=0?'+':''}${pnl.toFixed(2)}%
+          </b>
+        </div>
+
+        <div class="stat">
+          <small>Available</small>
+          <b>$${available.toLocaleString()}</b>
+        </div>
+
+      `;
+
+
+    renderScale(
+      d,
+      available,
+      p
+    );
+
+  }
+
+  else{
+
+    $('positionModeText')
+      .textContent=
+      'NOT OWNED';
+
+
+    $('positionStats')
+      .innerHTML=`
+
+        <div class="stat">
+          <small>Status</small>
+          <b>Watch only</b>
+        </div>
+
+        <div class="stat">
+          <small>Strong-buy rule</small>
+          <b>
+            ${d.score>=85?'ELIGIBLE':'WAIT'}
+          </b>
+        </div>
+
+      `;
+
+
+    renderScale(
+      d,
+      10000,
+      null
+    );
+
+  }
+
+
+  drawDemoChart(
+    symbol,
+    detailTf
+  );
+
+}
+
+
+function renderScale(
+  d,
+  available,
+  p
+){
+
+  const prices=[
+    d.price,
+    d.price*.97,
+    Math.max(
+      d.ma200,
+      d.price*.93
+    ),
+    d.price*1.035
+  ];
+
+
+  const weights=[
+    .25,
+    .30,
+    .30,
+    .15
+  ];
+
+
+  const labels=[
+    '1차',
+    '2차',
+    '3차',
+    '돌파'
+  ];
+
+
+  let qtyBase=
+    +p?.qty||0;
+
+
+  let avg=
+    +p?.avg||0;
+
+
+  let cost=
+    qtyBase*avg;
+
+
+  $('scalePlan')
+    .innerHTML=
+    prices.map(
+      (price,i)=>{
+
+        const budget=
+          available*
+          weights[i];
+
+
+        const qty=
+          budget/
+          price;
+
+
+        const newQty=
+          qtyBase+
+          qty;
+
+
+        const newAvg=
+          newQty
+          ?(
+            cost+
+            budget
+          )/
+          newQty
+          :price;
+
+
+        qtyBase=
+          newQty;
+
+
+        cost+=
+          budget;
+
+
+        return `
+          <div class="plan-item">
+
+            <small>
+              ${labels[i]}
+            </small>
+
+            <b>
+              ${fmtPrice(price,d.type)}
+              ·
+              ${qty.toFixed(3)}
+            </b>
+
+            <em>
+              ${
+                p
+                ?`체결 후 예상 평단 ${fmtPrice(newAvg,d.type)}`
+                :`예산 ${(weights[i]*100).toFixed(0)}%`
+              }
+            </em>
+
+          </div>
+        `;
+
+      }
+    )
+    .join('');
+
+}
+
+
+$('closeDetail')
+  .onclick=
+  ()=>
+    $('detail')
+      .classList
+      .remove('open');
+
+
+$('nextDetail')
+  .onclick=
+  ()=>{
+
+    if(!watch.length) return;
+
+    detailIndex=
+      (
+        detailIndex+
+        1
+      )%
+      watch.length;
+
+    fillDetail(
+      watch[detailIndex]
+    );
+
+  };
+
+
+document.querySelectorAll(
+  '.tf-toggle button'
+).forEach(
+  b=>
+    b.onclick=
+    ()=>{
+
+      detailTf=
+        b.dataset.tf;
+
+      document.querySelectorAll(
+        '.tf-toggle button'
+      ).forEach(
+        x=>
+          x.classList.toggle(
+            'active',
+            x===b
+          )
+      );
+
+      fillDetail(
+        $('detailTicker')
+          .textContent
+      );
+
+    }
+);
+
+
+let dStartX=0;
+let dDragging=false;
+
+
+$('detail').addEventListener(
+  'touchstart',
+  e=>{
+
+    dStartX=
+      e.touches[0]
+      .clientX;
+
+    dDragging=true;
+
+  },
+  {passive:true}
+);
+
+
+$('detail').addEventListener(
+  'touchend',
+  e=>{
+
+    if(!dDragging) return;
+
+    dDragging=false;
+
+    const dx=
+      e.changedTouches[0]
+      .clientX-
+      dStartX;
+
+    if(
+      Math.abs(dx)<80
+    ) return;
+
+
+    if(dx<0){
+
+      detailIndex=
+        (
+          detailIndex+
+          1
+        )%
+        watch.length;
+
+    }
+
+    else{
+
+      detailIndex=
+        (
+          detailIndex-
+          1+
+          watch.length
+        )%
+        watch.length;
+
+    }
+
+
+    fillDetail(
+      watch[detailIndex]
+    );
+
+  },
+  {passive:true}
+);
+
+
+$('addWatchBtn')
+  .onclick=
+  ()=>{
+
+    let s=
+      $('watchInput')
+        .value
+        .trim()
+        .toUpperCase();
+
+    if(!s) return;
+
+
+    if(
+      !watch.includes(s)
+    ){
+
+      watch.push(s);
+
+      store.set(
+        'stockpm_watch',
+        watch
+      );
+
+    }
+
+
+    $('watchInput')
+      .value='';
+
+
+    renderWatch();
+    renderHome();
+
+  };
+
+
+$('watchInput')
+  .addEventListener(
+    'keydown',
+    e=>{
+
+      if(
+        e.key==='Enter'
+      ){
+
+        $('addWatchBtn')
+          .click();
+
+      }
+
+    }
+  );
+
+
+document.querySelectorAll(
+  '#positionMode button'
+).forEach(
+  b=>
+    b.onclick=
+    ()=>{
+
+      document.querySelectorAll(
+        '#positionMode button'
+      ).forEach(
+        x=>
+          x.classList.toggle(
+            'active',
+            x===b
+          )
+      );
+
+
+      const lev=
+        b.dataset.mode==='lev';
+
+
+      $('spotForm')
+        .style
+        .display=
+        lev
+        ?'none'
+        :'block';
+
+
+      $('levForm')
+        .style
+        .display=
+        lev
+        ?'block'
+        :'none';
+
+    }
+);
+
+
+$('saveSpot')
+  .onclick=
+  ()=>{
+
+    const s=
+      $('posTicker')
+        .value
+        .trim()
+        .toUpperCase();
+
+
+    if(!s){
+      return alert(
+        'Ticker를 입력하세요.'
+      );
+    }
+
+
+    positions[s]={
+
+      qty:
+        +$('posQty').value||0,
+
+      avg:
+        +$('posAvg').value||0,
+
+      max:
+        +$('posMax').value||
+        10000
+
+    };
+
+
+    store.set(
+      'stockpm_positions',
+      positions
+    );
+
+
+    renderPositions();
+
+
+    alert(
+      '포지션 저장 완료'
+    );
+
+  };
+
+
+$('saveLev')
+  .onclick=
+  ()=>{
+
+    const symbol=
+      $('levTicker')
+        .value
+        .trim()
+        .toUpperCase();
+
+
+    if(!symbol){
+      return alert(
+        'Symbol을 입력하세요.'
+      );
+    }
+
+
+    leveragePositions.push({
+
+      symbol,
+
+      side:
+        $('levSide')
+          .value
+          .trim()
+          .toUpperCase()||
+        'LONG',
+
+      leverage:
+        +$('levX').value||
+        1,
+
+      entry:
+        +$('levEntry').value||
+        0,
+
+      size:
+        +$('levSize').value||
+        0,
+
+      liq:
+        +$('levLiq').value||
+        0
+
+    });
+
+
+    store.set(
+      'stockpm_leverage',
+      leveragePositions
+    );
+
+
+    renderPositions();
+
+
+    alert(
+      '레버리지 포지션 저장 완료'
+    );
+
+  };
+
+
+window.addEventListener(
+  'resize',
+  ()=>gotoPage(
+    currentPage,
+    false
+  )
+);
+
+
+renderWatch();
+renderHome();
+renderPositions();
+gotoPage(0,false);
 
 </script>
 
