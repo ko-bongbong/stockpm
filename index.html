@@ -1,1634 +1,1905 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b0d12">
-
-  <title>STOCK PM</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0d12" />
+  <title>STOCKPM</title>
 
   <style>
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
       margin: 0;
       padding: 0;
+      background: #0b0d12;
+      color: #f4f6fb;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      overscroll-behavior: none;
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #090b10;
-      color: #f5f7fb;
       min-height: 100vh;
+      overflow: hidden;
     }
 
     button,
-    input {
-      font-family: inherit;
+    input,
+    select {
+      font: inherit;
     }
 
     button {
       cursor: pointer;
     }
 
-    .app {
-      max-width: 520px;
-      margin: 0 auto;
-      min-height: 100vh;
-      padding-bottom: 95px;
+    :root {
+      --bg: #0b0d12;
+      --panel: #131720;
+      --panel2: #171c26;
+      --line: #262c39;
+      --muted: #8993a5;
+      --text: #f4f6fb;
+      --green: #28d17c;
+      --yellow: #f3c34d;
+      --red: #ff5b6e;
+      --blue: #5f8cff;
+      --purple: #9d79ff;
+      --cyan: #59d0ff;
+      --orange: #ff9e58;
     }
 
-    .header {
-      padding: 26px 20px 18px;
-      position: sticky;
-      top: 0;
+    #app {
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(95, 140, 255, .10), transparent 26%),
+        var(--bg);
+    }
+
+    .topbar {
+      height: 76px;
+      padding: 14px 18px 10px;
+      padding-top: max(14px, env(safe-area-inset-top));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+      flex-shrink: 0;
       z-index: 20;
-      background: rgba(9, 11, 16, 0.94);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid #171b24;
+      background: rgba(11,13,18,.88);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .brand {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: .7px;
+    }
+
+    .version {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .sync-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: #cdd4df;
+      background: #171b23;
+      border: 1px solid #272d39;
+      padding: 7px 10px;
+      border-radius: 999px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--yellow);
+      box-shadow: 0 0 10px rgba(243,195,77,.6);
+    }
+
+    .dot.green {
+      background: var(--green);
+      box-shadow: 0 0 10px rgba(40,209,124,.55);
+    }
+
+    .dot.red {
+      background: var(--red);
+      box-shadow: 0 0 10px rgba(255,91,110,.55);
+    }
+
+    .viewport {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pages {
+      height: 100%;
+      width: 500%;
+      display: flex;
+      will-change: transform;
+      transition: transform .42s cubic-bezier(.22,.8,.2,1);
+    }
+
+    .page {
+      width: 20%;
+      height: 100%;
+      overflow-y: auto;
+      padding: 16px 16px 118px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .page::-webkit-scrollbar {
+      display: none;
+    }
+
+    .section-title {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 2px 2px 10px;
+      font-weight: 650;
+      letter-spacing: .2px;
+    }
+
+    .hero {
+      border: 1px solid #222936;
+      border-radius: 24px;
+      padding: 20px;
+      background:
+        linear-gradient(145deg, rgba(95,140,255,.15), rgba(157,121,255,.06)),
+        #131720;
+      box-shadow: 0 12px 40px rgba(0,0,0,.18);
+    }
+
+    .hero .small {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .hero .value {
+      margin-top: 7px;
+      font-size: 31px;
+      font-weight: 780;
+      letter-spacing: -.7px;
+    }
+
+    .hero-row {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18px;
+      gap: 12px;
+      margin-top: 16px;
     }
 
-    .brand h1 {
-      font-size: 21px;
-      letter-spacing: -0.5px;
+    .hero-stat {
+      flex: 1;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.05);
+      border-radius: 16px;
+      padding: 12px;
     }
 
-    .brand span {
+    .hero-stat .label {
+      color: var(--muted);
       font-size: 11px;
-      color: #6f7889;
-      letter-spacing: 1.5px;
+    }
+
+    .hero-stat .num {
+      margin-top: 4px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid #202633;
+      border-radius: 20px;
+      padding: 15px;
+      margin-bottom: 11px;
+    }
+
+    .card.clickable {
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .card.clickable:active {
+      transform: scale(.985);
+      background: #171c26;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .ticker {
+      font-weight: 780;
+      font-size: 17px;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .price {
+      text-align: right;
+    }
+
+    .price strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .up {
+      color: var(--green);
+    }
+
+    .down {
+      color: var(--red);
+    }
+
+    .score {
+      min-width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      background: #1c2230;
+      border: 1px solid #2a3242;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+    }
+
+    .score strong {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .score span {
+      font-size: 9px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 9px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .3px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .badge.strong {
+      background: rgba(40,209,124,.12);
+      color: #56e99b;
+      border-color: rgba(40,209,124,.22);
+    }
+
+    .badge.buy {
+      background: rgba(95,140,255,.13);
+      color: #82a5ff;
+      border-color: rgba(95,140,255,.25);
+    }
+
+    .badge.watch {
+      background: rgba(243,195,77,.12);
+      color: #ffd76f;
+      border-color: rgba(243,195,77,.2);
+    }
+
+    .badge.wait {
+      background: rgba(137,147,165,.10);
+      color: #aab2c0;
+      border-color: rgba(137,147,165,.18);
+    }
+
+    .badge.risk {
+      background: rgba(255,91,110,.11);
+      color: #ff7e8c;
+      border-color: rgba(255,91,110,.20);
+    }
+
+    .mini-bar {
+      margin-top: 12px;
+      height: 4px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #202633;
+    }
+
+    .mini-bar > div {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .grid3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    }
+
+    .metric {
+      background: #171c26;
+      border: 1px solid #242b38;
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .metric .label {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .metric .value {
+      font-size: 17px;
+      margin-top: 5px;
+      font-weight: 750;
+    }
+
+    .metric .hint {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.45;
     }
 
     .search-wrap {
       display: flex;
-      gap: 8px;
-    }
-
-    .search-wrap input {
-      flex: 1;
-      height: 48px;
-      border-radius: 14px;
-      border: 1px solid #242a36;
-      background: #11151d;
-      color: white;
-      padding: 0 15px;
-      outline: none;
-      font-size: 15px;
-      text-transform: uppercase;
-    }
-
-    .search-wrap input:focus {
-      border-color: #596273;
-    }
-
-    .search-wrap button {
-      border: 0;
-      border-radius: 14px;
-      background: #f3f5f8;
-      color: #0b0d12;
-      padding: 0 18px;
-      font-weight: 800;
-    }
-
-    .content {
-      padding: 20px;
-    }
-
-    .hero {
-      padding: 22px;
-      border-radius: 22px;
-      background:
-        radial-gradient(circle at top right, rgba(91, 106, 255, 0.18), transparent 42%),
-        #11151d;
-      border: 1px solid #1e2430;
-      margin-bottom: 25px;
-    }
-
-    .hero-small {
-      color: #747e90;
-      font-size: 11px;
-      letter-spacing: 1.3px;
-      margin-bottom: 8px;
-    }
-
-    .hero-title {
-      font-size: 27px;
-      font-weight: 800;
-      line-height: 1.2;
-    }
-
-    .hero-desc {
-      margin-top: 10px;
-      color: #8e97a8;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .section-title {
-      font-size: 12px;
-      color: #747e90;
-      letter-spacing: 1.2px;
-      margin: 26px 2px 12px;
-    }
-
-    .card {
-      background: #11151d;
-      border: 1px solid #1e2430;
-      border-radius: 18px;
-      padding: 17px;
-      margin-bottom: 10px;
-    }
-
-    .stock-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .ticker {
-      font-size: 18px;
-      font-weight: 800;
-    }
-
-    .stock-name {
-      color: #7f899a;
-      font-size: 12px;
-      margin-top: 3px;
-    }
-
-    .score-box {
-      text-align: right;
-    }
-
-    .score {
-      font-size: 22px;
-      font-weight: 900;
-    }
-
-    .score-label {
-      color: #717b8d;
-      font-size: 10px;
-      margin-top: 2px;
-    }
-
-    .action {
-      display: inline-flex;
-      margin-top: 9px;
-      padding: 5px 9px;
-      border-radius: 8px;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-    }
-
-    .buy {
-      background: rgba(59, 214, 130, 0.12);
-      color: #54db96;
-    }
-
-    .watch {
-      background: rgba(255, 194, 71, 0.12);
-      color: #ffca63;
-    }
-
-    .wait {
-      background: #1c212b;
-      color: #8b94a5;
-    }
-
-    .add-btn {
-      width: 100%;
-      height: 48px;
-      border-radius: 14px;
-      border: 1px dashed #303746;
-      background: transparent;
-      color: #a4adbd;
-      font-weight: 700;
-      margin-top: 4px;
-    }
-
-    .position-card {
-      cursor: pointer;
-    }
-
-    .position-top {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .profit {
-      font-weight: 800;
-      color: #54db96;
-    }
-
-    .loss {
-      font-weight: 800;
-      color: #ff6d78;
-    }
-
-    .position-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: 15px;
-    }
-
-    .mini {
-      background: #0c1016;
-      padding: 11px;
-      border-radius: 12px;
-    }
-
-    .mini-label {
-      color: #687285;
-      font-size: 9px;
-      margin-bottom: 5px;
-    }
-
-    .mini-value {
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .empty {
-      text-align: center;
-      padding: 30px 15px;
-      color: #687285;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      background: rgba(0, 0, 0, 0.72);
-      padding: 20px;
-      overflow-y: auto;
-    }
-
-    .modal.show {
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-    }
-
-    .sheet {
-      width: 100%;
-      max-width: 520px;
-      background: #11151d;
-      border: 1px solid #252c39;
-      border-radius: 25px 25px 18px 18px;
-      padding: 22px;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-
-    .sheet-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .sheet-title h2 {
-      font-size: 21px;
-    }
-
-    .close {
-      border: 0;
-      background: #202631;
-      color: white;
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      font-size: 18px;
-    }
-
-    .field {
+      gap: 9px;
       margin-bottom: 14px;
     }
 
-    .field label {
-      display: block;
-      color: #7c8697;
-      font-size: 11px;
-      margin-bottom: 7px;
-    }
-
-    .field input {
+    .search-wrap input,
+    .form-grid input,
+    .form-grid select {
       width: 100%;
-      height: 48px;
-      border: 1px solid #252c39;
-      border-radius: 13px;
-      background: #0b0f15;
-      color: white;
-      padding: 0 14px;
+      border: 1px solid #293140;
+      background: #151a23;
+      color: var(--text);
+      padding: 12px 13px;
+      border-radius: 14px;
       outline: none;
-      font-size: 15px;
     }
 
-    .save {
-      width: 100%;
-      height: 50px;
+    .search-wrap input:focus,
+    .form-grid input:focus {
+      border-color: #567bd5;
+    }
+
+    .btn {
       border: 0;
       border-radius: 14px;
-      background: #f3f5f8;
-      color: #090b10;
-      font-weight: 900;
-      margin-top: 8px;
+      padding: 11px 14px;
+      font-weight: 750;
+      color: white;
+      background: var(--blue);
     }
 
-    .delete {
-      width: 100%;
-      height: 45px;
-      border: 0;
-      background: transparent;
-      color: #ff6d78;
-      margin-top: 8px;
+    .btn.secondary {
+      background: #1c2230;
+      border: 1px solid #2c3444;
     }
 
-    .plan {
-      margin-top: 20px;
-      border-top: 1px solid #242a36;
-      padding-top: 18px;
+    .btn.green {
+      background: #1d9f63;
     }
 
-    .plan-title {
-      font-size: 12px;
-      color: #7c8697;
-      letter-spacing: 1px;
-      margin-bottom: 12px;
-    }
-
-    .plan-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 11px 0;
-      border-bottom: 1px solid #1b202a;
-      font-size: 13px;
-    }
-
-    .plan-row span:first-child {
-      color: #7f899a;
+    .btn.red {
+      background: #8e3947;
     }
 
     .bottom-nav {
       position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 520px;
+      left: 10px;
+      right: 10px;
+      bottom: max(10px, env(safe-area-inset-bottom));
       height: 72px;
-      background: rgba(11, 14, 20, 0.96);
-      backdrop-filter: blur(16px);
-      border-top: 1px solid #1d222d;
+      z-index: 30;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      z-index: 50;
+      grid-template-columns: repeat(5, 1fr);
+      background: rgba(17,20,27,.94);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 22px;
+      box-shadow: 0 12px 35px rgba(0,0,0,.35);
+      overflow: hidden;
     }
 
     .nav-item {
       border: 0;
       background: transparent;
-      color: #626c7e;
-      font-size: 10px;
+      color: #687284;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 9px;
       font-weight: 700;
     }
 
+    .nav-item .icon {
+      font-size: 20px;
+      line-height: 1;
+      transition: transform .18s ease;
+    }
+
     .nav-item.active {
-      color: #f5f7fb;
+      color: white;
     }
 
-    .nav-icon {
+    .nav-item.active .icon {
+      transform: translateY(-1px) scale(1.06);
+    }
+
+    .detail {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: #0b0d12;
+      transform: translateX(100%);
+      transition: transform .38s cubic-bezier(.22,.8,.2,1);
+      overflow-y: auto;
+      padding-bottom: 32px;
+    }
+
+    .detail.open {
+      transform: translateX(0);
+    }
+
+    .detail-header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      padding: max(14px, env(safe-area-inset-top)) 16px 13px;
+      background: rgba(11,13,18,.91);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid #1f2530;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .back {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      border: 1px solid #29303d;
+      background: #151a23;
+      color: white;
+      font-size: 19px;
+    }
+
+    .detail-body {
+      padding: 15px;
+    }
+
+    .detail-hero {
+      background:
+        radial-gradient(circle at 85% 15%, rgba(40,209,124,.10), transparent 34%),
+        #131720;
+      border: 1px solid #212836;
+      border-radius: 24px;
+      padding: 18px;
+    }
+
+    .big-price {
+      font-size: 31px;
+      font-weight: 800;
+      letter-spacing: -.7px;
+      margin-top: 6px;
+    }
+
+    .score-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .score-box {
+      border: 1px solid #252d3b;
+      background: #171c26;
+      border-radius: 17px;
+      padding: 12px 8px;
+      text-align: center;
+    }
+
+    .score-box .name {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .score-box strong {
       display: block;
-      font-size: 18px;
-      margin-bottom: 4px;
+      font-size: 21px;
+      margin-top: 4px;
     }
 
-    .notice {
-      border: 1px solid #292f3b;
-      background: #0d1118;
-      color: #7d8797;
+    .why-row,
+    .plan-row,
+    .status-row {
+      border-bottom: 1px solid #242a35;
+      padding: 11px 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .why-row:last-child,
+    .plan-row:last-child,
+    .status-row:last-child {
+      border-bottom: 0;
+    }
+
+    .why-title {
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .why-desc {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    .points {
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .ma200-card {
+      border: 1px solid rgba(95,140,255,.32);
+      background: linear-gradient(145deg, rgba(95,140,255,.12), rgba(95,140,255,.03));
+      border-radius: 19px;
+      padding: 15px;
+      margin-bottom: 11px;
+    }
+
+    .ma200-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      margin-top: 9px;
+    }
+
+    .ma200-main strong {
+      font-size: 24px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 9px;
+      margin-top: 10px;
+    }
+
+    .form-grid .full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: block;
+      font-size: 10px;
+      color: var(--muted);
+      margin: 0 0 5px 2px;
+    }
+
+    .note {
       font-size: 11px;
+      color: var(--muted);
       line-height: 1.6;
-      padding: 13px;
-      border-radius: 13px;
-      margin-top: 22px;
     }
 
-    .hidden {
-      display: none;
+    .status-good {
+      color: var(--green);
+    }
+
+    .status-warn {
+      color: var(--yellow);
+    }
+
+    .status-bad {
+      color: var(--red);
+    }
+
+    .empty {
+      padding: 28px 15px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .leverage-card {
+      border: 1px solid rgba(255,158,88,.24);
+      background: linear-gradient(145deg, rgba(255,158,88,.08), rgba(255,255,255,.01));
+    }
+
+    .divider {
+      height: 1px;
+      background: #252b36;
+      margin: 13px 0;
+    }
+
+    .tiny {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .mt16 {
+      margin-top: 16px;
+    }
+
+    .mt10 {
+      margin-top: 10px;
+    }
+
+    @media (min-width: 760px) {
+      #app {
+        max-width: 520px;
+        margin: 0 auto;
+        border-left: 1px solid #1b202a;
+        border-right: 1px solid #1b202a;
+      }
+
+      .bottom-nav {
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .detail {
+        max-width: 520px;
+        left: 50%;
+        right: auto;
+        width: 520px;
+        transform: translateX(100%);
+      }
+
+      .detail.open {
+        transform: translateX(-50%);
+      }
     }
   </style>
 </head>
 
 <body>
 
-<div class="app">
+<div id="app">
 
-  <header class="header">
-
-    <div class="brand">
-      <div>
-        <h1>STOCK PM</h1>
-        <span>POSITION MANAGER</span>
-      </div>
-      <div style="font-size:20px;">◉</div>
+  <header class="topbar">
+    <div class="brand-wrap">
+      <div class="brand">STOCKPM</div>
+      <div class="version" id="versionText">v0.2.0 · Position Intelligence</div>
     </div>
 
-    <div class="search-wrap">
-      <input
-        id="tickerInput"
-        placeholder="NVDA · TSLA · SOXX · BTC/USD"
-        autocomplete="off"
-      >
-      <button onclick="searchTicker()">검색</button>
+    <div class="sync-pill" id="syncPill">
+      <span class="dot" id="syncDot"></span>
+      <span id="syncLabel">LOCAL MODE</span>
     </div>
-
   </header>
 
+  <main class="viewport" id="viewport">
+    <div class="pages" id="pages">
 
-  <!-- HOME -->
+      <!-- HOME -->
+      <section class="page">
+        <div class="hero">
+          <div class="small">Portfolio Overview</div>
+          <div class="value" id="portfolioValue">$34,900</div>
 
-  <main id="homePage" class="content">
+          <div class="hero-row">
+            <div class="hero-stat">
+              <div class="label">Cash</div>
+              <div class="num">$12,500</div>
+            </div>
+            <div class="hero-stat">
+              <div class="label">Risk</div>
+              <div class="num status-warn">MEDIUM</div>
+            </div>
+            <div class="hero-stat">
+              <div class="label">Positions</div>
+              <div class="num" id="positionCount">2</div>
+            </div>
+          </div>
+        </div>
 
-    <section class="hero">
+        <div class="section-title mt16">오늘의 매수 후보</div>
+        <div id="homeCandidates"></div>
 
-      <div class="hero-small">
-        POSITION INTELLIGENCE
-      </div>
+        <div class="section-title mt16">Market / Model Status</div>
 
-      <div class="hero-title">
-        오늘 무엇을<br>
-        해야 하는가.
-      </div>
+        <div class="card">
+          <div class="status-row">
+            <div>
+              <div class="why-title">Model</div>
+              <div class="why-desc">MA200 중심 Entry Engine</div>
+            </div>
+            <div><strong>v0.2</strong></div>
+          </div>
 
-      <div class="hero-desc">
-        관심종목의 매수 매력도를 비교하고,
-        현재 보유 포지션을 기준으로 다음 행동을 관리합니다.
-      </div>
+          <div class="status-row">
+            <div>
+              <div class="why-title">Market Data</div>
+              <div class="why-desc">Twelve Data 연결 예정</div>
+            </div>
+            <div class="status-warn"><strong>MOCK</strong></div>
+          </div>
 
-    </section>
+          <div class="status-row">
+            <div>
+              <div class="why-title">Supabase</div>
+              <div class="why-desc">Cloud Sync 연결 예정</div>
+            </div>
+            <div class="status-warn"><strong>OFFLINE</strong></div>
+          </div>
+        </div>
+      </section>
 
+      <!-- WATCH -->
+      <section class="page">
+        <div class="search-wrap">
+          <input id="watchTickerInput" placeholder="Ticker · NVDA / TSLA / BTC" />
+          <button class="btn" onclick="addWatchTicker()">추가</button>
+        </div>
 
-    <div class="section-title">
-      TODAY'S BUY CANDIDATES
+        <div class="section-title">WATCH · Entry Score 순</div>
+        <div id="watchList"></div>
+      </section>
+
+      <!-- DISCOVER -->
+      <section class="page">
+        <div class="hero">
+          <div class="small">DISCOVER</div>
+          <div class="value" style="font-size:24px">Market Scanner</div>
+          <div class="note mt10">
+            나중에 NASDAQ-100 / 주요 ETF / Crypto를 자동 스캔해서
+            Entry Score 상위 종목을 찾아주는 기능이 들어갈 자리야.
+          </div>
+        </div>
+
+        <div class="section-title mt16">Preview</div>
+
+        <div class="card">
+          <div class="row">
+            <div>
+              <div class="ticker">NASDAQ 100</div>
+              <div class="sub">자동 스캔 예정</div>
+            </div>
+            <span class="badge wait">COMING</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="row">
+            <div>
+              <div class="ticker">ETF Radar</div>
+              <div class="sub">SOXX · QQQ · SMH · TQQQ 등</div>
+            </div>
+            <span class="badge wait">COMING</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="row">
+            <div>
+              <div class="ticker">Crypto Radar</div>
+              <div class="sub">BTC · ETH · SOL 등</div>
+            </div>
+            <span class="badge wait">COMING</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- POSITION -->
+      <section class="page">
+        <div class="section-title">SPOT / STOCK POSITIONS</div>
+        <div id="positionList"></div>
+
+        <div class="section-title mt16">BYBIT · LEVERAGE MODE</div>
+
+        <div class="card leverage-card">
+          <div class="row">
+            <div>
+              <div class="ticker">BTCUSDT</div>
+              <div class="sub">BYBIT PERP · LONG 5x</div>
+            </div>
+            <span class="badge watch">MANUAL</span>
+          </div>
+
+          <div class="grid3 mt16">
+            <div class="metric">
+              <div class="label">ENTRY</div>
+              <div class="value">$72,400</div>
+            </div>
+
+            <div class="metric">
+              <div class="label">LEVERAGE</div>
+              <div class="value">5x</div>
+            </div>
+
+            <div class="metric">
+              <div class="label">RISK</div>
+              <div class="value status-warn">HIGH</div>
+            </div>
+          </div>
+
+          <div class="note mt10">
+            Bybit API 연결 후 진입가 · 레버리지 · 청산가 · PnL · 증거금 정보를
+            읽기 전용으로 자동 불러오는 구조로 확장 예정.
+          </div>
+        </div>
+      </section>
+
+      <!-- MORE -->
+      <section class="page">
+        <div class="section-title">SYSTEM STATUS</div>
+
+        <div class="card">
+          <div class="status-row">
+            <div>
+              <div class="why-title">App Version</div>
+              <div class="why-desc">Current build</div>
+            </div>
+            <strong>v0.2.0</strong>
+          </div>
+
+          <div class="status-row">
+            <div>
+              <div class="why-title">Twelve Data</div>
+              <div class="why-desc">Market price / OHLCV</div>
+            </div>
+            <strong class="status-warn">NOT CONNECTED</strong>
+          </div>
+
+          <div class="status-row">
+            <div>
+              <div class="why-title">Supabase</div>
+              <div class="why-desc">Position / Signal / Sync DB</div>
+            </div>
+            <strong class="status-warn">NOT CONNECTED</strong>
+          </div>
+
+          <div class="status-row">
+            <div>
+              <div class="why-title">Last Data Update</div>
+              <div class="why-desc">현재는 샘플 데이터</div>
+            </div>
+            <strong id="lastUpdate">MOCK</strong>
+          </div>
+        </div>
+
+        <div class="section-title mt16">MODEL RULES</div>
+
+        <div class="card">
+          <div class="why-row">
+            <div>
+              <div class="why-title">Strong Buy</div>
+              <div class="why-desc">Entry ≥ 85 + MA200 Gate 통과</div>
+            </div>
+            <span class="badge strong">85+</span>
+          </div>
+
+          <div class="why-row">
+            <div>
+              <div class="why-title">Buy Candidate</div>
+              <div class="why-desc">Entry 75~84</div>
+            </div>
+            <span class="badge buy">75+</span>
+          </div>
+
+          <div class="why-row">
+            <div>
+              <div class="why-title">Watch</div>
+              <div class="why-desc">Entry 65~74</div>
+            </div>
+            <span class="badge watch">65+</span>
+          </div>
+
+          <div class="why-row">
+            <div>
+              <div class="why-title">Wait</div>
+              <div class="why-desc">Entry &lt; 65</div>
+            </div>
+            <span class="badge wait">&lt;65</span>
+          </div>
+        </div>
+
+        <div class="section-title mt16">CHANGELOG</div>
+
+        <div class="card">
+          <div class="why-title">v0.2.0</div>
+          <div class="note mt10">
+            • HOME / WATCH / DISCOVER / POSITION / MORE<br>
+            • 좌우 스와이프 탭 전환<br>
+            • MA200 중심 Entry Gate<br>
+            • Volume / Options 분석 영역<br>
+            • 포지션 수량 / 평단 / 최대 시드 저장<br>
+            • 추가매수 및 예상 평단 계산<br>
+            • Bybit 레버리지 모드 UI<br>
+            • 버전 / 데이터 연결 상태 표시
+          </div>
+        </div>
+      </section>
+
     </div>
-
-    <div id="candidateList"></div>
-
-
-    <div class="section-title">
-      MY POSITIONS
-    </div>
-
-    <div id="positionList"></div>
-
-    <button class="add-btn" onclick="openNewPosition()">
-      + 보유 포지션 추가
-    </button>
-
-
-    <div class="notice">
-      V1은 포지션 관리 구조를 먼저 테스트하는 버전입니다.
-      다음 단계에서 Twelve Data를 연결하면 실제 일봉 데이터로
-      Entry Score, ATR, 분할매수 가격 및 시장 판단이 자동 계산됩니다.
-    </div>
-
   </main>
-
-
-  <!-- WATCHLIST -->
-
-  <main id="watchPage" class="content hidden">
-
-    <div class="section-title">
-      WATCHLIST
-    </div>
-
-    <div id="watchList"></div>
-
-  </main>
-
-
-  <!-- PORTFOLIO -->
-
-  <main id="portfolioPage" class="content hidden">
-
-    <div class="section-title">
-      PORTFOLIO
-    </div>
-
-    <div class="card">
-
-      <div class="mini-label">
-        CURRENT INVESTED CAPITAL
-      </div>
-
-      <div
-        id="totalInvested"
-        style="font-size:30px;font-weight:900;margin-top:5px;"
-      >
-        $0
-      </div>
-
-      <div
-        style="color:#727c8d;font-size:12px;margin-top:7px;"
-      >
-        등록된 포지션의 평단 × 수량 기준
-      </div>
-
-    </div>
-
-    <div id="portfolioPositions"></div>
-
-  </main>
-
-
-  <!-- BOTTOM NAV -->
 
   <nav class="bottom-nav">
-
-    <button
-      class="nav-item active"
-      onclick="showPage('home',this)"
-    >
-      <span class="nav-icon">⌂</span>
+    <button class="nav-item active" onclick="goPage(0)">
+      <span class="icon">⌂</span>
       HOME
     </button>
 
-    <button
-      class="nav-item"
-      onclick="showPage('watch',this)"
-    >
-      <span class="nav-icon">◎</span>
+    <button class="nav-item" onclick="goPage(1)">
+      <span class="icon">◎</span>
       WATCH
     </button>
 
-    <button
-      class="nav-item"
-      onclick="showPage('portfolio',this)"
-    >
-      <span class="nav-icon">▦</span>
-      PORTFOLIO
+    <button class="nav-item" onclick="goPage(2)">
+      <span class="icon">◇</span>
+      DISCOVER
     </button>
 
+    <button class="nav-item" onclick="goPage(3)">
+      <span class="icon">▤</span>
+      POSITION
+    </button>
+
+    <button class="nav-item" onclick="goPage(4)">
+      <span class="icon">•••</span>
+      MORE
+    </button>
   </nav>
 
 </div>
 
 
-<!-- POSITION MODAL -->
+<!-- DETAIL -->
+<div class="detail" id="detailPanel">
 
-<div id="positionModal" class="modal">
+  <div class="detail-header">
+    <button class="back" onclick="closeDetail()">‹</button>
 
-  <div class="sheet">
-
-    <div class="sheet-title">
-
-      <div>
-        <div
-          style="color:#6e7889;font-size:10px;margin-bottom:4px;"
-        >
-          POSITION
-        </div>
-
-        <h2 id="modalTicker">
-          NEW
-        </h2>
-      </div>
-
-      <button
-        class="close"
-        onclick="closeModal()"
-      >
-        ×
-      </button>
-
+    <div>
+      <div class="ticker" id="detailTicker">NVDA</div>
+      <div class="sub" id="detailType">US STOCK</div>
     </div>
-
-
-    <div class="field">
-      <label>TICKER</label>
-      <input
-        id="positionTicker"
-        placeholder="NVDA"
-      >
-    </div>
-
-
-    <div class="field">
-      <label>보유 수량</label>
-      <input
-        id="positionQty"
-        type="number"
-        step="any"
-        placeholder="40"
-      >
-    </div>
-
-
-    <div class="field">
-      <label>평균 단가 ($)</label>
-      <input
-        id="positionAvg"
-        type="number"
-        step="any"
-        placeholder="142.50"
-      >
-    </div>
-
-
-    <div class="field">
-      <label>현재 가격 ($) — V1 수동 입력</label>
-      <input
-        id="positionPrice"
-        type="number"
-        step="any"
-        placeholder="160"
-        oninput="updatePlanPreview()"
-      >
-    </div>
-
-
-    <div class="field">
-      <label>이 종목 최대 투입금 ($)</label>
-      <input
-        id="positionMax"
-        type="number"
-        step="any"
-        placeholder="10000"
-        oninput="updatePlanPreview()"
-      >
-    </div>
-
-
-    <div class="plan">
-
-      <div class="plan-title">
-        POSITION PLAN
-      </div>
-
-      <div class="plan-row">
-        <span>현재 투입금</span>
-        <strong id="previewInvested">$0</strong>
-      </div>
-
-      <div class="plan-row">
-        <span>추가 가능금</span>
-        <strong id="previewAvailable">$0</strong>
-      </div>
-
-      <div class="plan-row">
-        <span>1차 추가매수</span>
-        <strong id="previewBuy1">-</strong>
-      </div>
-
-      <div class="plan-row">
-        <span>2차 추가매수</span>
-        <strong id="previewBuy2">-</strong>
-      </div>
-
-      <div class="plan-row">
-        <span>3차 추가매수</span>
-        <strong id="previewBuy3">-</strong>
-      </div>
-
-      <div class="plan-row">
-        <span>돌파 추가</span>
-        <strong id="previewBuy4">-</strong>
-      </div>
-
-    </div>
-
-
-    <button
-      class="save"
-      onclick="savePosition()"
-    >
-      포지션 저장
-    </button>
-
-    <button
-      id="deleteButton"
-      class="delete"
-      onclick="deletePosition()"
-    >
-      포지션 삭제
-    </button>
-
   </div>
 
+  <div class="detail-body">
+
+    <div class="detail-hero">
+      <div class="sub">Current Market Price</div>
+
+      <div class="row">
+        <div>
+          <div class="big-price" id="detailPrice">$182.40</div>
+          <div class="up" id="detailChange">+1.8%</div>
+        </div>
+
+        <span class="badge strong" id="detailSignal">STRONG BUY</span>
+      </div>
+
+      <div class="score-row">
+        <div class="score-box">
+          <div class="name">ENTRY</div>
+          <strong id="entryScore">88</strong>
+        </div>
+
+        <div class="score-box">
+          <div class="name">TECHNICAL</div>
+          <strong id="technicalScore">91</strong>
+        </div>
+
+        <div class="score-box">
+          <div class="name">RISK</div>
+          <strong id="riskScore">54</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title mt16">MA200 · LONG TERM GATE</div>
+
+    <div class="ma200-card">
+      <div class="sub">200-Day Moving Average</div>
+
+      <div class="ma200-main">
+        <strong id="ma200Value">$142.10</strong>
+        <span class="badge strong" id="ma200Status">BULLISH</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="grid2">
+        <div>
+          <div class="tiny">MA200 Distance</div>
+          <strong id="ma200Distance">+28.4%</strong>
+        </div>
+
+        <div>
+          <div class="tiny">MA200 Slope</div>
+          <strong class="status-good">RISING ↑</strong>
+        </div>
+      </div>
+
+      <div class="note mt10">
+        STOCKPM은 MA200을 단순 가점이 아니라 장기 추세 Gate로 사용한다.
+        가격이 MA200 아래이고 MA200이 하락 중이면 Strong Buy 신호를 제한한다.
+      </div>
+    </div>
+
+    <div class="section-title">TECHNICAL SNAPSHOT</div>
+
+    <div class="grid2">
+      <div class="metric">
+        <div class="label">MA20</div>
+        <div class="value" id="ma20Value">$177.2</div>
+      </div>
+
+      <div class="metric">
+        <div class="label">MA50</div>
+        <div class="value" id="ma50Value">$166.4</div>
+      </div>
+
+      <div class="metric">
+        <div class="label">RSI 14</div>
+        <div class="value" id="rsiValue">61</div>
+      </div>
+
+      <div class="metric">
+        <div class="label">ATR 14</div>
+        <div class="value" id="atrValue">$5.8</div>
+      </div>
+    </div>
+
+    <div class="section-title mt16">VOLUME</div>
+
+    <div class="card">
+      <div class="grid3">
+        <div class="metric">
+          <div class="label">TODAY</div>
+          <div class="value" id="volumeToday">61M</div>
+        </div>
+
+        <div class="metric">
+          <div class="label">20D AVG</div>
+          <div class="value" id="volume20">42M</div>
+        </div>
+
+        <div class="metric">
+          <div class="label">REL VOL</div>
+          <div class="value status-good" id="relativeVolume">1.45x</div>
+        </div>
+      </div>
+
+      <div class="note mt10">
+        상승일 거래량 증가와 조정일 거래량 감소 여부를 Entry Score 보조 신호로 사용.
+      </div>
+    </div>
+
+    <div class="section-title mt16">OPTIONS SENTIMENT</div>
+
+    <div class="card">
+      <div class="grid3">
+        <div class="metric">
+          <div class="label">CALL / PUT</div>
+          <div class="value">1.73</div>
+        </div>
+
+        <div class="metric">
+          <div class="label">IV</div>
+          <div class="value">41%</div>
+        </div>
+
+        <div class="metric">
+          <div class="label">SIGNAL</div>
+          <div class="value status-good">BULL</div>
+        </div>
+      </div>
+
+      <div class="note mt10">
+        옵션 정보는 추세를 뒤집는 핵심 조건이 아니라 보조 확신 신호로 사용한다.
+        실제 옵션 API는 후속 버전에서 연결 예정.
+      </div>
+    </div>
+
+    <div class="section-title mt16">WHY THIS SCORE?</div>
+
+    <div class="card">
+      <div class="why-row">
+        <div>
+          <div class="why-title">MA200 / Long Trend</div>
+          <div class="why-desc">가격 > MA200 · MA200 상승</div>
+        </div>
+        <div class="points status-good">+23</div>
+      </div>
+
+      <div class="why-row">
+        <div>
+          <div class="why-title">Momentum</div>
+          <div class="why-desc">RSI / MACD / 최근 수익률</div>
+        </div>
+        <div class="points status-good">+14</div>
+      </div>
+
+      <div class="why-row">
+        <div>
+          <div class="why-title">Pullback / Entry</div>
+          <div class="why-desc">MA20과 현재가 위치</div>
+        </div>
+        <div class="points">+13</div>
+      </div>
+
+      <div class="why-row">
+        <div>
+          <div class="why-title">Volume</div>
+          <div class="why-desc">20일 평균 대비 1.45x</div>
+        </div>
+        <div class="points status-good">+14</div>
+      </div>
+
+      <div class="why-row">
+        <div>
+          <div class="why-title">Risk / Reward</div>
+          <div class="why-desc">예상 R/R 약 2.6</div>
+        </div>
+        <div class="points">+12</div>
+      </div>
+
+      <div class="why-row">
+        <div>
+          <div class="why-title">Options</div>
+          <div class="why-desc">보조 심리 신호</div>
+        </div>
+        <div class="points">+4</div>
+      </div>
+    </div>
+
+    <div class="section-title mt16">POSITION MANAGER</div>
+
+    <div class="card">
+
+      <div class="form-grid">
+        <div>
+          <label>보유수량</label>
+          <input id="positionQty" type="number" step="0.0001" placeholder="0" />
+        </div>
+
+        <div>
+          <label>평단가</label>
+          <input id="positionAvg" type="number" step="0.01" placeholder="0" />
+        </div>
+
+        <div class="full">
+          <label>이 종목 최대 투입금</label>
+          <input id="positionMax" type="number" step="1" placeholder="예: 25000" />
+        </div>
+      </div>
+
+      <button class="btn green mt10" style="width:100%" onclick="savePosition()">
+        포지션 저장
+      </button>
+
+      <div id="positionSummary" class="mt16"></div>
+    </div>
+
+    <div class="section-title mt16">BUY PLAN</div>
+
+    <div class="card" id="buyPlan"></div>
+
+    <div class="section-title mt16">SIGNAL LOG</div>
+
+    <div class="card">
+      <div class="note">
+        Strong Buy / Buy Candidate 신호는 실제 매수 여부와 상관없이 향후 Supabase에 기록한다.
+        이후 5일 / 20일 / 60일 성과를 비교해 모델 개선에 사용한다.
+      </div>
+    </div>
+
+  </div>
 </div>
 
 
 <script>
 
-  const DEFAULT_WATCHLIST = [
-    {
-      ticker: "NVDA",
-      name: "NVIDIA",
-      score: 87
-    },
-    {
-      ticker: "GOOGL",
-      name: "Alphabet",
-      score: 82
-    },
-    {
-      ticker: "TSLA",
-      name: "Tesla",
-      score: 76
-    },
-    {
-      ticker: "SOXX",
-      name: "Semiconductor ETF",
-      score: 69
-    },
-    {
-      ticker: "BTC/USD",
-      name: "Bitcoin",
-      score: 74
-    }
-  ];
+const APP_VERSION = "0.2.0";
 
+let currentPage = 0;
+let detailTicker = null;
 
-  let watchlist =
-    JSON.parse(localStorage.getItem("stockpm_watchlist"))
-    || DEFAULT_WATCHLIST;
-
-
-  let positions =
-    JSON.parse(localStorage.getItem("stockpm_positions"))
-    || [];
-
-
-  let editingTicker = null;
-
-
-  function money(value) {
-
-    const number = Number(value || 0);
-
-    return "$" + number.toLocaleString(
-      undefined,
-      {
-        maximumFractionDigits: 2
-      }
-    );
-
+const watchDefaults = [
+  {
+    ticker: "NVDA",
+    type: "US STOCK",
+    price: 182.40,
+    change: 1.8,
+    entry: 88,
+    technical: 91,
+    risk: 54,
+    ma20: 177.20,
+    ma50: 166.40,
+    ma200: 142.10,
+    rsi: 61,
+    atr: 5.80,
+    vol: "61M",
+    vol20: "42M",
+    relvol: "1.45x"
+  },
+  {
+    ticker: "GOOGL",
+    type: "US STOCK",
+    price: 205.30,
+    change: .6,
+    entry: 82,
+    technical: 87,
+    risk: 46,
+    ma20: 201.10,
+    ma50: 194.90,
+    ma200: 171.30,
+    rsi: 58,
+    atr: 4.20,
+    vol: "28M",
+    vol20: "25M",
+    relvol: "1.12x"
+  },
+  {
+    ticker: "TSLA",
+    type: "US STOCK",
+    price: 418.20,
+    change: -1.2,
+    entry: 76,
+    technical: 81,
+    risk: 72,
+    ma20: 405.20,
+    ma50: 386.10,
+    ma200: 341.40,
+    rsi: 68,
+    atr: 18.70,
+    vol: "94M",
+    vol20: "78M",
+    relvol: "1.21x"
+  },
+  {
+    ticker: "SOXX",
+    type: "ETF",
+    price: 307.40,
+    change: .4,
+    entry: 71,
+    technical: 79,
+    risk: 58,
+    ma20: 303.80,
+    ma50: 295.10,
+    ma200: 267.30,
+    rsi: 57,
+    atr: 6.40,
+    vol: "4.8M",
+    vol20: "4.1M",
+    relvol: "1.17x"
+  },
+  {
+    ticker: "BTC",
+    type: "CRYPTO",
+    price: 78450,
+    change: 2.1,
+    entry: 69,
+    technical: 74,
+    risk: 79,
+    ma20: 76800,
+    ma50: 74100,
+    ma200: 66800,
+    rsi: 63,
+    atr: 2650,
+    vol: "—",
+    vol20: "—",
+    relvol: "—"
   }
+];
 
+let watchList = JSON.parse(localStorage.getItem("stockpm_watchlist") || "null") || watchDefaults;
+let positions = JSON.parse(localStorage.getItem("stockpm_positions") || "{}");
 
-  function getAction(score) {
+function signalFromScore(score, stock) {
+  const maGate = stock.price > stock.ma200;
 
-    if (score >= 85) {
-      return {
-        text: "STRONG BUY",
-        cls: "buy"
-      };
-    }
-
-    if (score >= 75) {
-      return {
-        text: "BUY CANDIDATE",
-        cls: "buy"
-      };
-    }
-
-    if (score >= 65) {
-      return {
-        text: "WATCH",
-        cls: "watch"
-      };
-    }
-
+  if (score >= 85 && maGate) {
     return {
-      text: "WAIT",
-      cls: "wait"
+      text: "STRONG BUY",
+      cls: "strong"
     };
-
   }
 
-
-  function renderCandidates() {
-
-    const container =
-      document.getElementById("candidateList");
-
-    const sorted =
-      [...watchlist]
-      .sort((a,b) => b.score - a.score)
-      .slice(0,5);
-
-    container.innerHTML =
-      sorted.map((item,index) => {
-
-        const action =
-          getAction(item.score);
-
-        return `
-          <div class="card">
-
-            <div class="stock-row">
-
-              <div>
-
-                <div
-                  style="
-                    color:#626c7d;
-                    font-size:10px;
-                    margin-bottom:5px;
-                  "
-                >
-                  #${index + 1}
-                </div>
-
-                <div class="ticker">
-                  ${item.ticker}
-                </div>
-
-                <div class="stock-name">
-                  ${item.name}
-                </div>
-
-                <div class="action ${action.cls}">
-                  ${action.text}
-                </div>
-
-              </div>
-
-              <div class="score-box">
-
-                <div class="score">
-                  ${item.score}
-                </div>
-
-                <div class="score-label">
-                  ENTRY
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-        `;
-
-      }).join("");
-
+  if (score >= 75 && maGate) {
+    return {
+      text: "BUY CANDIDATE",
+      cls: "buy"
+    };
   }
 
-
-  function renderWatchlist() {
-
-    const container =
-      document.getElementById("watchList");
-
-    if (!watchlist.length) {
-
-      container.innerHTML =
-        `<div class="empty">
-          관심종목이 없습니다.
-        </div>`;
-
-      return;
-    }
-
-
-    container.innerHTML =
-      watchlist.map(item => {
-
-        const action =
-          getAction(item.score);
-
-        return `
-          <div class="card">
-
-            <div class="stock-row">
-
-              <div>
-
-                <div class="ticker">
-                  ${item.ticker}
-                </div>
-
-                <div class="stock-name">
-                  ${item.name}
-                </div>
-
-                <div class="action ${action.cls}">
-                  ${action.text}
-                </div>
-
-              </div>
-
-              <div class="score-box">
-
-                <div class="score">
-                  ${item.score}
-                </div>
-
-                <div class="score-label">
-                  ENTRY
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-        `;
-
-      }).join("");
-
+  if (score >= 65) {
+    return {
+      text: "WATCH",
+      cls: "watch"
+    };
   }
 
-
-  function renderPositions() {
-
-    const container =
-      document.getElementById("positionList");
-
-    const portfolioContainer =
-      document.getElementById("portfolioPositions");
-
-
-    if (!positions.length) {
-
-      container.innerHTML =
-        `<div class="empty">
-          아직 보유 포지션이 없습니다.<br>
-          수량과 평단을 등록해보세요.
-        </div>`;
-
-      portfolioContainer.innerHTML =
-        `<div class="empty">
-          등록된 포지션이 없습니다.
-        </div>`;
-
-      document.getElementById(
-        "totalInvested"
-      ).textContent = "$0";
-
-      return;
-
-    }
-
-
-    let totalInvested = 0;
-
-
-    const html =
-      positions.map(p => {
-
-        const invested =
-          p.qty * p.avg;
-
-        const marketValue =
-          p.qty * p.price;
-
-        const pnl =
-          invested > 0
-          ? ((marketValue - invested) / invested) * 100
-          : 0;
-
-        totalInvested += invested;
-
-
-        return `
-          <div
-            class="card position-card"
-            onclick="editPosition('${p.ticker}')"
-          >
-
-            <div class="position-top">
-
-              <div>
-
-                <div class="ticker">
-                  ${p.ticker}
-                </div>
-
-                <div class="stock-name">
-                  ${p.qty} units · AVG ${money(p.avg)}
-                </div>
-
-              </div>
-
-              <div
-                class="${pnl >= 0 ? "profit" : "loss"}"
-              >
-                ${pnl >= 0 ? "+" : ""}
-                ${pnl.toFixed(2)}%
-              </div>
-
-            </div>
-
-
-            <div class="position-grid">
-
-              <div class="mini">
-
-                <div class="mini-label">
-                  INVESTED
-                </div>
-
-                <div class="mini-value">
-                  ${money(invested)}
-                </div>
-
-              </div>
-
-
-              <div class="mini">
-
-                <div class="mini-label">
-                  VALUE
-                </div>
-
-                <div class="mini-value">
-                  ${money(marketValue)}
-                </div>
-
-              </div>
-
-
-              <div class="mini">
-
-                <div class="mini-label">
-                  MAX
-                </div>
-
-                <div class="mini-value">
-                  ${money(p.max)}
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-        `;
-
-      }).join("");
-
-
-    container.innerHTML = html;
-
-    portfolioContainer.innerHTML = html;
-
-    document.getElementById(
-      "totalInvested"
-    ).textContent =
-      money(totalInvested);
-
-  }
-
-
-  function searchTicker() {
-
-    const input =
-      document.getElementById("tickerInput");
-
-    const ticker =
-      input.value
-      .trim()
-      .toUpperCase();
-
-
-    if (!ticker) return;
-
-
-    const exists =
-      watchlist.find(
-        item => item.ticker === ticker
-      );
-
-
-    if (!exists) {
-
-      watchlist.push({
-        ticker: ticker,
-        name: "Custom Asset",
-        score: 0
-      });
-
-      localStorage.setItem(
-        "stockpm_watchlist",
-        JSON.stringify(watchlist)
-      );
-
-    }
-
-
-    input.value = "";
-
-    renderAll();
-
-    showPage(
-      "watch",
-      document.querySelectorAll(".nav-item")[1]
-    );
-
-  }
-
-
-  function openNewPosition() {
-
-    editingTicker = null;
-
-    document.getElementById(
-      "modalTicker"
-    ).textContent = "NEW POSITION";
-
-    document.getElementById(
-      "positionTicker"
-    ).value = "";
-
-    document.getElementById(
-      "positionQty"
-    ).value = "";
-
-    document.getElementById(
-      "positionAvg"
-    ).value = "";
-
-    document.getElementById(
-      "positionPrice"
-    ).value = "";
-
-    document.getElementById(
-      "positionMax"
-    ).value = "";
-
-    document.getElementById(
-      "deleteButton"
-    ).style.display = "none";
-
-    updatePlanPreview();
-
-    document.getElementById(
-      "positionModal"
-    ).classList.add("show");
-
-  }
-
-
-  function editPosition(ticker) {
-
-    const p =
-      positions.find(
-        item => item.ticker === ticker
-      );
-
-    if (!p) return;
-
-
-    editingTicker = ticker;
-
-
-    document.getElementById(
-      "modalTicker"
-    ).textContent = ticker;
-
-
-    document.getElementById(
-      "positionTicker"
-    ).value = p.ticker;
-
-
-    document.getElementById(
-      "positionQty"
-    ).value = p.qty;
-
-
-    document.getElementById(
-      "positionAvg"
-    ).value = p.avg;
-
-
-    document.getElementById(
-      "positionPrice"
-    ).value = p.price;
-
-
-    document.getElementById(
-      "positionMax"
-    ).value = p.max;
-
-
-    document.getElementById(
-      "deleteButton"
-    ).style.display = "block";
-
-
-    updatePlanPreview();
-
-
-    document.getElementById(
-      "positionModal"
-    ).classList.add("show");
-
-  }
-
-
-  function closeModal() {
-
-    document.getElementById(
-      "positionModal"
-    ).classList.remove("show");
-
-  }
-
-
-  function updatePlanPreview() {
-
-    const qty =
-      Number(
-        document.getElementById(
-          "positionQty"
-        ).value || 0
-      );
-
-
-    const avg =
-      Number(
-        document.getElementById(
-          "positionAvg"
-        ).value || 0
-      );
-
-
-    const price =
-      Number(
-        document.getElementById(
-          "positionPrice"
-        ).value || 0
-      );
-
-
-    const max =
-      Number(
-        document.getElementById(
-          "positionMax"
-        ).value || 0
-      );
-
-
-    const invested =
-      qty * avg;
-
-
-    const available =
-      Math.max(
-        max - invested,
-        0
-      );
-
-
-    document.getElementById(
-      "previewInvested"
-    ).textContent =
-      money(invested);
-
-
-    document.getElementById(
-      "previewAvailable"
-    ).textContent =
-      money(available);
-
-
-    if (!price || !available) {
-
-      document.getElementById(
-        "previewBuy1"
-      ).textContent = "-";
-
-      document.getElementById(
-        "previewBuy2"
-      ).textContent = "-";
-
-      document.getElementById(
-        "previewBuy3"
-      ).textContent = "-";
-
-      document.getElementById(
-        "previewBuy4"
-      ).textContent = "-";
-
-      return;
-
-    }
-
-
-    const plans = [
-      {
-        pct: 0.25,
-        price: price
-      },
-      {
-        pct: 0.30,
-        price: price * 0.95
-      },
-      {
-        pct: 0.30,
-        price: price * 0.90
-      },
-      {
-        pct: 0.15,
-        price: price * 1.05
-      }
-    ];
-
-
-    plans.forEach((plan,index) => {
-
-      const amount =
-        available * plan.pct;
-
-
-      const units =
-        amount / plan.price;
-
-
-      document.getElementById(
-        "previewBuy" + (index + 1)
-      ).textContent =
-        `${money(plan.price)} · ${units.toFixed(2)} units`;
-
+  return {
+    text: "WAIT",
+    cls: "wait"
+  };
+}
+
+function money(v, type = "US STOCK") {
+  if (type === "CRYPTO") {
+    return "$" + Number(v).toLocaleString(undefined, {
+      maximumFractionDigits: 0
     });
-
   }
 
+  return "$" + Number(v).toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
 
-  function savePosition() {
+function renderWatch() {
+  const list = document.getElementById("watchList");
 
-    const ticker =
-      document.getElementById(
-        "positionTicker"
-      ).value
-      .trim()
-      .toUpperCase();
+  const sorted = [...watchList].sort((a,b) => b.entry - a.entry);
 
+  list.innerHTML = sorted.map(stock => {
+    const signal = signalFromScore(stock.entry, stock);
 
-    const qty =
-      Number(
-        document.getElementById(
-          "positionQty"
-        ).value
-      );
+    return `
+      <div class="card clickable" onclick="openDetail('${stock.ticker}')">
+        <div class="row">
 
+          <div>
+            <div class="ticker">${stock.ticker}</div>
+            <div class="sub">
+              ${stock.type} · ${money(stock.price, stock.type)}
+              <span class="${stock.change >= 0 ? "up" : "down"}">
+                ${stock.change >= 0 ? "+" : ""}${stock.change}%
+              </span>
+            </div>
+          </div>
 
-    const avg =
-      Number(
-        document.getElementById(
-          "positionAvg"
-        ).value
-      );
+          <div class="score">
+            <strong>${stock.entry}</strong>
+            <span>ENTRY</span>
+          </div>
 
+          <span class="badge ${signal.cls}">
+            ${signal.text}
+          </span>
 
-    const price =
-      Number(
-        document.getElementById(
-          "positionPrice"
-        ).value
-      );
+        </div>
 
+        <div class="mini-bar">
+          <div style="width:${stock.entry}%"></div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
 
-    const max =
-      Number(
-        document.getElementById(
-          "positionMax"
-        ).value
-      );
+function renderHome() {
+  const el = document.getElementById("homeCandidates");
 
+  const candidates = [...watchList]
+    .sort((a,b) => b.entry - a.entry)
+    .slice(0,3);
 
-    if (!ticker) {
+  el.innerHTML = candidates.map((stock, index) => {
+    const signal = signalFromScore(stock.entry, stock);
 
-      alert("티커를 입력해주세요.");
+    return `
+      <div class="card clickable" onclick="openDetail('${stock.ticker}')">
+        <div class="row">
 
-      return;
+          <div style="min-width:28px;font-weight:800;color:#657087">
+            ${index + 1}
+          </div>
 
-    }
+          <div style="flex:1">
+            <div class="ticker">${stock.ticker}</div>
+            <div class="sub">${signal.text}</div>
+          </div>
 
+          <div style="text-align:right">
+            <strong style="font-size:22px">${stock.entry}</strong>
+            <div class="tiny">ENTRY</div>
+          </div>
 
-    const position = {
-      ticker,
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderPositions() {
+  const el = document.getElementById("positionList");
+
+  const entries = Object.entries(positions);
+
+  document.getElementById("positionCount").textContent = entries.length;
+
+  if (!entries.length) {
+    el.innerHTML = `
+      <div class="card empty">
+        아직 등록된 보유 포지션이 없어.<br>
+        WATCH 종목을 눌러 보유수량과 평단을 입력하면 여기에 나타나.
+      </div>
+    `;
+    return;
+  }
+
+  el.innerHTML = entries.map(([ticker, p]) => {
+
+    const stock = watchList.find(s => s.ticker === ticker);
+
+    if (!stock) return "";
+
+    const currentValue = stock.price * p.qty;
+    const invested = p.avg * p.qty;
+    const pnl = invested > 0 ? ((currentValue / invested) - 1) * 100 : 0;
+
+    return `
+      <div class="card clickable" onclick="openDetail('${ticker}')">
+
+        <div class="row">
+          <div>
+            <div class="ticker">${ticker}</div>
+            <div class="sub">
+              ${p.qty} units · AVG ${money(p.avg, stock.type)}
+            </div>
+          </div>
+
+          <div class="${pnl >= 0 ? "up" : "down"}" style="font-weight:800">
+            ${pnl >= 0 ? "+" : ""}${pnl.toFixed(2)}%
+          </div>
+        </div>
+
+        <div class="grid3 mt16">
+          <div class="metric">
+            <div class="label">INVESTED</div>
+            <div class="value">
+              ${money(invested, stock.type)}
+            </div>
+          </div>
+
+          <div class="metric">
+            <div class="label">VALUE</div>
+            <div class="value">
+              ${money(currentValue, stock.type)}
+            </div>
+          </div>
+
+          <div class="metric">
+            <div class="label">ENTRY</div>
+            <div class="value">
+              ${stock.entry}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    `;
+  }).join("");
+}
+
+function openDetail(ticker) {
+  const stock = watchList.find(s => s.ticker === ticker);
+
+  if (!stock) return;
+
+  detailTicker = ticker;
+
+  const signal = signalFromScore(stock.entry, stock);
+
+  document.getElementById("detailTicker").textContent = stock.ticker;
+  document.getElementById("detailType").textContent = stock.type;
+  document.getElementById("detailPrice").textContent = money(stock.price, stock.type);
+
+  const change = document.getElementById("detailChange");
+  change.textContent = `${stock.change >= 0 ? "+" : ""}${stock.change}%`;
+  change.className = stock.change >= 0 ? "up" : "down";
+
+  const signalEl = document.getElementById("detailSignal");
+  signalEl.textContent = signal.text;
+  signalEl.className = `badge ${signal.cls}`;
+
+  document.getElementById("entryScore").textContent = stock.entry;
+  document.getElementById("technicalScore").textContent = stock.technical;
+  document.getElementById("riskScore").textContent = stock.risk;
+
+  document.getElementById("ma20Value").textContent = money(stock.ma20, stock.type);
+  document.getElementById("ma50Value").textContent = money(stock.ma50, stock.type);
+  document.getElementById("ma200Value").textContent = money(stock.ma200, stock.type);
+  document.getElementById("rsiValue").textContent = stock.rsi;
+  document.getElementById("atrValue").textContent = money(stock.atr, stock.type);
+
+  const dist = ((stock.price / stock.ma200) - 1) * 100;
+  document.getElementById("ma200Distance").textContent =
+    `${dist >= 0 ? "+" : ""}${dist.toFixed(1)}%`;
+
+  const maStatus = document.getElementById("ma200Status");
+
+  if (stock.price > stock.ma200) {
+    maStatus.textContent = "BULLISH";
+    maStatus.className = "badge strong";
+  } else {
+    maStatus.textContent = "BELOW MA200";
+    maStatus.className = "badge risk";
+  }
+
+  document.getElementById("volumeToday").textContent = stock.vol;
+  document.getElementById("volume20").textContent = stock.vol20;
+  document.getElementById("relativeVolume").textContent = stock.relvol;
+
+  const p = positions[ticker] || {
+    qty: 0,
+    avg: 0,
+    max: 0
+  };
+
+  document.getElementById("positionQty").value = p.qty || "";
+  document.getElementById("positionAvg").value = p.avg || "";
+  document.getElementById("positionMax").value = p.max || "";
+
+  renderPositionSummary(stock, p);
+  renderBuyPlan(stock, p);
+
+  document.getElementById("detailPanel").classList.add("open");
+}
+
+function closeDetail() {
+  document.getElementById("detailPanel").classList.remove("open");
+}
+
+function savePosition() {
+  if (!detailTicker) return;
+
+  const qty = Number(document.getElementById("positionQty").value) || 0;
+  const avg = Number(document.getElementById("positionAvg").value) || 0;
+  const max = Number(document.getElementById("positionMax").value) || 0;
+
+  if (qty <= 0) {
+    delete positions[detailTicker];
+  } else {
+    positions[detailTicker] = {
       qty,
       avg,
-      price,
       max
     };
+  }
 
+  localStorage.setItem("stockpm_positions", JSON.stringify(positions));
 
-    if (editingTicker) {
+  const stock = watchList.find(s => s.ticker === detailTicker);
 
-      const index =
-        positions.findIndex(
-          p => p.ticker === editingTicker
-        );
+  renderPositionSummary(stock, positions[detailTicker] || {qty:0,avg:0,max:0});
+  renderBuyPlan(stock, positions[detailTicker] || {qty:0,avg:0,max:0});
 
+  renderPositions();
+  renderHome();
+}
 
-      if (index >= 0) {
-        positions[index] = position;
-      }
+function renderPositionSummary(stock, p) {
+  const el = document.getElementById("positionSummary");
 
+  if (!p.qty || !p.avg) {
+    el.innerHTML = `
+      <div class="note">
+        미보유 상태 · 현재 신호는 신규진입 플랜 기준으로 계산됨.
+      </div>
+    `;
+    return;
+  }
+
+  const invested = p.qty * p.avg;
+  const currentValue = p.qty * stock.price;
+
+  const pnl = ((stock.price / p.avg) - 1) * 100;
+  const remain = Math.max(0, (p.max || 0) - invested);
+
+  el.innerHTML = `
+    <div class="grid2">
+
+      <div class="metric">
+        <div class="label">투입금</div>
+        <div class="value">${money(invested, stock.type)}</div>
+      </div>
+
+      <div class="metric">
+        <div class="label">평가금</div>
+        <div class="value">${money(currentValue, stock.type)}</div>
+      </div>
+
+      <div class="metric">
+        <div class="label">수익률</div>
+        <div class="value ${pnl >= 0 ? "up" : "down"}">
+          ${pnl >= 0 ? "+" : ""}${pnl.toFixed(2)}%
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="label">추가 가능</div>
+        <div class="value">${money(remain, stock.type)}</div>
+      </div>
+
+    </div>
+  `;
+}
+
+function renderBuyPlan(stock, p) {
+  const el = document.getElementById("buyPlan");
+
+  const signal = signalFromScore(stock.entry, stock);
+
+  const atr = stock.atr;
+
+  const prices = [
+    stock.price,
+    Math.max(stock.ma20, stock.price - atr),
+    Math.max(stock.ma50, stock.price - atr * 2)
+  ];
+
+  const invalidation = Math.min(stock.ma50, stock.price - atr * 2.2);
+
+  const target1 = stock.price + (stock.price - invalidation) * 2;
+  const target2 = stock.price + (stock.price - invalidation) * 3;
+
+  const max = p.max || 0;
+  const invested = (p.qty || 0) * (p.avg || 0);
+  const remaining = Math.max(0, max - invested);
+
+  const allocations = [0.25, 0.30, 0.30];
+
+  let html = `
+    <div class="row">
+      <div>
+        <div class="why-title">Current Action</div>
+        <div class="why-desc">
+          ${signal.text}
+        </div>
+      </div>
+
+      <span class="badge ${signal.cls}">
+        ${stock.entry}
+      </span>
+    </div>
+
+    <div class="divider"></div>
+  `;
+
+  prices.forEach((price, i) => {
+
+    const amount = remaining
+      ? remaining * allocations[i]
+      : 0;
+
+    const qty = amount
+      ? amount / price
+      : 0;
+
+    let projectedAvg = 0;
+
+    if (p.qty && p.avg && qty) {
+      projectedAvg =
+        ((p.qty * p.avg) + (qty * price)) /
+        (p.qty + qty);
+    }
+
+    html += `
+      <div class="plan-row">
+
+        <div>
+          <div class="why-title">
+            ${i + 1}차 분할매수
+          </div>
+
+          <div class="why-desc">
+            ${money(price, stock.type)}
+            ${amount ? `· 약 ${qty.toFixed(stock.type === "CRYPTO" ? 4 : 2)} units` : ""}
+          </div>
+
+          ${
+            projectedAvg
+            ? `<div class="why-desc">예상 평단 ${money(projectedAvg, stock.type)}</div>`
+            : ""
+          }
+
+        </div>
+
+        <div style="text-align:right">
+          <strong>${[25,30,30][i]}%</strong>
+        </div>
+
+      </div>
+    `;
+  });
+
+  html += `
+    <div class="plan-row">
+      <div>
+        <div class="why-title">돌파 추가</div>
+        <div class="why-desc">
+          최근 전고점 돌파 + 거래량 증가 시
+        </div>
+      </div>
+      <strong>15%</strong>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="grid2">
+      <div class="metric">
+        <div class="label">INVALIDATION</div>
+        <div class="value down">
+          ${money(invalidation, stock.type)}
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="label">R/R</div>
+        <div class="value">~2.0+</div>
+      </div>
+
+      <div class="metric">
+        <div class="label">TARGET 1</div>
+        <div class="value">
+          ${money(target1, stock.type)}
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="label">TARGET 2</div>
+        <div class="value">
+          ${money(target2, stock.type)}
+        </div>
+      </div>
+    </div>
+
+    <div class="note mt10">
+      가격이 내려갔다고 무조건 추가매수하지 않는다.
+      MA200 Gate · 추세 · 거래량 · Entry Score가 유지되는 경우에만 추가매수를 허용한다.
+    </div>
+  `;
+
+  el.innerHTML = html;
+}
+
+function addWatchTicker() {
+  const input = document.getElementById("watchTickerInput");
+
+  const ticker = input.value.trim().toUpperCase();
+
+  if (!ticker) return;
+
+  if (watchList.some(x => x.ticker === ticker)) {
+    input.value = "";
+    return;
+  }
+
+  watchList.push({
+    ticker,
+    type: ticker.includes("BTC") || ticker.includes("ETH") ? "CRYPTO" : "US STOCK",
+    price: 100,
+    change: 0,
+    entry: 50,
+    technical: 50,
+    risk: 50,
+    ma20: 98,
+    ma50: 95,
+    ma200: 85,
+    rsi: 50,
+    atr: 3,
+    vol: "—",
+    vol20: "—",
+    relvol: "—"
+  });
+
+  localStorage.setItem("stockpm_watchlist", JSON.stringify(watchList));
+
+  input.value = "";
+
+  renderWatch();
+  renderHome();
+}
+
+function goPage(index) {
+  currentPage = Math.max(0, Math.min(4, index));
+
+  document.getElementById("pages").style.transform =
+    `translateX(-${currentPage * 20}%)`;
+
+  document.querySelectorAll(".nav-item")
+    .forEach((el, i) => el.classList.toggle("active", i === currentPage));
+}
+
+let touchStartX = 0;
+let touchCurrentX = 0;
+let isDragging = false;
+
+const viewport = document.getElementById("viewport");
+
+viewport.addEventListener("touchstart", e => {
+  touchStartX = e.touches[0].clientX;
+  touchCurrentX = touchStartX;
+  isDragging = true;
+}, {
+  passive: true
+});
+
+viewport.addEventListener("touchmove", e => {
+  if (!isDragging) return;
+
+  touchCurrentX = e.touches[0].clientX;
+}, {
+  passive: true
+});
+
+viewport.addEventListener("touchend", () => {
+  if (!isDragging) return;
+
+  const dx = touchCurrentX - touchStartX;
+
+  if (Math.abs(dx) > 55) {
+    if (dx < 0) {
+      goPage(currentPage + 1);
     } else {
-
-      const exists =
-        positions.findIndex(
-          p => p.ticker === ticker
-        );
-
-
-      if (exists >= 0) {
-        positions[exists] = position;
-      } else {
-        positions.push(position);
-      }
-
+      goPage(currentPage - 1);
     }
-
-
-    localStorage.setItem(
-      "stockpm_positions",
-      JSON.stringify(positions)
-    );
-
-
-    if (
-      !watchlist.find(
-        item => item.ticker === ticker
-      )
-    ) {
-
-      watchlist.push({
-        ticker,
-        name: "Portfolio Asset",
-        score: 0
-      });
-
-
-      localStorage.setItem(
-        "stockpm_watchlist",
-        JSON.stringify(watchlist)
-      );
-
-    }
-
-
-    closeModal();
-
-    renderAll();
-
   }
 
+  isDragging = false;
+});
 
-  function deletePosition() {
+function init() {
+  renderWatch();
+  renderHome();
+  renderPositions();
 
-    if (!editingTicker) return;
+  document.getElementById("versionText").textContent =
+    `v${APP_VERSION} · Position Intelligence`;
+}
 
-
-    if (
-      !confirm(
-        editingTicker +
-        " 포지션을 삭제할까요?"
-      )
-    ) {
-      return;
-    }
-
-
-    positions =
-      positions.filter(
-        p => p.ticker !== editingTicker
-      );
-
-
-    localStorage.setItem(
-      "stockpm_positions",
-      JSON.stringify(positions)
-    );
-
-
-    closeModal();
-
-    renderAll();
-
-  }
-
-
-  function showPage(page,button) {
-
-    document.getElementById(
-      "homePage"
-    ).classList.add("hidden");
-
-    document.getElementById(
-      "watchPage"
-    ).classList.add("hidden");
-
-    document.getElementById(
-      "portfolioPage"
-    ).classList.add("hidden");
-
-
-    if (page === "home") {
-
-      document.getElementById(
-        "homePage"
-      ).classList.remove("hidden");
-
-    }
-
-
-    if (page === "watch") {
-
-      document.getElementById(
-        "watchPage"
-      ).classList.remove("hidden");
-
-    }
-
-
-    if (page === "portfolio") {
-
-      document.getElementById(
-        "portfolioPage"
-      ).classList.remove("hidden");
-
-    }
-
-
-    document.querySelectorAll(
-      ".nav-item"
-    ).forEach(
-      item =>
-        item.classList.remove("active")
-    );
-
-
-    if (button) {
-      button.classList.add("active");
-    }
-
-  }
-
-
-  function renderAll() {
-
-    renderCandidates();
-
-    renderWatchlist();
-
-    renderPositions();
-
-  }
-
-
-  document.getElementById(
-    "tickerInput"
-  ).addEventListener(
-    "keydown",
-    function(event) {
-
-      if (event.key === "Enter") {
-        searchTicker();
-      }
-
-    }
-  );
-
-
-  document.getElementById(
-    "positionModal"
-  ).addEventListener(
-    "click",
-    function(event) {
-
-      if (
-        event.target.id ===
-        "positionModal"
-      ) {
-        closeModal();
-      }
-
-    }
-  );
-
-
-  renderAll();
+init();
 
 </script>
 
