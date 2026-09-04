@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#090b0e">
-<title>STOCKPM v0.3.1</title>
+<title>STOCKPM v0.3.2</title>
 
 <style>
 :root{
 --bg:#090b0e;--panel:#12161b;--panel2:#181d24;--panel3:#0f1318;
 --text:#f6f8fb;--muted:#8d97a6;--line:#252c35;
---good:#31d07c;--warn:#f5b942;--bad:#ff6678;--blue:#75aaff;
+--good:#31d07c;--warn:#f5b942;--bad:#ff6678;--blue:#75aaff;--violet:#9b8cff;
 --radius:20px;--safe:max(14px,env(safe-area-inset-bottom))
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -19,180 +19,105 @@ body{overflow:hidden}
 button,input,select{font:inherit}
 button{cursor:pointer}
 .app{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
-.topbar{
-height:62px;flex:0 0 62px;padding:14px 16px 10px;
-display:flex;align-items:center;justify-content:space-between;
-border-bottom:1px solid rgba(255,255,255,.05);
-background:rgba(9,11,14,.94);backdrop-filter:blur(18px);z-index:20
-}
+.topbar{height:62px;flex:0 0 62px;padding:14px 16px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.05);background:rgba(9,11,14,.94);backdrop-filter:blur(18px);z-index:20}
 .brand{display:flex;gap:10px;align-items:center}
-.logo{
-width:34px;height:34px;border-radius:11px;
-background:linear-gradient(135deg,#fff,#778399);
-color:#0b0d10;display:grid;place-items:center;font-weight:900
-}
+.logo{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#fff,#778399);color:#0b0d10;display:grid;place-items:center;font-weight:900}
 .brand h1{font-size:17px;margin:0}
 .brand small{display:block;color:var(--muted);font-size:10px;margin-top:4px;letter-spacing:.07em}
-.sync{
-font-size:10px;color:var(--muted);border:1px solid var(--line);
-background:var(--panel);padding:8px 10px;border-radius:999px
-}
+.sync{font-size:10px;color:var(--muted);border:1px solid var(--line);background:var(--panel);padding:8px 10px;border-radius:999px}
 .viewport{flex:1;position:relative;overflow:hidden}
 .track{height:100%;display:flex;will-change:transform}
 .track.anim{transition:transform .46s cubic-bezier(.22,.85,.25,1)}
-.page{
-flex:0 0 100%;height:100%;overflow-y:auto;
-padding:16px 14px calc(94px + var(--safe));scrollbar-width:none
-}
+.page{flex:0 0 100%;height:100%;overflow-y:auto;padding:16px 14px calc(94px + var(--safe));scrollbar-width:none}
 .page::-webkit-scrollbar{display:none}
 .inner{max-width:900px;margin:auto}
 h2{font-size:27px;margin:4px 0 3px}
 .subtitle{color:var(--muted);font-size:13px;margin-bottom:16px}
-.card{
-background:var(--panel);border:1px solid var(--line);
-border-radius:var(--radius);padding:16px;margin-bottom:12px
-}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px}
 .section{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .section h3{font-size:12px;letter-spacing:.08em;margin:0;color:#cbd2dc;text-transform:uppercase}
 .section span{font-size:10px;color:var(--muted)}
 .list{display:grid;gap:8px}
-.row{
-display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
-background:var(--panel2);border:1px solid var(--line);
-border-radius:15px;padding:14px
-}
+.row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:14px}
 .row:active{transform:scale(.995)}
 .name{font-weight:900}
 .meta{font-size:11px;color:var(--muted);line-height:1.55;margin-top:4px}
 .price{font-weight:900;text-align:right}
-.badge{
-display:inline-flex;padding:6px 8px;border-radius:999px;
-font-size:9px;font-weight:900;border:1px solid;margin-left:5px
-}
+.badge{display:inline-flex;padding:6px 8px;border-radius:999px;font-size:9px;font-weight:900;border:1px solid;margin-left:5px}
 .good{color:var(--good)}
 .warn{color:var(--warn)}
 .bad{color:var(--bad)}
+.blue{color:var(--blue)}
+.violet{color:var(--violet)}
 .badge.good{background:#0d2118;border-color:#1d4933}
 .badge.warn{background:#261e0d;border-color:#5d4617}
 .badge.bad{background:#271216;border-color:#5a2630}
+.badge.blue{background:#111d2c;border-color:#263e5e}
 .badge.neutral{color:#c7ced8;background:#171c22;border-color:#2a323c}
-.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.sum{
-background:var(--panel2);border:1px solid var(--line);
-border-radius:13px;padding:10px;text-align:center
-}
-.sum small{display:block;color:var(--muted);font-size:9px}
-.sum b{display:block;font-size:18px;margin-top:4px}
+.summary{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.sum{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:9px 4px;text-align:center}
+.sum small{display:block;color:var(--muted);font-size:8px}
+.sum b{display:block;font-size:17px;margin-top:4px}
 .field{display:grid;gap:6px;margin-bottom:11px}
 .field label{font-size:11px;color:var(--muted)}
-.field input,.field select{
-width:100%;border:1px solid var(--line);background:var(--panel3);
-color:var(--text);padding:12px 13px;border-radius:13px;outline:none
-}
+.field input,.field select{width:100%;border:1px solid var(--line);background:var(--panel3);color:var(--text);padding:12px 13px;border-radius:13px;outline:none}
+.field input:disabled{opacity:.55}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.btn{
-border:0;border-radius:12px;padding:12px 14px;
-background:#f5f7fa;color:#090b0e;font-weight:850
-}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.btn{border:0;border-radius:12px;padding:12px 14px;background:#f5f7fa;color:#090b0e;font-weight:850}
 .btn.secondary{background:var(--panel2);border:1px solid var(--line);color:var(--text)}
 .btn.danger{background:#2a1217;border:1px solid #5a2630;color:var(--bad)}
 .btn.full{width:100%}
-.calc{
-background:var(--panel2);border:1px solid var(--line);
-border-radius:13px;padding:12px;margin-bottom:11px
-}
+.calc{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px;margin-bottom:11px}
 .calc small{display:block;color:var(--muted);font-size:10px}
 .calc b{font-size:20px;display:block;margin-top:4px}
-.seg{
-display:grid;grid-template-columns:1fr 1fr;
-background:var(--panel3);border:1px solid var(--line);
-border-radius:12px;padding:3px;margin-bottom:14px
-}
-.seg button{
-border:0;background:transparent;color:var(--muted);
-padding:10px;border-radius:9px;font-weight:800
-}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--panel3);border:1px solid var(--line);border-radius:12px;padding:3px;margin-bottom:14px}
+.seg button{border:0;background:transparent;color:var(--muted);padding:10px;border-radius:9px;font-weight:800}
 .seg button.active{background:var(--panel2);color:var(--text)}
-.riskbar{
-height:9px;border-radius:999px;background:#0d1116;
-border:1px solid var(--line);overflow:hidden;margin-top:8px
-}
-.riskbar span{
-display:block;height:100%;width:0;
-background:linear-gradient(90deg,#31d07c 0%,#31d07c 45%,#f5b942 70%,#ff6678 100%)
-}
-.risktext{font-size:11px;color:var(--muted);margin-top:7px}
-.notice{
-font-size:11px;line-height:1.55;color:#d6bd83;
-background:#241b0e;border:1px solid #5a4317;
-padding:11px;border-radius:12px;margin-bottom:12px
-}
-.bottom{
-position:absolute;left:10px;right:10px;bottom:var(--safe);
-height:64px;border:1px solid rgba(255,255,255,.08);
-border-radius:22px;background:rgba(18,22,27,.94);
-backdrop-filter:blur(22px);display:grid;grid-template-columns:repeat(3,1fr);
-z-index:30
-}
-.tab{
-border:0;background:none;color:#738090;
-display:flex;flex-direction:column;align-items:center;justify-content:center;
-font-size:9px;font-weight:800;gap:3px
-}
+.riskbar{height:9px;border-radius:999px;background:#0d1116;border:1px solid var(--line);overflow:hidden;margin-top:8px}
+.riskbar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#31d07c 0%,#31d07c 45%,#f5b942 70%,#ff6678 100%)}
+.risktext{font-size:11px;color:var(--muted);margin-top:7px;line-height:1.5}
+.notice{font-size:11px;line-height:1.55;color:#d6bd83;background:#241b0e;border:1px solid #5a4317;padding:11px;border-radius:12px;margin-bottom:12px}
+.bottom{position:absolute;left:10px;right:10px;bottom:var(--safe);height:64px;border:1px solid rgba(255,255,255,.08);border-radius:22px;background:rgba(18,22,27,.94);backdrop-filter:blur(22px);display:grid;grid-template-columns:repeat(3,1fr);z-index:30}
+.tab{border:0;background:none;color:#738090;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;font-weight:800;gap:3px}
 .tab i{font-style:normal;font-size:20px}
 .tab.active{color:white}
-.detail{
-position:absolute;inset:0;background:var(--bg);z-index:50;
-transform:translateX(100%);
-transition:transform .45s cubic-bezier(.22,.85,.25,1);
-display:flex;flex-direction:column
-}
+.detail{position:absolute;inset:0;background:var(--bg);z-index:50;transform:translateX(100%);transition:transform .45s cubic-bezier(.22,.85,.25,1);display:flex;flex-direction:column}
 .detail.open{transform:translateX(0)}
-.detailhead{
-height:60px;flex:0 0 60px;display:grid;
-grid-template-columns:42px 1fr 42px;align-items:center;
-padding:10px 14px;border-bottom:1px solid var(--line)
-}
-.icon{
-width:38px;height:38px;border-radius:12px;
-border:1px solid var(--line);background:var(--panel);color:white
-}
+.detailhead{height:60px;flex:0 0 60px;display:grid;grid-template-columns:42px 1fr 42px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+.icon{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:white}
 .detailtitle{text-align:center}
 .detailtitle b{display:block}
 .detailtitle small{font-size:10px;color:var(--muted)}
-.detailbody{flex:1;overflow-y:auto;padding:14px}
-.hero{
-background:linear-gradient(145deg,#161b22,#101318);
-border:1px solid #27313d
-}
+.detailbody{flex:1;overflow-y:auto;padding:14px 14px calc(30px + var(--safe))}
+.hero{background:linear-gradient(145deg,#161b22,#101318);border:1px solid #27313d}
 .herotop{display:flex;justify-content:space-between;align-items:flex-start}
 .bigprice{font-size:28px;font-weight:900;margin:4px 0}
-.score{font-size:46px;font-weight:900}
+.score{font-size:46px;font-weight:900;text-align:right}
 .score small{font-size:11px;color:var(--muted)}
+.confidence{font-size:9px;color:var(--muted);margin-top:3px;text-align:right}
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.stat{
-background:var(--panel2);border:1px solid var(--line);
-border-radius:13px;padding:12px
-}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}
 .stat small{display:block;color:var(--muted);font-size:10px}
 .stat b{display:block;margin-top:5px}
-.signal{
-display:grid;grid-template-columns:1fr auto;
-padding:11px;border-bottom:1px solid var(--line)
-}
+.signal{display:grid;grid-template-columns:1fr auto;gap:10px;padding:11px;border-bottom:1px solid var(--line)}
 .signal:last-child{border-bottom:0}
 .signal span{font-size:12px}
-.signal b{font-size:12px}
-.simbox{
-background:var(--panel2);border:1px solid var(--line);
-border-radius:14px;padding:13px;margin-top:10px
-}
+.signal b{font-size:12px;text-align:right}
+.plan{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:8px}
+.planhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+.planhead b{font-size:12px}
+.planhead span{font-size:11px;font-weight:900}
+.planmeta{font-size:10px;color:var(--muted);line-height:1.55}
+.miniinput{width:86px!important;padding:8px 9px!important;text-align:right}
+.editbanner{display:none;background:#152034;border:1px solid #29496f;color:#9bc3ff;padding:10px 12px;border-radius:12px;margin-bottom:12px;font-size:11px;font-weight:800}
+.editbanner.show{display:block}
+.datadot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--good);margin-right:4px}
 .empty{text-align:center;color:var(--muted);font-size:12px;padding:25px}
 </style>
 </head>
 
 <body>
-
 <div class="app">
 
 <header class="topbar">
@@ -200,7 +125,7 @@ border-radius:14px;padding:13px;margin-top:10px
 <div class="logo">SP</div>
 <div>
 <h1>STOCKPM</h1>
-<small>POSITION MANAGER · v0.3.1</small>
+<small>POSITION MANAGER · v0.3.2</small>
 </div>
 </div>
 <div class="sync" id="sync">DATA WAIT</div>
@@ -211,20 +136,18 @@ border-radius:14px;padding:13px;margin-top:10px
 
 <section class="page">
 <div class="inner">
-
 <h2>Today</h2>
-<div class="subtitle">내가 등록한 포지션만 분석합니다.</div>
+<div class="subtitle">보유 포지션의 추세 · 타이밍 · 리스크를 분석합니다.</div>
 
 <div class="card">
 <div class="section"><h3>Position status</h3><span>ACCOUNT</span></div>
-
 <div class="summary">
 <div class="sum"><small>ADD</small><b class="good" id="addCount">0</b></div>
 <div class="sum"><small>HOLD</small><b id="holdCount">0</b></div>
 <div class="sum"><small>CAUTION</small><b class="warn" id="cautionCount">0</b></div>
+<div class="sum"><small>REDUCE</small><b class="warn" id="reduceCount">0</b></div>
 <div class="sum"><small>RISK</small><b class="bad" id="riskCount">0</b></div>
 </div>
-
 <div class="riskbar"><span id="heatbar"></span></div>
 <div class="risktext" id="heattext">Portfolio Risk 계산 대기</div>
 </div>
@@ -233,20 +156,16 @@ border-radius:14px;padding:13px;margin-top:10px
 <div class="section"><h3>My positions</h3><span id="homeCount">0</span></div>
 <div class="list" id="homeList"></div>
 </div>
-
 </div>
 </section>
 
-
 <section class="page">
 <div class="inner">
-
 <h2>Position</h2>
-<div class="subtitle">포지션 등록 · 수정 · 추가매수 관리</div>
+<div class="subtitle">등록 · 수정 · 분할매수 · 분할매도 관리</div>
 
 <div class="card">
 <div class="section"><h3>Trade risk limit</h3><span>WARNING LIMIT</span></div>
-
 <div class="two">
 <div class="field">
 <label>Account equity ($)</label>
@@ -257,24 +176,18 @@ border-radius:14px;padding:13px;margin-top:10px
 <input id="riskLimit" type="number" step=".1">
 </div>
 </div>
-
-<div class="notice">
-Risk Limit은 매수를 막는 기능이 아니라 경고 기준입니다.
-Stop 도달 예상 손실이 이 기준을 초과하면 RISK ALERT로 표시합니다.
-</div>
-
+<div class="notice">Risk Limit은 주문을 막는 기능이 아닙니다. Active Stop 기준 예상 손실이 설정값을 넘으면 경고합니다.</div>
 <button class="btn secondary full" id="saveRisk">설정 저장</button>
 </div>
 
-
 <div class="card">
-
 <div class="seg">
 <button class="active" data-mode="stock">STOCK / ETF</button>
 <button data-mode="crypto">CRYPTO LEVERAGE</button>
 </div>
 
 <div id="stockForm">
+<div class="editbanner" id="stockEditBanner">포지션 수정 모드</div>
 
 <div class="field">
 <label>Ticker</label>
@@ -286,7 +199,6 @@ Stop 도달 예상 손실이 이 기준을 초과하면 RISK ALERT로 표시합�
 <label>수량</label>
 <input id="qty" type="number" step="any">
 </div>
-
 <div class="field">
 <label>평단가</label>
 <input id="avgPrice" type="number" step="any">
@@ -294,8 +206,8 @@ Stop 도달 예상 손실이 이 기준을 초과하면 RISK ALERT로 표시합�
 </div>
 
 <div class="field">
-<label>Stop Price</label>
-<input id="stopPrice" type="number" step="any">
+<label>Manual Stop</label>
+<input id="stopPrice" type="number" step="any" placeholder="비워두면 Tech Stop 사용">
 </div>
 
 <div class="calc">
@@ -303,12 +215,14 @@ Stop 도달 예상 손실이 이 기준을 초과하면 RISK ALERT로 표시합�
 <b id="investedCalc">$0</b>
 </div>
 
+<div class="two">
 <button class="btn full" id="saveStock">포지션 등록</button>
-
+<button class="btn secondary" id="cancelEdit" style="display:none">취소</button>
+</div>
 </div>
 
-
 <div id="cryptoForm" style="display:none">
+<div class="editbanner" id="cryptoEditBanner">레버리지 포지션 수정 모드</div>
 
 <div class="field">
 <label>Symbol</label>
@@ -323,7 +237,6 @@ Stop 도달 예상 손실이 이 기준을 초과하면 RISK ALERT로 표시합�
 <option>SHORT</option>
 </select>
 </div>
-
 <div class="field">
 <label>Leverage</label>
 <input id="cryptoLev" type="number" value="5">
@@ -335,7 +248,6 @@ Stop 도달 예상 손실이 이 기준을 초과하면 RISK ALERT로 표시합�
 <label>Entry</label>
 <input id="cryptoEntry" type="number" step="any">
 </div>
-
 <div class="field">
 <label>Position Size ($)</label>
 <input id="cryptoSize" type="number" step="any">
@@ -347,68 +259,56 @@ Stop 도달 예상 손실이 이 기준을 초과하면 RISK ALERT로 표시합�
 <label>Stop</label>
 <input id="cryptoStop" type="number" step="any">
 </div>
-
 <div class="field">
 <label>Liquidation</label>
 <input id="cryptoLiq" type="number" step="any">
 </div>
 </div>
 
+<div class="two">
 <button class="btn full" id="saveCrypto">포지션 등록</button>
-
+<button class="btn secondary" id="cancelCryptoEdit" style="display:none">취소</button>
 </div>
-
 </div>
-
+</div>
 
 <div class="card">
 <div class="section"><h3>Registered positions</h3><span id="positionCount">0</span></div>
 <div class="list" id="positionList"></div>
 </div>
-
 </div>
 </section>
 
-
 <section class="page">
 <div class="inner">
-
 <h2>More</h2>
-<div class="subtitle">데이터 및 시스템 상태</div>
+<div class="subtitle">시장 데이터 및 시스템 상태</div>
 
 <div class="card">
-<div class="section"><h3>Market data</h3><span>SUPABASE + TWELVE</span></div>
+<div class="section"><h3>Market data</h3><span>TWELVE DATA</span></div>
 
-<div class="signal">
-<span>Status</span>
-<b id="dataStatus">WAIT</b>
-</div>
-
-<div class="signal">
-<span>Tracked symbols</span>
-<b id="trackedSymbols">0</b>
-</div>
-
-<div class="signal">
-<span>Last sync</span>
-<b id="lastSync">—</b>
-</div>
+<div class="signal"><span>Connection</span><b id="dataStatus">WAIT</b></div>
+<div class="signal"><span>Mode</span><b id="dataMode">—</b></div>
+<div class="signal"><span>Last Market Update</span><b id="lastMarketUpdate">—</b></div>
+<div class="signal"><span>Data Age</span><b id="dataAge">—</b></div>
+<div class="signal"><span>Tracked Positions</span><b id="trackedSymbols">0</b></div>
 
 <button class="btn full" style="margin-top:12px" id="refresh">시장 데이터 업데이트</button>
 </div>
 
 <div class="card">
-<div class="notice">
-WATCH / DISCOVER / 차트 기능을 제거했습니다.
-STOCKPM은 등록된 포지션만 Twelve Data에서 가져옵니다.
+<div class="section"><h3>Engine</h3><span>v2.1</span></div>
+<div class="signal"><span>Daily Trend</span><b>MA50 / MA200</b></div>
+<div class="signal"><span>Timing</span><b>4H</b></div>
+<div class="signal"><span>Momentum</span><b>RSI</b></div>
+<div class="signal"><span>Volatility</span><b>ATR</b></div>
+<div class="signal"><span>Volume</span><b>Relative Volume</b></div>
+<div class="signal"><span>Position Signals</span><b>ADD → EXIT WATCH</b></div>
 </div>
-</div>
-
 </div>
 </section>
 
 </div>
-
 
 <nav class="bottom">
 <button class="tab active" data-page="0"><i>⌂</i>HOME</button>
@@ -416,1437 +316,1119 @@ STOCKPM은 등록된 포지션만 Twelve Data에서 가져옵니다.
 <button class="tab" data-page="2"><i>•••</i>MORE</button>
 </nav>
 
-
 <div class="detail" id="detail">
-
 <header class="detailhead">
 <button class="icon" id="back">‹</button>
-
 <div class="detailtitle">
 <b id="detailTicker">—</b>
 <small>POSITION ANALYSIS</small>
 </div>
-
 <div></div>
 </header>
-
 
 <div class="detailbody">
 <div class="inner">
 
 <div class="card hero">
-
 <div class="herotop">
-
 <div>
 <div class="meta">CURRENT PRICE</div>
 <div class="bigprice" id="currentPrice">—</div>
 <span class="badge neutral" id="actionBadge">WAIT</span>
+<div class="meta" id="detailDataAge" style="margin-top:8px">DATA WAIT</div>
 </div>
 
+<div>
 <div class="score" id="score">—<small>/100</small></div>
-
+<div class="confidence" id="confidence">CONFIDENCE —</div>
 </div>
-
 </div>
-
+</div>
 
 <div class="card">
-
-<div class="section">
-<h3>Position</h3>
-<span>LIVE</span>
-</div>
-
+<div class="section"><h3>Position</h3><span>RISK</span></div>
 <div class="stats" id="positionStats"></div>
-
 <div class="riskbar"><span id="riskbar"></span></div>
-
 <div class="risktext" id="riskText"></div>
-
 </div>
-
 
 <div class="card">
-
-<div class="section">
-<h3>Signal Engine</h3>
-<span>v2</span>
+<div class="section"><h3>Stop Engine</h3><span>ACTIVE STOP</span></div>
+<div id="stopEngine"></div>
 </div>
 
+<div class="card">
+<div class="section"><h3>Signal Engine</h3><span>v2.1</span></div>
 <div id="signalEngine"></div>
-
 </div>
 
-
 <div class="card">
+<div class="section"><h3>Scale In</h3><span>3 STEP PLAN</span></div>
+<div id="scaleInPlan"></div>
 
-<div class="section">
-<h3>Add position simulator</h3>
-<span>AVERAGE DOWN / UP</span>
+<div class="notice" style="margin-top:10px">
+제안 가격은 주문 지시가 아니라 MA20 · MA50 · ATR · 4H 구조를 이용한 관리 기준입니다. 수량은 직접 결정합니다.
 </div>
 
 <div class="two">
-
 <div class="field">
 <label>추가 수량</label>
 <input id="addQty" type="number" step="any">
 </div>
-
 <div class="field">
 <label>추가 매수가</label>
 <input id="addPrice" type="number" step="any">
 </div>
-
 </div>
-
-<div class="simbox">
 
 <div class="stats">
-
-<div class="stat">
-<small>새 총수량</small>
-<b id="newQty">—</b>
-</div>
-
-<div class="stat">
-<small>새 평단</small>
-<b id="newAvg">—</b>
-</div>
-
-<div class="stat">
-<small>새 투자금</small>
-<b id="newInvested">—</b>
-</div>
-
-<div class="stat">
-<small>추가 후 Risk</small>
-<b id="newRisk">—</b>
-</div>
-
+<div class="stat"><small>새 총수량</small><b id="newQty">—</b></div>
+<div class="stat"><small>새 평단</small><b id="newAvg">—</b></div>
+<div class="stat"><small>새 투자금</small><b id="newInvested">—</b></div>
+<div class="stat"><small>추가 후 Risk</small><b id="newRisk">—</b></div>
 </div>
 
 <div class="riskbar"><span id="newRiskBar"></span></div>
 <div class="risktext" id="newRiskText"></div>
-
 </div>
-
-</div>
-
 
 <div class="card">
+<div class="section"><h3>Scale Out</h3><span>R MULTIPLE</span></div>
+<div id="scaleOutPlan"></div>
+</div>
 
+<div class="card">
 <div class="two">
 <button class="btn secondary" id="editPosition">포지션 수정</button>
 <button class="btn danger" id="deletePosition">포지션 삭제</button>
 </div>
-
 </div>
 
 </div>
 </div>
-
 </div>
 
 </div>
 </div>
-
 
 <script>
-
 const SUPABASE_URL='https://seuqhwmzmsqzuppemiuk.supabase.co';
 const KEY='sb_publishable_8T7Wafioftxn528m-T4fNA_-OZq9dwq';
-
 const MARKET=SUPABASE_URL+'/functions/v1/market-data';
 
 const CACHE='stockpm_market_cache_v022';
+const POSITIONS_KEY='stockpm_positions';
+const CRYPTO_KEY='stockpm_leverage';
+const SETTINGS_KEY='stockpm_risk_settings';
 
-const $=x=>document.getElementById(x);
+const DAILY_TTL=60*60*1000;
+const H4_TTL=15*60*1000;
+
+const $=id=>document.getElementById(id);
 
 const store={
 get(k,d){
-try{return JSON.parse(localStorage.getItem(k))??d}
-catch{return d}
+try{
+const v=JSON.parse(localStorage.getItem(k));
+return v??d;
+}catch{return d}
 },
 set(k,v){localStorage.setItem(k,JSON.stringify(v))}
 };
 
-let positions=store.get('stockpm_positions',{});
-let crypto=store.get('stockpm_leverage',[]);
-let settings=store.get('stockpm_risk_settings',{
-equity:100000,
-maxRiskPct:2
-});
-
+let positions=store.get(POSITIONS_KEY,{});
+let crypto=store.get(CRYPTO_KEY,[]);
+let settings=store.get(SETTINGS_KEY,{equity:100000,maxRiskPct:2});
 let cache=store.get(CACHE,{});
+
 let data={};
 let currentTicker=null;
+let editingTicker=null;
+let editingCryptoIndex=null;
 let page=0;
-
+let lastFetchMode='CACHED';
 
 function money(v){
-
 if(!Number.isFinite(+v))return '—';
-
-return '$'+(+v).toLocaleString(undefined,{
-maximumFractionDigits:2
-});
-
+return '$'+(+v).toLocaleString(undefined,{maximumFractionDigits:2});
 }
-
 
 function pct(v){
-
 if(!Number.isFinite(+v))return '—';
-
 return (+v).toFixed(2)+'%';
-
 }
-
 
 function average(a){
-
-return a.length
-?a.reduce((x,y)=>x+y,0)/a.length
-:0;
-
+return a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 }
 
-
-function sma(a,n){
-
-return a.length>=n
-?average(a.slice(-n))
-:average(a);
-
+function exactSMA(a,n){
+if(a.length<n)return null;
+return average(a.slice(-n));
 }
-
 
 function RSI(c,n=14){
-
-if(c.length<n+1)return 50;
-
-let gain=0;
-let loss=0;
-
+if(c.length<n+1)return null;
+let gain=0,loss=0;
 for(let i=c.length-n;i<c.length;i++){
-
-let d=c[i]-c[i-1];
-
+const d=c[i]-c[i-1];
 if(d>0)gain+=d;
 else loss-=d;
-
 }
-
 if(!loss)return 100;
-
-let rs=(gain/n)/(loss/n);
-
+const rs=(gain/n)/(loss/n);
 return 100-(100/(1+rs));
-
 }
-
 
 function ATR(a,n=14){
-
-if(a.length<n+1)return 0;
-
-let values=[];
-
+if(a.length<n+1)return null;
+const values=[];
 for(let i=a.length-n;i<a.length;i++){
-
-values.push(
-Math.max(
+values.push(Math.max(
 a[i].h-a[i].l,
 Math.abs(a[i].h-a[i-1].c),
 Math.abs(a[i].l-a[i-1].c)
-)
-);
-
+));
 }
-
 return average(values);
-
 }
-
 
 function normalize(values){
-
-return [...values]
-.reverse()
-.map(x=>({
-
+return [...values].reverse().map(x=>({
 dt:x.datetime,
-
 o:+x.open,
 h:+x.high,
 l:+x.low,
 c:+x.close,
 v:+x.volume||0
-
-}))
-.filter(x=>Number.isFinite(x.c));
-
+})).filter(x=>Number.isFinite(x.c));
 }
-
 
 function cryptoSymbol(s){
-
-s=s.toUpperCase();
-
-if(s.endsWith('USDT'))
-return s.slice(0,-4)+'/USD';
-
+s=(s||'').toUpperCase().trim();
+if(s.endsWith('USDT'))return s.slice(0,-4)+'/USD';
 return s;
-
 }
-
 
 function symbols(){
-
-let s=new Set(Object.keys(positions));
-
+const s=new Set(Object.keys(positions));
 crypto.forEach(p=>s.add(cryptoSymbol(p.symbol)));
-
-return [...s];
-
+return [...s].filter(Boolean);
 }
 
+function ageText(ms){
+if(!Number.isFinite(ms)||ms<0)return '—';
+const m=Math.floor(ms/60000);
+if(m<1)return '방금 전';
+if(m<60)return m+'분 전';
+const h=Math.floor(m/60);
+if(h<24)return h+'시간 전';
+return Math.floor(h/24)+'일 전';
+}
 
-async function fetchSeries(symbol,interval){
+function newestCacheTime(){
+let newest=0;
+symbols().forEach(symbol=>{
+['1day','4h'].forEach(interval=>{
+const t=cache[symbol+'__'+interval]?.time||0;
+if(t>newest)newest=t;
+});
+});
+return newest;
+}
 
-let key=symbol+'__'+interval;
+function symbolCacheTime(symbol){
+return Math.max(
+cache[symbol+'__1day']?.time||0,
+cache[symbol+'__4h']?.time||0
+);
+}
 
-let old=cache[key];
+async function fetchSeries(symbol,interval,force=false){
+const key=symbol+'__'+interval;
+const old=cache[key];
+const ttl=interval==='4h'?H4_TTL:DAILY_TTL;
+
+if(!force&&old?.values?.length&&Date.now()-old.time<ttl){
+return {values:old.values,mode:'CACHED'};
+}
 
 try{
-
-let url=new URL(MARKET);
-
+const url=new URL(MARKET);
 url.searchParams.set('symbol',symbol);
 url.searchParams.set('interval',interval);
 
-let r=await fetch(url,{
-headers:{apikey:KEY}
-});
+const r=await fetch(url,{headers:{apikey:KEY}});
+const j=await r.json();
 
-let j=await r.json();
+if(!r.ok||!Array.isArray(j.values))throw new Error(j?.message||'FETCH ERROR');
 
-if(!r.ok||!Array.isArray(j.values))
-throw Error();
-
-let values=normalize(j.values);
+const values=normalize(j.values);
 
 cache[key]={
 values,
-time:Date.now()
+time:Date.now(),
+sourceTime:j.fetched_at||new Date().toISOString()
 };
 
 store.set(CACHE,cache);
 
-return values;
-
+return {values,mode:'LIVE'};
+}catch(e){
+return {values:old?.values||[],mode:old?.values?.length?'CACHED':'ERROR'};
 }
-catch{
-
-return old?.values||[];
-
 }
-
-}
-
 
 function analyse(symbol,d,h4){
-
 if(!d.length)return null;
 
-let close=d.map(x=>x.c);
-let volume=d.map(x=>x.v);
+const close=d.map(x=>x.c);
+const volume=d.map(x=>x.v);
+const price=close.at(-1);
 
-let price=close.at(-1);
+const ma20=exactSMA(close,20);
+const ma50=exactSMA(close,50);
+const ma200=exactSMA(close,200);
 
-let ma20=sma(close,20);
-let ma50=sma(close,50);
-let ma200=sma(close,200);
+const rsi=RSI(close);
+const atr=ATR(d);
 
-let rsi=RSI(close);
-let atr=ATR(d);
+const hasMA200=ma200!==null;
+const hasMA50=ma50!==null;
 
-let oldMA200=
-d.length>210
-?average(close.slice(-210,-10))
-:ma200;
+let ma200Rising=null;
 
-let slope=
-ma200>oldMA200
-?'RISING'
-:'FALLING';
-
-let hclose=h4.map(x=>x.c);
-
-let hma20=sma(hclose,20);
-
-let hrsi=RSI(hclose);
-
-let timing=
-hclose.length &&
-hclose.at(-1)>hma20 &&
-hrsi>45 &&
-hrsi<70;
-
-let trend=
-price>ma200 &&
-ma50>ma200 &&
-slope==='RISING';
-
-let overextended=
-price>ma20*1.08 ||
-rsi>74;
-
-let relVolume=1;
-
-if(volume.length>20){
-
-let base=average(volume.slice(-21,-1));
-
-if(base)
-relVolume=volume.at(-1)/base;
-
+if(close.length>=210){
+const oldMA200=average(close.slice(-210,-10));
+ma200Rising=ma200>oldMA200;
 }
+
+const hclose=h4.map(x=>x.c);
+const hma20=exactSMA(hclose,20);
+const hrsi=RSI(hclose);
+
+const timing=
+hma20!==null &&
+hrsi!==null &&
+hclose.at(-1)>hma20 &&
+hrsi>=45 &&
+hrsi<=70;
+
+let relVolume=null;
+if(volume.length>=21){
+const base=average(volume.slice(-21,-1));
+if(base>0)relVolume=volume.at(-1)/base;
+}
+
+const overextended=
+(ma20!==null&&price>ma20*1.08) ||
+(rsi!==null&&rsi>74);
 
 let score=0;
+let possible=0;
 
-score+=price>ma200?25:5;
-score+=ma50>ma200?20:5;
-score+=slope==='RISING'?15:0;
-score+=timing?15:5;
+if(hasMA200){
+possible+=25;
+if(price>ma200)score+=25;
+}
 
-if(rsi>=45&&rsi<=68)
-score+=10;
+if(hasMA50&&hasMA200){
+possible+=20;
+if(ma50>ma200)score+=20;
+}
 
-if(!overextended)
-score+=10;
+if(ma200Rising!==null){
+possible+=15;
+if(ma200Rising)score+=15;
+}
 
-if(relVolume>1)
-score+=5;
+if(hma20!==null&&hrsi!==null){
+possible+=15;
+if(timing)score+=15;
+else if(hrsi>=40&&hrsi<=75)score+=5;
+}
 
-score=Math.min(100,score);
+if(rsi!==null){
+possible+=10;
+if(rsi>=45&&rsi<=68)score+=10;
+else if(rsi>=40&&rsi<=72)score+=5;
+}
 
-let signal;
+if(ma20!==null){
+possible+=10;
+if(!overextended)score+=10;
+}
 
-if(!trend)
+if(relVolume!==null){
+possible+=5;
+if(relVolume>=1)score+=5;
+}
+
+const normalizedScore=possible?Math.round(score/possible*100):0;
+
+let confidence='LOW';
+if(close.length>=210&&hclose.length>=50)confidence='HIGH';
+else if(close.length>=50&&hclose.length>=20)confidence='MEDIUM';
+
+let longTrend='LIMITED';
+if(hasMA200&&hasMA50){
+if(price>ma200&&ma50>ma200&&(ma200Rising===true||ma200Rising===null)){
+longTrend='STRONG';
+}else if(price>ma200){
+longTrend='MIXED';
+}else{
+longTrend='WEAK';
+}
+}else if(hasMA50){
+longTrend=price>ma50?'SHORT UPTREND':'SHORT WEAK';
+}
+
+let signal='HOLD';
+
+if(hasMA200){
+const below200=price<ma200;
+const structureWeak=hasMA50&&ma50<ma200;
+
+if(below200&&structureWeak){
+signal=normalizedScore<45?'REDUCE':'CAUTION';
+}else if(below200){
 signal='CAUTION';
-
-else if(overextended)
+}else if(overextended){
 signal='HOLD';
-
-else if(score>=80&&timing)
+}else if(
+normalizedScore>=80 &&
+timing &&
+(!hasMA50||ma50>=ma200) &&
+(ma200Rising!==false)
+){
 signal='ADD';
-
-else
+}else if(
+normalizedScore<40 &&
+structureWeak
+){
+signal='REDUCE';
+}else if(
+normalizedScore<55
+){
+signal='CAUTION';
+}else{
 signal='HOLD';
+}
+}else{
+if(overextended){
+signal='HOLD';
+}else if(normalizedScore>=80&&timing){
+signal='ADD';
+}else if(normalizedScore<45){
+signal='CAUTION';
+}else{
+signal='HOLD';
+}
+}
 
+let techStop=null;
+let stopBasis='—';
 
-let stop=
-Math.min(
-ma50,
-price-(atr*2)
-);
+if(atr!==null){
+const atrStop=price-(atr*2);
 
-if(!stop||stop>=price)
-stop=price*.94;
+if(ma50!==null){
+techStop=Math.min(ma50,atrStop);
+stopBasis=techStop===ma50?'MA50':'2 × ATR';
+}else if(ma20!==null){
+techStop=Math.min(ma20,atrStop);
+stopBasis=techStop===ma20?'MA20':'2 × ATR';
+}else{
+techStop=atrStop;
+stopBasis='2 × ATR';
+}
+}
 
+if(!techStop||techStop<=0||techStop>=price){
+techStop=price*.94;
+stopBasis='6% FALLBACK';
+}
 
 return{
-
-price,
-ma20,
-ma50,
-ma200,
-rsi,
-hrsi,
-atr,
-relVolume,
-timing,
-trend,
-overextended,
-score,
-signal,
-stop
-
+symbol,price,ma20,ma50,ma200,rsi,atr,
+hrsi,hma20,relVolume,timing,
+overextended,score:normalizedScore,
+possible,confidence,longTrend,signal,
+techStop,stopBasis,
+hasMA200,hasMA50,ma200Rising,
+dailyBars:close.length,h4Bars:hclose.length
 };
-
 }
 
+function activeStop(symbol){
+const p=positions[symbol];
+const d=data[symbol];
+if(!p)return {active:null,manual:null,tech:null,basis:'—'};
 
-function positionRisk(symbol){
+const manual=+p.stop>0?+p.stop:null;
+const tech=d?.techStop||null;
 
-let p=positions[symbol];
-
-let d=data[symbol];
-
-if(!p||!d)
-return {
-loss:0,
-risk:0
+return{
+active:manual||tech,
+manual,
+tech,
+basis:manual?'MANUAL':d?.stopBasis||'TECH'
 };
-
-let stop=
-p.stop>0
-?p.stop
-:d.stop;
-
-let loss=
-Math.max(
-0,
-(p.avg-stop)*p.qty
-);
-
-let risk=
-settings.equity
-?loss/settings.equity*100
-:0;
-
-return {loss,risk,stop};
-
 }
 
+function positionRisk(symbol,avgOverride=null,qtyOverride=null){
+const p=positions[symbol];
+if(!p)return {loss:0,risk:0,stop:null};
+
+const s=activeStop(symbol);
+const avg=avgOverride??+p.avg;
+const qty=qtyOverride??+p.qty;
+
+if(!s.active)return {loss:0,risk:0,stop:null};
+
+const loss=Math.max(0,(avg-s.active)*qty);
+const risk=settings.equity?loss/settings.equity*100:0;
+
+return {loss,risk,stop:s.active};
+}
+
+function positionAction(symbol){
+const d=data[symbol];
+const r=positionRisk(symbol);
+
+if(r.risk>settings.maxRiskPct)return 'RISK ALERT';
+if(!d)return 'WAIT';
+
+if(d.signal==='REDUCE'&&r.stop&&d.price<r.stop)return 'EXIT WATCH';
+
+return d.signal;
+}
 
 function badgeClass(s){
-
-if(s==='ADD')
-return 'good';
-
-if(s==='CAUTION')
-return 'warn';
-
-if(s==='RISK ALERT')
-return 'bad';
-
+if(s==='ADD')return 'good';
+if(s==='HOLD')return 'neutral';
+if(s==='CAUTION'||s==='REDUCE')return 'warn';
+if(s==='RISK ALERT'||s==='EXIT WATCH')return 'bad';
 return 'neutral';
-
 }
-
 
 function render(){
-
 let list='';
-
-let add=0;
-let hold=0;
-let caution=0;
-let risks=0;
-
+let add=0,hold=0,caution=0,reduce=0,risks=0;
 let portfolioRisk=0;
 
-
 Object.keys(positions).forEach(symbol=>{
+const p=positions[symbol];
+const d=data[symbol];
+const action=positionAction(symbol);
+const r=positionRisk(symbol);
 
-let p=positions[symbol];
-
-let d=data[symbol];
-
-let action=d?.signal||'WAIT';
-
-let r=positionRisk(symbol);
-
-if(r.risk>settings.maxRiskPct){
-
-action='RISK ALERT';
-risks++;
-
-}
-
-else if(action==='ADD')add++;
-
+if(action==='ADD')add++;
+else if(action==='HOLD'||action==='WAIT')hold++;
 else if(action==='CAUTION')caution++;
-
-else hold++;
-
+else if(action==='REDUCE')reduce++;
+else risks++;
 
 portfolioRisk+=r.risk;
 
-
-let invested=p.qty*p.avg;
-
-let current=d?.price||0;
-
-let value=current*p.qty;
-
-let pnl=current
-?(value-invested)
-:0;
-
+const invested=(+p.qty||0)*(+p.avg||0);
+const current=d?.price||0;
+const value=current*(+p.qty||0);
+const pnl=current?value-invested:0;
+const t=symbolCacheTime(symbol);
 
 list+=`
-
 <div class="row" data-position="${symbol}">
-
 <div>
-
 <div class="name">
-
 ${symbol}
-
-<span class="badge ${badgeClass(action)}">
-${action}
-</span>
-
+<span class="badge ${badgeClass(action)}">${action}</span>
 </div>
-
 <div class="meta">
-
-${p.qty.toLocaleString()} shares · AVG ${money(p.avg)}
-<br>
-
+${(+p.qty||0).toLocaleString()} shares · AVG ${money(p.avg)}<br>
 Invested ${money(invested)}
 ${current?' · P/L '+money(pnl):''}
-
+${t?'<br><span class="datadot"></span>DATA '+ageText(Date.now()-t):''}
 </div>
-
 </div>
-
-<div class="price">
-
-${current?money(current):'DATA WAIT'}
-
-</div>
-
-</div>
-
-`;
-
+<div class="price">${current?money(current):'DATA WAIT'}</div>
+</div>`;
 });
-
 
 crypto.forEach((p,i)=>{
-
-let symbol=cryptoSymbol(p.symbol);
-
-let d=data[symbol];
-
-let current=d?.price||p.entry;
-
-let dir=p.side==='SHORT'?-1:1;
-
-let pnl=
-p.size*((current-p.entry)/p.entry)*dir;
-
-let stopLoss=
-p.stop
-?p.size*Math.abs(p.stop-p.entry)/p.entry
-:0;
-
-let risk=
-settings.equity
-?stopLoss/settings.equity*100
-:0;
-
+const symbol=cryptoSymbol(p.symbol);
+const d=data[symbol];
+const current=d?.price||+p.entry||0;
+const dir=p.side==='SHORT'?-1:1;
+const size=+p.size||0;
+const entry=+p.entry||0;
+const pnl=entry?size*((current-entry)/entry)*dir:0;
+const stopLoss=p.stop&&entry?size*Math.abs(+p.stop-entry)/entry:0;
+const risk=settings.equity?stopLoss/settings.equity*100:0;
 portfolioRisk+=risk;
 
-let action=
-risk>settings.maxRiskPct
-?'RISK ALERT'
-:'HOLD';
-
-if(action==='RISK ALERT')
-risks++;
-else
-hold++;
-
+const action=risk>settings.maxRiskPct?'RISK ALERT':'HOLD';
+if(action==='RISK ALERT')risks++;
+else hold++;
 
 list+=`
-
-<div class="row">
-
+<div class="row" data-crypto="${i}">
 <div>
-
 <div class="name">
-
 ${p.symbol}
-
-<span class="badge ${badgeClass(action)}">
-${action}
-</span>
-
+<span class="badge ${badgeClass(action)}">${action}</span>
 </div>
-
 <div class="meta">
-
-${p.side} · ${p.leverage}X
-<br>
-
-Position ${money(p.size)} · P/L ${money(pnl)}
-
+${p.side} · ${p.leverage}X<br>
+Position ${money(size)} · P/L ${money(pnl)}
 </div>
-
 </div>
-
-<div class="price">
-
-${money(current)}
-
-</div>
-
-</div>
-
-`;
-
+<div class="price">${current?money(current):'DATA WAIT'}</div>
+</div>`;
 });
 
+$('homeList').innerHTML=list||'<div class="empty">POSITION 탭에서 포지션을 등록하세요.</div>';
+$('positionList').innerHTML=list||'<div class="empty">등록된 포지션이 없습니다.</div>';
 
-$('homeList').innerHTML=
-list||
-'<div class="empty">POSITION 탭에서 포지션을 등록하세요.</div>';
-
-$('positionList').innerHTML=
-list||
-'<div class="empty">등록된 포지션이 없습니다.</div>';
-
-$('homeCount').textContent=
-Object.keys(positions).length+crypto.length;
-
-$('positionCount').textContent=
-Object.keys(positions).length+crypto.length;
+const count=Object.keys(positions).length+crypto.length;
+$('homeCount').textContent=count;
+$('positionCount').textContent=count;
+$('trackedSymbols').textContent=symbols().length;
 
 $('addCount').textContent=add;
-
 $('holdCount').textContent=hold;
-
 $('cautionCount').textContent=caution;
-
+$('reduceCount').textContent=reduce;
 $('riskCount').textContent=risks;
 
+const heat=settings.maxRiskPct?portfolioRisk/settings.maxRiskPct*100:0;
+$('heatbar').style.width=Math.min(100,heat)+'%';
+$('heattext').innerHTML=
+'Portfolio Risk <b>'+portfolioRisk.toFixed(2)+'%</b> · Trade Risk Limit '+settings.maxRiskPct.toFixed(2)+'%';
 
-let heat=
-settings.maxRiskPct
-?portfolioRisk/settings.maxRiskPct*100
-:0;
-
-$('heatbar').style.width=
-Math.min(100,heat)+'%';
-
-$('heattext').textContent=
-'Portfolio Risk '+portfolioRisk.toFixed(2)+'%';
-
-
-$('trackedSymbols').textContent=
-symbols().length;
-
-
-document.querySelectorAll('[data-position]')
-.forEach(el=>{
-
-el.onclick=()=>openPosition(
-el.dataset.position
-);
-
+document.querySelectorAll('[data-position]').forEach(el=>{
+el.onclick=()=>openPosition(el.dataset.position);
 });
 
+document.querySelectorAll('[data-crypto]').forEach(el=>{
+el.onclick=()=>editCrypto(+el.dataset.crypto);
+});
+
+renderDataStatus();
 }
 
+function renderDataStatus(){
+const t=newestCacheTime();
+
+if(!symbols().length){
+$('dataStatus').textContent='NO POSITION';
+$('dataMode').textContent='—';
+$('lastMarketUpdate').textContent='—';
+$('dataAge').textContent='—';
+return;
+}
+
+if(t){
+$('lastMarketUpdate').textContent=new Date(t).toLocaleString();
+$('dataAge').textContent=ageText(Date.now()-t);
+}
+
+$('dataMode').textContent=lastFetchMode;
+
+if(lastFetchMode==='LIVE'){
+$('dataStatus').textContent='CONNECTED';
+$('sync').textContent='LIVE';
+}else if(t){
+$('dataStatus').textContent='CONNECTED';
+$('sync').textContent='CACHED DATA';
+}else{
+$('dataStatus').textContent='WAIT';
+$('sync').textContent='DATA WAIT';
+}
+}
 
 function openPosition(symbol){
-
 currentTicker=symbol;
 
-let p=positions[symbol];
-
-let d=data[symbol];
-
+const p=positions[symbol];
+const d=data[symbol];
 if(!p)return;
 
+const s=activeStop(symbol);
+const r=positionRisk(symbol);
+const action=positionAction(symbol);
 
 $('detailTicker').textContent=symbol;
-
-$('currentPrice').textContent=
-d?money(d.price):'DATA WAIT';
-
-$('score').innerHTML=
-(d?.score??'—')+
-'<small>/100</small>';
-
-
-let r=positionRisk(symbol);
-
-let action=
-r.risk>settings.maxRiskPct
-?'RISK ALERT'
-:(d?.signal||'WAIT');
-
+$('currentPrice').textContent=d?money(d.price):'DATA WAIT';
+$('score').innerHTML=(d?.score??'—')+'<small>/100</small>';
+$('confidence').textContent='CONFIDENCE '+(d?.confidence||'—');
 
 $('actionBadge').textContent=action;
+$('actionBadge').className='badge '+badgeClass(action);
 
-$('actionBadge').className=
-'badge '+badgeClass(action);
+const ct=symbolCacheTime(symbol);
+$('detailDataAge').textContent=ct?'DATA · '+ageText(Date.now()-ct):'DATA WAIT';
 
-
-let invested=p.qty*p.avg;
-
-let value=d
-?p.qty*d.price
-:0;
-
-let pnl=d
-?value-invested
-:0;
-
-let pnlPct=
-invested
-?pnl/invested*100
-:0;
-
+const invested=(+p.qty||0)*(+p.avg||0);
+const value=d?d.price*(+p.qty||0):0;
+const pnl=d?value-invested:0;
+const pnlPct=invested?pnl/invested*100:0;
 
 $('positionStats').innerHTML=`
+<div class="stat"><small>수량</small><b>${(+p.qty||0).toLocaleString()}</b></div>
+<div class="stat"><small>평단</small><b>${money(p.avg)}</b></div>
+<div class="stat"><small>투자금액</small><b>${money(invested)}</b></div>
+<div class="stat"><small>현재 평가금</small><b>${d?money(value):'—'}</b></div>
+<div class="stat"><small>P/L</small><b class="${pnl>=0?'good':'bad'}">${d?money(pnl):'—'}</b></div>
+<div class="stat"><small>수익률</small><b class="${pnlPct>=0?'good':'bad'}">${d?pct(pnlPct):'—'}</b></div>
+<div class="stat"><small>Active Stop</small><b>${money(s.active)}</b></div>
+<div class="stat"><small>Stop 손실</small><b>${money(r.loss)}</b></div>`;
 
-<div class="stat">
-<small>수량</small>
-<b>${p.qty.toLocaleString()}</b>
-</div>
-
-<div class="stat">
-<small>평단</small>
-<b>${money(p.avg)}</b>
-</div>
-
-<div class="stat">
-<small>투자금액</small>
-<b>${money(invested)}</b>
-</div>
-
-<div class="stat">
-<small>현재 평가금</small>
-<b>${d?money(value):'—'}</b>
-</div>
-
-<div class="stat">
-<small>P/L</small>
-<b>${d?money(pnl):'—'}</b>
-</div>
-
-<div class="stat">
-<small>수익률</small>
-<b>${d?pct(pnlPct):'—'}</b>
-</div>
-
-<div class="stat">
-<small>Stop</small>
-<b>${money(r.stop)}</b>
-</div>
-
-<div class="stat">
-<small>Stop 손실</small>
-<b>${money(r.loss)}</b>
-</div>
-
-`;
-
-
-let riskRatio=
-settings.maxRiskPct
-?r.risk/settings.maxRiskPct*100
-:0;
-
-$('riskbar').style.width=
-Math.min(100,riskRatio)+'%';
-
+const riskRatio=settings.maxRiskPct?r.risk/settings.maxRiskPct*100:0;
+$('riskbar').style.width=Math.min(100,riskRatio)+'%';
 
 $('riskText').innerHTML=
+'현재 Risk <b>'+r.risk.toFixed(2)+'%</b> / Limit '+settings.maxRiskPct.toFixed(2)+'%'+
+(r.risk>settings.maxRiskPct?' · <span class="bad"><b>RISK LIMIT EXCEEDED</b></span>':'');
 
-'현재 Risk <b>'+
-r.risk.toFixed(2)+
-'%</b> / Limit '+
-settings.maxRiskPct.toFixed(2)+
-'%'+
-
-(
-r.risk>settings.maxRiskPct
-?' · <span class="bad"><b>RISK LIMIT EXCEEDED</b></span>'
-:''
-);
-
+$('stopEngine').innerHTML=`
+<div class="signal"><span>TECH STOP</span><b>${money(s.tech)}</b></div>
+<div class="signal"><span>Tech Basis</span><b>${d?.stopBasis||'DATA WAIT'}</b></div>
+<div class="signal"><span>MANUAL STOP</span><b>${s.manual?money(s.manual):'NOT SET'}</b></div>
+<div class="signal"><span>ACTIVE STOP</span><b class="blue">${money(s.active)}</b></div>
+<div class="signal"><span>Risk Source</span><b>${s.manual?'MANUAL':'TECH'}</b></div>`;
 
 if(d){
+const ma200Text=d.hasMA200
+?(d.price>d.ma200?'ABOVE':'BELOW')
+:'DATA LIMITED';
+
+const ma200Class=!d.hasMA200?'warn':d.price>d.ma200?'good':'bad';
 
 $('signalEngine').innerHTML=`
-
-<div class="signal">
-<span>MA200 Gate</span>
-<b class="${d.price>d.ma200?'good':'bad'}">
-${d.price>d.ma200?'PASS':'BLOCK'}
-</b>
-</div>
-
-<div class="signal">
-<span>MA50 > MA200</span>
-<b>
-${d.ma50>d.ma200?'YES':'NO'}
-</b>
-</div>
-
-<div class="signal">
-<span>MA200 Trend</span>
-<b>
-${d.trend?'UPTREND':'WEAK'}
-</b>
-</div>
-
-<div class="signal">
-<span>4H Timing</span>
-<b>
-${d.timing?'READY':'WAIT'}
-</b>
-</div>
-
-<div class="signal">
-<span>Daily RSI</span>
-<b>
-${Math.round(d.rsi)}
-</b>
-</div>
-
-<div class="signal">
-<span>Relative Volume</span>
-<b>
-${d.relVolume.toFixed(2)}x
-</b>
-</div>
-
-<div class="signal">
-<span>Overextension</span>
-<b class="${d.overextended?'warn':'good'}">
-${d.overextended?'HIGH':'NORMAL'}
-</b>
-</div>
-
-`;
-
+<div class="signal"><span>MA200</span><b class="${ma200Class}">${ma200Text}</b></div>
+<div class="signal"><span>MA50 / MA200</span><b>${d.hasMA200&&d.hasMA50?(d.ma50>d.ma200?'BULLISH':'WEAK'):'DATA LIMITED'}</b></div>
+<div class="signal"><span>MA200 Trend</span><b>${d.ma200Rising===null?'DATA LIMITED':d.ma200Rising?'RISING':'FALLING'}</b></div>
+<div class="signal"><span>4H Timing</span><b class="${d.timing?'good':'warn'}">${d.timing?'READY':'WAIT'}</b></div>
+<div class="signal"><span>Daily RSI</span><b>${d.rsi===null?'—':Math.round(d.rsi)}</b></div>
+<div class="signal"><span>Relative Volume</span><b>${d.relVolume===null?'—':d.relVolume.toFixed(2)+'x'}</b></div>
+<div class="signal"><span>CHASE RISK</span><b class="${d.overextended?'warn':'good'}">${d.overextended?'HIGH':'NORMAL'}</b></div>
+<div class="signal"><span>Long Trend</span><b>${d.longTrend}</b></div>
+<div class="signal"><span>Data</span><b>${d.dailyBars}D / ${d.h4Bars} 4H</b></div>`;
+}else{
+$('signalEngine').innerHTML='<div class="empty">시장 데이터 업데이트 대기</div>';
 }
 
-else{
-
-$('signalEngine').innerHTML=
-'<div class="empty">시장 데이터 업데이트 대기</div>';
-
-}
-
+renderScaleIn(symbol);
+renderScaleOut(symbol);
 
 $('addQty').value='';
-
 $('addPrice').value='';
-
 simulateAdd();
 
 $('detail').classList.add('open');
-
 }
 
+function suggestedLevels(symbol){
+const d=data[symbol];
+if(!d)return [];
+
+const levels=[];
+
+let l1=d.price;
+let l2=d.ma20;
+let l3=d.ma50;
+
+if(d.atr){
+if(!l2||l2>=l1)l2=l1-d.atr;
+if(!l3||l3>=l2)l3=l1-(d.atr*2);
+}
+
+if(!l2)l2=l1*.97;
+if(!l3)l3=l1*.94;
+
+l2=Math.min(l2,l1);
+l3=Math.min(l3,l2);
+
+return [
+{label:'1차',name:'4H / Current',price:l1},
+{label:'2차',name:'MA20 Pullback',price:l2},
+{label:'3차',name:'MA50 / ATR Deep',price:l3}
+];
+}
+
+function renderScaleIn(symbol){
+const levels=suggestedLevels(symbol);
+
+if(!levels.length){
+$('scaleInPlan').innerHTML='<div class="empty">시장 데이터가 필요합니다.</div>';
+return;
+}
+
+$('scaleInPlan').innerHTML=levels.map((x,i)=>`
+<div class="plan">
+<div class="planhead">
+<b>${x.label} · ${x.name}</b>
+<span>${money(x.price)}</span>
+</div>
+<div class="planmeta">
+${i===0?'현재/4H 타이밍 기준':
+i===1?'단기 추세 눌림 기준':
+'중기 추세 또는 변동성 심화 구간'}
+</div>
+</div>`).join('');
+}
+
+function renderScaleOut(symbol){
+const p=positions[symbol];
+const d=data[symbol];
+const s=activeStop(symbol);
+
+if(!p||!s.active){
+$('scaleOutPlan').innerHTML='<div class="empty">Active Stop이 필요합니다.</div>';
+return;
+}
+
+const avg=+p.avg;
+const qty=+p.qty;
+const R=Math.max(0,avg-s.active);
+
+if(!R){
+$('scaleOutPlan').innerHTML='<div class="empty">평단과 Stop 구조를 확인하세요.</div>';
+return;
+}
+
+const plans=[
+['T1','1R',avg+R,25],
+['T2','2R',avg+R*2,25],
+['T3','3R',avg+R*3,30],
+['RUNNER','4R+',avg+R*4,20]
+];
+
+$('scaleOutPlan').innerHTML=plans.map(x=>{
+const sellQty=qty*x[3]/100;
+const proceeds=sellQty*x[2];
+const profit=sellQty*(x[2]-avg);
+
+return `
+<div class="plan">
+<div class="planhead">
+<b>${x[0]} · ${x[1]}</b>
+<span>${money(x[2])}</span>
+</div>
+<div class="planmeta">
+기본 ${x[3]}% · 약 ${sellQty.toFixed(2)}주<br>
+예상 회수 ${money(proceeds)} · 예상 이익 ${money(profit)}
+</div>
+</div>`;
+}).join('');
+}
 
 function simulateAdd(){
-
 if(!currentTicker)return;
 
-let p=positions[currentTicker];
-
+const p=positions[currentTicker];
 if(!p)return;
 
-let aq=+$('addQty').value||0;
-
-let ap=+$('addPrice').value||0;
-
+const aq=+$('addQty').value||0;
+const ap=+$('addPrice').value||0;
 
 if(!aq||!ap){
-
 $('newQty').textContent='—';
 $('newAvg').textContent='—';
 $('newInvested').textContent='—';
 $('newRisk').textContent='—';
 $('newRiskBar').style.width='0%';
 $('newRiskText').textContent='추가 수량과 가격을 입력하면 자동 계산됩니다.';
-
 return;
-
 }
 
+const oldRisk=positionRisk(currentTicker).risk;
+const totalQty=(+p.qty||0)+aq;
+const totalCost=((+p.qty||0)*(+p.avg||0))+(aq*ap);
+const newAvg=totalCost/totalQty;
+const r=positionRisk(currentTicker,newAvg,totalQty);
 
-let totalQty=
-p.qty+aq;
+$('newQty').textContent=totalQty.toLocaleString();
+$('newAvg').textContent=money(newAvg);
+$('newInvested').textContent=money(totalCost);
+$('newRisk').textContent=r.risk.toFixed(2)+'%';
 
-
-let totalCost=
-(p.qty*p.avg)+(aq*ap);
-
-
-let newAvg=
-totalCost/totalQty;
-
-
-let stop=
-p.stop||
-data[currentTicker]?.stop||
-newAvg*.94;
-
-
-let loss=
-Math.max(
-0,
-(newAvg-stop)*totalQty
-);
-
-
-let risk=
-settings.equity
-?loss/settings.equity*100
-:0;
-
-
-$('newQty').textContent=
-totalQty.toLocaleString();
-
-
-$('newAvg').textContent=
-money(newAvg);
-
-
-$('newInvested').textContent=
-money(totalCost);
-
-
-$('newRisk').textContent=
-risk.toFixed(2)+'%';
-
-
-let ratio=
-settings.maxRiskPct
-?risk/settings.maxRiskPct*100
-:0;
-
-
-$('newRiskBar').style.width=
-Math.min(100,ratio)+'%';
-
+const ratio=settings.maxRiskPct?r.risk/settings.maxRiskPct*100:0;
+$('newRiskBar').style.width=Math.min(100,ratio)+'%';
 
 $('newRiskText').innerHTML=
-
-'추가 후 Risk <b>'+
-risk.toFixed(2)+
-'%</b> / Limit '+
-settings.maxRiskPct.toFixed(2)+
-'%'+
-
-(
-risk>settings.maxRiskPct
-?' · <span class="bad"><b>HIGH RISK</b></span>'
-:''
-);
-
+'Risk <b>'+oldRisk.toFixed(2)+'%</b> → <b>'+r.risk.toFixed(2)+'%</b> / Limit '+
+settings.maxRiskPct.toFixed(2)+'%'+
+(r.risk>settings.maxRiskPct?' · <span class="bad"><b>HIGH RISK</b></span>':'');
 }
-
 
 async function updateData(force=false){
+const syms=symbols();
 
-if(!symbols().length){
-
+if(!syms.length){
 $('sync').textContent='NO POSITION';
-
+renderDataStatus();
 return;
-
 }
-
 
 $('sync').textContent='SYNCING';
+$('dataStatus').textContent='SYNCING';
 
+let usedLive=false;
+let hadData=false;
 
-for(let symbol of symbols()){
+for(const symbol of syms){
+const h=await fetchSeries(symbol,'4h',force);
+if(h.mode==='LIVE')usedLive=true;
 
-let d=await fetchSeries(symbol,'1day');
+const d=await fetchSeries(symbol,'1day',force);
+if(d.mode==='LIVE')usedLive=true;
 
-let h=await fetchSeries(symbol,'4h');
+if(d.values.length){
+data[symbol]=analyse(symbol,d.values,h.values);
+hadData=true;
+render();
+}
 
+await new Promise(r=>setTimeout(r,1200));
+}
 
-if(d.length){
-
-data[symbol]=analyse(symbol,d,h);
+lastFetchMode=usedLive?'LIVE':hadData?'CACHED':'ERROR';
 
 render();
+renderDataStatus();
 
+if(currentTicker&&positions[currentTicker]){
+openPosition(currentTicker);
+}
 }
 
+function resetStockForm(){
+editingTicker=null;
+$('ticker').disabled=false;
+$('ticker').value='';
+$('qty').value='';
+$('avgPrice').value='';
+$('stopPrice').value='';
+$('investedCalc').textContent='$0';
+$('saveStock').textContent='포지션 등록';
+$('cancelEdit').style.display='none';
+$('stockEditBanner').classList.remove('show');
 }
 
-
-let now=new Date();
-
-localStorage.setItem(
-'stockpm_last_sync',
-now.toISOString()
-);
-
-
-$('sync').textContent='CONNECTED';
-
-$('dataStatus').textContent='CONNECTED';
-
-$('lastSync').textContent=
-now.toLocaleString();
-
-}
-
-
-$('qty').oninput=
-$('avgPrice').oninput=()=>{
-
-let q=+$('qty').value||0;
-
-let a=+$('avgPrice').value||0;
-
-$('investedCalc').textContent=
-money(q*a);
-
-};
-
-
-$('addQty').oninput=simulateAdd;
-
-$('addPrice').oninput=simulateAdd;
-
-
-$('saveStock').onclick=()=>{
-
-let symbol=
-$('ticker').value.trim().toUpperCase();
-
-if(!symbol)return;
-
-
-positions[symbol]={
-
-qty:+$('qty').value||0,
-
-avg:+$('avgPrice').value||0,
-
-stop:+$('stopPrice').value||0
-
-};
-
-
-store.set(
-'stockpm_positions',
-positions
-);
-
-
-$('saveStock').textContent=
-'포지션 등록';
-
-
-render();
-
-updateData();
-
-};
-
-
-$('editPosition').onclick=()=>{
-
-let p=positions[currentTicker];
-
+function startStockEdit(symbol){
+const p=positions[symbol];
 if(!p)return;
 
+editingTicker=symbol;
 
-$('ticker').value=currentTicker;
-
+$('ticker').value=symbol;
+$('ticker').disabled=true;
 $('qty').value=p.qty;
-
 $('avgPrice').value=p.avg;
-
 $('stopPrice').value=p.stop||'';
+$('investedCalc').textContent=money((+p.qty||0)*(+p.avg||0));
 
-
-$('investedCalc').textContent=
-money(p.qty*p.avg);
-
-
-$('saveStock').textContent=
-'수정 저장';
-
+$('saveStock').textContent='수정 저장';
+$('cancelEdit').style.display='block';
+$('stockEditBanner').classList.add('show');
 
 $('detail').classList.remove('open');
-
 go(1);
-
-};
-
-
-$('deletePosition').onclick=()=>{
-
-if(!currentTicker)return;
-
-
-if(confirm(
-currentTicker+
-' 포지션을 삭제할까요?'
-)){
-
-delete positions[currentTicker];
-
-store.set(
-'stockpm_positions',
-positions
-);
-
-$('detail').classList.remove('open');
-
-render();
-
 }
 
+function resetCryptoForm(){
+editingCryptoIndex=null;
+$('cryptoSymbol').disabled=false;
+$('cryptoSymbol').value='';
+$('cryptoSide').value='LONG';
+$('cryptoLev').value=5;
+$('cryptoEntry').value='';
+$('cryptoSize').value='';
+$('cryptoStop').value='';
+$('cryptoLiq').value='';
+$('saveCrypto').textContent='포지션 등록';
+$('cancelCryptoEdit').style.display='none';
+$('cryptoEditBanner').classList.remove('show');
+}
+
+function editCrypto(i){
+const p=crypto[i];
+if(!p)return;
+
+editingCryptoIndex=i;
+
+document.querySelectorAll('.seg button').forEach(x=>{
+x.classList.toggle('active',x.dataset.mode==='crypto');
+});
+
+$('stockForm').style.display='none';
+$('cryptoForm').style.display='block';
+
+$('cryptoSymbol').value=p.symbol;
+$('cryptoSymbol').disabled=true;
+$('cryptoSide').value=p.side;
+$('cryptoLev').value=p.leverage;
+$('cryptoEntry').value=p.entry;
+$('cryptoSize').value=p.size;
+$('cryptoStop').value=p.stop||'';
+$('cryptoLiq').value=p.liq||'';
+
+$('saveCrypto').textContent='수정 저장';
+$('cancelCryptoEdit').style.display='block';
+$('cryptoEditBanner').classList.add('show');
+
+go(1);
+}
+
+$('qty').oninput=$('avgPrice').oninput=()=>{
+const q=+$('qty').value||0;
+const a=+$('avgPrice').value||0;
+$('investedCalc').textContent=money(q*a);
 };
 
+$('addQty').oninput=simulateAdd;
+$('addPrice').oninput=simulateAdd;
+
+$('saveStock').onclick=()=>{
+const symbol=(editingTicker||$('ticker').value.trim().toUpperCase());
+if(!symbol)return;
+
+positions[symbol]={
+qty:+$('qty').value||0,
+avg:+$('avgPrice').value||0,
+stop:+$('stopPrice').value||0
+};
+
+store.set(POSITIONS_KEY,positions);
+resetStockForm();
+render();
+updateData(false);
+};
+
+$('cancelEdit').onclick=resetStockForm;
+
+$('editPosition').onclick=()=>{
+if(currentTicker)startStockEdit(currentTicker);
+};
+
+$('deletePosition').onclick=()=>{
+if(!currentTicker)return;
+
+if(confirm(currentTicker+' 포지션을 삭제할까요?')){
+delete positions[currentTicker];
+store.set(POSITIONS_KEY,positions);
+currentTicker=null;
+$('detail').classList.remove('open');
+render();
+}
+};
 
 $('saveCrypto').onclick=()=>{
-
-let symbol=
-$('cryptoSymbol').value.trim().toUpperCase();
+const symbol=(editingCryptoIndex!==null
+?crypto[editingCryptoIndex].symbol
+:$('cryptoSymbol').value.trim().toUpperCase());
 
 if(!symbol)return;
 
-
-let p={
-
+const p={
 symbol,
-
 side:$('cryptoSide').value,
-
 leverage:+$('cryptoLev').value||1,
-
 entry:+$('cryptoEntry').value||0,
-
 size:+$('cryptoSize').value||0,
-
 stop:+$('cryptoStop').value||0,
-
 liq:+$('cryptoLiq').value||0
-
 };
 
-
-let i=crypto.findIndex(
-x=>x.symbol===symbol&&
-x.side===p.side
-);
-
-
-if(i>=0)
-crypto[i]=p;
-
-else
+if(editingCryptoIndex!==null){
+crypto[editingCryptoIndex]=p;
+}else{
 crypto.push(p);
-
-
-store.set(
-'stockpm_leverage',
-crypto
-);
-
-
-render();
-
-updateData();
-
-};
-
-
-$('saveRisk').onclick=()=>{
-
-settings={
-
-equity:+$('equity').value||100000,
-
-maxRiskPct:+$('riskLimit').value||2
-
-};
-
-
-store.set(
-'stockpm_risk_settings',
-settings
-);
-
-
-render();
-
-};
-
-
-$('refresh').onclick=()=>updateData(true);
-
-
-$('back').onclick=()=>{
-
-$('detail').classList.remove('open');
-
-};
-
-
-document.querySelectorAll('.seg button')
-.forEach(b=>{
-
-b.onclick=()=>{
-
-document.querySelectorAll('.seg button')
-.forEach(x=>
-x.classList.toggle(
-'active',
-x===b
-)
-);
-
-
-let cryptoMode=
-b.dataset.mode==='crypto';
-
-
-$('stockForm').style.display=
-cryptoMode?'none':'block';
-
-
-$('cryptoForm').style.display=
-cryptoMode?'block':'none';
-
-};
-
-});
-
-
-function go(i){
-
-page=i;
-
-$('track').classList.add('anim');
-
-$('track').style.transform=
-`translateX(${-i*100}%)`;
-
-
-document.querySelectorAll('.tab')
-.forEach((b,n)=>
-b.classList.toggle(
-'active',
-n===i
-)
-);
-
 }
 
+store.set(CRYPTO_KEY,crypto);
+resetCryptoForm();
+render();
+updateData(false);
+};
 
-document.querySelectorAll('.tab')
-.forEach(b=>{
+$('cancelCryptoEdit').onclick=resetCryptoForm;
 
-b.onclick=()=>go(
-+b.dataset.page
-);
+$('saveRisk').onclick=()=>{
+settings={
+equity:+$('equity').value||100000,
+maxRiskPct:+$('riskLimit').value||2
+};
+store.set(SETTINGS_KEY,settings);
+render();
+if(currentTicker)openPosition(currentTicker);
+};
 
+$('refresh').onclick=()=>updateData(true);
+$('back').onclick=()=>$('detail').classList.remove('open');
+
+document.querySelectorAll('.seg button').forEach(b=>{
+b.onclick=()=>{
+document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('active',x===b));
+const cm=b.dataset.mode==='crypto';
+$('stockForm').style.display=cm?'none':'block';
+$('cryptoForm').style.display=cm?'block':'none';
+};
 });
 
+function go(i){
+page=i;
+$('track').classList.add('anim');
+$('track').style.transform=`translateX(${-i*100}%)`;
+
+document.querySelectorAll('.tab').forEach((b,n)=>{
+b.classList.toggle('active',n===i);
+});
+}
+
+document.querySelectorAll('.tab').forEach(b=>{
+b.onclick=()=>go(+b.dataset.page);
+});
 
 let sx=0;
 
-
-$('viewport').addEventListener(
-'touchstart',
-e=>{
-
+$('viewport').addEventListener('touchstart',e=>{
+if($('detail').classList.contains('open'))return;
 sx=e.touches[0].clientX;
+},{passive:true});
 
-},
-{passive:true}
-);
+$('viewport').addEventListener('touchend',e=>{
+if($('detail').classList.contains('open'))return;
 
+const dx=e.changedTouches[0].clientX-sx;
 
-$('viewport').addEventListener(
-'touchend',
-e=>{
+if(dx<-70&&page<2)go(page+1);
+if(dx>70&&page>0)go(page-1);
+},{passive:true});
 
-let dx=
-e.changedTouches[0].clientX-sx;
+$('equity').value=settings.equity;
+$('riskLimit').value=settings.maxRiskPct;
 
+function hydrateCache(){
+symbols().forEach(symbol=>{
+const d=cache[symbol+'__1day']?.values||[];
+const h=cache[symbol+'__4h']?.values||[];
 
-if(dx<-70&&page<2)
-go(page+1);
-
-
-if(dx>70&&page>0)
-go(page-1);
-
-},
-{passive:true}
-);
-
-
-$('equity').value=
-settings.equity;
-
-
-$('riskLimit').value=
-settings.maxRiskPct;
-
-
-let last=
-localStorage.getItem(
-'stockpm_last_sync'
-);
-
-
-if(last){
-
-$('lastSync').textContent=
-new Date(last).toLocaleString();
-
-$('sync').textContent=
-'CACHED DATA';
-
-$('dataStatus').textContent=
-'CACHED';
-
-}
-
-
-Object.keys(cache).forEach(k=>{
-
-let parts=k.split('__');
-
-if(parts.length!==2)return;
-
-});
-
-
-(async()=>{
-
-for(let symbol of symbols()){
-
-let d=
-cache[symbol+'__1day']?.values||[];
-
-let h=
-cache[symbol+'__4h']?.values||[];
-
-
-if(d.length)
+if(d.length){
 data[symbol]=analyse(symbol,d,h);
-
+}
+});
 }
 
-
+hydrateCache();
 render();
-
 go(0);
 
-updateData();
+setInterval(renderDataStatus,60000);
 
-})();
-
+updateData(false);
 </script>
-
 </body>
 </html>
