@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#090b0e">
-<title>STOCKPM v0.3.6</title>
+<title>STOCKPM v0.3.7</title>
 
 <style>
 :root{
@@ -14,116 +14,253 @@
   --violet:#a78bfa;--radius:20px;--safe:max(14px,env(safe-area-inset-bottom))
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+html,body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+}
 body{overflow:hidden}
 button,input{font:inherit}
 button{cursor:pointer}
+
 .app{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+
 .topbar{
-  height:62px;flex:0 0 62px;padding:14px 16px 10px;display:flex;align-items:center;
-  justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.05);
+  height:62px;flex:0 0 62px;padding:14px 16px 10px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,.05);
   background:rgba(9,11,14,.94);backdrop-filter:blur(18px);z-index:20
 }
 .brand{display:flex;gap:10px;align-items:center}
 .logo{
-  width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#fff,#778399);
+  width:34px;height:34px;border-radius:11px;
+  background:linear-gradient(135deg,#fff,#778399);
   color:#0b0d10;display:grid;place-items:center;font-weight:900
 }
 .brand h1{font-size:17px;margin:0}
-.brand small{display:block;color:var(--muted);font-size:10px;margin-top:4px;letter-spacing:.07em}
-.sync{font-size:10px;color:var(--muted);border:1px solid var(--line);background:var(--panel);padding:8px 10px;border-radius:999px}
+.brand small{
+  display:block;color:var(--muted);font-size:10px;
+  margin-top:4px;letter-spacing:.07em
+}
+.sync{
+  font-size:10px;color:var(--muted);border:1px solid var(--line);
+  background:var(--panel);padding:8px 10px;border-radius:999px
+}
+
 .viewport{flex:1;position:relative;overflow:hidden}
 .track{height:100%;display:flex;will-change:transform}
 .track.anim{transition:transform .45s cubic-bezier(.22,.85,.25,1)}
-.page{flex:0 0 100%;height:100%;overflow-y:auto;padding:16px 14px calc(94px + var(--safe));scrollbar-width:none}
+
+.page{
+  flex:0 0 100%;height:100%;overflow-y:auto;
+  padding:16px 14px calc(94px + var(--safe));scrollbar-width:none
+}
 .page::-webkit-scrollbar{display:none}
 .inner{max-width:900px;margin:auto}
+
 h2{font-size:27px;margin:4px 0 3px}
 .subtitle{color:var(--muted);font-size:13px;margin-bottom:16px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px}
-.section{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.section h3{font-size:12px;letter-spacing:.08em;margin:0;color:#cbd2dc;text-transform:uppercase}
+
+.card{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--radius);padding:16px;margin-bottom:12px
+}
+.section{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:12px
+}
+.section h3{
+  font-size:12px;letter-spacing:.08em;margin:0;color:#cbd2dc;text-transform:uppercase
+}
 .section span{font-size:10px;color:var(--muted)}
+
 .field{display:grid;gap:6px;margin-bottom:11px}
-.field input{width:100%;border:1px solid var(--line);background:var(--panel3);color:var(--text);padding:13px;border-radius:13px;outline:none}
+.field input{
+  width:100%;border:1px solid var(--line);background:var(--panel3);
+  color:var(--text);padding:13px;border-radius:13px;outline:none
+}
+
 .addrow{display:grid;grid-template-columns:1fr auto;gap:8px}
-.btn{border:0;border-radius:12px;padding:12px 14px;background:#f5f7fa;color:#090b0e;font-weight:850}
-.btn.secondary{background:var(--panel2);border:1px solid var(--line);color:var(--text)}
-.btn.danger{background:#2a1217;border:1px solid #5a2630;color:var(--bad)}
+
+.btn{
+  border:0;border-radius:12px;padding:12px 14px;
+  background:#f5f7fa;color:#090b0e;font-weight:850
+}
+.btn.danger{
+  background:#2a1217;border:1px solid #5a2630;color:var(--bad)
+}
 .btn.full{width:100%}
+
 .list{display:grid;gap:8px}
 .row{
   display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
-  background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:14px
+  background:var(--panel2);border:1px solid var(--line);
+  border-radius:15px;padding:14px
 }
 .name{font-weight:900}
-.meta{font-size:11px;color:var(--muted);line-height:1.65;margin-top:5px}
+.meta{
+  font-size:11px;color:var(--muted);line-height:1.65;margin-top:5px
+}
 .price{text-align:right;font-weight:900}
-.badge{display:inline-flex;padding:6px 8px;border-radius:999px;font-size:9px;font-weight:900;border:1px solid;margin-left:5px}
+
+.badge{
+  display:inline-flex;padding:6px 8px;border-radius:999px;
+  font-size:9px;font-weight:900;border:1px solid;margin-left:5px
+}
 .badge.good{color:var(--good);background:#0d2118;border-color:#1d4933}
 .badge.warn{color:var(--warn);background:#261e0d;border-color:#5d4617}
 .badge.bad{color:var(--bad);background:#271216;border-color:#5a2630}
-.badge.blue{color:var(--blue);background:#111d2c;border-color:#263e5e}
 .badge.violet{color:var(--violet);background:#1b1728;border-color:#443766}
 .badge.neutral{color:#c7ced8;background:#171c22;border-color:#2a323c}
-.good{color:var(--good)}.warn{color:var(--warn)}.bad{color:var(--bad)}.blue{color:var(--blue)}.violet{color:var(--violet)}
-.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.sum{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:11px 4px;text-align:center}
+
+.good{color:var(--good)}
+.warn{color:var(--warn)}
+.bad{color:var(--bad)}
+.blue{color:var(--blue)}
+.violet{color:var(--violet)}
+
+.summary{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:7px
+}
+.sum{
+  background:var(--panel2);border:1px solid var(--line);
+  border-radius:13px;padding:11px 4px;text-align:center
+}
 .sum small{display:block;color:var(--muted);font-size:8px}
 .sum b{display:block;font-size:17px;margin-top:4px}
-.scoregrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.scorebox{background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:13px}
-.scorebox small{display:block;color:var(--muted);font-size:9px;letter-spacing:.05em}
+
+.scoregrid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px
+}
+.scorebox{
+  background:var(--panel2);border:1px solid var(--line);
+  border-radius:15px;padding:13px
+}
+.scorebox small{
+  display:block;color:var(--muted);font-size:9px;letter-spacing:.05em
+}
 .scorebox b{display:block;font-size:27px;margin-top:4px}
-.scorebox em{display:block;font-style:normal;color:var(--muted);font-size:9px;margin-top:4px;line-height:1.4}
-.signal{display:grid;grid-template-columns:1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
+.scorebox em{
+  display:block;font-style:normal;color:var(--muted);
+  font-size:9px;margin-top:4px;line-height:1.4
+}
+
+.signal{
+  display:grid;grid-template-columns:1fr auto;gap:10px;
+  padding:11px 0;border-bottom:1px solid var(--line)
+}
 .signal:last-child{border-bottom:0}
 .signal span,.signal b{font-size:12px}
 .signal b{text-align:right}
-.turncard{background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:14px;margin-bottom:8px}
-.turnhead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.turnhead small{display:block;color:var(--muted);font-size:9px;margin-bottom:4px}
+
+.turncard{
+  background:var(--panel2);border:1px solid var(--line);
+  border-radius:15px;padding:14px;margin-bottom:8px
+}
+.turnhead{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:10px
+}
+.turnhead small{
+  display:block;color:var(--muted);font-size:9px;margin-bottom:4px
+}
 .turnhead b{font-size:16px}
 .turnscore{font-size:22px;font-weight:900;text-align:right}
-.turnmeta{margin-top:9px;font-size:10px;color:var(--muted);line-height:1.7}
-.notice{font-size:11px;line-height:1.65;color:#d6bd83;background:#241b0e;border:1px solid #5a4317;padding:11px;border-radius:12px;margin-bottom:12px}
-.empty{text-align:center;color:var(--muted);font-size:12px;padding:25px}
-.progress{height:7px;border-radius:999px;overflow:hidden;background:#0d1116;border:1px solid var(--line);margin-top:8px}
+.turnmeta{
+  margin-top:9px;font-size:10px;color:var(--muted);line-height:1.7
+}
+
+.notice{
+  font-size:11px;line-height:1.65;color:#d6bd83;
+  background:#241b0e;border:1px solid #5a4317;
+  padding:11px;border-radius:12px;margin-bottom:12px
+}
+
+.empty{
+  text-align:center;color:var(--muted);font-size:12px;padding:25px
+}
+
+.progress{
+  height:7px;border-radius:999px;overflow:hidden;
+  background:#0d1116;border:1px solid var(--line);margin-top:8px
+}
 .progress span{display:block;height:100%}
 .bottomfill{background:var(--good)}
 .topfill{background:var(--bad)}
 .simfill{background:var(--violet)}
+
 .bottom{
-  position:absolute;left:10px;right:10px;bottom:var(--safe);height:64px;
-  border:1px solid rgba(255,255,255,.08);border-radius:22px;background:rgba(18,22,27,.94);
-  backdrop-filter:blur(22px);display:grid;grid-template-columns:repeat(3,1fr);z-index:30
+  position:absolute;left:10px;right:10px;bottom:var(--safe);
+  height:64px;border:1px solid rgba(255,255,255,.08);
+  border-radius:22px;background:rgba(18,22,27,.94);
+  backdrop-filter:blur(22px);
+  display:grid;grid-template-columns:repeat(3,1fr);z-index:30
 }
-.tab{border:0;background:none;color:#738090;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;font-weight:800;gap:3px}
+.tab{
+  border:0;background:none;color:#738090;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;font-size:9px;font-weight:800;gap:3px
+}
 .tab i{font-style:normal;font-size:20px}
 .tab.active{color:white}
+
 .detail{
-  position:absolute;inset:0;background:var(--bg);z-index:50;transform:translateX(100%);
-  transition:transform .45s cubic-bezier(.22,.85,.25,1);display:flex;flex-direction:column
+  position:absolute;inset:0;background:var(--bg);z-index:50;
+  transform:translateX(100%);
+  transition:transform .45s cubic-bezier(.22,.85,.25,1);
+  display:flex;flex-direction:column
 }
 .detail.open{transform:translateX(0)}
+
 .detailhead{
-  height:60px;flex:0 0 60px;display:grid;grid-template-columns:42px 1fr 42px;
+  height:60px;flex:0 0 60px;
+  display:grid;grid-template-columns:42px 1fr 42px;
   align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)
 }
-.icon{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:white}
+.icon{
+  width:38px;height:38px;border-radius:12px;
+  border:1px solid var(--line);background:var(--panel);color:white
+}
 .detailtitle{text-align:center}
 .detailtitle b{display:block}
 .detailtitle small{font-size:10px;color:var(--muted)}
-.detailbody{flex:1;overflow-y:auto;padding:14px 14px calc(30px + var(--safe))}
-.hero{background:linear-gradient(145deg,#161b22,#101318);border:1px solid #27313d}
+.detailbody{
+  flex:1;overflow-y:auto;padding:14px 14px calc(30px + var(--safe))
+}
+
+.hero{
+  background:linear-gradient(145deg,#161b22,#101318);
+  border:1px solid #27313d
+}
 .bigprice{font-size:29px;font-weight:900;margin:5px 0}
-.cycle{padding:13px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;margin-top:12px}
+
+.cycle{
+  padding:13px;background:var(--panel2);
+  border:1px solid var(--line);border-radius:14px;margin-top:12px
+}
 .cycle small{color:var(--muted);font-size:9px}
 .cycle b{display:block;font-size:18px;margin-top:5px}
+
+.structural{
+  background:#101b16;
+  border:1px solid #244735;
+  border-radius:15px;
+  padding:14px;
+  margin-top:10px
+}
+.structural.top{
+  background:#211216;
+  border-color:#542831
+}
+.structural small{
+  display:block;color:var(--muted);font-size:9px;margin-bottom:5px
+}
+.structural strong{font-size:19px}
+.structural p{
+  color:var(--muted);font-size:10px;line-height:1.6;margin:7px 0 0
+}
 </style>
 </head>
 
 <body>
+
 <div class="app">
 
 <header class="topbar">
@@ -131,193 +268,401 @@ h2{font-size:27px;margin:4px 0 3px}
 <div class="logo">SP</div>
 <div>
 <h1>STOCKPM</h1>
-<small>HISTORICAL PATTERN ENGINE · v0.3.6</small>
+<small>MAJOR TURN ENGINE · v0.3.7</small>
 </div>
 </div>
 <div class="sync" id="sync">DATA WAIT</div>
 </header>
 
 <div class="viewport" id="viewport">
+
 <div class="track" id="track">
 
 <section class="page">
 <div class="inner">
+
 <h2>Scanner</h2>
-<div class="subtitle">과거 실제 Turning Point를 기준으로 현재 패턴을 비교합니다.</div>
+<div class="subtitle">
+가격 구조를 먼저 판독한 뒤 실제 바닥·고점의 보조지표 패턴을 역산합니다.
+</div>
 
 <div class="card">
-<div class="section"><h3>Market State</h3><span>WEEKLY + DAILY</span></div>
+<div class="section">
+<h3>Market State</h3>
+<span>1 YEAR</span>
+</div>
+
 <div class="summary">
-<div class="sum"><small>BOTTOM</small><b class="good" id="bottomCount">0</b></div>
-<div class="sum"><small>TREND</small><b id="trendCount">0</b></div>
-<div class="sum"><small>TOP</small><b class="bad" id="topCount">0</b></div>
+<div class="sum">
+<small>BOTTOM</small>
+<b class="good" id="bottomCount">0</b>
+</div>
+
+<div class="sum">
+<small>TREND</small>
+<b id="trendCount">0</b>
+</div>
+
+<div class="sum">
+<small>TOP</small>
+<b class="bad" id="topCount">0</b>
+</div>
 </div>
 </div>
 
 <div class="card">
-<div class="section"><h3>My Symbols</h3><span id="symbolCount">0</span></div>
+<div class="section">
+<h3>My Symbols</h3>
+<span id="symbolCount">0</span>
+</div>
+
 <div class="list" id="homeList"></div>
 </div>
+
 </div>
 </section>
 
 <section class="page">
 <div class="inner">
+
 <h2>Symbols</h2>
-<div class="subtitle">Ticker만 등록하면 자동으로 Historical Pattern을 분석합니다.</div>
+<div class="subtitle">
+Ticker만 등록하면 최근 약 1년 데이터를 자동 분석합니다.
+</div>
 
 <div class="card">
-<div class="section"><h3>Add Symbol</h3><span>STOCK / ETF</span></div>
+<div class="section">
+<h3>Add Symbol</h3>
+<span>STOCK / ETF</span>
+</div>
+
 <div class="addrow">
 <div class="field" style="margin:0">
-<input id="ticker" placeholder="CRCL · NVDA · TSLL · SOXL">
+<input id="ticker" placeholder="TSLA · CRCL · NVDA · SOXL">
 </div>
 <button class="btn" id="addSymbol">등록</button>
 </div>
 </div>
 
 <div class="card">
-<div class="section"><h3>Registered</h3><span id="registeredCount">0</span></div>
+<div class="section">
+<h3>Registered</h3>
+<span id="registeredCount">0</span>
+</div>
+
 <div class="list" id="registeredList"></div>
 </div>
+
 </div>
 </section>
 
 <section class="page">
 <div class="inner">
+
 <h2>More</h2>
-<div class="subtitle">Historical Pattern Engine 설정</div>
+<div class="subtitle">Major Bottom / Top Engine</div>
 
 <div class="card">
-<div class="section"><h3>Market Data</h3><span>TWELVE DATA</span></div>
-<div class="signal"><span>Connection</span><b id="dataStatus">WAIT</b></div>
-<div class="signal"><span>Mode</span><b id="dataMode">—</b></div>
-<div class="signal"><span>Last Update</span><b id="lastUpdate">—</b></div>
-<div class="signal"><span>Tracked Symbols</span><b id="tracked">0</b></div>
-<button class="btn full" style="margin-top:12px" id="refresh">시장 데이터 업데이트</button>
+
+<div class="section">
+<h3>Market Data</h3>
+<span>TWELVE DATA</span>
+</div>
+
+<div class="signal">
+<span>Connection</span>
+<b id="dataStatus">WAIT</b>
+</div>
+
+<div class="signal">
+<span>Mode</span>
+<b id="dataMode">—</b>
+</div>
+
+<div class="signal">
+<span>Last Update</span>
+<b id="lastUpdate">—</b>
+</div>
+
+<div class="signal">
+<span>Tracked Symbols</span>
+<b id="tracked">0</b>
+</div>
+
+<button class="btn full" style="margin-top:12px" id="refresh">
+시장 데이터 업데이트
+</button>
+
 </div>
 
 <div class="card">
-<div class="section"><h3>Pattern Engine</h3><span>v2.1</span></div>
-<div class="signal"><span>Historical Bottom</span><b>PRICE CONFIRMED</b></div>
-<div class="signal"><span>Historical Top</span><b>PRICE CONFIRMED</b></div>
-<div class="signal"><span>Confirmation Window</span><b>8 WEEKS</b></div>
-<div class="signal"><span>Bottom Move</span><b>+15%</b></div>
-<div class="signal"><span>Top Move</span><b>-15%</b></div>
-<div class="signal"><span>Current Similarity</span><b>0 - 100</b></div>
-<div class="signal"><span>Current Technical</span><b>0 - 100</b></div>
+
+<div class="section">
+<h3>Major Turn Rules</h3>
+<span>PRICE FIRST</span>
+</div>
+
+<div class="signal">
+<span>Historical Range</span>
+<b>~1 YEAR</b>
+</div>
+
+<div class="signal">
+<span>Major Bottom</span>
+<b>LOW → +15%</b>
+</div>
+
+<div class="signal">
+<span>Major Top</span>
+<b>HIGH → -15%</b>
+</div>
+
+<div class="signal">
+<span>Confirmation Window</span>
+<b>10 WEEKS</b>
+</div>
+
+<div class="signal">
+<span>Pivot Radius</span>
+<b>±1 WEEK</b>
+</div>
+
+<div class="signal">
+<span>Structural Break</span>
+<b>2%</b>
+</div>
+
+<div class="signal">
+<span>Pattern Score</span>
+<b>0 - 100</b>
+</div>
+
 </div>
 
 <div class="notice">
-Historical Bottom/Top은 먼저 실제 가격 반전을 이용해 찾습니다.
-그 다음 해당 Turning Point 직전의 RSI, MACD, Bollinger, Stochastic, 거래량, 가격 위치를 추출합니다.
-현재 패턴이 과거 실제 Turning Point와 얼마나 비슷한지를 별도 Similarity Score로 표시합니다.
+v0.3.7부터는 RSI나 MACD 점수로 바닥을 먼저 정하지 않습니다.
+가격 자체에서 실제 저점 → 의미 있는 반등을 먼저 찾고,
+그 시점의 RSI·MACD·Stochastic·Bollinger·Volume 데이터를 추출합니다.
+현재 구간이 그 실제 바닥 패턴과 얼마나 닮았는지를 별도로 계산합니다.
 </div>
+
 </div>
 </section>
 
 </div>
 
 <nav class="bottom">
-<button class="tab active" data-page="0"><i>⌂</i>SCANNER</button>
-<button class="tab" data-page="1"><i>＋</i>SYMBOLS</button>
-<button class="tab" data-page="2"><i>•••</i>MORE</button>
+
+<button class="tab active" data-page="0">
+<i>⌂</i>
+SCANNER
+</button>
+
+<button class="tab" data-page="1">
+<i>＋</i>
+SYMBOLS
+</button>
+
+<button class="tab" data-page="2">
+<i>•••</i>
+MORE
+</button>
+
 </nav>
 
 <div class="detail" id="detail">
+
 <header class="detailhead">
+
 <button class="icon" id="back">‹</button>
+
 <div class="detailtitle">
 <b id="detailTicker">—</b>
-<small>HISTORICAL PATTERN ANALYSIS</small>
+<small>MAJOR TURN ANALYSIS</small>
 </div>
+
 <div></div>
+
 </header>
 
 <div class="detailbody">
+
 <div class="inner">
 
 <div class="card hero">
+
 <div class="meta">CURRENT PRICE</div>
 <div class="bigprice" id="currentPrice">—</div>
-<span class="badge neutral" id="stateBadge">DATA WAIT</span>
+
+<span class="badge neutral" id="stateBadge">
+DATA WAIT
+</span>
 
 <div class="cycle">
-<small>WEEKLY CYCLE</small>
+
+<small>CURRENT CYCLE</small>
+
 <b id="cycleState">—</b>
+
 <div class="meta" id="cycleText"></div>
+
 </div>
+
+<div id="structuralBox"></div>
+
 </div>
 
 <div class="card">
-<div class="section"><h3>Current Weekly</h3><span>TECHNICAL</span></div>
+
+<div class="section">
+<h3>Current Bottom / Top</h3>
+<span>COMBINED</span>
+</div>
+
 <div class="scoregrid">
+
 <div class="scorebox">
 <small>BOTTOM SCORE</small>
-<b class="good" id="weeklyBottom">—</b>
-<em id="weeklyBottomLabel">—</em>
-<div class="progress"><span class="bottomfill" id="weeklyBottomBar"></span></div>
+<b class="good" id="combinedBottom">—</b>
+<em id="combinedBottomLabel">—</em>
+
+<div class="progress">
+<span class="bottomfill" id="combinedBottomBar"></span>
 </div>
+</div>
+
 <div class="scorebox">
 <small>TOP SCORE</small>
-<b class="bad" id="weeklyTop">—</b>
-<em id="weeklyTopLabel">—</em>
-<div class="progress"><span class="topfill" id="weeklyTopBar"></span></div>
+<b class="bad" id="combinedTop">—</b>
+<em id="combinedTopLabel">—</em>
+
+<div class="progress">
+<span class="topfill" id="combinedTopBar"></span>
 </div>
+</div>
+
 </div>
 </div>
 
 <div class="card">
-<div class="section"><h3>Historical Pattern Match</h3><span>SIMILARITY</span></div>
+
+<div class="section">
+<h3>Historical Pattern</h3>
+<span>SIMILARITY</span>
+</div>
+
 <div class="scoregrid">
+
 <div class="scorebox">
-<small>BOTTOM SIMILARITY</small>
+<small>BOTTOM MATCH</small>
 <b class="violet" id="bottomSimilarity">—</b>
 <em id="bottomSimilarityText">—</em>
-<div class="progress"><span class="simfill" id="bottomSimilarityBar"></span></div>
+
+<div class="progress">
+<span class="simfill" id="bottomSimilarityBar"></span>
 </div>
+</div>
+
 <div class="scorebox">
-<small>TOP SIMILARITY</small>
+<small>TOP MATCH</small>
 <b class="violet" id="topSimilarity">—</b>
 <em id="topSimilarityText">—</em>
-<div class="progress"><span class="simfill" id="topSimilarityBar"></span></div>
+
+<div class="progress">
+<span class="simfill" id="topSimilarityBar"></span>
 </div>
+</div>
+
 </div>
 </div>
 
 <div class="card">
-<div class="section"><h3>Reference Bottom</h3><span>PRICE FIRST</span></div>
-<div id="referenceBottom"></div>
+
+<div class="section">
+<h3>Major Bottoms</h3>
+<span>PRICE CONFIRMED</span>
+</div>
+
+<div id="majorBottoms"></div>
+
 </div>
 
 <div class="card">
-<div class="section"><h3>Reference Top</h3><span>PRICE FIRST</span></div>
-<div id="referenceTop"></div>
+
+<div class="section">
+<h3>Major Tops</h3>
+<span>PRICE CONFIRMED</span>
+</div>
+
+<div id="majorTops"></div>
+
 </div>
 
 <div class="card">
-<div class="section"><h3>Daily Early Signal</h3><span>FAST</span></div>
+
+<div class="section">
+<h3>Weekly Technical</h3>
+<span>NOW</span>
+</div>
+
 <div class="scoregrid">
+
+<div class="scorebox">
+<small>TECH BOTTOM</small>
+<b class="good" id="weeklyBottom">—</b>
+<em id="weeklyBottomLabel">—</em>
+</div>
+
+<div class="scorebox">
+<small>TECH TOP</small>
+<b class="bad" id="weeklyTop">—</b>
+<em id="weeklyTopLabel">—</em>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+
+<div class="section">
+<h3>Daily Early Signal</h3>
+<span>FAST</span>
+</div>
+
+<div class="scoregrid">
+
 <div class="scorebox">
 <small>DAILY BOTTOM</small>
 <b class="good" id="dailyBottom">—</b>
 <em id="dailyBottomLabel">—</em>
 </div>
+
 <div class="scorebox">
 <small>DAILY TOP</small>
 <b class="bad" id="dailyTop">—</b>
 <em id="dailyTopLabel">—</em>
 </div>
+
 </div>
 </div>
 
 <div class="card">
-<div class="section"><h3>Current Indicators</h3><span>WEEKLY</span></div>
+
+<div class="section">
+<h3>Current Indicators</h3>
+<span>WEEKLY</span>
+</div>
+
 <div id="indicatorList"></div>
+
 </div>
 
 <div class="card">
-<button class="btn danger full" id="deleteSymbol">종목 삭제</button>
+
+<button class="btn danger full" id="deleteSymbol">
+종목 삭제
+</button>
+
 </div>
 
 </div>
@@ -328,1106 +673,9 @@ Historical Bottom/Top은 먼저 실제 가격 반전을 이용해 찾습니다.
 </div>
 
 <script>
+
 const SUPABASE_URL='https://seuqhwmzmsqzuppemiuk.supabase.co';
+
 const KEY='sb_publishable_8T7Wafioftxn528m-T4fNA_-OZq9dwq';
-const MARKET=SUPABASE_URL+'/functions/v1/market-data';
 
-const SYMBOL_KEY='stockpm_scanner_symbols_v034';
-const CACHE_KEY='stockpm_market_cache_v022';
-const DAILY_TTL=60*60*1000;
-
-const TURN_WINDOW=8;
-const TURN_MOVE=15;
-const PIVOT_RADIUS=2;
-
-const $=id=>document.getElementById(id);
-
-const store={
-get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},
-set(k,v){localStorage.setItem(k,JSON.stringify(v))}
-};
-
-let symbols=store.get(SYMBOL_KEY,[]);
-let cache=store.get(CACHE_KEY,{});
-let data={};
-let currentSymbol=null;
-let page=0;
-let lastMode='CACHED';
-
-function money(v){
-if(!Number.isFinite(+v))return '—';
-return '$'+(+v).toLocaleString(undefined,{maximumFractionDigits:2});
-}
-
-function average(a){
-return a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
-}
-
-function std(a){
-if(!a.length)return 0;
-const m=average(a);
-return Math.sqrt(average(a.map(x=>(x-m)**2)));
-}
-
-function clamp(v,min=0,max=100){
-return Math.max(min,Math.min(max,v));
-}
-
-function EMA(values,n){
-if(!values.length)return [];
-const k=2/(n+1);
-let p=values[0];
-const out=[p];
-
-for(let i=1;i<values.length;i++){
-p=values[i]*k+p*(1-k);
-out.push(p);
-}
-
-return out;
-}
-
-function RSI(closes,n=14){
-if(closes.length<n+1)return null;
-
-let gain=0;
-let loss=0;
-
-for(let i=closes.length-n;i<closes.length;i++){
-const d=closes[i]-closes[i-1];
-if(d>0)gain+=d;
-else loss-=d;
-}
-
-if(loss===0)return 100;
-
-const rs=(gain/n)/(loss/n);
-return 100-(100/(1+rs));
-}
-
-function MACD(closes){
-if(closes.length<35)return null;
-
-const e12=EMA(closes,12);
-const e26=EMA(closes,26);
-const macd=closes.map((_,i)=>e12[i]-e26[i]);
-const signal=EMA(macd,9);
-const hist=macd.map((x,i)=>x-signal[i]);
-
-return {macd,signal,hist};
-}
-
-function bollinger(closes,n=20){
-if(closes.length<n)return null;
-
-const x=closes.slice(-n);
-const mid=average(x);
-const sd=std(x);
-
-return {
-mid,
-upper:mid+2*sd,
-lower:mid-2*sd
-};
-}
-
-function stochastic(bars,n=14){
-if(bars.length<n)return null;
-
-const x=bars.slice(-n);
-const hi=Math.max(...x.map(b=>b.h));
-const lo=Math.min(...x.map(b=>b.l));
-
-if(hi===lo)return 50;
-
-return ((bars.at(-1).c-lo)/(hi-lo))*100;
-}
-
-function normalize(values){
-return [...values]
-.reverse()
-.map(x=>({
-dt:x.datetime,
-o:+x.open,
-h:+x.high,
-l:+x.low,
-c:+x.close,
-v:+x.volume||0
-}))
-.filter(x=>Number.isFinite(x.c));
-}
-
-function weekKey(s){
-const d=new Date(s.substring(0,10)+'T12:00:00');
-const day=(d.getDay()+6)%7;
-d.setDate(d.getDate()-day);
-
-return [
-d.getFullYear(),
-String(d.getMonth()+1).padStart(2,'0'),
-String(d.getDate()).padStart(2,'0')
-].join('-');
-}
-
-function dailyToWeekly(daily){
-const weeks=[];
-let cur=null;
-
-for(const bar of daily){
-const key=weekKey(bar.dt);
-
-if(!cur||cur.key!==key){
-cur={
-key,
-dt:key,
-o:bar.o,
-h:bar.h,
-l:bar.l,
-c:bar.c,
-v:bar.v||0
-};
-weeks.push(cur);
-}else{
-cur.h=Math.max(cur.h,bar.h);
-cur.l=Math.min(cur.l,bar.l);
-cur.c=bar.c;
-cur.v+=bar.v||0;
-}
-}
-
-return weeks;
-}
-
-function featureAt(bars,index){
-const slice=bars.slice(0,index+1);
-
-if(slice.length<20)return null;
-
-const closes=slice.map(x=>x.c);
-const volumes=slice.map(x=>x.v||0);
-
-const rsi=RSI(closes);
-const prevRsi=RSI(closes.slice(0,-1));
-const stoch=stochastic(slice);
-const bb=bollinger(closes);
-const macd=MACD(closes);
-
-const last=slice.at(-1);
-const prev=slice.at(-2);
-
-let macdHist=0;
-let macdSlope=0;
-let macdCross=0;
-
-if(macd){
-macdHist=macd.hist.at(-1)||0;
-
-if(macd.hist.length>=2){
-macdSlope=(macd.hist.at(-1)||0)-(macd.hist.at(-2)||0);
-}
-
-if(macd.macd.length>=2){
-if(
-macd.macd.at(-2)<=macd.signal.at(-2) &&
-macd.macd.at(-1)>macd.signal.at(-1)
-) macdCross=1;
-
-if(
-macd.macd.at(-2)>=macd.signal.at(-2) &&
-macd.macd.at(-1)<macd.signal.at(-1)
-) macdCross=-1;
-}
-}
-
-let bbPosition=0;
-
-if(bb){
-const width=bb.upper-bb.lower;
-if(width)bbPosition=(last.c-bb.lower)/width;
-}
-
-const avgVol=volumes.length>=13
-?average(volumes.slice(-13,-1))
-:0;
-
-const relVolume=avgVol?last.v/avgVol:1;
-
-const range=Math.max(last.h-last.l,0.000001);
-const closeLocation=(last.c-last.l)/range;
-
-const rsiSlope=
-rsi!==null&&prevRsi!==null
-?rsi-prevRsi
-:0;
-
-const recent=slice.slice(-9);
-const recentHigh=Math.max(...recent.map(x=>x.h));
-const recentLow=Math.min(...recent.map(x=>x.l));
-
-const position8w=
-recentHigh===recentLow
-?.5
-:(last.c-recentLow)/(recentHigh-recentLow);
-
-let return4w=0;
-
-if(slice.length>=5){
-const old=slice.at(-5).c;
-return4w=old?((last.c-old)/old)*100:0;
-}
-
-return {
-rsi:rsi??50,
-rsiSlope,
-stoch:stoch??50,
-macdHist,
-macdSlope,
-macdCross,
-bbPosition,
-relVolume,
-closeLocation,
-position8w,
-return4w
-};
-}
-
-function technicalScore(feature,type){
-if(!feature)return 0;
-
-let score=0;
-
-if(type==='bottom'){
-if(feature.rsi<=25)score+=20;
-else if(feature.rsi<=30)score+=16;
-else if(feature.rsi<=38)score+=10;
-
-if(feature.rsiSlope>0&&feature.rsi<40)score+=10;
-if(feature.stoch<20)score+=10;
-else if(feature.stoch<30)score+=6;
-
-if(feature.macdSlope>0)score+=12;
-if(feature.macdCross===1)score+=14;
-
-if(feature.bbPosition<0)score+=12;
-else if(feature.bbPosition<.2)score+=8;
-
-if(feature.relVolume>=1.7)score+=8;
-if(feature.closeLocation>.6)score+=7;
-if(feature.position8w<.2)score+=7;
-
-}else{
-
-if(feature.rsi>=75)score+=20;
-else if(feature.rsi>=70)score+=16;
-else if(feature.rsi>=62)score+=10;
-
-if(feature.rsiSlope<0&&feature.rsi>60)score+=10;
-if(feature.stoch>80)score+=10;
-else if(feature.stoch>70)score+=6;
-
-if(feature.macdSlope<0)score+=12;
-if(feature.macdCross===-1)score+=14;
-
-if(feature.bbPosition>1)score+=12;
-else if(feature.bbPosition>.8)score+=8;
-
-if(feature.relVolume>=1.7)score+=8;
-if(feature.closeLocation<.4)score+=7;
-if(feature.position8w>.8)score+=7;
-}
-
-return clamp(Math.round(score));
-}
-
-function isPivotLow(bars,i){
-if(i<PIVOT_RADIUS||i>=bars.length-PIVOT_RADIUS)return false;
-
-for(let n=1;n<=PIVOT_RADIUS;n++){
-if(bars[i].l>bars[i-n].l)return false;
-if(bars[i].l>bars[i+n].l)return false;
-}
-
-return true;
-}
-
-function isPivotHigh(bars,i){
-if(i<PIVOT_RADIUS||i>=bars.length-PIVOT_RADIUS)return false;
-
-for(let n=1;n<=PIVOT_RADIUS;n++){
-if(bars[i].h<bars[i-n].h)return false;
-if(bars[i].h<bars[i+n].h)return false;
-}
-
-return true;
-}
-
-function discoverHistoricalTurns(bars){
-const bottoms=[];
-const tops=[];
-
-for(let i=20;i<bars.length-TURN_WINDOW;i++){
-
-const future=bars.slice(i+1,i+1+TURN_WINDOW);
-if(!future.length)continue;
-
-if(isPivotLow(bars,i)){
-const base=bars[i].l;
-const futureHigh=Math.max(...future.map(x=>x.h));
-const rise=((futureHigh-base)/base)*100;
-
-if(rise>=TURN_MOVE){
-const feature=featureAt(bars,i);
-
-bottoms.push({
-index:i,
-date:bars[i].dt,
-price:base,
-move:rise,
-feature
-});
-}
-}
-
-if(isPivotHigh(bars,i)){
-const base=bars[i].h;
-const futureLow=Math.min(...future.map(x=>x.l));
-const drop=((base-futureLow)/base)*100;
-
-if(drop>=TURN_MOVE){
-const feature=featureAt(bars,i);
-
-tops.push({
-index:i,
-date:bars[i].dt,
-price:base,
-move:drop,
-feature
-});
-}
-}
-}
-
-return {bottoms,tops};
-}
-
-function distance(a,b,scale){
-return Math.min(1,Math.abs(a-b)/scale);
-}
-
-function featureSimilarity(current,reference,type){
-if(!current||!reference)return 0;
-
-const parts=[];
-
-parts.push(1-distance(current.rsi,reference.rsi,35));
-parts.push(1-distance(current.rsiSlope,reference.rsiSlope,12));
-parts.push(1-distance(current.stoch,reference.stoch,45));
-parts.push(1-distance(current.bbPosition,reference.bbPosition,.8));
-parts.push(1-distance(current.relVolume,reference.relVolume,2));
-parts.push(1-distance(current.closeLocation,reference.closeLocation,.7));
-parts.push(1-distance(current.position8w,reference.position8w,.8));
-parts.push(1-distance(current.return4w,reference.return4w,30));
-
-const currentMacdDirection=Math.sign(current.macdSlope);
-const refMacdDirection=Math.sign(reference.macdSlope);
-
-parts.push(currentMacdDirection===refMacdDirection?1:.35);
-
-if(type==='bottom'){
-parts.push(
-(current.macdCross===1&&reference.macdCross===1) ? 1 :
-(current.macdCross===reference.macdCross ? .7 : .35)
-);
-}else{
-parts.push(
-(current.macdCross===-1&&reference.macdCross===-1) ? 1 :
-(current.macdCross===reference.macdCross ? .7 : .35)
-);
-}
-
-return clamp(Math.round(average(parts)*100));
-}
-
-function historicalSimilarity(current,turns,type){
-if(!current||!turns.length){
-return {
-score:0,
-reference:null,
-matches:[]
-};
-}
-
-const matches=turns.map(turn=>({
-...turn,
-similarity:featureSimilarity(current,turn.feature,type)
-}))
-.sort((a,b)=>b.similarity-a.similarity);
-
-const top=matches.slice(0,Math.min(3,matches.length));
-
-let weighted=0;
-let weights=0;
-
-top.forEach((x,i)=>{
-const w=i===0?3:i===1?2:1;
-weighted+=x.similarity*w;
-weights+=w;
-});
-
-return {
-score:weights?Math.round(weighted/weights):0,
-reference:matches[0]||null,
-matches
-};
-}
-
-function lastStructuralBottom(bars,turns,currentPrice){
-if(!turns.length)return null;
-
-const ordered=[...turns].sort((a,b)=>b.index-a.index);
-
-for(const turn of ordered){
-const after=bars.slice(turn.index+1);
-const broke=after.some(x=>x.l<turn.price*.985);
-
-if(!broke){
-return {
-...turn,
-intact:currentPrice>=turn.price*.985
-};
-}
-}
-
-return ordered[0]||null;
-}
-
-function lastStructuralTop(bars,turns,currentPrice){
-if(!turns.length)return null;
-
-const ordered=[...turns].sort((a,b)=>b.index-a.index);
-
-for(const turn of ordered){
-const after=bars.slice(turn.index+1);
-const broke=after.some(x=>x.h>turn.price*1.015);
-
-if(!broke){
-return {
-...turn,
-intact:currentPrice<=turn.price*1.015
-};
-}
-}
-
-return ordered[0]||null;
-}
-
-function scoreLabel(type,score){
-if(type==='bottom'){
-if(score>=90)return 'EXTREME BOTTOM SETUP';
-if(score>=80)return 'STRONG BOTTOM SETUP';
-if(score>=65)return 'BOTTOM BUILDING';
-if(score>=45)return 'BOTTOM WATCH';
-return 'LOW BOTTOM SIGNAL';
-}
-
-if(score>=90)return 'EXTREME TOP SETUP';
-if(score>=80)return 'STRONG TOP SETUP';
-if(score>=65)return 'TOP BUILDING';
-if(score>=45)return 'TOP WATCH';
-return 'LOW TOP SIGNAL';
-}
-
-function similarityLabel(score,type){
-if(score>=90)return type==='bottom'?'VERY CLOSE TO HISTORICAL BOTTOM':'VERY CLOSE TO HISTORICAL TOP';
-if(score>=80)return 'STRONG HISTORICAL MATCH';
-if(score>=70)return 'MODERATE HISTORICAL MATCH';
-if(score>=55)return 'PARTIAL MATCH';
-return 'LOW MATCH';
-}
-
-function analyse(symbol,daily){
-if(!daily.length)return null;
-
-const weekly=dailyToWeekly(daily);
-const currentPrice=daily.at(-1).c;
-
-const weeklyFeature=featureAt(weekly,weekly.length-1);
-const dailyFeature=featureAt(daily,daily.length-1);
-
-const weeklyBottom=technicalScore(weeklyFeature,'bottom');
-const weeklyTop=technicalScore(weeklyFeature,'top');
-
-const dailyBottom=technicalScore(dailyFeature,'bottom');
-const dailyTop=technicalScore(dailyFeature,'top');
-
-const historical=discoverHistoricalTurns(weekly);
-
-const bottomMatch=historicalSimilarity(
-weeklyFeature,
-historical.bottoms,
-'bottom'
-);
-
-const topMatch=historicalSimilarity(
-weeklyFeature,
-historical.tops,
-'top'
-);
-
-const structuralBottom=lastStructuralBottom(
-weekly,
-historical.bottoms,
-currentPrice
-);
-
-const structuralTop=lastStructuralTop(
-weekly,
-historical.tops,
-currentPrice
-);
-
-let state='TREND / NEUTRAL';
-
-const combinedBottom=Math.round(
-weeklyBottom*.55+
-bottomMatch.score*.45
-);
-
-const combinedTop=Math.round(
-weeklyTop*.55+
-topMatch.score*.45
-);
-
-if(combinedBottom>=85&&combinedBottom>combinedTop+12){
-state='STRONG BOTTOM';
-}else if(combinedBottom>=70&&combinedBottom>combinedTop+10){
-state='BOTTOM WATCH';
-}else if(combinedTop>=85&&combinedTop>combinedBottom+12){
-state='STRONG TOP';
-}else if(combinedTop>=70&&combinedTop>combinedBottom+10){
-state='TOP WATCH';
-}
-
-let cycle='TREND / NEUTRAL';
-let cycleText='현재 주봉은 과거 주요 바닥·고점 패턴과 뚜렷하게 겹치지 않습니다.';
-
-if(structuralBottom){
-const move=((currentPrice-structuralBottom.price)/structuralBottom.price)*100;
-
-if(structuralBottom.intact&&move>=0){
-cycle='RISING FROM STRUCTURAL BOTTOM';
-cycleText=
-`주요 바닥 ${structuralBottom.date} · ${money(structuralBottom.price)}가 아직 훼손되지 않았습니다. 현재가는 해당 바닥 대비 +${move.toFixed(1)}%입니다.`;
-}
-}
-
-if(combinedBottom>=85){
-cycle='HISTORICAL BOTTOM PATTERN';
-cycleText=
-`현재 기술 신호와 과거 실제 바닥 패턴이 강하게 겹칩니다. Combined Bottom ${combinedBottom}/100 · Historical Similarity ${bottomMatch.score}/100`;
-}
-
-if(combinedTop>=85&&combinedTop>combinedBottom){
-cycle='HISTORICAL TOP PATTERN';
-cycleText=
-`현재 기술 신호와 과거 실제 고점 패턴이 강하게 겹칩니다. Combined Top ${combinedTop}/100 · Historical Similarity ${topMatch.score}/100`;
-}
-
-return {
-symbol,
-price:currentPrice,
-weekly,
-weeklyFeature,
-dailyFeature,
-weeklyBottom,
-weeklyTop,
-dailyBottom,
-dailyTop,
-historical,
-bottomMatch,
-topMatch,
-structuralBottom,
-structuralTop,
-combinedBottom,
-combinedTop,
-state,
-cycle,
-cycleText
-};
-}
-
-function badgeClass(state){
-if(state.includes('BOTTOM'))return 'good';
-if(state.includes('TOP'))return 'bad';
-return 'neutral';
-}
-
-function ageText(ms){
-const m=Math.floor(ms/60000);
-if(m<1)return '방금 전';
-if(m<60)return m+'분 전';
-
-const h=Math.floor(m/60);
-if(h<24)return h+'시간 전';
-
-return Math.floor(h/24)+'일 전';
-}
-
-async function fetchDaily(symbol,force=false){
-const key=symbol+'__1day';
-const old=cache[key];
-
-if(
-!force &&
-old?.values?.length &&
-Date.now()-old.time<DAILY_TTL
-){
-return {
-values:old.values,
-mode:'CACHED'
-};
-}
-
-try{
-const url=new URL(MARKET);
-url.searchParams.set('symbol',symbol);
-url.searchParams.set('interval','1day');
-
-const r=await fetch(url,{
-headers:{apikey:KEY}
-});
-
-const j=await r.json();
-
-if(!r.ok||!Array.isArray(j.values)){
-throw new Error(j?.message||'FETCH ERROR');
-}
-
-const values=normalize(j.values);
-
-cache[key]={
-values,
-time:Date.now(),
-sourceTime:j.fetched_at||new Date().toISOString()
-};
-
-store.set(CACHE_KEY,cache);
-
-return {
-values,
-mode:'LIVE'
-};
-
-}catch(e){
-
-return {
-values:old?.values||[],
-mode:old?.values?.length?'CACHED':'ERROR'
-};
-
-}
-}
-
-function lastCacheTime(){
-let t=0;
-
-symbols.forEach(s=>{
-const x=cache[s+'__1day']?.time||0;
-if(x>t)t=x;
-});
-
-return t;
-}
-
-function render(){
-let html='';
-let bottoms=0;
-let tops=0;
-let trends=0;
-
-symbols.forEach(symbol=>{
-const d=data[symbol];
-
-if(d?.state.includes('BOTTOM'))bottoms++;
-else if(d?.state.includes('TOP'))tops++;
-else trends++;
-
-html+=`
-<div class="row" data-symbol="${symbol}">
-<div>
-<div class="name">
-${symbol}
-<span class="badge ${badgeClass(d?.state||'')}">
-${d?.state||'DATA WAIT'}
-</span>
-</div>
-
-<div class="meta">
-${d
-?`
-WEEKLY · B ${d.weeklyBottom} / T ${d.weeklyTop}
-<br>
-HIST MATCH · B ${d.bottomMatch.score} / T ${d.topMatch.score}
-<br>
-COMBINED · B ${d.combinedBottom} / T ${d.combinedTop}
-${d.structuralBottom
-?`<br>STRUCTURAL BOTTOM · ${d.structuralBottom.date} · ${money(d.structuralBottom.price)}`
-:''
-}
-`
-:'시장 데이터 대기'
-}
-</div>
-</div>
-
-<div class="price">
-${d?money(d.price):'WAIT'}
-</div>
-</div>
-`;
-});
-
-$('homeList').innerHTML=
-html||'<div class="empty">SYMBOLS 탭에서 종목을 등록하세요.</div>';
-
-let reg='';
-
-symbols.forEach(symbol=>{
-const d=data[symbol];
-
-reg+=`
-<div class="row" data-symbol="${symbol}">
-<div>
-<div class="name">${symbol}</div>
-<div class="meta">${d?d.cycle:'시장 데이터 대기'}</div>
-</div>
-<div class="price">${d?money(d.price):'WAIT'}</div>
-</div>
-`;
-});
-
-$('registeredList').innerHTML=
-reg||'<div class="empty">등록된 종목이 없습니다.</div>';
-
-$('symbolCount').textContent=symbols.length;
-$('registeredCount').textContent=symbols.length;
-$('tracked').textContent=symbols.length;
-
-$('bottomCount').textContent=bottoms;
-$('topCount').textContent=tops;
-$('trendCount').textContent=trends;
-
-document.querySelectorAll('[data-symbol]').forEach(el=>{
-el.onclick=()=>openDetail(el.dataset.symbol);
-});
-
-renderStatus();
-}
-
-function renderStatus(){
-const t=lastCacheTime();
-
-if(!symbols.length){
-$('sync').textContent='NO SYMBOL';
-$('dataStatus').textContent='NO SYMBOL';
-$('dataMode').textContent='—';
-$('lastUpdate').textContent='—';
-return;
-}
-
-if(t){
-$('lastUpdate').textContent=
-new Date(t).toLocaleString()+' · '+ageText(Date.now()-t);
-}
-
-$('dataMode').textContent=lastMode;
-
-if(lastMode==='LIVE'){
-$('sync').textContent='LIVE';
-$('dataStatus').textContent='CONNECTED';
-}else if(t){
-$('sync').textContent='CACHED';
-$('dataStatus').textContent='CONNECTED';
-}else{
-$('sync').textContent='DATA WAIT';
-$('dataStatus').textContent='WAIT';
-}
-}
-
-function referenceCard(point,type,currentPrice){
-if(!point){
-return `<div class="empty">확인 가능한 Historical ${type==='bottom'?'Bottom':'Top'}이 없습니다.</div>`;
-}
-
-const move=((currentPrice-point.price)/point.price)*100;
-
-const f=point.feature||{};
-
-return `
-<div class="turncard">
-<div class="turnhead">
-<div>
-<small>${point.date}</small>
-<b>${money(point.price)}</b>
-</div>
-<div class="turnscore ${type==='bottom'?'good':'bad'}">
-${point.similarity!==undefined?point.similarity+'/100':''}
-</div>
-</div>
-
-<div class="turnmeta">
-실제 이후 ${type==='bottom'?'상승':'하락'}:
-<b class="${type==='bottom'?'good':'bad'}">
-${type==='bottom'?'+':'-'}${point.move.toFixed(1)}%
-</b>
-<br>
-현재가와의 거리:
-<b class="${move>=0?'good':'bad'}">
-${move>=0?'+':''}${move.toFixed(1)}%
-</b>
-<br><br>
-RSI · ${f.rsi?.toFixed(1)??'—'}
-<br>
-RSI Slope · ${f.rsiSlope?.toFixed(1)??'—'}
-<br>
-Stochastic · ${f.stoch?.toFixed(1)??'—'}
-<br>
-Bollinger Position · ${f.bbPosition?.toFixed(2)??'—'}
-<br>
-Relative Volume · ${f.relVolume?.toFixed(2)??'—'}x
-<br>
-4W Return · ${f.return4w?.toFixed(1)??'—'}%
-</div>
-</div>
-`;
-}
-
-function indicatorsHTML(d){
-const f=d.weeklyFeature;
-
-if(!f){
-return '<div class="empty">DATA LIMITED</div>';
-}
-
-return `
-<div class="signal"><span>RSI</span><b>${f.rsi.toFixed(1)}</b></div>
-<div class="signal"><span>RSI Slope</span><b class="${f.rsiSlope>=0?'good':'bad'}">${f.rsiSlope>=0?'+':''}${f.rsiSlope.toFixed(1)}</b></div>
-<div class="signal"><span>Stochastic</span><b>${f.stoch.toFixed(1)}</b></div>
-<div class="signal"><span>MACD Histogram Slope</span><b class="${f.macdSlope>=0?'good':'bad'}">${f.macdSlope>=0?'UP':'DOWN'}</b></div>
-<div class="signal"><span>Bollinger Position</span><b>${f.bbPosition.toFixed(2)}</b></div>
-<div class="signal"><span>Relative Volume</span><b>${f.relVolume.toFixed(2)}x</b></div>
-<div class="signal"><span>8W Price Position</span><b>${Math.round(f.position8w*100)}%</b></div>
-<div class="signal"><span>4W Return</span><b class="${f.return4w>=0?'good':'bad'}">${f.return4w>=0?'+':''}${f.return4w.toFixed(1)}%</b></div>
-`;
-}
-
-function openDetail(symbol){
-currentSymbol=symbol;
-
-const d=data[symbol];
-
-$('detailTicker').textContent=symbol;
-
-if(!d){
-$('currentPrice').textContent='DATA WAIT';
-$('stateBadge').textContent='DATA WAIT';
-$('stateBadge').className='badge neutral';
-$('cycleState').textContent='—';
-$('cycleText').textContent='시장 데이터 업데이트가 필요합니다.';
-$('detail').classList.add('open');
-return;
-}
-
-$('currentPrice').textContent=money(d.price);
-
-$('stateBadge').textContent=d.state;
-$('stateBadge').className='badge '+badgeClass(d.state);
-
-$('cycleState').textContent=d.cycle;
-$('cycleText').textContent=d.cycleText;
-
-$('weeklyBottom').textContent=d.weeklyBottom+'/100';
-$('weeklyTop').textContent=d.weeklyTop+'/100';
-
-$('weeklyBottomLabel').textContent=
-scoreLabel('bottom',d.weeklyBottom);
-
-$('weeklyTopLabel').textContent=
-scoreLabel('top',d.weeklyTop);
-
-$('weeklyBottomBar').style.width=d.weeklyBottom+'%';
-$('weeklyTopBar').style.width=d.weeklyTop+'%';
-
-$('bottomSimilarity').textContent=d.bottomMatch.score+'/100';
-$('topSimilarity').textContent=d.topMatch.score+'/100';
-
-$('bottomSimilarityText').textContent=
-similarityLabel(d.bottomMatch.score,'bottom');
-
-$('topSimilarityText').textContent=
-similarityLabel(d.topMatch.score,'top');
-
-$('bottomSimilarityBar').style.width=d.bottomMatch.score+'%';
-$('topSimilarityBar').style.width=d.topMatch.score+'%';
-
-$('dailyBottom').textContent=d.dailyBottom+'/100';
-$('dailyTop').textContent=d.dailyTop+'/100';
-
-$('dailyBottomLabel').textContent=
-scoreLabel('bottom',d.dailyBottom);
-
-$('dailyTopLabel').textContent=
-scoreLabel('top',d.dailyTop);
-
-$('referenceBottom').innerHTML=
-referenceCard(
-d.bottomMatch.reference,
-'bottom',
-d.price
-);
-
-$('referenceTop').innerHTML=
-referenceCard(
-d.topMatch.reference,
-'top',
-d.price
-);
-
-$('indicatorList').innerHTML=
-indicatorsHTML(d);
-
-$('detail').classList.add('open');
-}
-
-async function updateData(force=false){
-if(!symbols.length){
-render();
-return;
-}
-
-$('sync').textContent='SYNCING';
-$('dataStatus').textContent='SYNCING';
-
-let live=false;
-let any=false;
-
-for(const symbol of symbols){
-
-const r=await fetchDaily(symbol,force);
-
-if(r.mode==='LIVE')live=true;
-
-if(r.values.length){
-data[symbol]=analyse(symbol,r.values);
-any=true;
-render();
-}
-
-await new Promise(resolve=>setTimeout(resolve,1100));
-}
-
-lastMode=live?'LIVE':any?'CACHED':'ERROR';
-
-render();
-
-if(currentSymbol&&data[currentSymbol]){
-openDetail(currentSymbol);
-}
-}
-
-$('addSymbol').onclick=()=>{
-const symbol=$('ticker').value.trim().toUpperCase();
-
-if(!symbol)return;
-
-if(!symbols.includes(symbol)){
-symbols.push(symbol);
-store.set(SYMBOL_KEY,symbols);
-}
-
-$('ticker').value='';
-
-render();
-updateData(false);
-};
-
-$('ticker').addEventListener('keydown',e=>{
-if(e.key==='Enter'){
-$('addSymbol').click();
-}
-});
-
-$('deleteSymbol').onclick=()=>{
-if(!currentSymbol)return;
-
-if(confirm(currentSymbol+' 종목을 삭제할까요?')){
-symbols=symbols.filter(x=>x!==currentSymbol);
-store.set(SYMBOL_KEY,symbols);
-
-delete data[currentSymbol];
-
-currentSymbol=null;
-
-$('detail').classList.remove('open');
-
-render();
-}
-};
-
-$('refresh').onclick=()=>updateData(true);
-
-$('back').onclick=()=>{
-$('detail').classList.remove('open');
-};
-
-function go(i){
-page=i;
-
-$('track').classList.add('anim');
-$('track').style.transform=`translateX(${-i*100}%)`;
-
-document.querySelectorAll('.tab').forEach((b,n)=>{
-b.classList.toggle('active',n===i);
-});
-}
-
-document.querySelectorAll('.tab').forEach(b=>{
-b.onclick=()=>go(+b.dataset.page);
-});
-
-let sx=0;
-
-$('viewport').addEventListener('touchstart',e=>{
-if($('detail').classList.contains('open'))return;
-sx=e.touches[0].clientX;
-},{passive:true});
-
-$('viewport').addEventListener('touchend',e=>{
-if($('detail').classList.contains('open'))return;
-
-const dx=e.changedTouches[0].clientX-sx;
-
-if(dx<-70&&page<2)go(page+1);
-if(dx>70&&page>0)go(page-1);
-},{passive:true});
-
-function hydrate(){
-symbols.forEach(symbol=>{
-const values=cache[symbol+'__1day']?.values||[];
-
-if(values.length){
-data[symbol]=analyse(symbol,values);
-}
-});
-}
-
-hydrate();
-render();
-go(0);
-
-setInterval(renderStatus,60000);
-
-updateData(false);
-</script>
-</body>
-</html>
+const MARKET=
