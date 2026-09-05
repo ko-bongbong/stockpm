@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#090b0e">
-<title>STOCKPM v0.4.1</title>
+<title>STOCKPM v0.4.2</title>
 
 <style>
 :root{
   --bg:#090b0e;--panel:#12161b;--panel2:#181d24;--panel3:#0e1217;
   --text:#f7f9fc;--muted:#8d97a6;--line:#252c35;
   --good:#31d07c;--warn:#f5b942;--orange:#ff914d;--bad:#ff6678;
-  --blue:#75aaff;--violet:#a78bfa;--radius:20px;
+  --blue:#75aaff;--violet:#a78bfa;
   --safe:max(14px,env(safe-area-inset-bottom));
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -20,10 +20,12 @@ html,body{
   font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   overscroll-behavior:none
 }
-body{overflow:hidden;touch-action:pan-y}
-button,input{font:inherit}button{cursor:pointer}
+body{overflow:hidden}
+button,input{font:inherit}
+button{cursor:pointer}
 .app{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 
+/* HEADER */
 .topbar{
   height:62px;flex:0 0 62px;padding:14px 16px 10px;
   display:flex;align-items:center;justify-content:space-between;
@@ -37,214 +39,563 @@ button,input{font:inherit}button{cursor:pointer}
   display:grid;place-items:center;font-weight:950
 }
 .brand h1{margin:0;font-size:17px}
-.brand small{display:block;color:var(--muted);font-size:10px;margin-top:4px;letter-spacing:.07em}
+.brand small{
+  display:block;color:var(--muted);font-size:10px;
+  margin-top:4px;letter-spacing:.07em
+}
 .sync{
   font-size:10px;color:var(--muted);border:1px solid var(--line);
   background:var(--panel);padding:8px 10px;border-radius:999px
 }
 
-.viewport{flex:1;position:relative;overflow:hidden;touch-action:pan-y}
-.track{height:100%;display:flex;will-change:transform;transform:translate3d(0,0,0)}
-.track.snap{transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+/* PAGES */
+.viewport{flex:1;position:relative;overflow:hidden}
+.track{
+  height:100%;display:flex;
+  will-change:transform;
+  transform:translate3d(0,0,0)
+}
+.track.snap{
+  transition:transform .48s cubic-bezier(.22,.8,.22,1)
+}
 .page{
-  flex:0 0 100%;width:100%;height:100%;overflow-y:auto;
+  flex:0 0 100%;width:100%;height:100%;
+  overflow-y:auto;
   padding:16px 14px calc(94px + var(--safe));
-  scrollbar-width:none;-webkit-overflow-scrolling:touch
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch
 }
 .page::-webkit-scrollbar{display:none}
 .inner{max-width:900px;margin:auto}
-h2{font-size:27px;margin:4px 0 3px}
-.subtitle{color:var(--muted);font-size:13px;margin-bottom:16px;line-height:1.55}
 
-.card{
-  background:var(--panel);border:1px solid var(--line);
-  border-radius:var(--radius);padding:16px;margin-bottom:12px
+h2{font-size:27px;margin:4px 0 3px}
+.subtitle{
+  color:var(--muted);font-size:13px;
+  margin-bottom:16px;line-height:1.55
 }
-.section{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.section h3{font-size:12px;letter-spacing:.08em;margin:0;color:#cbd2dc;text-transform:uppercase}
+
+/* CARD */
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:16px;
+  margin-bottom:12px
+}
+.section{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:12px
+}
+.section h3{
+  font-size:12px;letter-spacing:.08em;
+  margin:0;color:#cbd2dc;text-transform:uppercase
+}
 .section span{color:var(--muted);font-size:10px}
 
-.summary{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+/* DASHBOARD */
+.summary{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:5px
+}
 .sum{
-  background:var(--panel2);border:1px solid var(--line);
-  border-radius:12px;padding:9px 2px;text-align:center
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:9px 2px;
+  text-align:center
 }
 .sum small{display:block;color:var(--muted);font-size:7px}
 .sum b{display:block;margin-top:4px;font-size:15px}
 
-.good{color:var(--good)}.warn{color:var(--warn)}
-.orange{color:var(--orange)}.bad{color:var(--bad)}
-.violet{color:var(--violet)}.blue{color:var(--blue)}
+.good{color:var(--good)}
+.warn{color:var(--warn)}
+.orange{color:var(--orange)}
+.bad{color:var(--bad)}
+.violet{color:var(--violet)}
+.blue{color:var(--blue)}
 
+/* STOCK LIST */
 .list{display:grid;gap:9px}
 .stock{
-  background:var(--panel2);border:1px solid var(--line);
-  border-radius:18px;padding:14px
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:14px
 }
-.stockTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.stockTop{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px
+}
 .stockTicker{font-size:18px;font-weight:950}
 .stockPrice{text-align:right;font-size:17px;font-weight:900}
+.meta{
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.65;
+  margin-top:5px
+}
 
+/* DECISION */
 .decision{
-  margin-top:12px;padding:14px;border-radius:15px;border:1px solid var(--line)
+  margin-top:12px;
+  padding:14px;
+  border-radius:15px;
+  border:1px solid var(--line)
 }
-.decision.buy{background:#0d2118;border-color:#24553d}
-.decision.watch{background:#261e0d;border-color:#5d4617}
+.decision.buy{
+  background:#0d2118;
+  border-color:#24553d
+}
+.decision.watch{
+  background:#261e0d;
+  border-color:#5d4617
+}
 .decision.wait{background:#171c22}
-.decision.avoid{background:#2b1c10;border-color:#71431d}
-.decision.sell{background:#2b1117;border-color:#7b2937}
-.decisionLine{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.decisionTitle{font-size:20px;font-weight:950}
-.decisionScore{font-size:22px;font-weight:950}
-.decisionReason{color:var(--muted);font-size:10px;line-height:1.55;margin-top:7px}
+.decision.avoid{
+  background:#2b1c10;
+  border-color:#71431d
+}
+.decision.sell{
+  background:#2b1117;
+  border-color:#7b2937
+}
+.decisionLine{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px
+}
+.decisionTitle{
+  font-size:20px;
+  font-weight:950
+}
+.decisionScore{
+  font-size:22px;
+  font-weight:950
+}
+.decisionReason{
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.55;
+  margin-top:7px
+}
 
-.miniScores{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.miniScores{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  margin-top:10px
+}
 .mini{
-  border:1px solid var(--line);border-radius:11px;
-  background:rgba(0,0,0,.12);padding:8px 5px;text-align:center
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:rgba(0,0,0,.12);
+  padding:8px 5px;
+  text-align:center
 }
-.mini small{display:block;color:var(--muted);font-size:7px}
-.mini b{display:block;margin-top:3px;font-size:13px}
+.mini small{
+  display:block;
+  color:var(--muted);
+  font-size:7px
+}
+.mini b{
+  display:block;
+  margin-top:3px;
+  font-size:13px
+}
 
+/* FORM */
 .field input{
-  width:100%;border:1px solid var(--line);background:var(--panel3);
-  color:var(--text);padding:13px;border-radius:13px;outline:none
+  width:100%;
+  border:1px solid var(--line);
+  background:var(--panel3);
+  color:var(--text);
+  padding:13px;
+  border-radius:13px;
+  outline:none
 }
-.addrow{display:grid;grid-template-columns:1fr auto;gap:8px}
+.addrow{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px
+}
 .btn{
-  border:0;border-radius:12px;padding:12px 14px;
-  background:#f5f7fa;color:#090b0e;font-weight:900
+  border:0;
+  border-radius:12px;
+  padding:12px 14px;
+  background:#f5f7fa;
+  color:#090b0e;
+  font-weight:900
 }
 .btn.full{width:100%}
-.btn.danger{background:#2a1217;color:var(--bad);border:1px solid #5a2630}
-
+.btn.danger{
+  background:#2a1217;
+  color:var(--bad);
+  border:1px solid #5a2630
+}
 .registeredRow{
-  display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
-  background:var(--panel2);border:1px solid var(--line);
-  border-radius:15px;padding:14px
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  align-items:center;
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:14px
 }
 .name{font-weight:900}
-.meta{color:var(--muted);font-size:10px;line-height:1.65;margin-top:5px}
 .price{font-weight:900;text-align:right}
 
+/* SIGNAL */
 .signal{
-  display:grid;grid-template-columns:1fr auto;gap:10px;
-  padding:11px 0;border-bottom:1px solid var(--line)
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  padding:11px 0;
+  border-bottom:1px solid var(--line)
 }
 .signal:last-child{border-bottom:0}
-.signal span,.signal b{font-size:12px}.signal b{text-align:right}
+.signal span,.signal b{font-size:12px}
+.signal b{text-align:right}
 
 .notice{
-  font-size:11px;line-height:1.65;color:#d6bd83;
-  background:#241b0e;border:1px solid #5a4317;
-  padding:11px;border-radius:12px;margin-bottom:12px
+  font-size:11px;
+  line-height:1.65;
+  color:#d6bd83;
+  background:#241b0e;
+  border:1px solid #5a4317;
+  padding:11px;
+  border-radius:12px;
+  margin-bottom:12px
 }
-.empty{text-align:center;color:var(--muted);font-size:12px;padding:25px}
+.empty{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  padding:25px
+}
 
+/* NAV */
 .bottomNav{
-  position:absolute;left:10px;right:10px;bottom:var(--safe);height:64px;
-  border:1px solid rgba(255,255,255,.08);border-radius:22px;
-  background:rgba(18,22,27,.94);backdrop-filter:blur(22px);
-  display:grid;grid-template-columns:repeat(3,1fr);z-index:30
+  position:absolute;
+  left:10px;right:10px;
+  bottom:var(--safe);
+  height:64px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:22px;
+  background:rgba(18,22,27,.94);
+  backdrop-filter:blur(22px);
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  z-index:30
 }
 .tab{
-  border:0;background:none;color:#738090;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;font-size:9px;font-weight:800;gap:3px
+  border:0;
+  background:none;
+  color:#738090;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  font-size:9px;
+  font-weight:800;
+  gap:3px
 }
-.tab i{font-style:normal;font-size:20px}.tab.active{color:white}
+.tab i{font-style:normal;font-size:20px}
+.tab.active{color:white}
 
+/* DETAIL */
 .detail{
-  position:absolute;inset:0;z-index:50;background:var(--bg);
+  position:absolute;
+  inset:0;
+  z-index:50;
+  background:var(--bg);
   transform:translateX(100%);
   transition:transform .45s cubic-bezier(.22,.85,.25,1);
-  display:flex;flex-direction:column
+  display:flex;
+  flex-direction:column
 }
 .detail.open{transform:translateX(0)}
+
 .detailhead{
-  height:60px;flex:0 0 60px;display:grid;
-  grid-template-columns:42px 1fr 42px;align-items:center;
-  padding:10px 14px;border-bottom:1px solid var(--line)
+  height:60px;
+  flex:0 0 60px;
+  display:grid;
+  grid-template-columns:42px 1fr 42px;
+  align-items:center;
+  padding:10px 14px;
+  border-bottom:1px solid var(--line)
 }
 .icon{
-  width:38px;height:38px;border-radius:12px;border:1px solid var(--line);
-  background:var(--panel);color:white
+  width:38px;height:38px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:white
 }
-.detailtitle{text-align:center}.detailtitle b{display:block}
-.detailtitle small{color:var(--muted);font-size:9px}
+.detailtitle{text-align:center}
+.detailtitle b{display:block}
+.detailtitle small{
+  color:var(--muted);
+  font-size:9px
+}
 .detailbody{
-  flex:1;overflow-y:auto;padding:14px 14px calc(30px + var(--safe));
+  flex:1;
+  overflow-y:auto;
+  padding:14px 14px calc(30px + var(--safe));
   -webkit-overflow-scrolling:touch
 }
 
+/* HERO */
 .heroDecision{
-  padding:22px 18px;border-radius:22px;margin-bottom:12px;
-  border:1px solid var(--line);text-align:center
+  padding:22px 18px;
+  border-radius:22px;
+  margin-bottom:12px;
+  border:1px solid var(--line);
+  text-align:center
 }
-.heroDecision.buy{background:linear-gradient(145deg,#10281d,#0b1712);border-color:#285b41}
-.heroDecision.watch{background:linear-gradient(145deg,#2b210e,#17130b);border-color:#664c18}
-.heroDecision.wait{background:linear-gradient(145deg,#181d24,#101318)}
-.heroDecision.avoid{background:linear-gradient(145deg,#302010,#171009);border-color:#73441d}
-.heroDecision.sell{background:linear-gradient(145deg,#32131a,#180b0f);border-color:#7b2937}
-.heroEyebrow{color:var(--muted);font-size:9px;letter-spacing:.1em}
-.heroAction{margin-top:8px;font-size:34px;font-weight:1000}
-.heroScore{font-size:52px;line-height:1;font-weight:1000;margin-top:12px}
-.heroScore small{font-size:14px;color:var(--muted)}
-.heroScoreLabel{color:var(--muted);font-size:9px;margin-top:5px}
-.heroReason{max-width:500px;margin:12px auto 0;color:#b9c1cc;font-size:11px;line-height:1.65}
+.heroDecision.buy{
+  background:linear-gradient(145deg,#10281d,#0b1712);
+  border-color:#285b41
+}
+.heroDecision.watch{
+  background:linear-gradient(145deg,#2b210e,#17130b);
+  border-color:#664c18
+}
+.heroDecision.wait{
+  background:linear-gradient(145deg,#181d24,#101318)
+}
+.heroDecision.avoid{
+  background:linear-gradient(145deg,#302010,#171009);
+  border-color:#73441d
+}
+.heroDecision.sell{
+  background:linear-gradient(145deg,#32131a,#180b0f);
+  border-color:#7b2937
+}
+.heroEyebrow{
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:.1em
+}
+.heroAction{
+  margin-top:8px;
+  font-size:34px;
+  font-weight:1000
+}
+.heroScore{
+  font-size:52px;
+  line-height:1;
+  font-weight:1000;
+  margin-top:12px
+}
+.heroScore small{
+  font-size:14px;
+  color:var(--muted)
+}
+.heroScoreLabel{
+  color:var(--muted);
+  font-size:9px;
+  margin-top:5px
+}
+.heroReason{
+  max-width:500px;
+  margin:12px auto 0;
+  color:#b9c1cc;
+  font-size:11px;
+  line-height:1.65
+}
 
-.scoregrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.scorebox{
-  background:var(--panel2);border:1px solid var(--line);
-  border-radius:15px;padding:12px 8px;text-align:center
+/* SCORES */
+.scoregrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px
 }
-.scorebox small{display:block;color:var(--muted);font-size:8px;line-height:1.4}
-.scorebox b{display:block;font-size:21px;margin-top:5px}
-.scorebox em{display:block;color:var(--muted);font-size:8px;font-style:normal;margin-top:5px}
+.scorebox{
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:12px 8px;
+  text-align:center
+}
+.scorebox small{
+  display:block;
+  color:var(--muted);
+  font-size:8px;
+  line-height:1.4
+}
+.scorebox b{
+  display:block;
+  font-size:21px;
+  margin-top:5px
+}
+.scorebox em{
+  display:block;
+  color:var(--muted);
+  font-size:8px;
+  font-style:normal;
+  margin-top:5px
+}
 
 .progress{
-  height:6px;overflow:hidden;border-radius:999px;
-  background:#0d1116;border:1px solid var(--line);margin-top:8px
+  height:6px;
+  overflow:hidden;
+  border-radius:999px;
+  background:#0d1116;
+  border:1px solid var(--line);
+  margin-top:8px
 }
-.progress span{display:block;height:100%}
+.progress span{
+  display:block;
+  height:100%
+}
 .bottomfill{background:var(--good)}
 .topfill{background:var(--bad)}
 .simfill{background:var(--violet)}
-.bluefill{background:var(--blue)}
 
+/* WEEK TREND */
+.weekCompare{
+  display:grid;
+  grid-template-columns:1fr 46px 1fr;
+  gap:8px;
+  align-items:center
+}
+.weekBox{
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:13px 8px;
+  text-align:center
+}
+.weekBox small{
+  color:var(--muted);
+  font-size:8px
+}
+.weekBox b{
+  display:block;
+  font-size:23px;
+  margin-top:5px
+}
+.arrow{
+  text-align:center;
+  font-size:20px;
+  font-weight:950
+}
+.delta{
+  text-align:center;
+  margin-top:10px;
+  font-size:11px;
+  color:var(--muted)
+}
+
+/* ADVANCED */
 .analysisToggle{
-  width:100%;border:1px solid var(--line);border-radius:14px;
-  background:var(--panel2);color:var(--text);padding:13px;font-weight:900
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--panel2);
+  color:var(--text);
+  padding:13px;
+  font-weight:900
 }
-.advanced{display:none;margin-top:12px}.advanced.open{display:block}
+.advanced{
+  display:none;
+  margin-top:12px
+}
+.advanced.open{display:block}
 
-.indicator{padding:12px 0;border-bottom:1px solid var(--line)}
+/* INDICATORS */
+.indicator{
+  padding:12px 0;
+  border-bottom:1px solid var(--line)
+}
 .indicator:last-child{border-bottom:0}
-.indicatorMain{display:grid;grid-template-columns:1fr auto;gap:10px}
-.indicatorName{font-size:12px;font-weight:800}
-.indicatorValue{font-size:12px;font-weight:900}
-.points{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.indicatorMain{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px
+}
+.indicatorName{
+  font-size:12px;
+  font-weight:800
+}
+.indicatorValue{
+  font-size:12px;
+  font-weight:900
+}
+.points{
+  display:flex;
+  gap:6px;
+  margin-top:6px;
+  flex-wrap:wrap
+}
 .point{
-  padding:5px 7px;border-radius:999px;border:1px solid var(--line);
-  background:var(--panel3);color:var(--muted);font-size:9px;font-weight:900
+  padding:5px 7px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:var(--panel3);
+  color:var(--muted);
+  font-size:9px;
+  font-weight:900
 }
-.point.bottom.on{color:var(--good);border-color:#24553d;background:#0e2118}
-.point.top.on{color:var(--bad);border-color:#603039;background:#271216}
+.point.bottom.on{
+  color:var(--good);
+  border-color:#24553d;
+  background:#0e2118
+}
+.point.top.on{
+  color:var(--bad);
+  border-color:#603039;
+  background:#271216
+}
 
+/* TURN CARDS */
 .turncard{
-  background:var(--panel2);border:1px solid var(--line);
-  border-radius:15px;padding:14px;margin-bottom:8px
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:14px;
+  margin-bottom:8px
 }
-.turnhead{display:flex;justify-content:space-between;gap:10px}
-.turnhead small{display:block;color:var(--muted);font-size:9px;margin-bottom:4px}
+.turnhead{
+  display:flex;
+  justify-content:space-between;
+  gap:10px
+}
+.turnhead small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-bottom:4px
+}
 .turnhead b{font-size:17px}
 .turnscore{text-align:right}
-.turnscore strong{display:block;font-size:22px}
-.turnscore small{color:var(--muted);font-size:8px}
-.turnmeta{margin-top:9px;color:var(--muted);font-size:10px;line-height:1.7}
+.turnscore strong{
+  display:block;
+  font-size:22px
+}
+.turnscore small{
+  color:var(--muted);
+  font-size:8px
+}
+.turnmeta{
+  margin-top:9px;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.7
+}
 
 @media(max-width:390px){
-  .summary{gap:3px}.sum small{font-size:6px}.sum b{font-size:14px}
-  .heroAction{font-size:30px}.heroScore{font-size:46px}.scorebox b{font-size:18px}
+  .summary{gap:3px}
+  .sum small{font-size:6px}
+  .sum b{font-size:14px}
+  .heroAction{font-size:30px}
+  .heroScore{font-size:46px}
+  .scorebox b{font-size:18px}
 }
 </style>
 </head>
@@ -257,7 +608,7 @@ h2{font-size:27px;margin:4px 0 3px}
     <div class="logo">SP</div>
     <div>
       <h1>STOCKPM</h1>
-      <small>BUY / SELL ENGINE · v0.4.1</small>
+      <small>CURRENT SIGNAL ENGINE · v0.4.2</small>
     </div>
   </div>
   <div class="sync" id="sync">DATA WAIT</div>
@@ -266,17 +617,21 @@ h2{font-size:27px;margin:4px 0 3px}
 <div class="viewport" id="viewport">
 <div class="track" id="track">
 
+<!-- SCANNER -->
 <section class="page">
 <div class="inner">
 
 <h2>Scanner</h2>
-<div class="subtitle">정밀 분석은 내부에서. 화면에는 지금 해야 할 행동을 먼저 보여줍니다.</div>
+<div class="subtitle">
+현재 신호를 중심으로 바닥·고점·반전 강도를 분석합니다.
+</div>
 
 <div class="card">
   <div class="section">
     <h3>Decision Board</h3>
-    <span>~1 YEAR</span>
+    <span>CURRENT FIRST</span>
   </div>
+
   <div class="summary">
     <div class="sum"><small>매수</small><b class="good" id="buyCount">0</b></div>
     <div class="sum"><small>관심</small><b class="warn" id="watchCount">0</b></div>
@@ -297,62 +652,91 @@ h2{font-size:27px;margin:4px 0 3px}
 </div>
 </section>
 
+<!-- SYMBOLS -->
 <section class="page">
 <div class="inner">
 
 <h2>Symbols</h2>
-<div class="subtitle">Ticker만 등록하면 주봉·일봉·과거 바닥/고점 패턴을 자동 분석합니다.</div>
+<div class="subtitle">
+Ticker만 등록하면 최근 약 1년 데이터를 자동 분석합니다.
+</div>
 
 <div class="card">
-  <div class="section"><h3>Add Symbol</h3><span>STOCK / ETF</span></div>
+  <div class="section">
+    <h3>Add Symbol</h3>
+    <span>STOCK / ETF</span>
+  </div>
+
   <div class="addrow">
-    <div class="field"><input id="ticker" placeholder="TSLA · CRCL · NVDA · SOXL"></div>
+    <div class="field">
+      <input id="ticker" placeholder="TSLA · CRCL · NVDA · SOXL">
+    </div>
     <button class="btn" id="addSymbol">등록</button>
   </div>
 </div>
 
 <div class="card">
-  <div class="section"><h3>Registered</h3><span id="registeredCount">0</span></div>
+  <div class="section">
+    <h3>Registered</h3>
+    <span id="registeredCount">0</span>
+  </div>
   <div class="list" id="registeredList"></div>
 </div>
 
 </div>
 </section>
 
+<!-- MORE -->
 <section class="page">
 <div class="inner">
 
 <h2>More</h2>
-<div class="subtitle">STOCKPM Decision Engine</div>
+<div class="subtitle">STOCKPM v0.4.2</div>
 
 <div class="card">
-  <div class="section"><h3>Market Data</h3><span>TWELVE DATA</span></div>
+  <div class="section">
+    <h3>Market Data</h3>
+    <span>TWELVE DATA</span>
+  </div>
+
   <div class="signal"><span>Connection</span><b id="dataStatus">WAIT</b></div>
   <div class="signal"><span>Mode</span><b id="dataMode">—</b></div>
   <div class="signal"><span>Last Update</span><b id="lastUpdate">—</b></div>
   <div class="signal"><span>Tracked</span><b id="tracked">0</b></div>
-  <button class="btn full" style="margin-top:12px" id="refresh">시장 데이터 업데이트</button>
+
+  <button class="btn full" style="margin-top:12px" id="refresh">
+    시장 데이터 업데이트
+  </button>
 </div>
 
 <div class="card">
-  <div class="section"><h3>Decision Commands</h3><span>v0.4.1</span></div>
-  <div class="signal"><span>🟢 매수해</span><b>BUY</b></div>
-  <div class="signal"><span>🟡 매수 관심</span><b>WATCH</b></div>
-  <div class="signal"><span>⚪ 기다려</span><b>WAIT</b></div>
-  <div class="signal"><span>🟠 매수하지 마</span><b>AVOID</b></div>
-  <div class="signal"><span>🔴 매도해</span><b>SELL</b></div>
+  <div class="section">
+    <h3>Decision</h3>
+    <span>v0.4.2</span>
+  </div>
+
+  <div class="signal"><span>🟢 매수해</span><b>강한 바닥 + 반전</b></div>
+  <div class="signal"><span>🟡 매수 관심</span><b>바닥 형성 중</b></div>
+  <div class="signal"><span>⚪ 기다려</span><b>방향 불명확</b></div>
+  <div class="signal"><span>🟠 매수하지 마</span><b>고점 위험</b></div>
+  <div class="signal"><span>🔴 매도해</span><b>고점 + 하락전환</b></div>
 </div>
 
 <div class="card">
-  <div class="section"><h3>Sell Confirmation</h3><span>STRICT</span></div>
-  <div class="signal"><span>Top Risk Score</span><b>85+</b></div>
-  <div class="signal"><span>Current Top</span><b>80+</b></div>
-  <div class="signal"><span>Top Similarity</span><b>65+</b></div>
-  <div class="signal"><span>vs Buy Score</span><b>+15</b></div>
+  <div class="section">
+    <h3>Engine Weight</h3>
+    <span>CURRENT FIRST</span>
+  </div>
+
+  <div class="signal"><span>Current Weekly Signal</span><b>45%</b></div>
+  <div class="signal"><span>Daily Confirmation</span><b>20%</b></div>
+  <div class="signal"><span>Historical Similarity</span><b>15%</b></div>
+  <div class="signal"><span>Price Location</span><b>10%</b></div>
+  <div class="signal"><span>Momentum</span><b>10%</b></div>
 </div>
 
 <div class="notice">
-SELL은 단순 과매수만으로 발생하지 않습니다. 현재 주봉 고점 신호, 과거 실제 고점 유사도, 일봉 고점 신호, 가격 위치, 하락 모멘텀을 함께 분석합니다. 점수는 기술적 조건 충족도이며 실제 상승·하락 확률을 의미하지 않습니다.
+Current Bottom/Top을 가장 중요하게 봅니다. Historical Similarity는 보조 확인값입니다. 현재 주봉은 아직 마감되지 않았다면 주중에 점수가 변할 수 있습니다. 점수는 기술적 조건 충족도이며 실제 수익 확률이 아닙니다.
 </div>
 
 </div>
@@ -366,10 +750,15 @@ SELL은 단순 과매수만으로 발생하지 않습니다. 현재 주봉 고�
   <button class="tab" data-page="2"><i>•••</i>MORE</button>
 </nav>
 
+<!-- DETAIL -->
 <div class="detail" id="detail">
+
 <header class="detailhead">
   <button class="icon" id="back">‹</button>
-  <div class="detailtitle"><b id="detailTicker">—</b><small>STOCKPM DECISION</small></div>
+  <div class="detailtitle">
+    <b id="detailTicker">—</b>
+    <small>STOCKPM DECISION</small>
+  </div>
   <div></div>
 </header>
 
@@ -377,94 +766,235 @@ SELL은 단순 과매수만으로 발생하지 않습니다. 현재 주봉 고�
 <div class="inner">
 
 <div class="heroDecision wait" id="heroDecision">
-  <div class="heroEyebrow">STOCKPM DECISION</div>
+  <div class="heroEyebrow">지금 판단</div>
   <div class="heroAction" id="heroAction">분석 중</div>
-  <div class="heroScore"><span id="decisionScore">—</span><small>/100</small></div>
-  <div class="heroScoreLabel" id="decisionScoreLabel">DECISION SCORE</div>
-  <div class="heroReason" id="heroReason">시장 데이터를 분석하고 있습니다.</div>
-</div>
 
-<div class="card">
-  <div class="section"><h3>지금 핵심</h3><span id="currentPrice">—</span></div>
-  <div class="scoregrid">
-    <div class="scorebox">
-      <small>BUY<br>SCORE</small>
-      <b class="good" id="buyScore">—</b><em>종합 매수</em>
-      <div class="progress"><span class="bottomfill" id="buyScoreBar"></span></div>
-    </div>
-    <div class="scorebox">
-      <small>TOP RISK<br>SCORE</small>
-      <b class="bad" id="riskScore">—</b><em>종합 매도 위험</em>
-      <div class="progress"><span class="topfill" id="riskScoreBar"></span></div>
-    </div>
-    <div class="scorebox">
-      <small>HISTORICAL<br>SIMILARITY</small>
-      <b class="violet" id="primarySimilarity">—</b><em id="similarityLabel">—</em>
-      <div class="progress"><span class="simfill" id="primarySimilarityBar"></span></div>
-    </div>
+  <div class="heroScore">
+    <span id="decisionScore">—</span>
+    <small>/100</small>
+  </div>
+
+  <div class="heroScoreLabel" id="decisionScoreLabel">
+    SIGNAL SCORE
+  </div>
+
+  <div class="heroReason" id="heroReason">
+    데이터를 분석하고 있습니다.
   </div>
 </div>
 
+<!-- 핵심 -->
 <div class="card">
-  <div class="section"><h3>현재 판단 근거</h3><span>AUTO</span></div>
+  <div class="section">
+    <h3>한눈에 보기</h3>
+    <span id="currentPrice">—</span>
+  </div>
+
+  <div class="scoregrid">
+
+    <div class="scorebox">
+      <small>CURRENT<br>BOTTOM</small>
+      <b class="good" id="currentBottomMain">—</b>
+      <em>현재 바닥 신호</em>
+      <div class="progress">
+        <span class="bottomfill" id="currentBottomBar"></span>
+      </div>
+    </div>
+
+    <div class="scorebox">
+      <small>BOTTOM<br>SIMILARITY</small>
+      <b class="violet" id="bottomSimilarityMain">—</b>
+      <em>과거 바닥 유사도</em>
+      <div class="progress">
+        <span class="simfill" id="bottomSimilarityBar"></span>
+      </div>
+    </div>
+
+    <div class="scorebox">
+      <small>TOP<br>RISK</small>
+      <b class="bad" id="topRiskMain">—</b>
+      <em>현재 고점 위험</em>
+      <div class="progress">
+        <span class="topfill" id="topRiskBar"></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- WEEK CHANGE -->
+<div class="card">
+  <div class="section">
+    <h3>Bottom Signal 변화</h3>
+    <span>WEEKLY</span>
+  </div>
+
+  <div class="weekCompare">
+    <div class="weekBox">
+      <small>PREVIOUS WEEK</small>
+      <b id="prevBottomScore">—</b>
+    </div>
+
+    <div class="arrow">→</div>
+
+    <div class="weekBox">
+      <small>LATEST WEEK</small>
+      <b class="good" id="latestBottomScore">—</b>
+    </div>
+  </div>
+
+  <div class="delta" id="bottomDelta">—</div>
+</div>
+
+<!-- WHY -->
+<div class="card">
+  <div class="section">
+    <h3>왜 이렇게 판단했나</h3>
+    <span>AUTO</span>
+  </div>
+
   <div id="reasonList"></div>
 </div>
 
+<!-- ADVANCED -->
 <div class="card">
-<button class="analysisToggle" id="analysisToggle">상세 분석 보기 ↓</button>
+
+<button class="analysisToggle" id="analysisToggle">
+상세 분석 보기 ↓
+</button>
 
 <div class="advanced" id="advanced">
 
 <div class="card" style="margin-top:12px;margin-bottom:8px">
-  <div class="section"><h3>Bottom Analysis</h3><span>FULL</span></div>
+  <div class="section">
+    <h3>Current Signal</h3>
+    <span>WEEKLY</span>
+  </div>
+
   <div class="scoregrid">
-    <div class="scorebox"><small>BOTTOM<br>QUALITY</small><b class="good" id="bottomQuality">—</b><em>과거 확정</em></div>
-    <div class="scorebox"><small>CURRENT<br>BOTTOM</small><b class="good" id="currentBottom">—</b><em>현재 주봉</em></div>
-    <div class="scorebox"><small>BOTTOM<br>SIMILARITY</small><b class="violet" id="bottomSimilarity">—</b><em>현재 ↔ 과거</em></div>
+
+    <div class="scorebox">
+      <small>CURRENT<br>BOTTOM</small>
+      <b class="good" id="currentBottom">—</b>
+      <em>현재 바닥</em>
+    </div>
+
+    <div class="scorebox">
+      <small>CURRENT<br>TOP</small>
+      <b class="bad" id="currentTop">—</b>
+      <em>현재 고점</em>
+    </div>
+
+    <div class="scorebox">
+      <small>NET<br>DIRECTION</small>
+      <b id="netDirection">—</b>
+      <em>바닥 - 고점</em>
+    </div>
+
   </div>
 </div>
 
 <div class="card" style="margin-bottom:8px">
-  <div class="section"><h3>Top Analysis</h3><span>FULL</span></div>
+  <div class="section">
+    <h3>Historical Pattern</h3>
+    <span>REFERENCE</span>
+  </div>
+
   <div class="scoregrid">
-    <div class="scorebox"><small>TOP<br>QUALITY</small><b class="bad" id="topQuality">—</b><em>과거 확정</em></div>
-    <div class="scorebox"><small>CURRENT<br>TOP</small><b class="bad" id="currentTop">—</b><em>현재 주봉</em></div>
-    <div class="scorebox"><small>TOP<br>SIMILARITY</small><b class="violet" id="topSimilarity">—</b><em>현재 ↔ 과거</em></div>
+
+    <div class="scorebox">
+      <small>BOTTOM<br>SIMILARITY</small>
+      <b class="violet" id="bottomSimilarity">—</b>
+      <em>과거 바닥</em>
+    </div>
+
+    <div class="scorebox">
+      <small>TOP<br>SIMILARITY</small>
+      <b class="violet" id="topSimilarity">—</b>
+      <em>과거 고점</em>
+    </div>
+
+    <div class="scorebox">
+      <small>LAST BOTTOM<br>QUALITY</small>
+      <b class="good" id="bottomQuality">—</b>
+      <em>확정 바닥</em>
+    </div>
+
   </div>
 </div>
 
 <div class="card" style="margin-bottom:8px">
-  <div class="section"><h3>Daily Early Signal</h3><span>FAST</span></div>
+  <div class="section">
+    <h3>Daily Early Signal</h3>
+    <span>FAST</span>
+  </div>
+
   <div class="scoregrid" style="grid-template-columns:1fr 1fr">
-    <div class="scorebox"><small>DAILY BOTTOM</small><b class="good" id="dailyBottom">—</b><em>일봉 바닥</em></div>
-    <div class="scorebox"><small>DAILY TOP</small><b class="bad" id="dailyTop">—</b><em>일봉 고점</em></div>
+
+    <div class="scorebox">
+      <small>DAILY BOTTOM</small>
+      <b class="good" id="dailyBottom">—</b>
+      <em>일봉 바닥</em>
+    </div>
+
+    <div class="scorebox">
+      <small>DAILY TOP</small>
+      <b class="bad" id="dailyTop">—</b>
+      <em>일봉 고점</em>
+    </div>
+
   </div>
 </div>
 
 <div class="card" style="margin-bottom:8px">
-  <div class="section"><h3>Current Indicators</h3><span>THIS WEEK</span></div>
+  <div class="section">
+    <h3>Current Indicators</h3>
+    <span>CONTRIBUTION</span>
+  </div>
+
   <div id="indicatorList"></div>
-  <div class="signal"><span><b>BOTTOM TOTAL</b></span><b class="good" id="indicatorBottomTotal">—</b></div>
-  <div class="signal"><span><b>TOP TOTAL</b></span><b class="bad" id="indicatorTopTotal">—</b></div>
+
+  <div class="signal">
+    <span><b>BOTTOM TOTAL</b></span>
+    <b class="good" id="indicatorBottomTotal">—</b>
+  </div>
+
+  <div class="signal">
+    <span><b>TOP TOTAL</b></span>
+    <b class="bad" id="indicatorTopTotal">—</b>
+  </div>
+
 </div>
 
 <div class="card" style="margin-bottom:8px">
-  <div class="section"><h3>Active Major Bottom</h3><span>CONFIRMED</span></div>
+  <div class="section">
+    <h3>Active Major Bottom</h3>
+    <span>CONFIRMED</span>
+  </div>
   <div id="activeBottom"></div>
 </div>
 
 <div class="card" style="margin-bottom:8px">
-  <div class="section"><h3>Active Major Top</h3><span>CONFIRMED</span></div>
+  <div class="section">
+    <h3>Active Major Top</h3>
+    <span>CONFIRMED</span>
+  </div>
   <div id="activeTop"></div>
 </div>
 
 <div class="card" style="margin-bottom:8px">
-  <div class="section"><h3>Historical Major Bottoms</h3><span>QUALITY</span></div>
+  <div class="section">
+    <h3>Historical Major Bottoms</h3>
+    <span>QUALITY</span>
+  </div>
   <div id="majorBottoms"></div>
 </div>
 
 <div class="card" style="margin-bottom:8px">
-  <div class="section"><h3>Historical Major Tops</h3><span>QUALITY</span></div>
+  <div class="section">
+    <h3>Historical Major Tops</h3>
+    <span>QUALITY</span>
+  </div>
   <div id="majorTops"></div>
 </div>
 
@@ -472,7 +1002,9 @@ SELL은 단순 과매수만으로 발생하지 않습니다. 현재 주봉 고�
 </div>
 
 <div class="card">
-  <button class="btn danger full" id="deleteSymbol">종목 삭제</button>
+  <button class="btn danger full" id="deleteSymbol">
+    종목 삭제
+  </button>
 </div>
 
 </div>
@@ -483,12 +1015,18 @@ SELL은 단순 과매수만으로 발생하지 않습니다. 현재 주봉 고�
 </div>
 
 <script>
+
+/* =====================================================
+   CONFIG
+===================================================== */
+
 const SUPABASE_URL='https://seuqhwmzmsqzuppemiuk.supabase.co';
 const KEY='sb_publishable_8T7Wafioftxn528m-T4fNA_-OZq9dwq';
 const MARKET=SUPABASE_URL+'/functions/v1/market-data';
 
 const SYMBOL_KEY='stockpm_scanner_symbols_v034';
 const CACHE_KEY='stockpm_market_cache_v022';
+
 const DAILY_TTL=60*60*1000;
 
 const CONFIRM_WEEKS=10;
@@ -501,93 +1039,203 @@ const MIN_HISTORY=20;
 const $=id=>document.getElementById(id);
 
 const store={
-  get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},
-  set(k,v){localStorage.setItem(k,JSON.stringify(v))}
+  get(k,d){
+    try{
+      return JSON.parse(localStorage.getItem(k))??d
+    }catch{
+      return d
+    }
+  },
+  set(k,v){
+    localStorage.setItem(k,JSON.stringify(v))
+  }
 };
 
 let symbols=store.get(SYMBOL_KEY,[]);
 let cache=store.get(CACHE_KEY,{});
 let data={};
+
 let currentSymbol=null;
 let page=0;
 let lastMode='CACHED';
 
-function clamp(v,min=0,max=100){return Math.max(min,Math.min(max,v))}
-function average(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:0}
+
+/* =====================================================
+   UTIL
+===================================================== */
+
+function clamp(v,min=0,max=100){
+  return Math.max(min,Math.min(max,v));
+}
+
+function average(a){
+  return a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
+}
+
 function std(a){
   if(!a.length)return 0;
   const m=average(a);
   return Math.sqrt(average(a.map(x=>(x-m)**2)));
 }
+
 function money(v){
   if(!Number.isFinite(+v))return '—';
-  return '$'+(+v).toLocaleString(undefined,{maximumFractionDigits:2});
+
+  return '$'+(+v).toLocaleString(undefined,{
+    maximumFractionDigits:2
+  });
 }
+
 function pct(v){
   if(!Number.isFinite(v))return '—';
   return (v>=0?'+':'')+v.toFixed(1)+'%';
 }
 
+
+/* =====================================================
+   INDICATORS
+===================================================== */
+
 function EMA(values,n){
+
   if(!values.length)return [];
+
   const k=2/(n+1);
+
   let p=values[0];
+
   const out=[p];
+
   for(let i=1;i<values.length;i++){
+
     p=values[i]*k+p*(1-k);
+
     out.push(p);
   }
+
   return out;
 }
 
+
 function RSI(closes,n=14){
+
   if(closes.length<n+1)return null;
-  let gain=0,loss=0;
+
+  let gain=0;
+  let loss=0;
+
   for(let i=closes.length-n;i<closes.length;i++){
+
     const d=closes[i]-closes[i-1];
-    if(d>0)gain+=d; else loss-=d;
+
+    if(d>0)gain+=d;
+    else loss-=d;
   }
+
   if(loss===0)return 100;
+
   const rs=(gain/n)/(loss/n);
+
   return 100-(100/(1+rs));
 }
 
+
 function MACD(closes){
+
   if(closes.length<35)return null;
+
   const e12=EMA(closes,12);
   const e26=EMA(closes,26);
+
   const macd=closes.map((_,i)=>e12[i]-e26[i]);
+
   const signal=EMA(macd,9);
+
   const hist=macd.map((x,i)=>x-signal[i]);
-  return{macd,signal,hist};
+
+  return{
+    macd,
+    signal,
+    hist
+  };
 }
+
 
 function bollinger(closes,n=20){
+
   if(closes.length<n)return null;
+
   const x=closes.slice(-n);
-  const mid=average(x),sd=std(x);
-  return{mid,upper:mid+2*sd,lower:mid-2*sd};
+
+  const mid=average(x);
+
+  const sd=std(x);
+
+  return{
+    mid,
+    upper:mid+2*sd,
+    lower:mid-2*sd
+  };
 }
+
 
 function stochastic(bars,n=14){
+
   if(bars.length<n)return null;
+
   const x=bars.slice(-n);
+
   const hi=Math.max(...x.map(b=>b.h));
   const lo=Math.min(...x.map(b=>b.l));
+
   if(hi===lo)return 50;
-  return ((bars.at(-1).c-lo)/(hi-lo))*100;
+
+  return(
+    (bars.at(-1).c-lo)/(hi-lo)
+  )*100;
 }
+
+
+/* =====================================================
+   DATA NORMALIZE
+===================================================== */
 
 function normalize(values){
-  return [...values].reverse().map(x=>({
-    dt:x.datetime,o:+x.open,h:+x.high,l:+x.low,c:+x.close,v:+x.volume||0
-  })).filter(x=>Number.isFinite(x.c));
+
+  return [...values]
+  .reverse()
+  .map(x=>({
+
+    dt:x.datetime,
+
+    o:+x.open,
+    h:+x.high,
+    l:+x.low,
+    c:+x.close,
+
+    v:+x.volume||0
+
+  }))
+  .filter(x=>Number.isFinite(x.c));
 }
 
+
+/* =====================================================
+   WEEKLY
+===================================================== */
+
 function weekKey(s){
-  const d=new Date(s.substring(0,10)+'T12:00:00');
+
+  const d=new Date(
+    s.substring(0,10)+'T12:00:00'
+  );
+
   const day=(d.getDay()+6)%7;
-  d.setDate(d.getDate()-day);
+
+  d.setDate(
+    d.getDate()-day
+  );
+
   return[
     d.getFullYear(),
     String(d.getMonth()+1).padStart(2,'0'),
@@ -595,1097 +1243,3897 @@ function weekKey(s){
   ].join('-');
 }
 
+
 function dailyToWeekly(daily){
+
   const weeks=[];
+
   let cur=null;
+
   for(const bar of daily){
+
     const key=weekKey(bar.dt);
+
     if(!cur||cur.key!==key){
-      cur={key,dt:key,o:bar.o,h:bar.h,l:bar.l,c:bar.c,v:bar.v||0};
+
+      cur={
+        key,
+        dt:key,
+        o:bar.o,
+        h:bar.h,
+        l:bar.l,
+        c:bar.c,
+        v:bar.v||0
+      };
+
       weeks.push(cur);
+
     }else{
+
       cur.h=Math.max(cur.h,bar.h);
       cur.l=Math.min(cur.l,bar.l);
       cur.c=bar.c;
       cur.v+=bar.v||0;
     }
   }
+
   return weeks;
 }
 
+
+/* =====================================================
+   FEATURE
+===================================================== */
+
 function featureAt(bars,index){
+
   const slice=bars.slice(0,index+1);
+
   if(slice.length<MIN_HISTORY)return null;
 
   const closes=slice.map(x=>x.c);
+
   const volumes=slice.map(x=>x.v||0);
+
   const rsi=RSI(closes);
-  const prevRsi=RSI(closes.slice(0,-1));
+
+  const prevRsi=RSI(
+    closes.slice(0,-1)
+  );
+
   const stoch=stochastic(slice);
+
   const bb=bollinger(closes);
+
   const macd=MACD(closes);
+
   const last=slice.at(-1);
 
-  let macdHist=0,macdSlope=0,macdCross=0;
+  let macdHist=0;
+  let macdSlope=0;
+  let macdCross=0;
 
   if(macd){
-    macdHist=macd.hist.at(-1)||0;
-    if(macd.hist.length>=2)macdSlope=(macd.hist.at(-1)||0)-(macd.hist.at(-2)||0);
+
+    macdHist=
+      macd.hist.at(-1)||0;
+
+    if(macd.hist.length>=2){
+
+      macdSlope=
+        (macd.hist.at(-1)||0)-
+        (macd.hist.at(-2)||0);
+    }
+
     if(macd.macd.length>=2){
-      if(macd.macd.at(-2)<=macd.signal.at(-2)&&macd.macd.at(-1)>macd.signal.at(-1))macdCross=1;
-      if(macd.macd.at(-2)>=macd.signal.at(-2)&&macd.macd.at(-1)<macd.signal.at(-1))macdCross=-1;
+
+      if(
+        macd.macd.at(-2)<=macd.signal.at(-2)&&
+        macd.macd.at(-1)>macd.signal.at(-1)
+      ){
+        macdCross=1;
+      }
+
+      if(
+        macd.macd.at(-2)>=macd.signal.at(-2)&&
+        macd.macd.at(-1)<macd.signal.at(-1)
+      ){
+        macdCross=-1;
+      }
     }
   }
 
   let bbPosition=.5;
+
   if(bb){
-    const width=bb.upper-bb.lower;
-    if(width)bbPosition=(last.c-bb.lower)/width;
+
+    const width=
+      bb.upper-bb.lower;
+
+    if(width){
+
+      bbPosition=
+        (last.c-bb.lower)/width;
+    }
   }
 
-  const avgVol=volumes.length>=13?average(volumes.slice(-13,-1)):0;
-  const relVolume=avgVol?last.v/avgVol:1;
-  const range=Math.max(last.h-last.l,.000001);
-  const closeLocation=(last.c-last.l)/range;
-  const rsiSlope=rsi!==null&&prevRsi!==null?rsi-prevRsi:0;
+  const avgVol=
+    volumes.length>=13
+    ?average(
+      volumes.slice(-13,-1)
+    )
+    :0;
 
-  const recent=slice.slice(-9);
-  const recentHigh=Math.max(...recent.map(x=>x.h));
-  const recentLow=Math.min(...recent.map(x=>x.l));
-  const position8w=recentHigh===recentLow?.5:(last.c-recentLow)/(recentHigh-recentLow);
+  const relVolume=
+    avgVol
+    ?last.v/avgVol
+    :1;
+
+  const range=
+    Math.max(
+      last.h-last.l,
+      .000001
+    );
+
+  const closeLocation=
+    (last.c-last.l)/range;
+
+  const rsiSlope=
+    rsi!==null&&prevRsi!==null
+    ?rsi-prevRsi
+    :0;
+
+  const recent=
+    slice.slice(-9);
+
+  const recentHigh=
+    Math.max(...recent.map(x=>x.h));
+
+  const recentLow=
+    Math.min(...recent.map(x=>x.l));
+
+  const position8w=
+    recentHigh===recentLow
+    ?.5
+    :(last.c-recentLow)/
+     (recentHigh-recentLow);
 
   let return4w=0;
+
   if(slice.length>=5){
-    const old=slice.at(-5).c;
-    if(old)return4w=((last.c-old)/old)*100;
+
+    const old=
+      slice.at(-5).c;
+
+    if(old){
+
+      return4w=
+        ((last.c-old)/old)*100;
+    }
   }
 
   return{
-    rsi:rsi??50,rsiSlope,stoch:stoch??50,macdHist,macdSlope,macdCross,
-    bbPosition,relVolume,closeLocation,position8w,return4w
+
+    rsi:rsi??50,
+
+    rsiSlope,
+
+    stoch:stoch??50,
+
+    macdHist,
+
+    macdSlope,
+
+    macdCross,
+
+    bbPosition,
+
+    relVolume,
+
+    closeLocation,
+
+    position8w,
+
+    return4w
   };
 }
 
+
+/* =====================================================
+   TECHNICAL CONTRIBUTIONS
+===================================================== */
+
 function indicatorContributions(f){
+
   const r={
-    rsi:{bottom:0,top:0},rsiSlope:{bottom:0,top:0},stoch:{bottom:0,top:0},
-    macdSlope:{bottom:0,top:0},macdCross:{bottom:0,top:0},bb:{bottom:0,top:0},
-    volume:{bottom:0,top:0},closeLocation:{bottom:0,top:0},position8w:{bottom:0,top:0}
+
+    rsi:{bottom:0,top:0},
+
+    rsiSlope:{bottom:0,top:0},
+
+    stoch:{bottom:0,top:0},
+
+    macdSlope:{bottom:0,top:0},
+
+    macdCross:{bottom:0,top:0},
+
+    bb:{bottom:0,top:0},
+
+    volume:{bottom:0,top:0},
+
+    closeLocation:{bottom:0,top:0},
+
+    position8w:{bottom:0,top:0}
   };
+
   if(!f)return r;
 
-  if(f.rsi<=25)r.rsi.bottom=20;
-  else if(f.rsi<=30)r.rsi.bottom=17;
-  else if(f.rsi<=38)r.rsi.bottom=10;
 
-  if(f.rsi>=75)r.rsi.top=20;
-  else if(f.rsi>=70)r.rsi.top=17;
-  else if(f.rsi>=62)r.rsi.top=10;
+  /* RSI */
 
-  if(f.rsiSlope>0&&f.rsi<42)r.rsiSlope.bottom=10;
-  if(f.rsiSlope<0&&f.rsi>58)r.rsiSlope.top=10;
+  if(f.rsi<=25)
+    r.rsi.bottom=20;
 
-  if(f.stoch<20)r.stoch.bottom=10;
-  else if(f.stoch<30)r.stoch.bottom=6;
-  if(f.stoch>80)r.stoch.top=10;
-  else if(f.stoch>70)r.stoch.top=6;
+  else if(f.rsi<=30)
+    r.rsi.bottom=17;
 
-  if(f.macdSlope>0)r.macdSlope.bottom=12;
-  if(f.macdSlope<0)r.macdSlope.top=12;
-  if(f.macdCross===1)r.macdCross.bottom=14;
-  if(f.macdCross===-1)r.macdCross.top=14;
+  else if(f.rsi<=38)
+    r.rsi.bottom=10;
 
-  if(f.bbPosition<0)r.bb.bottom=12;
-  else if(f.bbPosition<.2)r.bb.bottom=8;
-  if(f.bbPosition>1)r.bb.top=12;
-  else if(f.bbPosition>.8)r.bb.top=8;
 
-  if(f.relVolume>=1.7){r.volume.bottom=8;r.volume.top=8}
-  if(f.closeLocation>.6)r.closeLocation.bottom=7;
-  if(f.closeLocation<.4)r.closeLocation.top=7;
-  if(f.position8w<.2)r.position8w.bottom=7;
-  if(f.position8w>.8)r.position8w.top=7;
+  if(f.rsi>=75)
+    r.rsi.top=20;
+
+  else if(f.rsi>=70)
+    r.rsi.top=17;
+
+  else if(f.rsi>=62)
+    r.rsi.top=10;
+
+
+  /* RSI TURN */
+
+  if(
+    f.rsiSlope>0 &&
+    f.rsi<45
+  ){
+    r.rsiSlope.bottom=10;
+  }
+
+  if(
+    f.rsiSlope<0 &&
+    f.rsi>55
+  ){
+    r.rsiSlope.top=10;
+  }
+
+
+  /* STOCH */
+
+  if(f.stoch<20)
+    r.stoch.bottom=10;
+
+  else if(f.stoch<30)
+    r.stoch.bottom=6;
+
+
+  if(f.stoch>80)
+    r.stoch.top=10;
+
+  else if(f.stoch>70)
+    r.stoch.top=6;
+
+
+  /* MACD */
+
+  if(f.macdSlope>0)
+    r.macdSlope.bottom=12;
+
+  if(f.macdSlope<0)
+    r.macdSlope.top=12;
+
+
+  if(f.macdCross===1)
+    r.macdCross.bottom=14;
+
+  if(f.macdCross===-1)
+    r.macdCross.top=14;
+
+
+  /* BOLLINGER */
+
+  if(f.bbPosition<0)
+    r.bb.bottom=12;
+
+  else if(f.bbPosition<.2)
+    r.bb.bottom=8;
+
+
+  if(f.bbPosition>1)
+    r.bb.top=12;
+
+  else if(f.bbPosition>.8)
+    r.bb.top=8;
+
+
+  /* VOLUME */
+
+  if(f.relVolume>=1.7){
+
+    r.volume.bottom=8;
+
+    r.volume.top=8;
+  }
+
+
+  /* CANDLE */
+
+  if(f.closeLocation>.6)
+    r.closeLocation.bottom=7;
+
+  if(f.closeLocation<.4)
+    r.closeLocation.top=7;
+
+
+  /* PRICE POSITION */
+
+  if(f.position8w<.2)
+    r.position8w.bottom=7;
+
+  if(f.position8w>.8)
+    r.position8w.top=7;
+
 
   return r;
 }
 
+
 function currentTechnicalScore(f,type){
+
   if(!f)return 0;
-  const c=indicatorContributions(f);
+
+  const c=
+    indicatorContributions(f);
+
   let total=0;
-  Object.values(c).forEach(x=>total+=x[type]||0);
-  return clamp(Math.round(total));
+
+  Object.values(c)
+  .forEach(x=>{
+
+    total+=
+      x[type]||0;
+  });
+
+  return clamp(
+    Math.round(total)
+  );
 }
+
+
+/* =====================================================
+   HISTORICAL TURN
+===================================================== */
 
 function isLocalLow(bars,i){
-  if(i<PIVOT_RADIUS||i>=bars.length-PIVOT_RADIUS)return false;
-  for(let n=1;n<=PIVOT_RADIUS;n++){
-    if(bars[i].l>bars[i-n].l||bars[i].l>bars[i+n].l)return false;
+
+  if(
+    i<PIVOT_RADIUS ||
+    i>=bars.length-PIVOT_RADIUS
+  ){
+    return false;
   }
+
+  for(
+    let n=1;
+    n<=PIVOT_RADIUS;
+    n++
+  ){
+
+    if(
+      bars[i].l>bars[i-n].l ||
+      bars[i].l>bars[i+n].l
+    ){
+      return false;
+    }
+  }
+
   return true;
 }
+
 
 function isLocalHigh(bars,i){
-  if(i<PIVOT_RADIUS||i>=bars.length-PIVOT_RADIUS)return false;
-  for(let n=1;n<=PIVOT_RADIUS;n++){
-    if(bars[i].h<bars[i-n].h||bars[i].h<bars[i+n].h)return false;
+
+  if(
+    i<PIVOT_RADIUS ||
+    i>=bars.length-PIVOT_RADIUS
+  ){
+    return false;
   }
+
+  for(
+    let n=1;
+    n<=PIVOT_RADIUS;
+    n++
+  ){
+
+    if(
+      bars[i].h<bars[i-n].h ||
+      bars[i].h<bars[i+n].h
+    ){
+      return false;
+    }
+  }
+
   return true;
 }
 
+
 function bottomQuality(point,bars){
+
   if(!point)return 0;
+
   let score=40;
-  const f=point.feature||{};
+
+  const f=
+    point.feature||{};
+
 
   if(point.move>=50)score+=20;
+
   else if(point.move>=35)score+=17;
+
   else if(point.move>=25)score+=13;
+
   else if(point.move>=20)score+=9;
+
   else if(point.move>=15)score+=5;
+
 
   if(f.rsi<=25)score+=10;
+
   else if(f.rsi<=30)score+=8;
+
   else if(f.rsi<=38)score+=5;
+
   else if(f.rsi<=45)score+=2;
 
-  if(f.macdCross===1)score+=10;
-  else if(f.macdSlope>0)score+=7;
-  else if(f.rsiSlope>0)score+=4;
 
-  if(f.bbPosition<=0)score+=5;
-  else if(f.bbPosition<=.2)score+=3;
+  if(f.macdCross===1)
+    score+=10;
 
-  if(f.relVolume>=2)score+=5;
-  else if(f.relVolume>=1.5)score+=3;
+  else if(f.macdSlope>0)
+    score+=7;
 
-  if(f.closeLocation>=.75)score+=5;
-  else if(f.closeLocation>=.6)score+=3;
+  else if(f.rsiSlope>0)
+    score+=4;
+
+
+  if(f.bbPosition<=0)
+    score+=5;
+
+  else if(f.bbPosition<=.2)
+    score+=3;
+
+
+  if(f.relVolume>=2)
+    score+=5;
+
+  else if(f.relVolume>=1.5)
+    score+=3;
+
+
+  if(f.closeLocation>=.75)
+    score+=5;
+
+  else if(f.closeLocation>=.6)
+    score+=3;
+
 
   let intact=0;
-  for(const bar of bars.slice(point.index+1)){
-    if(bar.l<point.price*(1-STRUCTURE_BREAK))break;
+
+  for(
+    const bar
+    of bars.slice(point.index+1)
+  ){
+
+    if(
+      bar.l<
+      point.price*
+      (1-STRUCTURE_BREAK)
+    ){
+      break;
+    }
+
     intact++;
   }
 
+
   if(intact>=12)score+=10;
+
   else if(intact>=8)score+=8;
+
   else if(intact>=4)score+=5;
+
   else if(intact>=2)score+=2;
 
-  return clamp(Math.round(score));
+
+  return clamp(
+    Math.round(score)
+  );
 }
+
 
 function topQuality(point,bars){
+
   if(!point)return 0;
+
   let score=40;
-  const f=point.feature||{};
+
+  const f=
+    point.feature||{};
+
 
   if(point.move>=50)score+=20;
+
   else if(point.move>=35)score+=17;
+
   else if(point.move>=25)score+=13;
+
   else if(point.move>=20)score+=9;
+
   else if(point.move>=15)score+=5;
 
+
   if(f.rsi>=75)score+=10;
+
   else if(f.rsi>=70)score+=8;
+
   else if(f.rsi>=62)score+=5;
+
   else if(f.rsi>=55)score+=2;
 
-  if(f.macdCross===-1)score+=10;
-  else if(f.macdSlope<0)score+=7;
-  else if(f.rsiSlope<0)score+=4;
 
-  if(f.bbPosition>=1)score+=5;
-  else if(f.bbPosition>=.8)score+=3;
+  if(f.macdCross===-1)
+    score+=10;
 
-  if(f.relVolume>=2)score+=5;
-  else if(f.relVolume>=1.5)score+=3;
+  else if(f.macdSlope<0)
+    score+=7;
 
-  if(f.closeLocation<=.25)score+=5;
-  else if(f.closeLocation<=.4)score+=3;
+  else if(f.rsiSlope<0)
+    score+=4;
+
+
+  if(f.bbPosition>=1)
+    score+=5;
+
+  else if(f.bbPosition>=.8)
+    score+=3;
+
+
+  if(f.relVolume>=2)
+    score+=5;
+
+  else if(f.relVolume>=1.5)
+    score+=3;
+
+
+  if(f.closeLocation<=.25)
+    score+=5;
+
+  else if(f.closeLocation<=.4)
+    score+=3;
+
 
   let intact=0;
-  for(const bar of bars.slice(point.index+1)){
-    if(bar.h>point.price*(1+STRUCTURE_BREAK))break;
+
+  for(
+    const bar
+    of bars.slice(point.index+1)
+  ){
+
+    if(
+      bar.h>
+      point.price*
+      (1+STRUCTURE_BREAK)
+    ){
+      break;
+    }
+
     intact++;
   }
 
+
   if(intact>=12)score+=10;
+
   else if(intact>=8)score+=8;
+
   else if(intact>=4)score+=5;
+
   else if(intact>=2)score+=2;
 
-  return clamp(Math.round(score));
+
+  return clamp(
+    Math.round(score)
+  );
 }
+
 
 function discoverMajorTurns(bars){
-  const bottoms=[],tops=[];
 
-  for(let i=MIN_HISTORY;i<bars.length-1;i++){
-    const future=bars.slice(i+1,Math.min(bars.length,i+1+CONFIRM_WEEKS));
-    if(!future.length)continue;
+  const bottoms=[];
+  const tops=[];
+
+
+  for(
+    let i=MIN_HISTORY;
+    i<bars.length-1;
+    i++
+  ){
+
+    const future=
+      bars.slice(
+        i+1,
+        Math.min(
+          bars.length,
+          i+1+CONFIRM_WEEKS
+        )
+      );
+
+    if(!future.length)
+      continue;
+
 
     if(isLocalLow(bars,i)){
-      const low=bars[i].l;
-      const highest=Math.max(...future.map(x=>x.h));
-      const rise=((highest-low)/low)*100;
-      if(rise>=BOTTOM_CONFIRM_MOVE){
-        bottoms.push({type:'bottom',index:i,date:bars[i].dt,price:low,move:rise,feature:featureAt(bars,i)});
+
+      const low=
+        bars[i].l;
+
+      const highest=
+        Math.max(
+          ...future.map(x=>x.h)
+        );
+
+      const rise=
+        ((highest-low)/low)*100;
+
+
+      if(
+        rise>=BOTTOM_CONFIRM_MOVE
+      ){
+
+        bottoms.push({
+
+          type:'bottom',
+
+          index:i,
+
+          date:bars[i].dt,
+
+          price:low,
+
+          move:rise,
+
+          feature:
+            featureAt(bars,i)
+        });
       }
     }
+
 
     if(isLocalHigh(bars,i)){
-      const high=bars[i].h;
-      const lowest=Math.min(...future.map(x=>x.l));
-      const drop=((high-lowest)/high)*100;
-      if(drop>=TOP_CONFIRM_MOVE){
-        tops.push({type:'top',index:i,date:bars[i].dt,price:high,move:drop,feature:featureAt(bars,i)});
+
+      const high=
+        bars[i].h;
+
+      const lowest=
+        Math.min(
+          ...future.map(x=>x.l)
+        );
+
+      const drop=
+        ((high-lowest)/high)*100;
+
+
+      if(
+        drop>=TOP_CONFIRM_MOVE
+      ){
+
+        tops.push({
+
+          type:'top',
+
+          index:i,
+
+          date:bars[i].dt,
+
+          price:high,
+
+          move:drop,
+
+          feature:
+            featureAt(bars,i)
+        });
       }
     }
   }
 
+
   const cleanBottoms=[];
+
   for(const p of bottoms){
-    const prev=cleanBottoms.at(-1);
-    if(prev&&p.index-prev.index<=2){
-      if(p.price<prev.price)cleanBottoms[cleanBottoms.length-1]=p;
-    }else cleanBottoms.push(p);
+
+    const prev=
+      cleanBottoms.at(-1);
+
+    if(
+      prev &&
+      p.index-prev.index<=2
+    ){
+
+      if(p.price<prev.price){
+
+        cleanBottoms[
+          cleanBottoms.length-1
+        ]=p;
+      }
+
+    }else{
+
+      cleanBottoms.push(p);
+    }
   }
+
 
   const cleanTops=[];
+
   for(const p of tops){
-    const prev=cleanTops.at(-1);
-    if(prev&&p.index-prev.index<=2){
-      if(p.price>prev.price)cleanTops[cleanTops.length-1]=p;
-    }else cleanTops.push(p);
+
+    const prev=
+      cleanTops.at(-1);
+
+    if(
+      prev &&
+      p.index-prev.index<=2
+    ){
+
+      if(p.price>prev.price){
+
+        cleanTops[
+          cleanTops.length-1
+        ]=p;
+      }
+
+    }else{
+
+      cleanTops.push(p);
+    }
   }
 
-  cleanBottoms.forEach(p=>p.quality=bottomQuality(p,bars));
-  cleanTops.forEach(p=>p.quality=topQuality(p,bars));
 
-  return{bottoms:cleanBottoms,tops:cleanTops};
+  cleanBottoms.forEach(p=>{
+
+    p.quality=
+      bottomQuality(
+        p,
+        bars
+      );
+  });
+
+
+  cleanTops.forEach(p=>{
+
+    p.quality=
+      topQuality(
+        p,
+        bars
+      );
+  });
+
+
+  return{
+
+    bottoms:cleanBottoms,
+
+    tops:cleanTops
+  };
 }
 
-function activeStructuralBottom(bars,bottoms){
-  for(let n=bottoms.length-1;n>=0;n--){
-    const p=bottoms[n];
-    const broken=bars.slice(p.index+1).some(x=>x.l<p.price*(1-STRUCTURE_BREAK));
-    if(!broken)return{...p,intact:true};
+
+function activeStructuralBottom(
+  bars,
+  bottoms
+){
+
+  for(
+    let n=bottoms.length-1;
+    n>=0;
+    n--
+  ){
+
+    const p=
+      bottoms[n];
+
+    const broken=
+      bars
+      .slice(p.index+1)
+      .some(
+        x=>
+          x.l<
+          p.price*
+          (1-STRUCTURE_BREAK)
+      );
+
+    if(!broken){
+
+      return{
+        ...p,
+        intact:true
+      };
+    }
   }
+
   return null;
 }
 
-function activeStructuralTop(bars,tops){
-  for(let n=tops.length-1;n>=0;n--){
-    const p=tops[n];
-    const broken=bars.slice(p.index+1).some(x=>x.h>p.price*(1+STRUCTURE_BREAK));
-    if(!broken)return{...p,intact:true};
+
+function activeStructuralTop(
+  bars,
+  tops
+){
+
+  for(
+    let n=tops.length-1;
+    n>=0;
+    n--
+  ){
+
+    const p=
+      tops[n];
+
+    const broken=
+      bars
+      .slice(p.index+1)
+      .some(
+        x=>
+          x.h>
+          p.price*
+          (1+STRUCTURE_BREAK)
+      );
+
+    if(!broken){
+
+      return{
+        ...p,
+        intact:true
+      };
+    }
   }
+
   return null;
 }
 
-function similarityPart(a,b,scale){
-  if(!Number.isFinite(a)||!Number.isFinite(b))return .5;
-  return 1-Math.min(1,Math.abs(a-b)/scale);
+
+/* =====================================================
+   PATTERN SIMILARITY
+===================================================== */
+
+function similarityPart(
+  a,
+  b,
+  scale
+){
+
+  if(
+    !Number.isFinite(a) ||
+    !Number.isFinite(b)
+  ){
+    return .5;
+  }
+
+  return 1-Math.min(
+    1,
+    Math.abs(a-b)/scale
+  );
 }
 
-function featureSimilarity(current,reference){
-  if(!current||!reference)return 0;
+
+function featureSimilarity(
+  current,
+  reference
+){
+
+  if(
+    !current ||
+    !reference
+  ){
+    return 0;
+  }
+
+
   const scores=[
-    similarityPart(current.rsi,reference.rsi,30),
-    similarityPart(current.rsiSlope,reference.rsiSlope,12),
-    similarityPart(current.stoch,reference.stoch,40),
-    similarityPart(current.bbPosition,reference.bbPosition,.75),
-    similarityPart(current.relVolume,reference.relVolume,2),
-    similarityPart(current.closeLocation,reference.closeLocation,.65),
-    similarityPart(current.position8w,reference.position8w,.7),
-    similarityPart(current.return4w,reference.return4w,30),
-    Math.sign(current.macdSlope)===Math.sign(reference.macdSlope)?1:.25,
-    current.macdCross===reference.macdCross?1:.4
+
+    similarityPart(
+      current.rsi,
+      reference.rsi,
+      30
+    ),
+
+    similarityPart(
+      current.rsiSlope,
+      reference.rsiSlope,
+      12
+    ),
+
+    similarityPart(
+      current.stoch,
+      reference.stoch,
+      40
+    ),
+
+    similarityPart(
+      current.bbPosition,
+      reference.bbPosition,
+      .75
+    ),
+
+    similarityPart(
+      current.relVolume,
+      reference.relVolume,
+      2
+    ),
+
+    similarityPart(
+      current.closeLocation,
+      reference.closeLocation,
+      .65
+    ),
+
+    similarityPart(
+      current.position8w,
+      reference.position8w,
+      .7
+    ),
+
+    similarityPart(
+      current.return4w,
+      reference.return4w,
+      30
+    ),
+
+    Math.sign(current.macdSlope)===
+    Math.sign(reference.macdSlope)
+    ?1:.25,
+
+    current.macdCross===
+    reference.macdCross
+    ?1:.4
   ];
-  return clamp(Math.round(average(scores)*100));
+
+
+  return clamp(
+    Math.round(
+      average(scores)*100
+    )
+  );
 }
 
-function patternMatch(current,turns){
-  if(!current||!turns.length)return{score:0,reference:null,matches:[]};
 
-  const matches=turns.map(turn=>{
-    const similarity=featureSimilarity(current,turn.feature);
-    return{...turn,similarity,weightedMatch:similarity*.8+(turn.quality||0)*.2};
-  }).sort((a,b)=>b.weightedMatch-a.weightedMatch);
+function patternMatch(
+  current,
+  turns
+){
 
-  const top=matches.slice(0,Math.min(3,matches.length));
-  let total=0,weights=0;
+  if(
+    !current ||
+    !turns.length
+  ){
+
+    return{
+      score:0,
+      reference:null,
+      matches:[]
+    };
+  }
+
+
+  const matches=
+    turns.map(turn=>{
+
+      const similarity=
+        featureSimilarity(
+          current,
+          turn.feature
+        );
+
+      return{
+
+        ...turn,
+
+        similarity,
+
+        weightedMatch:
+          similarity*.8+
+          (turn.quality||0)*.2
+      };
+
+    })
+    .sort(
+      (a,b)=>
+        b.weightedMatch-
+        a.weightedMatch
+    );
+
+
+  const top=
+    matches.slice(
+      0,
+      Math.min(
+        3,
+        matches.length
+      )
+    );
+
+
+  let total=0;
+  let weights=0;
+
 
   top.forEach((x,i)=>{
-    const w=i===0?3:i===1?2:1;
-    total+=x.similarity*w;
+
+    const w=
+      i===0
+      ?3
+      :i===1
+      ?2
+      :1;
+
+    total+=
+      x.similarity*w;
+
     weights+=w;
   });
 
-  return{score:weights?Math.round(total/weights):0,reference:matches[0]||null,matches};
+
+  return{
+
+    score:
+      weights
+      ?Math.round(
+        total/weights
+      )
+      :0,
+
+    reference:
+      matches[0]||null,
+
+    matches
+  };
 }
 
-function priceLocationScore(weekly,type){
-  if(!weekly.length)return 50;
-  const recent=weekly.slice(-13);
-  const hi=Math.max(...recent.map(x=>x.h));
-  const lo=Math.min(...recent.map(x=>x.l));
-  const close=recent.at(-1).c;
-  if(hi===lo)return 50;
-  const position=clamp(((close-lo)/(hi-lo))*100);
-  return type==='bottom'?Math.round(100-position):Math.round(position);
+
+/* =====================================================
+   LOCATION / MOMENTUM
+===================================================== */
+
+function priceLocationScore(
+  weekly,
+  type
+){
+
+  if(!weekly.length)
+    return 50;
+
+  const recent=
+    weekly.slice(-13);
+
+  const hi=
+    Math.max(
+      ...recent.map(x=>x.h)
+    );
+
+  const lo=
+    Math.min(
+      ...recent.map(x=>x.l)
+    );
+
+  const close=
+    recent.at(-1).c;
+
+
+  if(hi===lo)
+    return 50;
+
+
+  const position=
+    clamp(
+      ((close-lo)/(hi-lo))*100
+    );
+
+
+  return type==='bottom'
+    ?Math.round(100-position)
+    :Math.round(position);
 }
 
-function momentumScore(f,type){
-  if(!f)return 0;
+
+function momentumScore(
+  f,
+  type
+){
+
+  if(!f)
+    return 0;
+
   let score=0;
 
+
   if(type==='bottom'){
-    if(f.rsiSlope>0)score+=30;
-    if(f.macdSlope>0)score+=30;
-    if(f.macdCross===1)score+=25;
-    if(f.closeLocation>.6)score+=15;
+
+    if(f.rsiSlope>0)
+      score+=25;
+
+    if(f.macdSlope>0)
+      score+=30;
+
+    if(f.macdCross===1)
+      score+=25;
+
+    if(f.closeLocation>.55)
+      score+=10;
+
+    if(f.return4w>0)
+      score+=10;
+
   }else{
-    if(f.rsiSlope<0)score+=30;
-    if(f.macdSlope<0)score+=30;
-    if(f.macdCross===-1)score+=25;
-    if(f.closeLocation<.4)score+=15;
+
+    if(f.rsiSlope<0)
+      score+=25;
+
+    if(f.macdSlope<0)
+      score+=30;
+
+    if(f.macdCross===-1)
+      score+=25;
+
+    if(f.closeLocation<.45)
+      score+=10;
+
+    if(f.return4w<0)
+      score+=10;
   }
+
 
   return clamp(score);
 }
 
-/* v0.4.1 BUY / SELL DECISION ENGINE */
+
+/* =====================================================
+   v0.4.2 CURRENT-FIRST DECISION ENGINE
+===================================================== */
+
 function makeDecision(d){
-  const weeklyBottom=d.currentBottom;
-  const weeklyTop=d.currentTop;
-  const bottomSimilarity=d.bottomPattern.score;
-  const topSimilarity=d.topPattern.score;
-  const dailyBottom=d.dailyBottom;
-  const dailyTop=d.dailyTop;
 
-  const bottomLocation=priceLocationScore(d.weekly,'bottom');
-  const topLocation=priceLocationScore(d.weekly,'top');
-  const bottomMomentum=momentumScore(d.weeklyFeature,'bottom');
-  const topMomentum=momentumScore(d.weeklyFeature,'top');
+  const WB=d.currentBottom;
+  const WT=d.currentTop;
 
-  let majorBottomContext=50;
-  if(d.majorBottom){
-    const dist=((d.price-d.majorBottom.price)/d.majorBottom.price)*100;
-    if(dist>=0&&dist<=8)majorBottomContext=100;
-    else if(dist<=15)majorBottomContext=85;
-    else if(dist<=25)majorBottomContext=65;
-    else majorBottomContext=40;
-  }
+  const DB=d.dailyBottom;
+  const DT=d.dailyTop;
 
-  let majorTopContext=50;
-  if(d.majorTop){
-    const dist=((d.majorTop.price-d.price)/d.majorTop.price)*100;
-    if(dist>=0&&dist<=8)majorTopContext=100;
-    else if(dist<=15)majorTopContext=85;
-    else if(dist<=25)majorTopContext=65;
-    else majorTopContext=40;
-  }
+  const BS=d.bottomPattern.score;
+  const TS=d.topPattern.score;
+
+  const BL=
+    priceLocationScore(
+      d.weekly,
+      'bottom'
+    );
+
+  const TL=
+    priceLocationScore(
+      d.weekly,
+      'top'
+    );
+
+  const BM=
+    momentumScore(
+      d.weeklyFeature,
+      'bottom'
+    );
+
+  const TM=
+    momentumScore(
+      d.weeklyFeature,
+      'top'
+    );
+
+
+  /*
+  ----------------------------------------
+  NEW SCORE MODEL
+
+  Weekly current signal   45%
+  Daily confirmation     20%
+  Historical similarity  15%
+  Price location         10%
+  Momentum               10%
+
+  핵심:
+  Historical similarity가 낮아도
+  Current signal이 강하면 판정을 막지 않는다.
+  ----------------------------------------
+  */
+
 
   let buyScore=
-    weeklyBottom*.30+
-    bottomSimilarity*.25+
-    dailyBottom*.15+
-    bottomLocation*.15+
-    bottomMomentum*.10+
-    majorBottomContext*.05;
+    WB*.45+
+    DB*.20+
+    BS*.15+
+    BL*.10+
+    BM*.10;
 
-  let riskScore=
-    weeklyTop*.30+
-    topSimilarity*.25+
-    dailyTop*.15+
-    topLocation*.15+
-    topMomentum*.10+
-    majorTopContext*.05;
 
-  if(weeklyTop>=70)buyScore-=8;
-  if(dailyTop>=70)buyScore-=5;
-  if(topLocation>=90)buyScore-=5;
+  let sellScore=
+    WT*.45+
+    DT*.20+
+    TS*.15+
+    TL*.10+
+    TM*.10;
 
-  if(weeklyBottom>=70)riskScore-=8;
-  if(dailyBottom>=70)riskScore-=5;
-  if(bottomLocation>=90)riskScore-=5;
 
-  if(weeklyBottom>=80&&dailyBottom>=65)buyScore+=5;
-  if(weeklyBottom>=85&&bottomSimilarity>=75)buyScore+=5;
+  /*
+  CURRENT SIGNAL BONUS
+  */
 
-  if(weeklyTop>=80&&dailyTop>=65)riskScore+=5;
-  if(weeklyTop>=85&&topSimilarity>=75)riskScore+=5;
 
-  buyScore=clamp(Math.round(buyScore));
-  riskScore=clamp(Math.round(riskScore));
+  if(WB>=90)
+    buyScore+=8;
 
-  let action='기다려',code='WAIT',level='wait';
+  else if(WB>=85)
+    buyScore+=6;
 
-  /* SELL = 강한 고점 조건이 여러 축에서 동시에 확인될 때만 */
+  else if(WB>=80)
+    buyScore+=4;
+
+  else if(WB>=70)
+    buyScore+=2;
+
+
+  if(WT>=90)
+    sellScore+=8;
+
+  else if(WT>=85)
+    sellScore+=6;
+
+  else if(WT>=80)
+    sellScore+=4;
+
+  else if(WT>=70)
+    sellScore+=2;
+
+
+  /*
+  MULTI TIMEFRAME CONFIRMATION
+  */
+
+
   if(
-    riskScore>=85 &&
-    weeklyTop>=80 &&
-    topSimilarity>=65 &&
-    riskScore>=buyScore+15
+    WB>=75 &&
+    DB>=60
   ){
+    buyScore+=5;
+  }
+
+
+  if(
+    WT>=75 &&
+    DT>=60
+  ){
+    sellScore+=5;
+  }
+
+
+  /*
+  HISTORICAL PATTERN BONUS
+
+  이제 보조 역할만 한다.
+  */
+
+
+  if(
+    WB>=75 &&
+    BS>=70
+  ){
+    buyScore+=3;
+  }
+
+
+  if(
+    WT>=75 &&
+    TS>=70
+  ){
+    sellScore+=3;
+  }
+
+
+  /*
+  OPPOSITE SIGNAL PENALTY
+  */
+
+
+  if(WT>=75)
+    buyScore-=6;
+
+  else if(WT>=65)
+    buyScore-=3;
+
+
+  if(WB>=75)
+    sellScore-=6;
+
+  else if(WB>=65)
+    sellScore-=3;
+
+
+  buyScore=
+    clamp(
+      Math.round(buyScore)
+    );
+
+
+  sellScore=
+    clamp(
+      Math.round(sellScore)
+    );
+
+
+  /*
+  ----------------------------------------
+  COMMAND ENGINE
+
+  BUY:
+  Current Bottom 중심
+
+  WATCH:
+  바닥 신호가 형성되는 단계
+
+  SELL:
+  Top + 실제 하락 전환 확인
+
+  AVOID:
+  고점 위험은 크지만 SELL까지는 아님
+  ----------------------------------------
+  */
+
+
+  let action='기다려';
+  let code='WAIT';
+  let level='wait';
+
+
+  /*
+  SELL
+
+  단순 과매수는 SELL 아님.
+
+  고점 + 하락전환이 필요.
+  */
+
+
+  const bearishTurn=
+    TM>=55 ||
+    DT>=65 ||
+    (
+      d.weeklyFeature &&
+      d.weeklyFeature.macdCross===-1
+    );
+
+
+  if(
+    WT>=82 &&
+    sellScore>=78 &&
+    bearishTurn &&
+    sellScore>=buyScore+10
+  ){
+
     action='매도해';
     code='SELL';
     level='sell';
 
-  }else if(
-    riskScore>=72 &&
-    riskScore>=buyScore+10
+  }
+
+
+  /*
+  AVOID
+  */
+
+
+  else if(
+    WT>=68 &&
+    sellScore>=65 &&
+    sellScore>=buyScore+7
   ){
+
     action='매수하지 마';
     code='AVOID';
     level='avoid';
 
-  }else if(
-    buyScore>=85 &&
-    weeklyBottom>=80 &&
-    bottomSimilarity>=65 &&
-    buyScore>=riskScore+10
-  ){
-    action='매수해';
-    code='BUY';
-    level='buy';
-
-  }else if(
-    buyScore>=72 &&
-    weeklyBottom>=65 &&
-    buyScore>riskScore
-  ){
-    action='매수 관심';
-    code='WATCH';
-    level='watch';
   }
+
+
+  /*
+  BUY
+
+  Historical similarity를
+  필수 조건에서 제거.
+
+  Current Bottom이 매우 강하면
+  자체적으로 BUY 가능.
+  */
+
+
+  else if(
+
+    (
+      WB>=88 &&
+      buyScore>=72
+    )
+
+    ||
+
+    (
+      WB>=82 &&
+      DB>=60 &&
+      buyScore>=70
+    )
+
+    ||
+
+    (
+      WB>=80 &&
+      BS>=68 &&
+      BM>=50 &&
+      buyScore>=68
+    )
+
+  ){
+
+    if(
+      buyScore>=sellScore+5
+    ){
+
+      action='매수해';
+      code='BUY';
+      level='buy';
+
+    }else{
+
+      action='매수 관심';
+      code='WATCH';
+      level='watch';
+    }
+
+  }
+
+
+  /*
+  WATCH
+
+  기존보다 적극적으로
+  바닥 형성 초기부터 표시
+  */
+
+
+  else if(
+
+    WB>=65
+
+    ||
+
+    (
+      WB>=58 &&
+      DB>=60
+    )
+
+    ||
+
+    (
+      WB>=55 &&
+      BS>=70
+    )
+
+    ||
+
+    (
+      WB>=55 &&
+      BM>=60
+    )
+
+  ){
+
+    if(
+      sellScore<
+      buyScore+10
+    ){
+
+      action='매수 관심';
+      code='WATCH';
+      level='watch';
+
+    }else{
+
+      action='기다려';
+      code='WAIT';
+      level='wait';
+    }
+  }
+
+
+  /*
+  REASONS
+  */
+
 
   const reasons=[];
 
-  if(code==='SELL'){
-    reasons.push('주봉에서 강한 고점 신호 확인');
-    reasons.push(`과거 실제 고점 패턴 유사도 ${topSimilarity}/100`);
-    if(dailyTop>=65)reasons.push('일봉에서도 고점·하락 선행 신호 확인');
-    if(topLocation>=80)reasons.push('최근 가격 범위의 고점권');
-    if(topMomentum>=70)reasons.push('하락 모멘텀 전환이 강함');
 
-  }else if(code==='AVOID'){
-    reasons.push('현재 고점 위험이 매수 신호보다 강함');
-    if(weeklyTop>=65)reasons.push('주봉 고점 신호가 형성 중');
-    if(topSimilarity>=60)reasons.push('과거 고점 패턴과 유사');
+  if(code==='BUY'){
 
-  }else{
-    if(weeklyBottom>=90)reasons.push('이번 주 주봉 바닥 신호가 매우 강함');
-    else if(weeklyBottom>=80)reasons.push('이번 주 주봉 바닥 신호가 강함');
-    else if(weeklyBottom>=65)reasons.push('주봉에서 바닥 형성 신호가 나타남');
-    else reasons.push('주봉 바닥 신호가 아직 충분하지 않음');
+    if(WB>=90)
+      reasons.push(
+        '현재 주봉 바닥 신호가 매우 강함'
+      );
 
-    if(bottomSimilarity>=80)reasons.push('과거 실제 바닥 패턴과 매우 유사');
-    else if(bottomSimilarity>=65)reasons.push('과거 실제 바닥 패턴과 유사');
-    else reasons.push('과거 바닥 패턴 유사도는 낮은 편');
+    else
+      reasons.push(
+        '현재 주봉 바닥 신호가 강함'
+      );
 
-    if(dailyBottom>=75)reasons.push('일봉 선행 바닥 신호도 확인');
-    else if(dailyBottom>=55)reasons.push('일봉 반전 신호가 형성 중');
 
-    if(bottomLocation>=80)reasons.push('최근 가격 범위의 저점권');
-    if(bottomMomentum>=70)reasons.push('상승 모멘텀 반전이 강하게 발생');
-    if(riskScore>=70)reasons.push('반대 방향 고점 위험도 존재');
+    if(DB>=65)
+      reasons.push(
+        '일봉에서도 바닥·반전 신호 확인'
+      );
+
+
+    if(BM>=60)
+      reasons.push(
+        '상승 방향 모멘텀 전환 확인'
+      );
+
+
+    if(BS>=75)
+      reasons.push(
+        `과거 바닥 패턴과 ${BS}% 유사`
+      );
+
+
+    if(BL>=75)
+      reasons.push(
+        '최근 가격 범위의 저점권'
+      );
   }
 
+
+  else if(code==='WATCH'){
+
+    reasons.push(
+      '바닥 형성 신호가 나타나는 중'
+    );
+
+
+    if(WB>=65)
+      reasons.push(
+        `현재 주봉 바닥 ${WB}/100`
+      );
+
+
+    if(DB>=60)
+      reasons.push(
+        '일봉 반전 신호가 먼저 나타남'
+      );
+
+
+    if(BM>=55)
+      reasons.push(
+        '모멘텀이 상승 방향으로 개선 중'
+      );
+
+
+    if(BS>=70)
+      reasons.push(
+        '과거 바닥 패턴과 유사'
+      );
+  }
+
+
+  else if(code==='SELL'){
+
+    reasons.push(
+      '현재 주봉 고점 신호가 매우 강함'
+    );
+
+
+    if(DT>=65)
+      reasons.push(
+        '일봉에서도 하락 신호 확인'
+      );
+
+
+    if(TM>=55)
+      reasons.push(
+        '하락 모멘텀 전환 확인'
+      );
+
+
+    if(TS>=70)
+      reasons.push(
+        `과거 고점 패턴과 ${TS}% 유사`
+      );
+
+
+    if(TL>=80)
+      reasons.push(
+        '최근 가격 범위의 고점권'
+      );
+  }
+
+
+  else if(code==='AVOID'){
+
+    reasons.push(
+      '현재 고점 위험이 매수 신호보다 강함'
+    );
+
+
+    if(WT>=70)
+      reasons.push(
+        `현재 주봉 고점 ${WT}/100`
+      );
+
+
+    if(TS>=65)
+      reasons.push(
+        '과거 고점 패턴과 유사'
+      );
+
+
+    if(TL>=80)
+      reasons.push(
+        '가격이 최근 고점권에 위치'
+      );
+  }
+
+
+  else{
+
+    reasons.push(
+      '현재 바닥·고점 어느 방향도 충분히 강하지 않음'
+    );
+
+
+    if(
+      WB<55 &&
+      WT<55
+    ){
+      reasons.push(
+        '극단적인 기술적 위치가 아님'
+      );
+    }
+
+
+    if(
+      Math.abs(
+        buyScore-sellScore
+      )<10
+    ){
+      reasons.push(
+        '매수·매도 신호 차이가 작음'
+      );
+    }
+  }
+
+
   return{
-    buyScore,riskScore,action,code,level,reasons,
-    bottomLocation,topLocation,bottomMomentum,topMomentum,
-    majorBottomContext,majorTopContext
+
+    buyScore,
+
+    sellScore,
+
+    action,
+
+    code,
+
+    level,
+
+    reasons,
+
+    bottomLocation:BL,
+
+    topLocation:TL,
+
+    bottomMomentum:BM,
+
+    topMomentum:TM
   };
 }
 
-function analyse(symbol,daily){
-  if(!daily.length)return null;
 
-  const weekly=dailyToWeekly(daily);
-  const price=daily.at(-1).c;
-  const weeklyFeature=featureAt(weekly,weekly.length-1);
-  const dailyFeature=featureAt(daily,daily.length-1);
+/* =====================================================
+   ANALYSIS
+===================================================== */
 
-  const currentBottom=currentTechnicalScore(weeklyFeature,'bottom');
-  const currentTop=currentTechnicalScore(weeklyFeature,'top');
-  const dailyBottom=currentTechnicalScore(dailyFeature,'bottom');
-  const dailyTop=currentTechnicalScore(dailyFeature,'top');
+function analyse(
+  symbol,
+  daily
+){
 
-  const contributions=indicatorContributions(weeklyFeature);
-  const turns=discoverMajorTurns(weekly);
-  const majorBottom=activeStructuralBottom(weekly,turns.bottoms);
-  const majorTop=activeStructuralTop(weekly,turns.tops);
-  const bottomPattern=patternMatch(weeklyFeature,turns.bottoms);
-  const topPattern=patternMatch(weeklyFeature,turns.tops);
+  if(!daily.length)
+    return null;
+
+
+  const weekly=
+    dailyToWeekly(daily);
+
+
+  const price=
+    daily.at(-1).c;
+
+
+  const weeklyFeature=
+    featureAt(
+      weekly,
+      weekly.length-1
+    );
+
+
+  const prevWeeklyFeature=
+    featureAt(
+      weekly,
+      weekly.length-2
+    );
+
+
+  const dailyFeature=
+    featureAt(
+      daily,
+      daily.length-1
+    );
+
+
+  const currentBottom=
+    currentTechnicalScore(
+      weeklyFeature,
+      'bottom'
+    );
+
+
+  const currentTop=
+    currentTechnicalScore(
+      weeklyFeature,
+      'top'
+    );
+
+
+  const previousBottom=
+    currentTechnicalScore(
+      prevWeeklyFeature,
+      'bottom'
+    );
+
+
+  const previousTop=
+    currentTechnicalScore(
+      prevWeeklyFeature,
+      'top'
+    );
+
+
+  const dailyBottom=
+    currentTechnicalScore(
+      dailyFeature,
+      'bottom'
+    );
+
+
+  const dailyTop=
+    currentTechnicalScore(
+      dailyFeature,
+      'top'
+    );
+
+
+  const contributions=
+    indicatorContributions(
+      weeklyFeature
+    );
+
+
+  const turns=
+    discoverMajorTurns(
+      weekly
+    );
+
+
+  const majorBottom=
+    activeStructuralBottom(
+      weekly,
+      turns.bottoms
+    );
+
+
+  const majorTop=
+    activeStructuralTop(
+      weekly,
+      turns.tops
+    );
+
+
+  const bottomPattern=
+    patternMatch(
+      weeklyFeature,
+      turns.bottoms
+    );
+
+
+  const topPattern=
+    patternMatch(
+      weeklyFeature,
+      turns.tops
+    );
+
 
   const d={
-    symbol,price,weekly,weeklyFeature,dailyFeature,currentBottom,currentTop,
-    dailyBottom,dailyTop,contributions,turns,majorBottom,majorTop,bottomPattern,topPattern
+
+    symbol,
+
+    price,
+
+    weekly,
+
+    weeklyFeature,
+
+    prevWeeklyFeature,
+
+    dailyFeature,
+
+    currentBottom,
+
+    currentTop,
+
+    previousBottom,
+
+    previousTop,
+
+    dailyBottom,
+
+    dailyTop,
+
+    contributions,
+
+    turns,
+
+    majorBottom,
+
+    majorTop,
+
+    bottomPattern,
+
+    topPattern
   };
 
-  d.decision=makeDecision(d);
+
+  d.decision=
+    makeDecision(d);
+
+
   return d;
 }
 
-async function fetchDaily(symbol,force=false){
-  const key=symbol+'__1day';
-  const old=cache[key];
 
-  if(!force&&old?.values?.length&&Date.now()-old.time<DAILY_TTL){
-    return{values:old.values,mode:'CACHED'};
+/* =====================================================
+   FETCH
+===================================================== */
+
+async function fetchDaily(
+  symbol,
+  force=false
+){
+
+  const key=
+    symbol+'__1day';
+
+
+  const old=
+    cache[key];
+
+
+  if(
+    !force &&
+    old?.values?.length &&
+    Date.now()-old.time<
+    DAILY_TTL
+  ){
+
+    return{
+      values:old.values,
+      mode:'CACHED'
+    };
   }
 
+
   try{
-    const url=new URL(MARKET);
-    url.searchParams.set('symbol',symbol);
-    url.searchParams.set('interval','1day');
 
-    const response=await fetch(url,{headers:{apikey:KEY}});
-    const json=await response.json();
+    const url=
+      new URL(MARKET);
 
-    if(!response.ok||!Array.isArray(json.values)){
-      throw new Error(json?.message||'FETCH ERROR');
+
+    url.searchParams.set(
+      'symbol',
+      symbol
+    );
+
+
+    url.searchParams.set(
+      'interval',
+      '1day'
+    );
+
+
+    const response=
+      await fetch(
+        url,
+        {
+          headers:{
+            apikey:KEY
+          }
+        }
+      );
+
+
+    const json=
+      await response.json();
+
+
+    if(
+      !response.ok ||
+      !Array.isArray(
+        json.values
+      )
+    ){
+
+      throw new Error(
+        json?.message||
+        'FETCH ERROR'
+      );
     }
 
-    const values=normalize(json.values);
+
+    const values=
+      normalize(
+        json.values
+      );
+
 
     cache[key]={
+
       values,
+
       time:Date.now(),
-      sourceTime:json.fetched_at||new Date().toISOString()
+
+      sourceTime:
+        json.fetched_at||
+        new Date().toISOString()
     };
 
-    store.set(CACHE_KEY,cache);
-    return{values,mode:'LIVE'};
+
+    store.set(
+      CACHE_KEY,
+      cache
+    );
+
+
+    return{
+      values,
+      mode:'LIVE'
+    };
+
 
   }catch(error){
+
+
     return{
-      values:old?.values||[],
-      mode:old?.values?.length?'CACHED':'ERROR'
+
+      values:
+        old?.values||[],
+
+      mode:
+        old?.values?.length
+        ?'CACHED'
+        :'ERROR'
     };
   }
 }
 
+
+/* =====================================================
+   UI HELPERS
+===================================================== */
+
 function actionIcon(code){
-  if(code==='BUY')return '🟢';
-  if(code==='WATCH')return '🟡';
-  if(code==='AVOID')return '🟠';
-  if(code==='SELL')return '🔴';
+
+  if(code==='BUY')
+    return '🟢';
+
+  if(code==='WATCH')
+    return '🟡';
+
+  if(code==='AVOID')
+    return '🟠';
+
+  if(code==='SELL')
+    return '🔴';
+
   return '⚪';
 }
 
+
 function decisionCard(d){
-  const x=d.decision;
-  const displayedScore=x.code==='SELL'||x.code==='AVOID'?x.riskScore:x.buyScore;
+
+  const x=
+    d.decision;
+
+
+  const displayedScore=
+    x.code==='SELL'||
+    x.code==='AVOID'
+    ?x.sellScore
+    :x.buyScore;
+
+
+  const sim=
+    x.code==='SELL'||
+    x.code==='AVOID'
+    ?d.topPattern.score
+    :d.bottomPattern.score;
+
 
   return`
+
     <div class="decision ${x.level}">
+
       <div class="decisionLine">
-        <div class="decisionTitle">${actionIcon(x.code)} ${x.action}</div>
-        <div class="decisionScore">${displayedScore}</div>
+
+        <div class="decisionTitle">
+          ${actionIcon(x.code)}
+          ${x.action}
+        </div>
+
+        <div class="decisionScore">
+          ${displayedScore}
+        </div>
+
       </div>
 
-      <div class="decisionReason">${x.reasons.slice(0,2).join(' · ')}</div>
+
+      <div class="decisionReason">
+        ${x.reasons.slice(0,2).join(' · ')}
+      </div>
+
 
       <div class="miniScores">
+
         <div class="mini">
-          <small>BUY</small>
-          <b class="good">${x.buyScore}</b>
+
+          <small>CURRENT BOTTOM</small>
+
+          <b class="good">
+            ${d.currentBottom}
+          </b>
+
         </div>
+
+
         <div class="mini">
-          <small>RISK / SELL</small>
-          <b class="bad">${x.riskScore}</b>
+
+          <small>BOTTOM SIM</small>
+
+          <b class="violet">
+            ${d.bottomPattern.score}
+          </b>
+
         </div>
+
+
         <div class="mini">
-          <small>${x.code==='SELL'||x.code==='AVOID'?'TOP SIM':'BOTTOM SIM'}</small>
-          <b class="violet">${x.code==='SELL'||x.code==='AVOID'?d.topPattern.score:d.bottomPattern.score}</b>
+
+          <small>TOP RISK</small>
+
+          <b class="bad">
+            ${x.sellScore}
+          </b>
+
         </div>
+
       </div>
+
     </div>
   `;
 }
 
+
 function reasonHTML(d){
-  const x=d.decision;
+
+  const x=
+    d.decision;
+
+
   let html='';
 
-  x.reasons.forEach(reason=>{
-    html+=`<div class="signal"><span>${reason}</span><b>✓</b></div>`;
-  });
+
+  x.reasons.forEach(
+    reason=>{
+
+      html+=`
+
+        <div class="signal">
+
+          <span>
+            ${reason}
+          </span>
+
+          <b>✓</b>
+
+        </div>
+      `;
+    }
+  );
+
 
   html+=`
-    <div class="signal"><span>종합 매수 점수</span><b class="good">${x.buyScore}/100</b></div>
-    <div class="signal"><span>종합 고점/매도 위험</span><b class="bad">${x.riskScore}/100</b></div>
+
+    <div class="signal">
+
+      <span>
+        Current Bottom
+      </span>
+
+      <b class="good">
+        ${d.currentBottom}/100
+      </b>
+
+    </div>
+
+
+    <div class="signal">
+
+      <span>
+        Daily Bottom
+      </span>
+
+      <b class="good">
+        ${d.dailyBottom}/100
+      </b>
+
+    </div>
+
+
+    <div class="signal">
+
+      <span>
+        Bottom Similarity
+      </span>
+
+      <b class="violet">
+        ${d.bottomPattern.score}/100
+      </b>
+
+    </div>
+
+
+    <div class="signal">
+
+      <span>
+        Buy Composite
+      </span>
+
+      <b class="good">
+        ${x.buyScore}/100
+      </b>
+
+    </div>
+
+
+    <div class="signal">
+
+      <span>
+        Sell / Top Risk
+      </span>
+
+      <b class="bad">
+        ${x.sellScore}/100
+      </b>
+
+    </div>
   `;
+
 
   return html;
 }
 
-function pointHTML(type,score){
-  return `<span class="point ${type} ${score>0?'on':''}">${type==='bottom'?'B':'T'} +${score}</span>`;
+
+/* =====================================================
+   INDICATOR UI
+===================================================== */
+
+function pointHTML(
+  type,
+  score
+){
+
+  return`
+
+    <span class="point ${type} ${score>0?'on':''}">
+
+      ${type==='bottom'?'B':'T'}
+      +${score}
+
+    </span>
+  `;
 }
 
-function indicatorRow(name,value,c){
+
+function indicatorRow(
+  name,
+  value,
+  c
+){
+
   return`
+
     <div class="indicator">
+
       <div class="indicatorMain">
-        <div class="indicatorName">${name}</div>
-        <div class="indicatorValue">${value}</div>
+
+        <div class="indicatorName">
+          ${name}
+        </div>
+
+        <div class="indicatorValue">
+          ${value}
+        </div>
+
       </div>
+
+
       <div class="points">
-        ${pointHTML('bottom',c.bottom)}
-        ${pointHTML('top',c.top)}
+
+        ${pointHTML(
+          'bottom',
+          c.bottom
+        )}
+
+        ${pointHTML(
+          'top',
+          c.top
+        )}
+
       </div>
+
     </div>
   `;
 }
+
 
 function indicatorsHTML(d){
-  const f=d.weeklyFeature,c=d.contributions;
-  if(!f)return `<div class="empty">DATA LIMITED</div>`;
 
-  const macdText=f.macdSlope>0?'UP':f.macdSlope<0?'DOWN':'FLAT';
-  const crossText=f.macdCross===1?'BULL CROSS':f.macdCross===-1?'BEAR CROSS':'NO CROSS';
+  const f=
+    d.weeklyFeature;
 
-  return[
-    indicatorRow('RSI',f.rsi.toFixed(1),c.rsi),
-    indicatorRow('RSI Slope',(f.rsiSlope>=0?'+':'')+f.rsiSlope.toFixed(1),c.rsiSlope),
-    indicatorRow('Stochastic',f.stoch.toFixed(1),c.stoch),
-    indicatorRow('MACD Direction',macdText,c.macdSlope),
-    indicatorRow('MACD Cross',crossText,c.macdCross),
-    indicatorRow('Bollinger Position',f.bbPosition.toFixed(2),c.bb),
-    indicatorRow('Relative Volume',f.relVolume.toFixed(2)+'x',c.volume),
-    indicatorRow('Candle Close Location',Math.round(f.closeLocation*100)+'%',c.closeLocation),
-    indicatorRow('8W Price Position',Math.round(f.position8w*100)+'%',c.position8w),
-    indicatorRow('4W Return',pct(f.return4w),{bottom:0,top:0})
-  ].join('');
-}
+  const c=
+    d.contributions;
 
-function qualityLabel(score){
-  if(score>=95)return 'EXCEPTIONAL';
-  if(score>=90)return 'VERY STRONG';
-  if(score>=80)return 'STRONG';
-  if(score>=70)return 'VALID';
-  if(score>=60)return 'WEAK';
-  return 'CONFIRMED';
-}
 
-function turnCard(point,type,currentPrice){
-  if(!point)return `<div class="empty">없음</div>`;
+  if(!f){
 
-  const distance=((currentPrice-point.price)/point.price)*100;
-
-  return`
-    <div class="turncard">
-      <div class="turnhead">
-        <div>
-          <small>${point.date}</small>
-          <b>${money(point.price)}</b>
-        </div>
-        <div class="turnscore">
-          <strong class="${type==='bottom'?'good':'bad'}">${point.quality}/100</strong>
-          <small>${qualityLabel(point.quality)}</small>
-        </div>
-      </div>
-      <div class="turnmeta">
-        ${type==='bottom'?'Confirmed rebound':'Confirmed decline'} ·
-        ${type==='bottom'?'+':'-'}${point.move.toFixed(1)}%
-        <br>현재가 거리 · ${pct(distance)}
-      </div>
-    </div>
-  `;
-}
-
-function turnsHTML(turns,type,currentPrice){
-  if(!turns.length)return `<div class="empty">확인된 데이터 없음</div>`;
-  return [...turns].sort((a,b)=>b.index-a.index).slice(0,5)
-    .map(p=>turnCard(p,type,currentPrice)).join('');
-}
-
-function render(){
-  let home='',registered='';
-  let buy=0,watch=0,wait=0,avoid=0,sell=0;
-
-  for(const symbol of symbols){
-    const d=data[symbol];
-
-    if(d){
-      if(d.decision.code==='BUY')buy++;
-      else if(d.decision.code==='WATCH')watch++;
-      else if(d.decision.code==='AVOID')avoid++;
-      else if(d.decision.code==='SELL')sell++;
-      else wait++;
-    }else wait++;
-
-    home+=`
-      <div class="stock" data-symbol="${symbol}">
-        <div class="stockTop">
-          <div>
-            <div class="stockTicker">${symbol}</div>
-            <div class="meta">${d?`BUY ${d.decision.buyScore} · SELL RISK ${d.decision.riskScore}`:'시장 데이터 대기'}</div>
-          </div>
-          <div class="stockPrice">${d?money(d.price):'WAIT'}</div>
-        </div>
-        ${d?decisionCard(d):''}
-      </div>
-    `;
-
-    registered+=`
-      <div class="registeredRow" data-symbol="${symbol}">
-        <div>
-          <div class="name">${symbol}</div>
-          <div class="meta">${d?`${actionIcon(d.decision.code)} ${d.decision.action}`:'시장 데이터 대기'}</div>
-        </div>
-        <div class="price">${d?money(d.price):'WAIT'}</div>
+    return`
+      <div class="empty">
+        DATA LIMITED
       </div>
     `;
   }
 
-  $('homeList').innerHTML=home||`<div class="empty">SYMBOLS 탭에서 종목을 등록하세요.</div>`;
-  $('registeredList').innerHTML=registered||`<div class="empty">등록된 종목이 없습니다.</div>`;
 
-  $('symbolCount').textContent=symbols.length;
-  $('registeredCount').textContent=symbols.length;
-  $('tracked').textContent=symbols.length;
-  $('buyCount').textContent=buy;
-  $('watchCount').textContent=watch;
-  $('waitCount').textContent=wait;
-  $('avoidCount').textContent=avoid;
-  $('sellCount').textContent=sell;
+  const macdText=
+    f.macdSlope>0
+    ?'UP'
+    :f.macdSlope<0
+    ?'DOWN'
+    :'FLAT';
 
-  document.querySelectorAll('[data-symbol]').forEach(el=>{
-    el.onclick=()=>openDetail(el.dataset.symbol);
+
+  const crossText=
+    f.macdCross===1
+    ?'BULL CROSS'
+    :f.macdCross===-1
+    ?'BEAR CROSS'
+    :'NO CROSS';
+
+
+  return[
+
+    indicatorRow(
+      'RSI',
+      f.rsi.toFixed(1),
+      c.rsi
+    ),
+
+    indicatorRow(
+      'RSI Slope',
+      (f.rsiSlope>=0?'+':'')+
+      f.rsiSlope.toFixed(1),
+      c.rsiSlope
+    ),
+
+    indicatorRow(
+      'Stochastic',
+      f.stoch.toFixed(1),
+      c.stoch
+    ),
+
+    indicatorRow(
+      'MACD Direction',
+      macdText,
+      c.macdSlope
+    ),
+
+    indicatorRow(
+      'MACD Cross',
+      crossText,
+      c.macdCross
+    ),
+
+    indicatorRow(
+      'Bollinger Position',
+      f.bbPosition.toFixed(2),
+      c.bb
+    ),
+
+    indicatorRow(
+      'Relative Volume',
+      f.relVolume.toFixed(2)+'x',
+      c.volume
+    ),
+
+    indicatorRow(
+      'Candle Close Location',
+      Math.round(
+        f.closeLocation*100
+      )+'%',
+      c.closeLocation
+    ),
+
+    indicatorRow(
+      '8W Price Position',
+      Math.round(
+        f.position8w*100
+      )+'%',
+      c.position8w
+    ),
+
+    indicatorRow(
+      '4W Return',
+      pct(
+        f.return4w
+      ),
+      {
+        bottom:0,
+        top:0
+      }
+    )
+
+  ].join('');
+}
+
+
+/* =====================================================
+   TURN UI
+===================================================== */
+
+function qualityLabel(score){
+
+  if(score>=95)
+    return 'EXCEPTIONAL';
+
+  if(score>=90)
+    return 'VERY STRONG';
+
+  if(score>=80)
+    return 'STRONG';
+
+  if(score>=70)
+    return 'VALID';
+
+  if(score>=60)
+    return 'WEAK';
+
+  return 'CONFIRMED';
+}
+
+
+function turnCard(
+  point,
+  type,
+  currentPrice
+){
+
+  if(!point){
+
+    return`
+      <div class="empty">
+        없음
+      </div>
+    `;
+  }
+
+
+  const distance=
+    (
+      (currentPrice-point.price)/
+      point.price
+    )*100;
+
+
+  return`
+
+    <div class="turncard">
+
+      <div class="turnhead">
+
+        <div>
+
+          <small>
+            ${point.date}
+          </small>
+
+          <b>
+            ${money(point.price)}
+          </b>
+
+        </div>
+
+
+        <div class="turnscore">
+
+          <strong class="${type==='bottom'?'good':'bad'}">
+
+            ${point.quality}/100
+
+          </strong>
+
+          <small>
+
+            ${qualityLabel(
+              point.quality
+            )}
+
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <div class="turnmeta">
+
+        ${type==='bottom'
+          ?'Confirmed rebound'
+          :'Confirmed decline'
+        }
+
+        ·
+
+        ${type==='bottom'?'+':'-'}
+        ${point.move.toFixed(1)}%
+
+        <br>
+
+        현재가 거리 ·
+        ${pct(distance)}
+
+      </div>
+
+    </div>
+  `;
+}
+
+
+function turnsHTML(
+  turns,
+  type,
+  currentPrice
+){
+
+  if(!turns.length){
+
+    return`
+      <div class="empty">
+        확인된 데이터 없음
+      </div>
+    `;
+  }
+
+
+  return[
+    ...turns
+  ]
+  .sort(
+    (a,b)=>
+      b.index-a.index
+  )
+  .slice(0,5)
+  .map(
+    p=>
+      turnCard(
+        p,
+        type,
+        currentPrice
+      )
+  )
+  .join('');
+}
+
+
+/* =====================================================
+   RENDER
+===================================================== */
+
+function render(){
+
+  let home='';
+  let registered='';
+
+  let buy=0;
+  let watch=0;
+  let wait=0;
+  let avoid=0;
+  let sell=0;
+
+
+  for(
+    const symbol
+    of symbols
+  ){
+
+    const d=
+      data[symbol];
+
+
+    if(d){
+
+      if(
+        d.decision.code==='BUY'
+      ){
+        buy++;
+      }
+
+      else if(
+        d.decision.code==='WATCH'
+      ){
+        watch++;
+      }
+
+      else if(
+        d.decision.code==='AVOID'
+      ){
+        avoid++;
+      }
+
+      else if(
+        d.decision.code==='SELL'
+      ){
+        sell++;
+      }
+
+      else{
+        wait++;
+      }
+
+    }else{
+
+      wait++;
+    }
+
+
+    home+=`
+
+      <div class="stock"
+           data-symbol="${symbol}">
+
+        <div class="stockTop">
+
+          <div>
+
+            <div class="stockTicker">
+              ${symbol}
+            </div>
+
+            <div class="meta">
+
+              ${
+                d
+                ?`CURRENT BOTTOM ${d.currentBottom} · TOP ${d.currentTop}`
+                :'시장 데이터 대기'
+              }
+
+            </div>
+
+          </div>
+
+
+          <div class="stockPrice">
+
+            ${
+              d
+              ?money(d.price)
+              :'WAIT'
+            }
+
+          </div>
+
+        </div>
+
+
+        ${
+          d
+          ?decisionCard(d)
+          :''
+        }
+
+      </div>
+    `;
+
+
+    registered+=`
+
+      <div class="registeredRow"
+           data-symbol="${symbol}">
+
+        <div>
+
+          <div class="name">
+            ${symbol}
+          </div>
+
+          <div class="meta">
+
+            ${
+              d
+              ?`${actionIcon(d.decision.code)} ${d.decision.action}`
+              :'시장 데이터 대기'
+            }
+
+          </div>
+
+        </div>
+
+
+        <div class="price">
+
+          ${
+            d
+            ?money(d.price)
+            :'WAIT'
+          }
+
+        </div>
+
+      </div>
+    `;
+  }
+
+
+  $('homeList').innerHTML=
+    home||
+    `
+      <div class="empty">
+        SYMBOLS 탭에서 종목을 등록하세요.
+      </div>
+    `;
+
+
+  $('registeredList').innerHTML=
+    registered||
+    `
+      <div class="empty">
+        등록된 종목이 없습니다.
+      </div>
+    `;
+
+
+  $('symbolCount').textContent=
+    symbols.length;
+
+  $('registeredCount').textContent=
+    symbols.length;
+
+  $('tracked').textContent=
+    symbols.length;
+
+
+  $('buyCount').textContent=
+    buy;
+
+  $('watchCount').textContent=
+    watch;
+
+  $('waitCount').textContent=
+    wait;
+
+  $('avoidCount').textContent=
+    avoid;
+
+  $('sellCount').textContent=
+    sell;
+
+
+  document
+  .querySelectorAll(
+    '[data-symbol]'
+  )
+  .forEach(el=>{
+
+    el.onclick=()=>{
+
+      openDetail(
+        el.dataset.symbol
+      );
+    };
   });
+
 
   renderStatus();
 }
 
-function openDetail(symbol){
-  currentSymbol=symbol;
-  const d=data[symbol];
 
-  $('detailTicker').textContent=symbol;
+/* =====================================================
+   DETAIL
+===================================================== */
+
+function openDetail(symbol){
+
+  currentSymbol=
+    symbol;
+
+
+  const d=
+    data[symbol];
+
+
+  $('detailTicker').textContent=
+    symbol;
+
 
   if(!d){
-    $('detail').classList.add('open');
+
+    $('detail')
+    .classList
+    .add('open');
+
     return;
   }
 
-  const x=d.decision;
-  const isRisk=x.code==='SELL'||x.code==='AVOID';
-  const displayScore=isRisk?x.riskScore:x.buyScore;
-  const sim=isRisk?d.topPattern.score:d.bottomPattern.score;
 
-  $('heroDecision').className='heroDecision '+x.level;
-  $('heroAction').textContent=`${actionIcon(x.code)} ${x.action}`;
-  $('decisionScore').textContent=displayScore;
-  $('decisionScoreLabel').textContent=isRisk?'SELL / RISK SCORE':'BUY SCORE';
-  $('heroReason').textContent=x.reasons.slice(0,3).join(' · ');
+  const x=
+    d.decision;
 
-  $('currentPrice').textContent=money(d.price);
 
-  $('buyScore').textContent=x.buyScore+'/100';
-  $('riskScore').textContent=x.riskScore+'/100';
-  $('buyScoreBar').style.width=x.buyScore+'%';
-  $('riskScoreBar').style.width=x.riskScore+'%';
+  const isRisk=
+    x.code==='SELL'||
+    x.code==='AVOID';
 
-  $('primarySimilarity').textContent=sim+'/100';
-  $('primarySimilarityBar').style.width=sim+'%';
-  $('similarityLabel').textContent=isRisk?'고점 유사도':'바닥 유사도';
 
-  $('reasonList').innerHTML=reasonHTML(d);
+  const displayScore=
+    isRisk
+    ?x.sellScore
+    :x.buyScore;
 
-  $('bottomQuality').textContent=d.majorBottom?d.majorBottom.quality+'/100':'—';
-  $('currentBottom').textContent=d.currentBottom+'/100';
-  $('bottomSimilarity').textContent=d.bottomPattern.score+'/100';
 
-  $('topQuality').textContent=d.majorTop?d.majorTop.quality+'/100':'—';
-  $('currentTop').textContent=d.currentTop+'/100';
-  $('topSimilarity').textContent=d.topPattern.score+'/100';
+  $('heroDecision').className=
+    'heroDecision '+
+    x.level;
 
-  $('dailyBottom').textContent=d.dailyBottom+'/100';
-  $('dailyTop').textContent=d.dailyTop+'/100';
 
-  $('indicatorList').innerHTML=indicatorsHTML(d);
-  $('indicatorBottomTotal').textContent=d.currentBottom+'/100';
-  $('indicatorTopTotal').textContent=d.currentTop+'/100';
+  $('heroAction').textContent=
+    `${actionIcon(x.code)} ${x.action}`;
 
-  $('activeBottom').innerHTML=turnCard(d.majorBottom,'bottom',d.price);
-  $('activeTop').innerHTML=turnCard(d.majorTop,'top',d.price);
-  $('majorBottoms').innerHTML=turnsHTML(d.turns.bottoms,'bottom',d.price);
-  $('majorTops').innerHTML=turnsHTML(d.turns.tops,'top',d.price);
 
-  $('advanced').classList.remove('open');
-  $('analysisToggle').textContent='상세 분석 보기 ↓';
-  $('detail').classList.add('open');
+  $('decisionScore').textContent=
+    displayScore;
+
+
+  $('decisionScoreLabel').textContent=
+    isRisk
+    ?'SELL / TOP RISK'
+    :'BUY SIGNAL';
+
+
+  $('heroReason').textContent=
+    x.reasons
+    .slice(0,3)
+    .join(' · ');
+
+
+  $('currentPrice').textContent=
+    money(d.price);
+
+
+  /* MAIN */
+
+  $('currentBottomMain').textContent=
+    d.currentBottom+'/100';
+
+  $('bottomSimilarityMain').textContent=
+    d.bottomPattern.score+'/100';
+
+  $('topRiskMain').textContent=
+    x.sellScore+'/100';
+
+
+  $('currentBottomBar').style.width=
+    d.currentBottom+'%';
+
+  $('bottomSimilarityBar').style.width=
+    d.bottomPattern.score+'%';
+
+  $('topRiskBar').style.width=
+    x.sellScore+'%';
+
+
+  /* WEEK CHANGE */
+
+  $('prevBottomScore').textContent=
+    d.previousBottom+'/100';
+
+  $('latestBottomScore').textContent=
+    d.currentBottom+'/100';
+
+
+  const delta=
+    d.currentBottom-
+    d.previousBottom;
+
+
+  $('bottomDelta').textContent=
+
+    delta>0
+    ?`▲ 지난주보다 +${delta}점 · 바닥 신호 강화`
+    :delta<0
+    ?`▼ 지난주보다 ${delta}점 · 바닥 신호 약화`
+    :'지난주와 동일';
+
+
+  $('bottomDelta').className=
+    'delta '+
+    (
+      delta>0
+      ?'good'
+      :delta<0
+      ?'bad'
+      :''
+    );
+
+
+  /* REASON */
+
+  $('reasonList').innerHTML=
+    reasonHTML(d);
+
+
+  /* ADVANCED */
+
+  $('currentBottom').textContent=
+    d.currentBottom+'/100';
+
+  $('currentTop').textContent=
+    d.currentTop+'/100';
+
+
+  const net=
+    d.currentBottom-
+    d.currentTop;
+
+
+  $('netDirection').textContent=
+    (net>=0?'+':'')+net;
+
+
+  $('netDirection').className=
+    net>10
+    ?'good'
+    :net<-10
+    ?'bad'
+    :'';
+
+
+  $('bottomSimilarity').textContent=
+    d.bottomPattern.score+'/100';
+
+  $('topSimilarity').textContent=
+    d.topPattern.score+'/100';
+
+
+  $('bottomQuality').textContent=
+    d.majorBottom
+    ?d.majorBottom.quality+'/100'
+    :'—';
+
+
+  $('dailyBottom').textContent=
+    d.dailyBottom+'/100';
+
+  $('dailyTop').textContent=
+    d.dailyTop+'/100';
+
+
+  $('indicatorList').innerHTML=
+    indicatorsHTML(d);
+
+
+  $('indicatorBottomTotal').textContent=
+    d.currentBottom+'/100';
+
+  $('indicatorTopTotal').textContent=
+    d.currentTop+'/100';
+
+
+  $('activeBottom').innerHTML=
+    turnCard(
+      d.majorBottom,
+      'bottom',
+      d.price
+    );
+
+
+  $('activeTop').innerHTML=
+    turnCard(
+      d.majorTop,
+      'top',
+      d.price
+    );
+
+
+  $('majorBottoms').innerHTML=
+    turnsHTML(
+      d.turns.bottoms,
+      'bottom',
+      d.price
+    );
+
+
+  $('majorTops').innerHTML=
+    turnsHTML(
+      d.turns.tops,
+      'top',
+      d.price
+    );
+
+
+  $('advanced')
+  .classList
+  .remove('open');
+
+
+  $('analysisToggle').textContent=
+    '상세 분석 보기 ↓';
+
+
+  $('detail')
+  .classList
+  .add('open');
 }
 
+
+/* =====================================================
+   ADVANCED
+===================================================== */
+
 $('analysisToggle').onclick=()=>{
-  const open=$('advanced').classList.toggle('open');
-  $('analysisToggle').textContent=open?'상세 분석 닫기 ↑':'상세 분석 보기 ↓';
+
+  const open=
+    $('advanced')
+    .classList
+    .toggle('open');
+
+
+  $('analysisToggle').textContent=
+
+    open
+    ?'상세 분석 닫기 ↑'
+    :'상세 분석 보기 ↓';
 };
 
+
+/* =====================================================
+   STATUS
+===================================================== */
+
 function lastCacheTime(){
+
   let t=0;
+
+
   symbols.forEach(s=>{
-    const x=cache[s+'__1day']?.time||0;
-    if(x>t)t=x;
+
+    const x=
+      cache[
+        s+'__1day'
+      ]?.time||0;
+
+
+    if(x>t)
+      t=x;
   });
+
+
   return t;
 }
 
+
 function ageText(ms){
-  const m=Math.floor(ms/60000);
-  if(m<1)return '방금 전';
-  if(m<60)return m+'분 전';
-  const h=Math.floor(m/60);
-  if(h<24)return h+'시간 전';
-  return Math.floor(h/24)+'일 전';
+
+  const m=
+    Math.floor(
+      ms/60000
+    );
+
+
+  if(m<1)
+    return '방금 전';
+
+
+  if(m<60)
+    return m+'분 전';
+
+
+  const h=
+    Math.floor(
+      m/60
+    );
+
+
+  if(h<24)
+    return h+'시간 전';
+
+
+  return(
+    Math.floor(
+      h/24
+    )+'일 전'
+  );
 }
 
+
 function renderStatus(){
-  const t=lastCacheTime();
+
+  const t=
+    lastCacheTime();
+
 
   if(!symbols.length){
-    $('sync').textContent='NO SYMBOL';
-    $('dataStatus').textContent='NO SYMBOL';
-    $('dataMode').textContent='—';
-    $('lastUpdate').textContent='—';
+
+    $('sync').textContent=
+      'NO SYMBOL';
+
+    $('dataStatus').textContent=
+      'NO SYMBOL';
+
+    $('dataMode').textContent=
+      '—';
+
+    $('lastUpdate').textContent=
+      '—';
+
     return;
   }
 
+
   if(t){
-    $('lastUpdate').textContent=new Date(t).toLocaleString()+' · '+ageText(Date.now()-t);
+
+    $('lastUpdate').textContent=
+
+      new Date(t)
+      .toLocaleString()
+
+      +' · '+
+
+      ageText(
+        Date.now()-t
+      );
   }
 
-  $('dataMode').textContent=lastMode;
+
+  $('dataMode').textContent=
+    lastMode;
+
 
   if(lastMode==='LIVE'){
-    $('sync').textContent='LIVE';
-    $('dataStatus').textContent='CONNECTED';
-  }else if(t){
-    $('sync').textContent='CACHED';
-    $('dataStatus').textContent='CONNECTED';
-  }else{
-    $('sync').textContent='DATA WAIT';
-    $('dataStatus').textContent='WAIT';
+
+    $('sync').textContent=
+      'LIVE';
+
+    $('dataStatus').textContent=
+      'CONNECTED';
+
+  }
+
+  else if(t){
+
+    $('sync').textContent=
+      'CACHED';
+
+    $('dataStatus').textContent=
+      'CONNECTED';
+
+  }
+
+  else{
+
+    $('sync').textContent=
+      'DATA WAIT';
+
+    $('dataStatus').textContent=
+      'WAIT';
   }
 }
 
-async function updateData(force=false){
-  if(!symbols.length){render();return}
 
-  $('sync').textContent='SYNCING';
-  $('dataStatus').textContent='SYNCING';
+/* =====================================================
+   UPDATE DATA
+===================================================== */
 
-  let live=false,any=false;
+async function updateData(
+  force=false
+){
 
-  for(const symbol of symbols){
-    const result=await fetchDaily(symbol,force);
+  if(!symbols.length){
 
-    if(result.mode==='LIVE')live=true;
+    render();
 
-    if(result.values.length){
-      data[symbol]=analyse(symbol,result.values);
+    return;
+  }
+
+
+  $('sync').textContent=
+    'SYNCING';
+
+
+  $('dataStatus').textContent=
+    'SYNCING';
+
+
+  let live=false;
+
+  let any=false;
+
+
+  for(
+    const symbol
+    of symbols
+  ){
+
+    const result=
+      await fetchDaily(
+        symbol,
+        force
+      );
+
+
+    if(
+      result.mode==='LIVE'
+    ){
+      live=true;
+    }
+
+
+    if(
+      result.values.length
+    ){
+
+      data[symbol]=
+        analyse(
+          symbol,
+          result.values
+        );
+
+
       any=true;
+
       render();
     }
 
-    await new Promise(resolve=>setTimeout(resolve,1100));
+
+    await new Promise(
+      resolve=>
+        setTimeout(
+          resolve,
+          1100
+        )
+    );
   }
 
-  lastMode=live?'LIVE':any?'CACHED':'ERROR';
+
+  lastMode=
+    live
+    ?'LIVE'
+    :any
+    ?'CACHED'
+    :'ERROR';
+
+
   render();
 
-  if(currentSymbol&&data[currentSymbol])openDetail(currentSymbol);
+
+  if(
+    currentSymbol &&
+    data[currentSymbol]
+  ){
+
+    openDetail(
+      currentSymbol
+    );
+  }
 }
 
-$('addSymbol').onclick=()=>{
-  const symbol=$('ticker').value.trim().toUpperCase();
-  if(!symbol)return;
 
-  if(!symbols.includes(symbol)){
+/* =====================================================
+   SYMBOLS
+===================================================== */
+
+$('addSymbol').onclick=()=>{
+
+  const symbol=
+    $('ticker')
+    .value
+    .trim()
+    .toUpperCase();
+
+
+  if(!symbol)
+    return;
+
+
+  if(
+    !symbols.includes(symbol)
+  ){
+
     symbols.push(symbol);
-    store.set(SYMBOL_KEY,symbols);
+
+
+    store.set(
+      SYMBOL_KEY,
+      symbols
+    );
   }
 
+
   $('ticker').value='';
+
+
   render();
+
   updateData(false);
 };
 
-$('ticker').addEventListener('keydown',e=>{
-  if(e.key==='Enter')$('addSymbol').click();
-});
+
+$('ticker')
+.addEventListener(
+  'keydown',
+  e=>{
+
+    if(e.key==='Enter'){
+
+      $('addSymbol')
+      .click();
+    }
+  }
+);
+
 
 $('deleteSymbol').onclick=()=>{
-  if(!currentSymbol)return;
 
-  if(confirm(currentSymbol+' 종목을 삭제할까요?')){
-    symbols=symbols.filter(x=>x!==currentSymbol);
-    store.set(SYMBOL_KEY,symbols);
-    delete data[currentSymbol];
+  if(!currentSymbol)
+    return;
+
+
+  if(
+    confirm(
+      currentSymbol+
+      ' 종목을 삭제할까요?'
+    )
+  ){
+
+    symbols=
+      symbols.filter(
+        x=>x!==currentSymbol
+      );
+
+
+    store.set(
+      SYMBOL_KEY,
+      symbols
+    );
+
+
+    delete data[
+      currentSymbol
+    ];
+
+
     currentSymbol=null;
-    $('detail').classList.remove('open');
+
+
+    $('detail')
+    .classList
+    .remove('open');
+
+
     render();
   }
 };
 
-$('refresh').onclick=()=>updateData(true);
-$('back').onclick=()=>$('detail').classList.remove('open');
 
-const track=$('track');
-const viewport=$('viewport');
+$('refresh').onclick=
+  ()=>updateData(true);
 
-function viewportWidth(){return viewport.clientWidth}
 
-function setTrackPosition(px,animate=false){
-  if(animate)track.classList.add('snap');
-  else track.classList.remove('snap');
+$('back').onclick=
+  ()=>
+    $('detail')
+    .classList
+    .remove('open');
 
-  track.style.transform=`translate3d(${px}px,0,0)`;
+
+/* =====================================================
+   SMOOTH BOOK SWIPE
+===================================================== */
+
+const track=
+  $('track');
+
+const viewport=
+  $('viewport');
+
+
+function viewportWidth(){
+
+  return viewport.clientWidth;
 }
 
+
+function setTrackPosition(
+  px,
+  animate=false
+){
+
+  if(animate){
+
+    track.classList.add(
+      'snap'
+    );
+
+  }else{
+
+    track.classList.remove(
+      'snap'
+    );
+  }
+
+
+  track.style.transform=
+    `translate3d(${px}px,0,0)`;
+}
+
+
 function updateTabs(){
-  document.querySelectorAll('.tab').forEach((b,n)=>{
-    b.classList.toggle('active',n===page);
+
+  document
+  .querySelectorAll('.tab')
+  .forEach((b,n)=>{
+
+    b.classList.toggle(
+      'active',
+      n===page
+    );
   });
 }
 
-function go(i,animate=true){
-  page=Math.max(0,Math.min(2,i));
-  setTrackPosition(-page*viewportWidth(),animate);
+
+function go(
+  i,
+  animate=true
+){
+
+  page=
+    Math.max(
+      0,
+      Math.min(
+        2,
+        i
+      )
+    );
+
+
+  setTrackPosition(
+    -page*
+    viewportWidth(),
+    animate
+  );
+
+
   updateTabs();
 }
 
-document.querySelectorAll('.tab').forEach(b=>{
-  b.onclick=()=>go(+b.dataset.page,true);
+
+document
+.querySelectorAll('.tab')
+.forEach(b=>{
+
+  b.onclick=
+    ()=>go(
+      +b.dataset.page,
+      true
+    );
 });
 
-/* Smooth live book-like swipe */
+
 let gesture={
-  active:false,locked:false,horizontal:false,
-  startX:0,startY:0,lastX:0,lastTime:0,velocity:0,baseX:0
+
+  active:false,
+
+  locked:false,
+
+  horizontal:false,
+
+  startX:0,
+
+  startY:0,
+
+  lastX:0,
+
+  lastTime:0,
+
+  velocity:0,
+
+  baseX:0
 };
 
+
 function rubberBand(distance){
-  const sign=distance<0?-1:1;
-  const abs=Math.abs(distance);
-  return sign*(1-1/(abs*.003+1))*115;
+
+  const sign=
+    distance<0
+    ?-1
+    :1;
+
+
+  const abs=
+    Math.abs(
+      distance
+    );
+
+
+  return(
+    sign*
+    (
+      1-
+      1/
+      (
+        abs*.003+
+        1
+      )
+    )*
+    115
+  );
 }
 
-viewport.addEventListener('touchstart',e=>{
-  if($('detail').classList.contains('open'))return;
-  if(e.touches.length!==1)return;
 
-  const t=e.touches[0];
+viewport.addEventListener(
+  'touchstart',
+  e=>{
 
-  gesture.active=true;
-  gesture.locked=false;
-  gesture.horizontal=false;
-  gesture.startX=t.clientX;
-  gesture.startY=t.clientY;
-  gesture.lastX=t.clientX;
-  gesture.lastTime=performance.now();
-  gesture.velocity=0;
-  gesture.baseX=-page*viewportWidth();
-
-  track.classList.remove('snap');
-},{passive:true});
-
-viewport.addEventListener('touchmove',e=>{
-  if(!gesture.active||e.touches.length!==1)return;
-  if($('detail').classList.contains('open'))return;
-
-  const t=e.touches[0];
-  const dx=t.clientX-gesture.startX;
-  const dy=t.clientY-gesture.startY;
-
-  if(!gesture.locked){
-    if(Math.abs(dx)<7&&Math.abs(dy)<7)return;
-
-    gesture.locked=true;
-    gesture.horizontal=Math.abs(dx)>Math.abs(dy)*1.15;
-
-    if(!gesture.horizontal){
-      gesture.active=false;
+    if(
+      $('detail')
+      .classList
+      .contains('open')
+    ){
       return;
     }
+
+
+    if(
+      e.touches.length!==1
+    ){
+      return;
+    }
+
+
+    const t=
+      e.touches[0];
+
+
+    gesture.active=true;
+
+    gesture.locked=false;
+
+    gesture.horizontal=false;
+
+    gesture.startX=
+      t.clientX;
+
+    gesture.startY=
+      t.clientY;
+
+    gesture.lastX=
+      t.clientX;
+
+    gesture.lastTime=
+      performance.now();
+
+    gesture.velocity=0;
+
+    gesture.baseX=
+      -page*
+      viewportWidth();
+
+
+    track.classList.remove(
+      'snap'
+    );
+
+  },
+  {
+    passive:true
   }
+);
 
-  if(!gesture.horizontal)return;
 
-  e.preventDefault();
+viewport.addEventListener(
+  'touchmove',
+  e=>{
 
-  const now=performance.now();
-  const dt=Math.max(1,now-gesture.lastTime);
-  const instantVelocity=(t.clientX-gesture.lastX)/dt;
+    if(
+      !gesture.active ||
+      e.touches.length!==1
+    ){
+      return;
+    }
 
-  gesture.velocity=gesture.velocity*.7+instantVelocity*.3;
-  gesture.lastX=t.clientX;
-  gesture.lastTime=now;
 
-  let dragX=dx;
+    if(
+      $('detail')
+      .classList
+      .contains('open')
+    ){
+      return;
+    }
 
-  if(page===0&&dx>0)dragX=rubberBand(dx);
-  if(page===2&&dx<0)dragX=rubberBand(dx);
 
-  setTrackPosition(gesture.baseX+dragX,false);
-},{passive:false});
+    const t=
+      e.touches[0];
 
-function finishSwipe(clientX){
-  if(!gesture.active||!gesture.horizontal){
+
+    const dx=
+      t.clientX-
+      gesture.startX;
+
+
+    const dy=
+      t.clientY-
+      gesture.startY;
+
+
+    if(
+      !gesture.locked
+    ){
+
+      if(
+        Math.abs(dx)<7 &&
+        Math.abs(dy)<7
+      ){
+        return;
+      }
+
+
+      gesture.locked=true;
+
+
+      gesture.horizontal=
+        Math.abs(dx)>
+        Math.abs(dy)*1.15;
+
+
+      if(
+        !gesture.horizontal
+      ){
+
+        gesture.active=false;
+
+        return;
+      }
+    }
+
+
+    if(
+      !gesture.horizontal
+    ){
+      return;
+    }
+
+
+    e.preventDefault();
+
+
+    const now=
+      performance.now();
+
+
+    const dt=
+      Math.max(
+        1,
+        now-
+        gesture.lastTime
+      );
+
+
+    const instantVelocity=
+      (
+        t.clientX-
+        gesture.lastX
+      )/dt;
+
+
+    gesture.velocity=
+      gesture.velocity*.72+
+      instantVelocity*.28;
+
+
+    gesture.lastX=
+      t.clientX;
+
+
+    gesture.lastTime=
+      now;
+
+
+    let dragX=
+      dx;
+
+
+    if(
+      page===0 &&
+      dx>0
+    ){
+
+      dragX=
+        rubberBand(dx);
+    }
+
+
+    if(
+      page===2 &&
+      dx<0
+    ){
+
+      dragX=
+        rubberBand(dx);
+    }
+
+
+    setTrackPosition(
+      gesture.baseX+
+      dragX,
+      false
+    );
+
+  },
+  {
+    passive:false
+  }
+);
+
+
+function finishSwipe(
+  clientX
+){
+
+  if(
+    !gesture.active ||
+    !gesture.horizontal
+  ){
+
     gesture.active=false;
+
     return;
   }
 
-  const dx=clientX-gesture.startX;
-  const width=viewportWidth();
-  const distanceTrigger=width*.20;
-  const fastFlick=Math.abs(gesture.velocity)>.40;
 
-  let target=page;
+  const dx=
+    clientX-
+    gesture.startX;
 
-  if(dx<-distanceTrigger||(fastFlick&&gesture.velocity<0)){
-    target=Math.min(2,page+1);
-  }else if(dx>distanceTrigger||(fastFlick&&gesture.velocity>0)){
-    target=Math.max(0,page-1);
+
+  const width=
+    viewportWidth();
+
+
+  const distanceTrigger=
+    width*.18;
+
+
+  const fastFlick=
+    Math.abs(
+      gesture.velocity
+    )>.34;
+
+
+  let target=
+    page;
+
+
+  if(
+    dx<
+    -distanceTrigger
+
+    ||
+
+    (
+      fastFlick &&
+      gesture.velocity<0
+    )
+  ){
+
+    target=
+      Math.min(
+        2,
+        page+1
+      );
   }
 
+
+  else if(
+    dx>
+    distanceTrigger
+
+    ||
+
+    (
+      fastFlick &&
+      gesture.velocity>0
+    )
+  ){
+
+    target=
+      Math.max(
+        0,
+        page-1
+      );
+  }
+
+
   gesture.active=false;
-  go(target,true);
+
+
+  go(
+    target,
+    true
+  );
 }
 
-viewport.addEventListener('touchend',e=>{
-  if(!gesture.active)return;
-  finishSwipe(e.changedTouches[0].clientX);
-},{passive:true});
 
-viewport.addEventListener('touchcancel',()=>{
-  if(!gesture.active)return;
-  gesture.active=false;
-  go(page,true);
-},{passive:true});
+viewport.addEventListener(
+  'touchend',
+  e=>{
 
-window.addEventListener('resize',()=>go(page,false));
+    if(
+      !gesture.active
+    ){
+      return;
+    }
+
+
+    finishSwipe(
+      e.changedTouches[0]
+      .clientX
+    );
+
+  },
+  {
+    passive:true
+  }
+);
+
+
+viewport.addEventListener(
+  'touchcancel',
+  ()=>{
+
+    if(
+      !gesture.active
+    ){
+      return;
+    }
+
+
+    gesture.active=false;
+
+
+    go(
+      page,
+      true
+    );
+  },
+  {
+    passive:true
+  }
+);
+
+
+window.addEventListener(
+  'resize',
+  ()=>go(
+    page,
+    false
+  )
+);
+
+
+/* =====================================================
+   START
+===================================================== */
 
 function hydrate(){
-  symbols.forEach(symbol=>{
-    const values=cache[symbol+'__1day']?.values||[];
-    if(values.length)data[symbol]=analyse(symbol,values);
-  });
+
+  symbols.forEach(
+    symbol=>{
+
+      const values=
+        cache[
+          symbol+
+          '__1day'
+        ]?.values||[];
+
+
+      if(
+        values.length
+      ){
+
+        data[symbol]=
+          analyse(
+            symbol,
+            values
+          );
+      }
+    }
+  );
 }
 
-hydrate();
-render();
-go(0,false);
-setInterval(renderStatus,60000);
-updateData(false);
-</script>
 
+hydrate();
+
+render();
+
+go(
+  0,
+  false
+);
+
+setInterval(
+  renderStatus,
+  60000
+);
+
+updateData(false);
+
+</script>
 </body>
 </html>
