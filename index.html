@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#090b0e">
-<title>STOCKPM v0.3.2</title>
+<title>STOCKPM v0.3.3</title>
 
 <style>
 :root{
@@ -14,110 +14,300 @@
 --radius:20px;--safe:max(14px,env(safe-area-inset-bottom))
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+html,body{
+margin:0;background:var(--bg);color:var(--text);
+font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+}
 body{overflow:hidden}
 button,input,select{font:inherit}
 button{cursor:pointer}
 .app{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
-.topbar{height:62px;flex:0 0 62px;padding:14px 16px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.05);background:rgba(9,11,14,.94);backdrop-filter:blur(18px);z-index:20}
+
+.topbar{
+height:62px;flex:0 0 62px;padding:14px 16px 10px;
+display:flex;align-items:center;justify-content:space-between;
+border-bottom:1px solid rgba(255,255,255,.05);
+background:rgba(9,11,14,.94);backdrop-filter:blur(18px);z-index:20
+}
 .brand{display:flex;gap:10px;align-items:center}
-.logo{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#fff,#778399);color:#0b0d10;display:grid;place-items:center;font-weight:900}
+.logo{
+width:34px;height:34px;border-radius:11px;
+background:linear-gradient(135deg,#fff,#778399);
+color:#0b0d10;display:grid;place-items:center;font-weight:900
+}
 .brand h1{font-size:17px;margin:0}
-.brand small{display:block;color:var(--muted);font-size:10px;margin-top:4px;letter-spacing:.07em}
-.sync{font-size:10px;color:var(--muted);border:1px solid var(--line);background:var(--panel);padding:8px 10px;border-radius:999px}
+.brand small{
+display:block;color:var(--muted);font-size:10px;
+margin-top:4px;letter-spacing:.07em
+}
+.sync{
+font-size:10px;color:var(--muted);border:1px solid var(--line);
+background:var(--panel);padding:8px 10px;border-radius:999px
+}
+
 .viewport{flex:1;position:relative;overflow:hidden}
 .track{height:100%;display:flex;will-change:transform}
 .track.anim{transition:transform .46s cubic-bezier(.22,.85,.25,1)}
-.page{flex:0 0 100%;height:100%;overflow-y:auto;padding:16px 14px calc(94px + var(--safe));scrollbar-width:none}
+.page{
+flex:0 0 100%;height:100%;overflow-y:auto;
+padding:16px 14px calc(94px + var(--safe));scrollbar-width:none
+}
 .page::-webkit-scrollbar{display:none}
 .inner{max-width:900px;margin:auto}
+
 h2{font-size:27px;margin:4px 0 3px}
 .subtitle{color:var(--muted);font-size:13px;margin-bottom:16px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px}
-.section{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.section h3{font-size:12px;letter-spacing:.08em;margin:0;color:#cbd2dc;text-transform:uppercase}
+
+.card{
+background:var(--panel);border:1px solid var(--line);
+border-radius:var(--radius);padding:16px;margin-bottom:12px
+}
+.section{
+display:flex;justify-content:space-between;
+align-items:center;margin-bottom:12px
+}
+.section h3{
+font-size:12px;letter-spacing:.08em;margin:0;
+color:#cbd2dc;text-transform:uppercase
+}
 .section span{font-size:10px;color:var(--muted)}
+
 .list{display:grid;gap:8px}
-.row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:14px}
+.row{
+display:grid;grid-template-columns:1fr auto;
+gap:10px;align-items:center;background:var(--panel2);
+border:1px solid var(--line);border-radius:15px;padding:14px
+}
 .row:active{transform:scale(.995)}
 .name{font-weight:900}
-.meta{font-size:11px;color:var(--muted);line-height:1.55;margin-top:4px}
+.meta{
+font-size:11px;color:var(--muted);
+line-height:1.55;margin-top:4px
+}
 .price{font-weight:900;text-align:right}
-.badge{display:inline-flex;padding:6px 8px;border-radius:999px;font-size:9px;font-weight:900;border:1px solid;margin-left:5px}
+
+.badge{
+display:inline-flex;padding:6px 8px;border-radius:999px;
+font-size:9px;font-weight:900;border:1px solid;margin-left:5px
+}
 .good{color:var(--good)}
 .warn{color:var(--warn)}
 .bad{color:var(--bad)}
 .blue{color:var(--blue)}
 .violet{color:var(--violet)}
+
 .badge.good{background:#0d2118;border-color:#1d4933}
 .badge.warn{background:#261e0d;border-color:#5d4617}
 .badge.bad{background:#271216;border-color:#5a2630}
 .badge.blue{background:#111d2c;border-color:#263e5e}
+.badge.violet{background:#1b1730;border-color:#41366e}
 .badge.neutral{color:#c7ced8;background:#171c22;border-color:#2a323c}
-.summary{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.sum{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:9px 4px;text-align:center}
+
+.scoregrid{
+display:grid;grid-template-columns:1fr 1fr;
+gap:8px;margin-top:12px
+}
+.scorebox{
+background:var(--panel2);border:1px solid var(--line);
+border-radius:15px;padding:12px
+}
+.scorebox small{
+display:block;color:var(--muted);
+font-size:9px;letter-spacing:.05em
+}
+.scorebox b{
+display:block;font-size:25px;
+margin-top:3px
+}
+.scorebox em{
+font-style:normal;display:block;font-size:9px;
+color:var(--muted);margin-top:3px
+}
+
+.summary{
+display:grid;grid-template-columns:repeat(4,1fr);gap:7px
+}
+.sum{
+background:var(--panel2);border:1px solid var(--line);
+border-radius:13px;padding:10px 4px;text-align:center
+}
 .sum small{display:block;color:var(--muted);font-size:8px}
 .sum b{display:block;font-size:17px;margin-top:4px}
+
 .field{display:grid;gap:6px;margin-bottom:11px}
 .field label{font-size:11px;color:var(--muted)}
-.field input,.field select{width:100%;border:1px solid var(--line);background:var(--panel3);color:var(--text);padding:12px 13px;border-radius:13px;outline:none}
+.field input,.field select{
+width:100%;border:1px solid var(--line);
+background:var(--panel3);color:var(--text);
+padding:12px 13px;border-radius:13px;outline:none
+}
 .field input:disabled{opacity:.55}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.three{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.btn{border:0;border-radius:12px;padding:12px 14px;background:#f5f7fa;color:#090b0e;font-weight:850}
-.btn.secondary{background:var(--panel2);border:1px solid var(--line);color:var(--text)}
-.btn.danger{background:#2a1217;border:1px solid #5a2630;color:var(--bad)}
+
+.btn{
+border:0;border-radius:12px;padding:12px 14px;
+background:#f5f7fa;color:#090b0e;font-weight:850
+}
+.btn.secondary{
+background:var(--panel2);
+border:1px solid var(--line);color:var(--text)
+}
+.btn.danger{
+background:#2a1217;border:1px solid #5a2630;color:var(--bad)
+}
 .btn.full{width:100%}
-.calc{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px;margin-bottom:11px}
+
+.calc{
+background:var(--panel2);border:1px solid var(--line);
+border-radius:13px;padding:12px;margin-bottom:11px
+}
 .calc small{display:block;color:var(--muted);font-size:10px}
 .calc b{font-size:20px;display:block;margin-top:4px}
-.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--panel3);border:1px solid var(--line);border-radius:12px;padding:3px;margin-bottom:14px}
-.seg button{border:0;background:transparent;color:var(--muted);padding:10px;border-radius:9px;font-weight:800}
+
+.seg{
+display:grid;grid-template-columns:1fr 1fr;
+background:var(--panel3);border:1px solid var(--line);
+border-radius:12px;padding:3px;margin-bottom:14px
+}
+.seg button{
+border:0;background:transparent;color:var(--muted);
+padding:10px;border-radius:9px;font-weight:800
+}
 .seg button.active{background:var(--panel2);color:var(--text)}
-.riskbar{height:9px;border-radius:999px;background:#0d1116;border:1px solid var(--line);overflow:hidden;margin-top:8px}
-.riskbar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#31d07c 0%,#31d07c 45%,#f5b942 70%,#ff6678 100%)}
-.risktext{font-size:11px;color:var(--muted);margin-top:7px;line-height:1.5}
-.notice{font-size:11px;line-height:1.55;color:#d6bd83;background:#241b0e;border:1px solid #5a4317;padding:11px;border-radius:12px;margin-bottom:12px}
-.bottom{position:absolute;left:10px;right:10px;bottom:var(--safe);height:64px;border:1px solid rgba(255,255,255,.08);border-radius:22px;background:rgba(18,22,27,.94);backdrop-filter:blur(22px);display:grid;grid-template-columns:repeat(3,1fr);z-index:30}
-.tab{border:0;background:none;color:#738090;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;font-weight:800;gap:3px}
+
+.riskbar{
+height:9px;border-radius:999px;background:#0d1116;
+border:1px solid var(--line);overflow:hidden;margin-top:8px
+}
+.riskbar span{
+display:block;height:100%;width:0;
+background:linear-gradient(
+90deg,
+#31d07c 0%,
+#31d07c 45%,
+#f5b942 70%,
+#ff6678 100%
+)
+}
+.risktext{
+font-size:11px;color:var(--muted);
+margin-top:7px;line-height:1.5
+}
+
+.notice{
+font-size:11px;line-height:1.55;color:#d6bd83;
+background:#241b0e;border:1px solid #5a4317;
+padding:11px;border-radius:12px;margin-bottom:12px
+}
+
+.bottom{
+position:absolute;left:10px;right:10px;bottom:var(--safe);
+height:64px;border:1px solid rgba(255,255,255,.08);
+border-radius:22px;background:rgba(18,22,27,.94);
+backdrop-filter:blur(22px);
+display:grid;grid-template-columns:repeat(3,1fr);z-index:30
+}
+.tab{
+border:0;background:none;color:#738090;
+display:flex;flex-direction:column;align-items:center;
+justify-content:center;font-size:9px;font-weight:800;gap:3px
+}
 .tab i{font-style:normal;font-size:20px}
 .tab.active{color:white}
-.detail{position:absolute;inset:0;background:var(--bg);z-index:50;transform:translateX(100%);transition:transform .45s cubic-bezier(.22,.85,.25,1);display:flex;flex-direction:column}
+
+.detail{
+position:absolute;inset:0;background:var(--bg);z-index:50;
+transform:translateX(100%);
+transition:transform .45s cubic-bezier(.22,.85,.25,1);
+display:flex;flex-direction:column
+}
 .detail.open{transform:translateX(0)}
-.detailhead{height:60px;flex:0 0 60px;display:grid;grid-template-columns:42px 1fr 42px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
-.icon{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:white}
+
+.detailhead{
+height:60px;flex:0 0 60px;
+display:grid;grid-template-columns:42px 1fr 42px;
+align-items:center;padding:10px 14px;
+border-bottom:1px solid var(--line)
+}
+.icon{
+width:38px;height:38px;border-radius:12px;
+border:1px solid var(--line);background:var(--panel);color:white
+}
 .detailtitle{text-align:center}
 .detailtitle b{display:block}
 .detailtitle small{font-size:10px;color:var(--muted)}
-.detailbody{flex:1;overflow-y:auto;padding:14px 14px calc(30px + var(--safe))}
-.hero{background:linear-gradient(145deg,#161b22,#101318);border:1px solid #27313d}
-.herotop{display:flex;justify-content:space-between;align-items:flex-start}
+.detailbody{
+flex:1;overflow-y:auto;
+padding:14px 14px calc(30px + var(--safe))
+}
+
+.hero{
+background:linear-gradient(145deg,#161b22,#101318);
+border:1px solid #27313d
+}
+.herotop{
+display:flex;justify-content:space-between;
+align-items:flex-start
+}
 .bigprice{font-size:28px;font-weight:900;margin:4px 0}
-.score{font-size:46px;font-weight:900;text-align:right}
-.score small{font-size:11px;color:var(--muted)}
-.confidence{font-size:9px;color:var(--muted);margin-top:3px;text-align:right}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.stat{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px}
+.turnstate{
+font-size:14px;font-weight:900;
+margin-top:6px
+}
+
+.stats{
+display:grid;grid-template-columns:repeat(2,1fr);gap:8px
+}
+.stat{
+background:var(--panel2);border:1px solid var(--line);
+border-radius:13px;padding:12px
+}
 .stat small{display:block;color:var(--muted);font-size:10px}
 .stat b{display:block;margin-top:5px}
-.signal{display:grid;grid-template-columns:1fr auto;gap:10px;padding:11px;border-bottom:1px solid var(--line)}
+
+.signal{
+display:grid;grid-template-columns:1fr auto;
+gap:10px;padding:11px;border-bottom:1px solid var(--line)
+}
 .signal:last-child{border-bottom:0}
 .signal span{font-size:12px}
 .signal b{font-size:12px;text-align:right}
-.plan{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:8px}
-.planhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+
+.plan{
+background:var(--panel2);border:1px solid var(--line);
+border-radius:14px;padding:12px;margin-bottom:8px
+}
+.planhead{
+display:flex;justify-content:space-between;
+align-items:center;margin-bottom:9px
+}
 .planhead b{font-size:12px}
 .planhead span{font-size:11px;font-weight:900}
-.planmeta{font-size:10px;color:var(--muted);line-height:1.55}
-.miniinput{width:86px!important;padding:8px 9px!important;text-align:right}
-.editbanner{display:none;background:#152034;border:1px solid #29496f;color:#9bc3ff;padding:10px 12px;border-radius:12px;margin-bottom:12px;font-size:11px;font-weight:800}
+.planmeta{
+font-size:10px;color:var(--muted);line-height:1.55
+}
+
+.editbanner{
+display:none;background:#152034;
+border:1px solid #29496f;color:#9bc3ff;
+padding:10px 12px;border-radius:12px;
+margin-bottom:12px;font-size:11px;font-weight:800
+}
 .editbanner.show{display:block}
-.datadot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--good);margin-right:4px}
-.empty{text-align:center;color:var(--muted);font-size:12px;padding:25px}
+
+.datadot{
+display:inline-block;width:6px;height:6px;
+border-radius:50%;background:var(--good);margin-right:4px
+}
+.empty{
+text-align:center;color:var(--muted);
+font-size:12px;padding:25px
+}
 </style>
 </head>
 
 <body>
+
 <div class="app">
 
 <header class="topbar">
@@ -125,1310 +315,5158 @@ h2{font-size:27px;margin:4px 0 3px}
 <div class="logo">SP</div>
 <div>
 <h1>STOCKPM</h1>
-<small>POSITION MANAGER · v0.3.2</small>
+<small>TURNING POINT MANAGER · v0.3.3</small>
 </div>
 </div>
 <div class="sync" id="sync">DATA WAIT</div>
 </header>
 
+
 <div class="viewport" id="viewport">
+
 <div class="track" id="track">
+
 
 <section class="page">
 <div class="inner">
+
 <h2>Today</h2>
-<div class="subtitle">보유 포지션의 추세 · 타이밍 · 리스크를 분석합니다.</div>
+
+<div class="subtitle">
+내 포지션의 주봉 바닥 · 고점 가능성과 리스크를 확인합니다.
+</div>
+
 
 <div class="card">
-<div class="section"><h3>Position status</h3><span>ACCOUNT</span></div>
+
+<div class="section">
+<h3>Turning Point Status</h3>
+<span>WEEKLY</span>
+</div>
+
+
 <div class="summary">
-<div class="sum"><small>ADD</small><b class="good" id="addCount">0</b></div>
-<div class="sum"><small>HOLD</small><b id="holdCount">0</b></div>
-<div class="sum"><small>CAUTION</small><b class="warn" id="cautionCount">0</b></div>
-<div class="sum"><small>REDUCE</small><b class="warn" id="reduceCount">0</b></div>
-<div class="sum"><small>RISK</small><b class="bad" id="riskCount">0</b></div>
-</div>
-<div class="riskbar"><span id="heatbar"></span></div>
-<div class="risktext" id="heattext">Portfolio Risk 계산 대기</div>
+
+<div class="sum">
+<small>BOTTOM</small>
+<b class="good" id="bottomCount">0</b>
 </div>
 
-<div class="card">
-<div class="section"><h3>My positions</h3><span id="homeCount">0</span></div>
-<div class="list" id="homeList"></div>
+<div class="sum">
+<small>NEUTRAL</small>
+<b id="neutralCount">0</b>
 </div>
+
+<div class="sum">
+<small>TOP</small>
+<b class="warn" id="topCount">0</b>
+</div>
+
+<div class="sum">
+<small>RISK</small>
+<b class="bad" id="riskCount">0</b>
+</div>
+
+</div>
+
+
+<div class="riskbar">
+<span id="heatbar"></span>
+</div>
+
+<div class="risktext" id="heattext">
+Portfolio Risk 계산 대기
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="section">
+<h3>My Positions</h3>
+<span id="homeCount">0</span>
+</div>
+
+<div class="list" id="homeList"></div>
+
+</div>
+
 </div>
 </section>
 
+
+
 <section class="page">
+
 <div class="inner">
+
 <h2>Position</h2>
-<div class="subtitle">등록 · 수정 · 분할매수 · 분할매도 관리</div>
+
+<div class="subtitle">
+등록 · 수정 · 분할매수 · 분할매도 관리
+</div>
+
 
 <div class="card">
-<div class="section"><h3>Trade risk limit</h3><span>WARNING LIMIT</span></div>
+
+<div class="section">
+<h3>Trade Risk Limit</h3>
+<span>WARNING LIMIT</span>
+</div>
+
+
 <div class="two">
+
 <div class="field">
-<label>Account equity ($)</label>
+<label>Account Equity ($)</label>
 <input id="equity" type="number">
 </div>
+
 <div class="field">
-<label>Trade risk limit (%)</label>
+<label>Trade Risk Limit (%)</label>
 <input id="riskLimit" type="number" step=".1">
 </div>
+
 </div>
-<div class="notice">Risk Limit은 주문을 막는 기능이 아닙니다. Active Stop 기준 예상 손실이 설정값을 넘으면 경고합니다.</div>
-<button class="btn secondary full" id="saveRisk">설정 저장</button>
+
+
+<div class="notice">
+Risk Limit은 주문을 차단하지 않습니다.
+Active Stop 기준 예상 손실이 설정값보다 커지면 경고합니다.
 </div>
+
+
+<button class="btn secondary full" id="saveRisk">
+설정 저장
+</button>
+
+</div>
+
+
 
 <div class="card">
+
 <div class="seg">
-<button class="active" data-mode="stock">STOCK / ETF</button>
-<button data-mode="crypto">CRYPTO LEVERAGE</button>
+
+<button class="active" data-mode="stock">
+STOCK / ETF
+</button>
+
+<button data-mode="crypto">
+CRYPTO LEVERAGE
+</button>
+
 </div>
 
+
 <div id="stockForm">
-<div class="editbanner" id="stockEditBanner">포지션 수정 모드</div>
+
+<div class="editbanner" id="stockEditBanner">
+포지션 수정 모드
+</div>
+
 
 <div class="field">
 <label>Ticker</label>
 <input id="ticker" placeholder="TSLL">
 </div>
 
+
 <div class="two">
+
 <div class="field">
 <label>수량</label>
 <input id="qty" type="number" step="any">
 </div>
+
 <div class="field">
 <label>평단가</label>
 <input id="avgPrice" type="number" step="any">
 </div>
+
 </div>
+
 
 <div class="field">
+
 <label>Manual Stop</label>
-<input id="stopPrice" type="number" step="any" placeholder="비워두면 Tech Stop 사용">
+
+<input
+id="stopPrice"
+type="number"
+step="any"
+placeholder="비워두면 Tech Stop 사용">
+
 </div>
+
 
 <div class="calc">
+
 <small>총 투자금액</small>
-<b id="investedCalc">$0</b>
+
+<b id="investedCalc">
+$0
+</b>
+
 </div>
+
 
 <div class="two">
-<button class="btn full" id="saveStock">포지션 등록</button>
-<button class="btn secondary" id="cancelEdit" style="display:none">취소</button>
-</div>
+
+<button class="btn full" id="saveStock">
+포지션 등록
+</button>
+
+<button
+class="btn secondary"
+id="cancelEdit"
+style="display:none">
+
+취소
+
+</button>
+
 </div>
 
+</div>
+
+
+
 <div id="cryptoForm" style="display:none">
-<div class="editbanner" id="cryptoEditBanner">레버리지 포지션 수정 모드</div>
+
+<div class="editbanner" id="cryptoEditBanner">
+레버리지 포지션 수정 모드
+</div>
+
 
 <div class="field">
 <label>Symbol</label>
 <input id="cryptoSymbol" placeholder="BTCUSDT">
 </div>
 
+
 <div class="two">
+
 <div class="field">
 <label>Direction</label>
+
 <select id="cryptoSide">
 <option>LONG</option>
 <option>SHORT</option>
 </select>
+
 </div>
+
+
 <div class="field">
 <label>Leverage</label>
 <input id="cryptoLev" type="number" value="5">
 </div>
+
 </div>
 
+
 <div class="two">
+
 <div class="field">
 <label>Entry</label>
 <input id="cryptoEntry" type="number" step="any">
 </div>
+
 <div class="field">
 <label>Position Size ($)</label>
 <input id="cryptoSize" type="number" step="any">
 </div>
+
 </div>
 
+
 <div class="two">
+
 <div class="field">
 <label>Stop</label>
 <input id="cryptoStop" type="number" step="any">
 </div>
+
 <div class="field">
 <label>Liquidation</label>
 <input id="cryptoLiq" type="number" step="any">
 </div>
+
 </div>
+
 
 <div class="two">
-<button class="btn full" id="saveCrypto">포지션 등록</button>
-<button class="btn secondary" id="cancelCryptoEdit" style="display:none">취소</button>
-</div>
-</div>
+
+<button class="btn full" id="saveCrypto">
+포지션 등록
+</button>
+
+<button
+class="btn secondary"
+id="cancelCryptoEdit"
+style="display:none">
+
+취소
+
+</button>
+
 </div>
 
-<div class="card">
-<div class="section"><h3>Registered positions</h3><span id="positionCount">0</span></div>
-<div class="list" id="positionList"></div>
 </div>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="section">
+<h3>Registered Positions</h3>
+<span id="positionCount">0</span>
+</div>
+
+<div class="list" id="positionList"></div>
+
+</div>
+
 </div>
 </section>
+
+
 
 <section class="page">
+
 <div class="inner">
+
 <h2>More</h2>
-<div class="subtitle">시장 데이터 및 시스템 상태</div>
 
-<div class="card">
-<div class="section"><h3>Market data</h3><span>TWELVE DATA</span></div>
-
-<div class="signal"><span>Connection</span><b id="dataStatus">WAIT</b></div>
-<div class="signal"><span>Mode</span><b id="dataMode">—</b></div>
-<div class="signal"><span>Last Market Update</span><b id="lastMarketUpdate">—</b></div>
-<div class="signal"><span>Data Age</span><b id="dataAge">—</b></div>
-<div class="signal"><span>Tracked Positions</span><b id="trackedSymbols">0</b></div>
-
-<button class="btn full" style="margin-top:12px" id="refresh">시장 데이터 업데이트</button>
+<div class="subtitle">
+시장 데이터 및 판독기 상태
 </div>
 
+
 <div class="card">
-<div class="section"><h3>Engine</h3><span>v2.1</span></div>
-<div class="signal"><span>Daily Trend</span><b>MA50 / MA200</b></div>
-<div class="signal"><span>Timing</span><b>4H</b></div>
-<div class="signal"><span>Momentum</span><b>RSI</b></div>
-<div class="signal"><span>Volatility</span><b>ATR</b></div>
-<div class="signal"><span>Volume</span><b>Relative Volume</b></div>
-<div class="signal"><span>Position Signals</span><b>ADD → EXIT WATCH</b></div>
+
+<div class="section">
+<h3>Market Data</h3>
+<span>TWELVE DATA</span>
 </div>
+
+
+<div class="signal">
+<span>Connection</span>
+<b id="dataStatus">WAIT</b>
+</div>
+
+
+<div class="signal">
+<span>Mode</span>
+<b id="dataMode">—</b>
+</div>
+
+
+<div class="signal">
+<span>Last Market Update</span>
+<b id="lastMarketUpdate">—</b>
+</div>
+
+
+<div class="signal">
+<span>Data Age</span>
+<b id="dataAge">—</b>
+</div>
+
+
+<div class="signal">
+<span>Tracked Positions</span>
+<b id="trackedSymbols">0</b>
+</div>
+
+
+<button
+class="btn full"
+style="margin-top:12px"
+id="refresh">
+
+시장 데이터 업데이트
+
+</button>
+
+</div>
+
+
+<div class="card">
+
+<div class="section">
+<h3>Weekly Turning Engine</h3>
+<span>v1.0</span>
+</div>
+
+
+<div class="signal">
+<span>Bottom / Top</span>
+<b>SEPARATE SCORE</b>
+</div>
+
+<div class="signal">
+<span>Weekly RSI</span>
+<b>EXTREME + TURN</b>
+</div>
+
+<div class="signal">
+<span>RSI Divergence</span>
+<b>PRICE vs MOMENTUM</b>
+</div>
+
+<div class="signal">
+<span>MACD</span>
+<b>CROSS + HISTOGRAM</b>
+</div>
+
+<div class="signal">
+<span>Stochastic</span>
+<b>EXTREME REVERSAL</b>
+</div>
+
+<div class="signal">
+<span>Bollinger</span>
+<b>BAND RE-ENTRY</b>
+</div>
+
+<div class="signal">
+<span>Volume</span>
+<b>CAPITULATION / CLIMAX</b>
+</div>
+
+<div class="signal">
+<span>Structure</span>
+<b>HIGHER LOW / LOWER HIGH</b>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="notice">
+주봉은 Twelve Data의 일봉 데이터를 주 단위로 변환해서 계산합니다.
+따라서 별도의 Weekly API 호출을 추가하지 않아 무료 API 사용량을 줄였습니다.
+</div>
+
+</div>
+
 </div>
 </section>
 
+
 </div>
+
 
 <nav class="bottom">
-<button class="tab active" data-page="0"><i>⌂</i>HOME</button>
-<button class="tab" data-page="1"><i>▣</i>POSITION</button>
-<button class="tab" data-page="2"><i>•••</i>MORE</button>
+
+<button class="tab active" data-page="0">
+<i>⌂</i>
+HOME
+</button>
+
+<button class="tab" data-page="1">
+<i>▣</i>
+POSITION
+</button>
+
+<button class="tab" data-page="2">
+<i>•••</i>
+MORE
+</button>
+
 </nav>
 
+
+
 <div class="detail" id="detail">
+
+
 <header class="detailhead">
-<button class="icon" id="back">‹</button>
+
+<button class="icon" id="back">
+‹
+</button>
+
+
 <div class="detailtitle">
-<b id="detailTicker">—</b>
-<small>POSITION ANALYSIS</small>
+
+<b id="detailTicker">
+—
+</b>
+
+<small>
+WEEKLY TURNING POINT
+</small>
+
 </div>
+
 <div></div>
+
 </header>
 
+
+
 <div class="detailbody">
+
 <div class="inner">
 
+
 <div class="card hero">
+
 <div class="herotop">
-<div>
-<div class="meta">CURRENT PRICE</div>
-<div class="bigprice" id="currentPrice">—</div>
-<span class="badge neutral" id="actionBadge">WAIT</span>
-<div class="meta" id="detailDataAge" style="margin-top:8px">DATA WAIT</div>
-</div>
+
 
 <div>
-<div class="score" id="score">—<small>/100</small></div>
-<div class="confidence" id="confidence">CONFIDENCE —</div>
+
+<div class="meta">
+CURRENT PRICE
 </div>
+
+<div class="bigprice" id="currentPrice">
+—
 </div>
+
+<span
+class="badge neutral"
+id="turnBadge">
+
+NEUTRAL
+
+</span>
+
+<div
+class="meta"
+id="detailDataAge"
+style="margin-top:8px">
+
+DATA WAIT
+
 </div>
+
+</div>
+
+
+<div>
+
+<div class="scoregrid" style="margin-top:0">
+
+<div class="scorebox">
+
+<small>
+BOTTOM
+</small>
+
+<b class="good" id="bottomScore">
+—
+</b>
+
+<em id="bottomLabel">
+—
+</em>
+
+</div>
+
+
+<div class="scorebox">
+
+<small>
+TOP
+</small>
+
+<b class="bad" id="topScore">
+—
+</b>
+
+<em id="topLabel">
+—
+</em>
+
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
 
 <div class="card">
-<div class="section"><h3>Position</h3><span>RISK</span></div>
+
+<div class="section">
+<h3>Position</h3>
+<span>RISK</span>
+</div>
+
 <div class="stats" id="positionStats"></div>
-<div class="riskbar"><span id="riskbar"></span></div>
+
+<div class="riskbar">
+<span id="riskbar"></span>
+</div>
+
 <div class="risktext" id="riskText"></div>
+
 </div>
 
+
+
 <div class="card">
-<div class="section"><h3>Stop Engine</h3><span>ACTIVE STOP</span></div>
+
+<div class="section">
+<h3>Weekly Turning Point</h3>
+<span id="turnConfidence">CONFIDENCE —</span>
+</div>
+
+<div id="turnEngine"></div>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="section">
+<h3>Bottom Evidence</h3>
+<span>EARLY REVERSAL</span>
+</div>
+
+<div id="bottomEvidence"></div>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="section">
+<h3>Top Evidence</h3>
+<span>DISTRIBUTION</span>
+</div>
+
+<div id="topEvidence"></div>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="section">
+<h3>4H Timing</h3>
+<span>EXECUTION</span>
+</div>
+
+<div id="timingEngine"></div>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="section">
+<h3>Stop Engine</h3>
+<span>ACTIVE STOP</span>
+</div>
+
 <div id="stopEngine"></div>
+
 </div>
 
-<div class="card">
-<div class="section"><h3>Signal Engine</h3><span>v2.1</span></div>
-<div id="signalEngine"></div>
-</div>
+
 
 <div class="card">
-<div class="section"><h3>Scale In</h3><span>3 STEP PLAN</span></div>
+
+<div class="section">
+<h3>Scale In</h3>
+<span>BOTTOM + RISK</span>
+</div>
+
 <div id="scaleInPlan"></div>
 
-<div class="notice" style="margin-top:10px">
-제안 가격은 주문 지시가 아니라 MA20 · MA50 · ATR · 4H 구조를 이용한 관리 기준입니다. 수량은 직접 결정합니다.
-</div>
 
-<div class="two">
+<div class="two" style="margin-top:12px">
+
 <div class="field">
 <label>추가 수량</label>
 <input id="addQty" type="number" step="any">
 </div>
+
 <div class="field">
 <label>추가 매수가</label>
 <input id="addPrice" type="number" step="any">
 </div>
+
 </div>
+
 
 <div class="stats">
-<div class="stat"><small>새 총수량</small><b id="newQty">—</b></div>
-<div class="stat"><small>새 평단</small><b id="newAvg">—</b></div>
-<div class="stat"><small>새 투자금</small><b id="newInvested">—</b></div>
-<div class="stat"><small>추가 후 Risk</small><b id="newRisk">—</b></div>
+
+<div class="stat">
+<small>새 총수량</small>
+<b id="newQty">—</b>
 </div>
 
-<div class="riskbar"><span id="newRiskBar"></span></div>
+<div class="stat">
+<small>새 평단</small>
+<b id="newAvg">—</b>
+</div>
+
+<div class="stat">
+<small>새 투자금</small>
+<b id="newInvested">—</b>
+</div>
+
+<div class="stat">
+<small>추가 후 Risk</small>
+<b id="newRisk">—</b>
+</div>
+
+</div>
+
+
+<div class="riskbar">
+<span id="newRiskBar"></span>
+</div>
+
 <div class="risktext" id="newRiskText"></div>
+
 </div>
 
+
+
 <div class="card">
-<div class="section"><h3>Scale Out</h3><span>R MULTIPLE</span></div>
+
+<div class="section">
+<h3>Scale Out</h3>
+<span>TOP + R MULTIPLE</span>
+</div>
+
 <div id="scaleOutPlan"></div>
+
 </div>
+
+
 
 <div class="card">
+
 <div class="two">
-<button class="btn secondary" id="editPosition">포지션 수정</button>
-<button class="btn danger" id="deletePosition">포지션 삭제</button>
+
+<button class="btn secondary" id="editPosition">
+포지션 수정
+</button>
+
+<button class="btn danger" id="deletePosition">
+포지션 삭제
+</button>
+
+</div>
+
+</div>
+
+
 </div>
 </div>
 
 </div>
-</div>
-</div>
+
 
 </div>
 </div>
+
 
 <script>
-const SUPABASE_URL='https://seuqhwmzmsqzuppemiuk.supabase.co';
-const KEY='sb_publishable_8T7Wafioftxn528m-T4fNA_-OZq9dwq';
-const MARKET=SUPABASE_URL+'/functions/v1/market-data';
 
-const CACHE='stockpm_market_cache_v022';
-const POSITIONS_KEY='stockpm_positions';
-const CRYPTO_KEY='stockpm_leverage';
-const SETTINGS_KEY='stockpm_risk_settings';
+const SUPABASE_URL =
+'https://seuqhwmzmsqzuppemiuk.supabase.co';
 
-const DAILY_TTL=60*60*1000;
-const H4_TTL=15*60*1000;
+const KEY =
+'sb_publishable_8T7Wafioftxn528m-T4fNA_-OZq9dwq';
 
-const $=id=>document.getElementById(id);
+const MARKET =
+SUPABASE_URL + '/functions/v1/market-data';
 
-const store={
+
+const CACHE =
+'stockpm_market_cache_v022';
+
+const POSITIONS_KEY =
+'stockpm_positions';
+
+const CRYPTO_KEY =
+'stockpm_leverage';
+
+const SETTINGS_KEY =
+'stockpm_risk_settings';
+
+
+const DAILY_TTL =
+60 * 60 * 1000;
+
+const H4_TTL =
+15 * 60 * 1000;
+
+
+const $ =
+id => document.getElementById(id);
+
+
+const store = {
+
 get(k,d){
+
 try{
-const v=JSON.parse(localStorage.getItem(k));
-return v??d;
-}catch{return d}
+
+const v =
+JSON.parse(
+localStorage.getItem(k)
+);
+
+return v ?? d;
+
+}
+catch{
+
+return d;
+
+}
+
 },
-set(k,v){localStorage.setItem(k,JSON.stringify(v))}
+
+set(k,v){
+
+localStorage.setItem(
+k,
+JSON.stringify(v)
+);
+
+}
+
 };
 
-let positions=store.get(POSITIONS_KEY,{});
-let crypto=store.get(CRYPTO_KEY,[]);
-let settings=store.get(SETTINGS_KEY,{equity:100000,maxRiskPct:2});
-let cache=store.get(CACHE,{});
 
-let data={};
-let currentTicker=null;
-let editingTicker=null;
-let editingCryptoIndex=null;
-let page=0;
-let lastFetchMode='CACHED';
+let positions =
+store.get(
+POSITIONS_KEY,
+{}
+);
+
+
+let crypto =
+store.get(
+CRYPTO_KEY,
+[]
+);
+
+
+let settings =
+store.get(
+SETTINGS_KEY,
+{
+equity:100000,
+maxRiskPct:2
+}
+);
+
+
+let cache =
+store.get(
+CACHE,
+{}
+);
+
+
+let data = {};
+
+let currentTicker = null;
+
+let editingTicker = null;
+
+let editingCryptoIndex = null;
+
+let page = 0;
+
+let lastFetchMode =
+'CACHED';
+
+
 
 function money(v){
-if(!Number.isFinite(+v))return '—';
-return '$'+(+v).toLocaleString(undefined,{maximumFractionDigits:2});
+
+if(
+!Number.isFinite(+v)
+)
+return '—';
+
+return '$' +
+(+v).toLocaleString(
+undefined,
+{
+maximumFractionDigits:2
 }
+);
+
+}
+
+
 
 function pct(v){
-if(!Number.isFinite(+v))return '—';
-return (+v).toFixed(2)+'%';
+
+if(
+!Number.isFinite(+v)
+)
+return '—';
+
+return (+v).toFixed(2) + '%';
+
 }
+
+
 
 function average(a){
-return a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
+
+return a.length
+? a.reduce(
+(x,y)=>x+y,
+0
+) / a.length
+: 0;
+
 }
+
+
 
 function exactSMA(a,n){
-if(a.length<n)return null;
-return average(a.slice(-n));
+
+if(
+a.length < n
+)
+return null;
+
+return average(
+a.slice(-n)
+);
+
 }
+
+
+
+function EMA(values,period){
+
+if(
+!values.length
+)
+return [];
+
+const k =
+2 / (period + 1);
+
+const out = [];
+
+let prev =
+values[0];
+
+out.push(prev);
+
+for(
+let i=1;
+i<values.length;
+i++
+){
+
+prev =
+values[i] * k +
+prev * (1-k);
+
+out.push(prev);
+
+}
+
+return out;
+
+}
+
+
 
 function RSI(c,n=14){
-if(c.length<n+1)return null;
-let gain=0,loss=0;
-for(let i=c.length-n;i<c.length;i++){
-const d=c[i]-c[i-1];
-if(d>0)gain+=d;
-else loss-=d;
+
+if(
+c.length < n+1
+)
+return null;
+
+let gain=0;
+let loss=0;
+
+for(
+let i=c.length-n;
+i<c.length;
+i++
+){
+
+const d =
+c[i] - c[i-1];
+
+if(d>0)
+gain += d;
+else
+loss -= d;
+
 }
-if(!loss)return 100;
-const rs=(gain/n)/(loss/n);
-return 100-(100/(1+rs));
+
+if(!loss)
+return 100;
+
+const rs =
+(gain/n)/(loss/n);
+
+return 100 -
+100/(1+rs);
+
 }
+
+
+
+function RSIseries(c,n=14){
+
+const result =
+Array(c.length).fill(null);
+
+if(
+c.length < n+1
+)
+return result;
+
+for(
+let end=n;
+end<c.length;
+end++
+){
+
+let gain=0;
+let loss=0;
+
+for(
+let i=end-n+1;
+i<=end;
+i++
+){
+
+const d =
+c[i]-c[i-1];
+
+if(d>0)
+gain += d;
+else
+loss -= d;
+
+}
+
+result[end] =
+loss===0
+?100
+:100 -
+100/
+(
+1+
+(gain/n)/(loss/n)
+);
+
+}
+
+return result;
+
+}
+
+
 
 function ATR(a,n=14){
-if(a.length<n+1)return null;
+
+if(
+a.length<n+1
+)
+return null;
+
 const values=[];
-for(let i=a.length-n;i<a.length;i++){
-values.push(Math.max(
+
+for(
+let i=a.length-n;
+i<a.length;
+i++
+){
+
+values.push(
+Math.max(
 a[i].h-a[i].l,
-Math.abs(a[i].h-a[i-1].c),
-Math.abs(a[i].l-a[i-1].c)
-));
+Math.abs(
+a[i].h-a[i-1].c
+),
+Math.abs(
+a[i].l-a[i-1].c
+)
+)
+);
+
 }
+
 return average(values);
+
 }
+
+
+
+function standardDeviation(a){
+
+if(!a.length)
+return 0;
+
+const m =
+average(a);
+
+return Math.sqrt(
+average(
+a.map(
+x => (x-m)**2
+)
+)
+);
+
+}
+
+
 
 function normalize(values){
-return [...values].reverse().map(x=>({
+
+return [...values]
+.reverse()
+.map(
+x=>({
+
 dt:x.datetime,
+
 o:+x.open,
+
 h:+x.high,
+
 l:+x.low,
+
 c:+x.close,
+
 v:+x.volume||0
-})).filter(x=>Number.isFinite(x.c));
+
+})
+)
+.filter(
+x=>
+Number.isFinite(x.c)
+);
+
 }
+
+
 
 function cryptoSymbol(s){
-s=(s||'').toUpperCase().trim();
-if(s.endsWith('USDT'))return s.slice(0,-4)+'/USD';
+
+s =
+(s||'')
+.toUpperCase()
+.trim();
+
+if(
+s.endsWith('USDT')
+)
+return s.slice(0,-4) + '/USD';
+
 return s;
+
 }
+
+
 
 function symbols(){
-const s=new Set(Object.keys(positions));
-crypto.forEach(p=>s.add(cryptoSymbol(p.symbol)));
-return [...s].filter(Boolean);
+
+const s =
+new Set(
+Object.keys(positions)
+);
+
+crypto.forEach(
+p=>
+s.add(
+cryptoSymbol(
+p.symbol
+)
+)
+);
+
+return [...s]
+.filter(Boolean);
+
 }
+
+
 
 function ageText(ms){
-if(!Number.isFinite(ms)||ms<0)return '—';
-const m=Math.floor(ms/60000);
-if(m<1)return '방금 전';
-if(m<60)return m+'분 전';
-const h=Math.floor(m/60);
-if(h<24)return h+'시간 전';
-return Math.floor(h/24)+'일 전';
+
+if(
+!Number.isFinite(ms) ||
+ms<0
+)
+return '—';
+
+const m =
+Math.floor(
+ms/60000
+);
+
+if(m<1)
+return '방금 전';
+
+if(m<60)
+return m+'분 전';
+
+const h =
+Math.floor(
+m/60
+);
+
+if(h<24)
+return h+'시간 전';
+
+return Math.floor(
+h/24
+)+'일 전';
+
 }
+
+
 
 function newestCacheTime(){
+
 let newest=0;
-symbols().forEach(symbol=>{
-['1day','4h'].forEach(interval=>{
-const t=cache[symbol+'__'+interval]?.time||0;
-if(t>newest)newest=t;
-});
-});
-return newest;
+
+symbols().forEach(
+symbol=>{
+
+['1day','4h']
+.forEach(
+interval=>{
+
+const t =
+cache[
+symbol+'__'+interval
+]?.time || 0;
+
+if(t>newest)
+newest=t;
+
 }
+);
+
+}
+);
+
+return newest;
+
+}
+
+
 
 function symbolCacheTime(symbol){
+
 return Math.max(
-cache[symbol+'__1day']?.time||0,
-cache[symbol+'__4h']?.time||0
+
+cache[
+symbol+'__1day'
+]?.time || 0,
+
+cache[
+symbol+'__4h'
+]?.time || 0
+
 );
+
 }
 
-async function fetchSeries(symbol,interval,force=false){
-const key=symbol+'__'+interval;
-const old=cache[key];
-const ttl=interval==='4h'?H4_TTL:DAILY_TTL;
 
-if(!force&&old?.values?.length&&Date.now()-old.time<ttl){
-return {values:old.values,mode:'CACHED'};
-}
 
-try{
-const url=new URL(MARKET);
-url.searchParams.set('symbol',symbol);
-url.searchParams.set('interval',interval);
+async function fetchSeries(
+symbol,
+interval,
+force=false
+){
 
-const r=await fetch(url,{headers:{apikey:KEY}});
-const j=await r.json();
+const key =
+symbol+'__'+interval;
 
-if(!r.ok||!Array.isArray(j.values))throw new Error(j?.message||'FETCH ERROR');
+const old =
+cache[key];
 
-const values=normalize(j.values);
+const ttl =
+interval==='4h'
+?H4_TTL
+:DAILY_TTL;
 
-cache[key]={
-values,
-time:Date.now(),
-sourceTime:j.fetched_at||new Date().toISOString()
+
+if(
+!force &&
+old?.values?.length &&
+Date.now()-old.time < ttl
+){
+
+return {
+values:old.values,
+mode:'CACHED'
 };
 
-store.set(CACHE,cache);
-
-return {values,mode:'LIVE'};
-}catch(e){
-return {values:old?.values||[],mode:old?.values?.length?'CACHED':'ERROR'};
-}
 }
 
-function analyse(symbol,d,h4){
-if(!d.length)return null;
 
-const close=d.map(x=>x.c);
-const volume=d.map(x=>x.v);
-const price=close.at(-1);
+try{
 
-const ma20=exactSMA(close,20);
-const ma50=exactSMA(close,50);
-const ma200=exactSMA(close,200);
+const url =
+new URL(MARKET);
 
-const rsi=RSI(close);
-const atr=ATR(d);
+url.searchParams.set(
+'symbol',
+symbol
+);
 
-const hasMA200=ma200!==null;
-const hasMA50=ma50!==null;
+url.searchParams.set(
+'interval',
+interval
+);
 
-let ma200Rising=null;
 
-if(close.length>=210){
-const oldMA200=average(close.slice(-210,-10));
-ma200Rising=ma200>oldMA200;
+const r =
+await fetch(
+url,
+{
+headers:{
+apikey:KEY
+}
+}
+);
+
+
+const j =
+await r.json();
+
+
+if(
+!r.ok ||
+!Array.isArray(j.values)
+)
+throw new Error(
+j?.message ||
+'FETCH ERROR'
+);
+
+
+const values =
+normalize(
+j.values
+);
+
+
+cache[key] = {
+
+values,
+
+time:Date.now(),
+
+sourceTime:
+j.fetched_at ||
+new Date().toISOString()
+
+};
+
+
+store.set(
+CACHE,
+cache
+);
+
+
+return {
+values,
+mode:'LIVE'
+};
+
+}
+catch(e){
+
+return {
+
+values:
+old?.values || [],
+
+mode:
+old?.values?.length
+?'CACHED'
+:'ERROR'
+
+};
+
 }
 
-const hclose=h4.map(x=>x.c);
-const hma20=exactSMA(hclose,20);
-const hrsi=RSI(hclose);
-
-const timing=
-hma20!==null &&
-hrsi!==null &&
-hclose.at(-1)>hma20 &&
-hrsi>=45 &&
-hrsi<=70;
-
-let relVolume=null;
-if(volume.length>=21){
-const base=average(volume.slice(-21,-1));
-if(base>0)relVolume=volume.at(-1)/base;
 }
 
-const overextended=
-(ma20!==null&&price>ma20*1.08) ||
-(rsi!==null&&rsi>74);
 
-let score=0;
-let possible=0;
 
-if(hasMA200){
-possible+=25;
-if(price>ma200)score+=25;
+function weekKey(dateString){
+
+const d =
+new Date(
+dateString+'T12:00:00'
+);
+
+const day =
+(d.getDay()+6)%7;
+
+d.setDate(
+d.getDate()-day
+);
+
+return [
+d.getFullYear(),
+String(
+d.getMonth()+1
+).padStart(2,'0'),
+String(
+d.getDate()
+).padStart(2,'0')
+].join('-');
+
 }
 
-if(hasMA50&&hasMA200){
-possible+=20;
-if(ma50>ma200)score+=20;
+
+
+function dailyToWeekly(daily){
+
+if(
+!daily?.length
+)
+return [];
+
+const weeks = [];
+
+let current = null;
+
+for(
+const bar of daily
+){
+
+const key =
+weekKey(
+bar.dt.substring(0,10)
+);
+
+
+if(
+!current ||
+current.key !== key
+){
+
+current = {
+
+key,
+
+dt:key,
+
+o:bar.o,
+
+h:bar.h,
+
+l:bar.l,
+
+c:bar.c,
+
+v:bar.v||0
+
+};
+
+weeks.push(
+current
+);
+
+}
+else{
+
+current.h =
+Math.max(
+current.h,
+bar.h
+);
+
+current.l =
+Math.min(
+current.l,
+bar.l
+);
+
+current.c =
+bar.c;
+
+current.v +=
+bar.v||0;
+
 }
 
-if(ma200Rising!==null){
-possible+=15;
-if(ma200Rising)score+=15;
 }
 
-if(hma20!==null&&hrsi!==null){
-possible+=15;
-if(timing)score+=15;
-else if(hrsi>=40&&hrsi<=75)score+=5;
+return weeks;
+
 }
 
-if(rsi!==null){
-possible+=10;
-if(rsi>=45&&rsi<=68)score+=10;
-else if(rsi>=40&&rsi<=72)score+=5;
+
+
+function MACD(values){
+
+if(
+values.length<35
+)
+return null;
+
+const e12 =
+EMA(
+values,
+12
+);
+
+const e26 =
+EMA(
+values,
+26
+);
+
+const macd =
+values.map(
+(_,i)=>
+e12[i]-e26[i]
+);
+
+const signal =
+EMA(
+macd,
+9
+);
+
+const hist =
+macd.map(
+(x,i)=>
+x-signal[i]
+);
+
+return {
+macd,
+signal,
+hist
+};
+
 }
 
-if(ma20!==null){
-possible+=10;
-if(!overextended)score+=10;
+
+
+function stochastic(
+bars,
+period=14
+){
+
+if(
+bars.length<period
+)
+return null;
+
+const recent =
+bars.slice(-period);
+
+const high =
+Math.max(
+...recent.map(
+x=>x.h
+)
+);
+
+const low =
+Math.min(
+...recent.map(
+x=>x.l
+)
+);
+
+const close =
+bars.at(-1).c;
+
+if(high===low)
+return 50;
+
+return (
+(close-low)/
+(high-low)
+)*100;
+
 }
 
-if(relVolume!==null){
-possible+=5;
-if(relVolume>=1)score+=5;
+
+
+function bollinger(closes,n=20){
+
+if(
+closes.length<n
+)
+return null;
+
+const r =
+closes.slice(-n);
+
+const mid =
+average(r);
+
+const sd =
+standardDeviation(r);
+
+return {
+
+mid,
+
+upper:
+mid + 2*sd,
+
+lower:
+mid - 2*sd
+
+};
+
 }
 
-const normalizedScore=possible?Math.round(score/possible*100):0;
+
+
+function findSwingLows(
+bars,
+lookback=16
+){
+
+if(
+bars.length<8
+)
+return [];
+
+const start =
+Math.max(
+2,
+bars.length-lookback
+);
+
+const out=[];
+
+for(
+let i=start;
+i<bars.length-2;
+i++
+){
+
+if(
+bars[i].l <= bars[i-1].l &&
+bars[i].l <= bars[i-2].l &&
+bars[i].l <= bars[i+1].l &&
+bars[i].l <= bars[i+2].l
+){
+
+out.push(i);
+
+}
+
+}
+
+return out;
+
+}
+
+
+
+function findSwingHighs(
+bars,
+lookback=16
+){
+
+if(
+bars.length<8
+)
+return [];
+
+const start =
+Math.max(
+2,
+bars.length-lookback
+);
+
+const out=[];
+
+for(
+let i=start;
+i<bars.length-2;
+i++
+){
+
+if(
+bars[i].h >= bars[i-1].h &&
+bars[i].h >= bars[i-2].h &&
+bars[i].h >= bars[i+1].h &&
+bars[i].h >= bars[i+2].h
+){
+
+out.push(i);
+
+}
+
+}
+
+return out;
+
+}
+
+
+
+function divergenceSignals(
+weeks,
+rsiSeries
+){
+
+const lows =
+findSwingLows(
+weeks,
+24
+);
+
+const highs =
+findSwingHighs(
+weeks,
+24
+);
+
+let bullish=false;
+let bearish=false;
+
+
+if(lows.length>=2){
+
+const a =
+lows.at(-2);
+
+const b =
+lows.at(-1);
+
+if(
+rsiSeries[a]!=null &&
+rsiSeries[b]!=null &&
+weeks[b].l < weeks[a].l &&
+rsiSeries[b] > rsiSeries[a]
+){
+
+bullish=true;
+
+}
+
+}
+
+
+if(highs.length>=2){
+
+const a =
+highs.at(-2);
+
+const b =
+highs.at(-1);
+
+if(
+rsiSeries[a]!=null &&
+rsiSeries[b]!=null &&
+weeks[b].h > weeks[a].h &&
+rsiSeries[b] < rsiSeries[a]
+){
+
+bearish=true;
+
+}
+
+}
+
+
+return {
+bullish,
+bearish,
+lows,
+highs
+};
+
+}
+
+
+
+function turningLabel(
+type,
+score,
+confirmed=false
+){
+
+if(type==='bottom'){
+
+if(
+confirmed &&
+score>=75
+)
+return 'REVERSAL CONFIRMED';
+
+if(score>=80)
+return 'STRONG BOTTOM';
+
+if(score>=60)
+return 'EARLY BOTTOM';
+
+if(score>=40)
+return 'BOTTOM WATCH';
+
+return 'NO BOTTOM SETUP';
+
+}
+
+
+if(
+confirmed &&
+score>=75
+)
+return 'REVERSAL DOWN';
+
+if(score>=80)
+return 'TOP WARNING';
+
+if(score>=60)
+return 'EARLY TOP';
+
+if(score>=40)
+return 'TOP WATCH';
+
+return 'NO TOP SETUP';
+
+}
+
+
+
+function turningState(
+bottom,
+top
+){
+
+if(
+bottom>=80 &&
+bottom-top>=20
+)
+return 'BOTTOM ZONE';
+
+if(
+bottom>=60 &&
+bottom-top>=15
+)
+return 'EARLY BOTTOM';
+
+if(
+top>=80 &&
+top-bottom>=20
+)
+return 'TOP WARNING';
+
+if(
+top>=60 &&
+top-bottom>=15
+)
+return 'EARLY TOP';
+
+return 'NEUTRAL';
+
+}
+
+
+
+function turnClass(state){
+
+if(
+state==='BOTTOM ZONE' ||
+state==='EARLY BOTTOM'
+)
+return 'good';
+
+if(
+state==='TOP WARNING'
+)
+return 'bad';
+
+if(
+state==='EARLY TOP'
+)
+return 'warn';
+
+return 'neutral';
+
+}
+
+
+
+function analyseTurning(
+symbol,
+daily,
+h4
+){
+
+if(
+!daily?.length
+)
+return null;
+
+
+const weeks =
+dailyToWeekly(
+daily
+);
+
+
+if(
+weeks.length<15
+){
+
+return {
+
+symbol,
+
+price:
+daily.at(-1).c,
+
+weeks,
+
+bottomScore:0,
+
+topScore:0,
+
+bottomLabel:
+'DATA LIMITED',
+
+topLabel:
+'DATA LIMITED',
+
+turnState:
+'DATA LIMITED',
+
+confidence:
+'LOW',
+
+bottomEvidence:[],
+
+topEvidence:[],
+
+weeklyRSI:null,
+
+stoch:null,
+
+techStop:
+daily.at(-1).c*.94,
+
+stopBasis:
+'6% FALLBACK',
+
+timing:false,
+
+h4rsi:null
+
+};
+
+}
+
+
+const closes =
+weeks.map(
+x=>x.c
+);
+
+const volumes =
+weeks.map(
+x=>x.v
+);
+
+const price =
+closes.at(-1);
+
+
+const rsis =
+RSIseries(
+closes,
+14
+);
+
+const weeklyRSI =
+rsis.at(-1);
+
+
+const previousRSI =
+rsis.at(-2);
+
+
+const macd =
+MACD(
+closes
+);
+
+
+const stoch =
+stochastic(
+weeks,
+14
+);
+
+
+const bb =
+bollinger(
+closes,
+20
+);
+
+
+const weeklyATR =
+ATR(
+weeks,
+14
+);
+
+
+const div =
+divergenceSignals(
+weeks,
+rsis
+);
+
+
+const last =
+weeks.at(-1);
+
+const prev =
+weeks.at(-2);
+
+
+const avgVolume =
+volumes.length>=13
+?average(
+volumes.slice(-13,-1)
+)
+:null;
+
+
+const relVolume =
+avgVolume
+?last.v/avgVolume
+:null;
+
+
+const recentLows =
+div.lows;
+
+
+const recentHighs =
+div.highs;
+
+
+let higherLow=false;
+let lowerHigh=false;
+
+
+if(
+recentLows.length>=2
+){
+
+const a =
+recentLows.at(-2);
+
+const b =
+recentLows.at(-1);
+
+higherLow =
+weeks[b].l >
+weeks[a].l;
+
+}
+
+
+if(
+recentHighs.length>=2
+){
+
+const a =
+recentHighs.at(-2);
+
+const b =
+recentHighs.at(-1);
+
+lowerHigh =
+weeks[b].h <
+weeks[a].h;
+
+}
+
+
+
+let bottom=0;
+let top=0;
+
+
+const bottomEvidence=[];
+const topEvidence=[];
+
+
+
+if(
+weeklyRSI!=null
+){
+
+if(weeklyRSI<=30){
+
+bottom+=18;
+
+bottomEvidence.push([
+'Weekly RSI',
+'OVERSOLD',
+'18'
+]);
+
+}
+else if(
+weeklyRSI<=38
+){
+
+bottom+=12;
+
+bottomEvidence.push([
+'Weekly RSI',
+'LOW',
+'12'
+]);
+
+}
+
+
+if(
+previousRSI!=null &&
+previousRSI<35 &&
+weeklyRSI>previousRSI
+){
+
+bottom+=8;
+
+bottomEvidence.push([
+'RSI Turn',
+'UP',
+'8'
+]);
+
+}
+
+
+if(weeklyRSI>=70){
+
+top+=18;
+
+topEvidence.push([
+'Weekly RSI',
+'OVERBOUGHT',
+'18'
+]);
+
+}
+else if(
+weeklyRSI>=62
+){
+
+top+=10;
+
+topEvidence.push([
+'Weekly RSI',
+'HIGH',
+'10'
+]);
+
+}
+
+
+if(
+previousRSI!=null &&
+previousRSI>65 &&
+weeklyRSI<previousRSI
+){
+
+top+=8;
+
+topEvidence.push([
+'RSI Turn',
+'DOWN',
+'8'
+]);
+
+}
+
+}
+
+
+
+if(div.bullish){
+
+bottom+=18;
+
+bottomEvidence.push([
+'RSI Divergence',
+'BULLISH',
+'18'
+]);
+
+}
+
+
+if(div.bearish){
+
+top+=18;
+
+topEvidence.push([
+'RSI Divergence',
+'BEARISH',
+'18'
+]);
+
+}
+
+
+
+if(macd){
+
+const mh =
+macd.hist;
+
+const mm =
+macd.macd;
+
+const ms =
+macd.signal;
+
+
+if(
+mh.length>=3 &&
+mh.at(-3)<mh.at(-2) &&
+mh.at(-2)<mh.at(-1)
+){
+
+bottom+=10;
+
+bottomEvidence.push([
+'MACD Histogram',
+'RISING',
+'10'
+]);
+
+}
+
+
+if(
+mm.at(-2)<=ms.at(-2) &&
+mm.at(-1)>ms.at(-1)
+){
+
+bottom+=12;
+
+bottomEvidence.push([
+'MACD',
+'BULL CROSS',
+'12'
+]);
+
+}
+
+
+if(
+mh.length>=3 &&
+mh.at(-3)>mh.at(-2) &&
+mh.at(-2)>mh.at(-1)
+){
+
+top+=10;
+
+topEvidence.push([
+'MACD Histogram',
+'FALLING',
+'10'
+]);
+
+}
+
+
+if(
+mm.at(-2)>=ms.at(-2) &&
+mm.at(-1)<ms.at(-1)
+){
+
+top+=12;
+
+topEvidence.push([
+'MACD',
+'BEAR CROSS',
+'12'
+]);
+
+}
+
+}
+
+
+
+if(stoch!=null){
+
+if(stoch<20){
+
+bottom+=8;
+
+bottomEvidence.push([
+'Stochastic',
+'OVERSOLD',
+'8'
+]);
+
+}
+
+
+if(stoch>80){
+
+top+=8;
+
+topEvidence.push([
+'Stochastic',
+'OVERBOUGHT',
+'8'
+]);
+
+}
+
+}
+
+
+
+if(bb){
+
+const prevCloses =
+closes.slice(0,-1);
+
+const prevBB =
+bollinger(
+prevCloses,
+20
+);
+
+
+if(
+prevBB &&
+prev.c < prevBB.lower &&
+last.c > bb.lower
+){
+
+bottom+=12;
+
+bottomEvidence.push([
+'Bollinger',
+'LOWER RE-ENTRY',
+'12'
+]);
+
+}
+
+
+if(
+prevBB &&
+prev.c > prevBB.upper &&
+last.c < bb.upper
+){
+
+top+=12;
+
+topEvidence.push([
+'Bollinger',
+'UPPER RE-ENTRY',
+'12'
+]);
+
+}
+
+}
+
+
+
+if(relVolume!=null){
+
+const redWeek =
+last.c < last.o;
+
+const greenWeek =
+last.c > last.o;
+
+
+if(
+relVolume>=1.7 &&
+redWeek
+){
+
+bottom+=8;
+
+bottomEvidence.push([
+'Volume',
+'CAPITULATION',
+'8'
+]);
+
+}
+
+
+if(
+relVolume>=1.7 &&
+greenWeek
+){
+
+top+=8;
+
+topEvidence.push([
+'Volume',
+'CLIMAX',
+'8'
+]);
+
+}
+
+}
+
+
+
+if(higherLow){
+
+bottom+=8;
+
+bottomEvidence.push([
+'Structure',
+'HIGHER LOW',
+'8'
+]);
+
+}
+
+
+if(lowerHigh){
+
+top+=8;
+
+topEvidence.push([
+'Structure',
+'LOWER HIGH',
+'8'
+]);
+
+}
+
+
+
+if(
+weeklyATR &&
+weeks.length>=20
+){
+
+const prevATR =
+ATR(
+weeks.slice(0,-1),
+14
+);
+
+
+if(
+prevATR &&
+weeklyATR < prevATR &&
+weeklyRSI!=null &&
+weeklyRSI<45
+){
+
+bottom+=6;
+
+bottomEvidence.push([
+'Volatility',
+'COOLING',
+'6'
+]);
+
+}
+
+
+if(
+prevATR &&
+weeklyATR > prevATR*1.15 &&
+weeklyRSI!=null &&
+weeklyRSI>60
+){
+
+top+=6;
+
+topEvidence.push([
+'Volatility',
+'EXPANDING',
+'6'
+]);
+
+}
+
+}
+
+
+
+bottom =
+Math.min(
+100,
+bottom
+);
+
+
+top =
+Math.min(
+100,
+top
+);
+
+
+
+const bottomConfirmed =
+
+last.c > prev.h &&
+weeklyRSI!=null &&
+weeklyRSI>40;
+
+
+
+const topConfirmed =
+
+last.c < prev.l &&
+weeklyRSI!=null &&
+weeklyRSI<60;
+
+
+
+const bottomLabel =
+turningLabel(
+'bottom',
+bottom,
+bottomConfirmed
+);
+
+
+const topLabel =
+turningLabel(
+'top',
+top,
+topConfirmed
+);
+
+
+const state =
+turningState(
+bottom,
+top
+);
+
+
 
 let confidence='LOW';
-if(close.length>=210&&hclose.length>=50)confidence='HIGH';
-else if(close.length>=50&&hclose.length>=20)confidence='MEDIUM';
 
-let longTrend='LIMITED';
-if(hasMA200&&hasMA50){
-if(price>ma200&&ma50>ma200&&(ma200Rising===true||ma200Rising===null)){
-longTrend='STRONG';
-}else if(price>ma200){
-longTrend='MIXED';
-}else{
-longTrend='WEAK';
-}
-}else if(hasMA50){
-longTrend=price>ma50?'SHORT UPTREND':'SHORT WEAK';
-}
+if(weeks.length>=45)
+confidence='HIGH';
 
-let signal='HOLD';
+else if(weeks.length>=26)
+confidence='MEDIUM';
 
-if(hasMA200){
-const below200=price<ma200;
-const structureWeak=hasMA50&&ma50<ma200;
 
-if(below200&&structureWeak){
-signal=normalizedScore<45?'REDUCE':'CAUTION';
-}else if(below200){
-signal='CAUTION';
-}else if(overextended){
-signal='HOLD';
-}else if(
-normalizedScore>=80 &&
-timing &&
-(!hasMA50||ma50>=ma200) &&
-(ma200Rising!==false)
-){
-signal='ADD';
-}else if(
-normalizedScore<40 &&
-structureWeak
-){
-signal='REDUCE';
-}else if(
-normalizedScore<55
-){
-signal='CAUTION';
-}else{
-signal='HOLD';
-}
-}else{
-if(overextended){
-signal='HOLD';
-}else if(normalizedScore>=80&&timing){
-signal='ADD';
-}else if(normalizedScore<45){
-signal='CAUTION';
-}else{
-signal='HOLD';
-}
-}
+
+const hclose =
+h4.map(
+x=>x.c
+);
+
+
+const hma20 =
+exactSMA(
+hclose,
+20
+);
+
+
+const h4rsi =
+RSI(
+hclose
+);
+
+
+const timing =
+hma20!==null &&
+h4rsi!==null &&
+hclose.at(-1)>hma20 &&
+h4rsi>=42 &&
+h4rsi<=68;
+
+
+
+const dailyClose =
+daily.map(
+x=>x.c
+);
+
+
+const dailyMA50 =
+exactSMA(
+dailyClose,
+50
+);
+
+
+const dailyATR =
+ATR(
+daily,
+14
+);
+
+
 
 let techStop=null;
 let stopBasis='—';
 
-if(atr!==null){
-const atrStop=price-(atr*2);
 
-if(ma50!==null){
-techStop=Math.min(ma50,atrStop);
-stopBasis=techStop===ma50?'MA50':'2 × ATR';
-}else if(ma20!==null){
-techStop=Math.min(ma20,atrStop);
-stopBasis=techStop===ma20?'MA20':'2 × ATR';
-}else{
-techStop=atrStop;
-stopBasis='2 × ATR';
+if(dailyATR){
+
+const atrStop =
+price -
+dailyATR*2;
+
+
+if(dailyMA50){
+
+techStop =
+Math.min(
+dailyMA50,
+atrStop
+);
+
+stopBasis =
+techStop===dailyMA50
+?'DAILY MA50'
+:'2 × DAILY ATR';
+
 }
+else{
+
+techStop =
+atrStop;
+
+stopBasis =
+'2 × DAILY ATR';
+
 }
 
-if(!techStop||techStop<=0||techStop>=price){
-techStop=price*.94;
-stopBasis='6% FALLBACK';
 }
 
-return{
-symbol,price,ma20,ma50,ma200,rsi,atr,
-hrsi,hma20,relVolume,timing,
-overextended,score:normalizedScore,
-possible,confidence,longTrend,signal,
-techStop,stopBasis,
-hasMA200,hasMA50,ma200Rising,
-dailyBars:close.length,h4Bars:hclose.length
+
+if(
+!techStop ||
+techStop<=0 ||
+techStop>=price
+){
+
+techStop =
+price*.94;
+
+stopBasis =
+'6% FALLBACK';
+
+}
+
+
+
+return {
+
+symbol,
+
+price,
+
+weeks,
+
+bottomScore:bottom,
+
+topScore:top,
+
+bottomLabel,
+
+topLabel,
+
+turnState:state,
+
+confidence,
+
+bottomEvidence,
+
+topEvidence,
+
+weeklyRSI,
+
+stoch,
+
+relVolume,
+
+bullDiv:
+div.bullish,
+
+bearDiv:
+div.bearish,
+
+higherLow,
+
+lowerHigh,
+
+bottomConfirmed,
+
+topConfirmed,
+
+weeklyATR,
+
+techStop,
+
+stopBasis,
+
+timing,
+
+h4rsi,
+
+weekCount:
+weeks.length
+
 };
+
 }
+
+
 
 function activeStop(symbol){
-const p=positions[symbol];
-const d=data[symbol];
-if(!p)return {active:null,manual:null,tech:null,basis:'—'};
 
-const manual=+p.stop>0?+p.stop:null;
-const tech=d?.techStop||null;
+const p =
+positions[symbol];
 
-return{
-active:manual||tech,
-manual,
-tech,
-basis:manual?'MANUAL':d?.stopBasis||'TECH'
+const d =
+data[symbol];
+
+
+if(!p)
+return {
+active:null,
+manual:null,
+tech:null,
+basis:'—'
 };
+
+
+const manual =
++p.stop>0
+?+p.stop
+:null;
+
+
+const tech =
+d?.techStop || null;
+
+
+return {
+
+active:
+manual || tech,
+
+manual,
+
+tech,
+
+basis:
+manual
+?'MANUAL'
+:d?.stopBasis ||
+'TECH'
+
+};
+
 }
 
-function positionRisk(symbol,avgOverride=null,qtyOverride=null){
-const p=positions[symbol];
-if(!p)return {loss:0,risk:0,stop:null};
 
-const s=activeStop(symbol);
-const avg=avgOverride??+p.avg;
-const qty=qtyOverride??+p.qty;
 
-if(!s.active)return {loss:0,risk:0,stop:null};
+function positionRisk(
+symbol,
+avgOverride=null,
+qtyOverride=null
+){
 
-const loss=Math.max(0,(avg-s.active)*qty);
-const risk=settings.equity?loss/settings.equity*100:0;
+const p =
+positions[symbol];
 
-return {loss,risk,stop:s.active};
+
+if(!p)
+return {
+loss:0,
+risk:0,
+stop:null
+};
+
+
+const s =
+activeStop(symbol);
+
+
+const avg =
+avgOverride ??
++p.avg;
+
+
+const qty =
+qtyOverride ??
++p.qty;
+
+
+if(!s.active)
+return {
+loss:0,
+risk:0,
+stop:null
+};
+
+
+const loss =
+Math.max(
+0,
+(avg-s.active)*qty
+);
+
+
+const risk =
+settings.equity
+?loss/settings.equity*100
+:0;
+
+
+return {
+loss,
+risk,
+stop:s.active
+};
+
 }
 
-function positionAction(symbol){
-const d=data[symbol];
-const r=positionRisk(symbol);
 
-if(r.risk>settings.maxRiskPct)return 'RISK ALERT';
-if(!d)return 'WAIT';
 
-if(d.signal==='REDUCE'&&r.stop&&d.price<r.stop)return 'EXIT WATCH';
+function displayState(symbol){
 
-return d.signal;
+const d =
+data[symbol];
+
+const r =
+positionRisk(symbol);
+
+
+if(
+r.risk >
+settings.maxRiskPct
+)
+return 'RISK ALERT';
+
+
+if(!d)
+return 'DATA WAIT';
+
+
+return d.turnState;
+
 }
+
+
 
 function badgeClass(s){
-if(s==='ADD')return 'good';
-if(s==='HOLD')return 'neutral';
-if(s==='CAUTION'||s==='REDUCE')return 'warn';
-if(s==='RISK ALERT'||s==='EXIT WATCH')return 'bad';
+
+if(
+s==='BOTTOM ZONE' ||
+s==='EARLY BOTTOM'
+)
+return 'good';
+
+
+if(
+s==='EARLY TOP'
+)
+return 'warn';
+
+
+if(
+s==='TOP WARNING' ||
+s==='RISK ALERT'
+)
+return 'bad';
+
+
 return 'neutral';
+
 }
+
+
 
 function render(){
+
 let list='';
-let add=0,hold=0,caution=0,reduce=0,risks=0;
+
+let bottoms=0;
+let neutral=0;
+let tops=0;
+let risks=0;
+
 let portfolioRisk=0;
 
-Object.keys(positions).forEach(symbol=>{
-const p=positions[symbol];
-const d=data[symbol];
-const action=positionAction(symbol);
-const r=positionRisk(symbol);
 
-if(action==='ADD')add++;
-else if(action==='HOLD'||action==='WAIT')hold++;
-else if(action==='CAUTION')caution++;
-else if(action==='REDUCE')reduce++;
-else risks++;
+Object.keys(
+positions
+)
+.forEach(
+symbol=>{
 
-portfolioRisk+=r.risk;
+const p =
+positions[symbol];
 
-const invested=(+p.qty||0)*(+p.avg||0);
-const current=d?.price||0;
-const value=current*(+p.qty||0);
-const pnl=current?value-invested:0;
-const t=symbolCacheTime(symbol);
+const d =
+data[symbol];
 
-list+=`
-<div class="row" data-position="${symbol}">
+const state =
+displayState(symbol);
+
+const r =
+positionRisk(symbol);
+
+
+portfolioRisk +=
+r.risk;
+
+
+if(
+state==='RISK ALERT'
+)
+risks++;
+
+else if(
+state==='BOTTOM ZONE' ||
+state==='EARLY BOTTOM'
+)
+bottoms++;
+
+else if(
+state==='TOP WARNING' ||
+state==='EARLY TOP'
+)
+tops++;
+
+else
+neutral++;
+
+
+const invested =
+(+p.qty||0) *
+(+p.avg||0);
+
+
+const current =
+d?.price || 0;
+
+
+const value =
+current *
+(+p.qty||0);
+
+
+const pnl =
+current
+?value-invested
+:0;
+
+
+const t =
+symbolCacheTime(
+symbol
+);
+
+
+list += `
+
+<div
+class="row"
+data-position="${symbol}">
+
 <div>
+
 <div class="name">
+
 ${symbol}
-<span class="badge ${badgeClass(action)}">${action}</span>
+
+<span
+class="badge ${badgeClass(state)}">
+
+${state}
+
+</span>
+
 </div>
+
+
 <div class="meta">
-${(+p.qty||0).toLocaleString()} shares · AVG ${money(p.avg)}<br>
-Invested ${money(invested)}
-${current?' · P/L '+money(pnl):''}
-${t?'<br><span class="datadot"></span>DATA '+ageText(Date.now()-t):''}
+
+${(+p.qty||0).toLocaleString()}
+shares · AVG ${money(p.avg)}
+
+<br>
+
+BOTTOM
+<b class="good">
+${d?.bottomScore ?? '—'}
+</b>
+
+/ TOP
+<b class="bad">
+${d?.topScore ?? '—'}
+</b>
+
+${current
+?' · P/L '+money(pnl)
+:''}
+
+${t
+?'<br><span class="datadot"></span>DATA '+ageText(Date.now()-t)
+:''}
+
 </div>
+
 </div>
-<div class="price">${current?money(current):'DATA WAIT'}</div>
-</div>`;
-});
 
-crypto.forEach((p,i)=>{
-const symbol=cryptoSymbol(p.symbol);
-const d=data[symbol];
-const current=d?.price||+p.entry||0;
-const dir=p.side==='SHORT'?-1:1;
-const size=+p.size||0;
-const entry=+p.entry||0;
-const pnl=entry?size*((current-entry)/entry)*dir:0;
-const stopLoss=p.stop&&entry?size*Math.abs(+p.stop-entry)/entry:0;
-const risk=settings.equity?stopLoss/settings.equity*100:0;
-portfolioRisk+=risk;
 
-const action=risk>settings.maxRiskPct?'RISK ALERT':'HOLD';
-if(action==='RISK ALERT')risks++;
-else hold++;
+<div class="price">
 
-list+=`
-<div class="row" data-crypto="${i}">
+${current
+?money(current)
+:'DATA WAIT'}
+
+</div>
+
+</div>
+
+`;
+
+}
+);
+
+
+
+crypto.forEach(
+(p,i)=>{
+
+const symbol =
+cryptoSymbol(
+p.symbol
+);
+
+
+const d =
+data[symbol];
+
+
+const current =
+d?.price ||
++p.entry ||
+0;
+
+
+const dir =
+p.side==='SHORT'
+?-1
+:1;
+
+
+const size =
++p.size || 0;
+
+
+const entry =
++p.entry || 0;
+
+
+const pnl =
+entry
+?size *
+((current-entry)/entry) *
+dir
+:0;
+
+
+const stopLoss =
+p.stop && entry
+?size *
+Math.abs(
++p.stop-entry
+)/entry
+:0;
+
+
+const risk =
+settings.equity
+?stopLoss/settings.equity*100
+:0;
+
+
+portfolioRisk +=
+risk;
+
+
+let state =
+risk >
+settings.maxRiskPct
+?'RISK ALERT'
+:(d?.turnState || 'NEUTRAL');
+
+
+if(
+state==='RISK ALERT'
+)
+risks++;
+
+else if(
+state==='BOTTOM ZONE' ||
+state==='EARLY BOTTOM'
+)
+bottoms++;
+
+else if(
+state==='TOP WARNING' ||
+state==='EARLY TOP'
+)
+tops++;
+
+else
+neutral++;
+
+
+list += `
+
+<div
+class="row"
+data-crypto="${i}">
+
 <div>
+
 <div class="name">
+
 ${p.symbol}
-<span class="badge ${badgeClass(action)}">${action}</span>
+
+<span
+class="badge ${badgeClass(state)}">
+
+${state}
+
+</span>
+
 </div>
+
+
 <div class="meta">
-${p.side} · ${p.leverage}X<br>
-Position ${money(size)} · P/L ${money(pnl)}
+
+${p.side} · ${p.leverage}X
+
+<br>
+
+BOTTOM
+<b class="good">
+${d?.bottomScore ?? '—'}
+</b>
+
+/ TOP
+<b class="bad">
+${d?.topScore ?? '—'}
+</b>
+
+· P/L ${money(pnl)}
+
 </div>
+
 </div>
-<div class="price">${current?money(current):'DATA WAIT'}</div>
-</div>`;
-});
 
-$('homeList').innerHTML=list||'<div class="empty">POSITION 탭에서 포지션을 등록하세요.</div>';
-$('positionList').innerHTML=list||'<div class="empty">등록된 포지션이 없습니다.</div>';
 
-const count=Object.keys(positions).length+crypto.length;
-$('homeCount').textContent=count;
-$('positionCount').textContent=count;
-$('trackedSymbols').textContent=symbols().length;
+<div class="price">
 
-$('addCount').textContent=add;
-$('holdCount').textContent=hold;
-$('cautionCount').textContent=caution;
-$('reduceCount').textContent=reduce;
-$('riskCount').textContent=risks;
+${current
+?money(current)
+:'DATA WAIT'}
 
-const heat=settings.maxRiskPct?portfolioRisk/settings.maxRiskPct*100:0;
-$('heatbar').style.width=Math.min(100,heat)+'%';
-$('heattext').innerHTML=
-'Portfolio Risk <b>'+portfolioRisk.toFixed(2)+'%</b> · Trade Risk Limit '+settings.maxRiskPct.toFixed(2)+'%';
+</div>
 
-document.querySelectorAll('[data-position]').forEach(el=>{
-el.onclick=()=>openPosition(el.dataset.position);
-});
+</div>
 
-document.querySelectorAll('[data-crypto]').forEach(el=>{
-el.onclick=()=>editCrypto(+el.dataset.crypto);
-});
+`;
+
+}
+);
+
+
+
+$('homeList').innerHTML =
+list ||
+'<div class="empty">POSITION 탭에서 포지션을 등록하세요.</div>';
+
+
+$('positionList').innerHTML =
+list ||
+'<div class="empty">등록된 포지션이 없습니다.</div>';
+
+
+const count =
+Object.keys(positions).length +
+crypto.length;
+
+
+$('homeCount').textContent =
+count;
+
+
+$('positionCount').textContent =
+count;
+
+
+$('trackedSymbols').textContent =
+symbols().length;
+
+
+$('bottomCount').textContent =
+bottoms;
+
+
+$('neutralCount').textContent =
+neutral;
+
+
+$('topCount').textContent =
+tops;
+
+
+$('riskCount').textContent =
+risks;
+
+
+const heat =
+settings.maxRiskPct
+?portfolioRisk /
+settings.maxRiskPct *
+100
+:0;
+
+
+$('heatbar').style.width =
+Math.min(
+100,
+heat
+)+'%';
+
+
+$('heattext').innerHTML =
+
+'Portfolio Risk <b>'+
+portfolioRisk.toFixed(2)+
+'%</b> · Trade Risk Limit '+
+settings.maxRiskPct.toFixed(2)+
+'%';
+
+
+document
+.querySelectorAll(
+'[data-position]'
+)
+.forEach(
+el=>{
+
+el.onclick =
+()=>openPosition(
+el.dataset.position
+);
+
+}
+);
+
+
+document
+.querySelectorAll(
+'[data-crypto]'
+)
+.forEach(
+el=>{
+
+el.onclick =
+()=>editCrypto(
++el.dataset.crypto
+);
+
+}
+);
+
 
 renderDataStatus();
+
 }
+
+
 
 function renderDataStatus(){
-const t=newestCacheTime();
 
-if(!symbols().length){
-$('dataStatus').textContent='NO POSITION';
-$('dataMode').textContent='—';
-$('lastMarketUpdate').textContent='—';
-$('dataAge').textContent='—';
+const t =
+newestCacheTime();
+
+
+if(
+!symbols().length
+){
+
+$('dataStatus').textContent =
+'NO POSITION';
+
+$('dataMode').textContent =
+'—';
+
+$('lastMarketUpdate').textContent =
+'—';
+
+$('dataAge').textContent =
+'—';
+
 return;
+
 }
+
 
 if(t){
-$('lastMarketUpdate').textContent=new Date(t).toLocaleString();
-$('dataAge').textContent=ageText(Date.now()-t);
+
+$('lastMarketUpdate').textContent =
+new Date(t)
+.toLocaleString();
+
+
+$('dataAge').textContent =
+ageText(
+Date.now()-t
+);
+
 }
 
-$('dataMode').textContent=lastFetchMode;
 
-if(lastFetchMode==='LIVE'){
-$('dataStatus').textContent='CONNECTED';
-$('sync').textContent='LIVE';
-}else if(t){
-$('dataStatus').textContent='CONNECTED';
-$('sync').textContent='CACHED DATA';
-}else{
-$('dataStatus').textContent='WAIT';
-$('sync').textContent='DATA WAIT';
+$('dataMode').textContent =
+lastFetchMode;
+
+
+if(
+lastFetchMode==='LIVE'
+){
+
+$('dataStatus').textContent =
+'CONNECTED';
+
+$('sync').textContent =
+'LIVE';
+
 }
+else if(t){
+
+$('dataStatus').textContent =
+'CONNECTED';
+
+$('sync').textContent =
+'CACHED DATA';
+
 }
+else{
+
+$('dataStatus').textContent =
+'WAIT';
+
+$('sync').textContent =
+'DATA WAIT';
+
+}
+
+}
+
+
+
+function evidenceHTML(
+items,
+emptyText
+){
+
+if(!items.length)
+return `
+<div class="empty">
+${emptyText}
+</div>
+`;
+
+
+return items
+.map(
+x=>`
+
+<div class="signal">
+
+<span>
+${x[0]}
+</span>
+
+<b>
+${x[1]} · +${x[2]}
+</b>
+
+</div>
+
+`
+)
+.join('');
+
+}
+
+
 
 function openPosition(symbol){
-currentTicker=symbol;
 
-const p=positions[symbol];
-const d=data[symbol];
-if(!p)return;
+currentTicker =
+symbol;
 
-const s=activeStop(symbol);
-const r=positionRisk(symbol);
-const action=positionAction(symbol);
 
-$('detailTicker').textContent=symbol;
-$('currentPrice').textContent=d?money(d.price):'DATA WAIT';
-$('score').innerHTML=(d?.score??'—')+'<small>/100</small>';
-$('confidence').textContent='CONFIDENCE '+(d?.confidence||'—');
+const p =
+positions[symbol];
 
-$('actionBadge').textContent=action;
-$('actionBadge').className='badge '+badgeClass(action);
 
-const ct=symbolCacheTime(symbol);
-$('detailDataAge').textContent=ct?'DATA · '+ageText(Date.now()-ct):'DATA WAIT';
+const d =
+data[symbol];
 
-const invested=(+p.qty||0)*(+p.avg||0);
-const value=d?d.price*(+p.qty||0):0;
-const pnl=d?value-invested:0;
-const pnlPct=invested?pnl/invested*100:0;
 
-$('positionStats').innerHTML=`
-<div class="stat"><small>수량</small><b>${(+p.qty||0).toLocaleString()}</b></div>
-<div class="stat"><small>평단</small><b>${money(p.avg)}</b></div>
-<div class="stat"><small>투자금액</small><b>${money(invested)}</b></div>
-<div class="stat"><small>현재 평가금</small><b>${d?money(value):'—'}</b></div>
-<div class="stat"><small>P/L</small><b class="${pnl>=0?'good':'bad'}">${d?money(pnl):'—'}</b></div>
-<div class="stat"><small>수익률</small><b class="${pnlPct>=0?'good':'bad'}">${d?pct(pnlPct):'—'}</b></div>
-<div class="stat"><small>Active Stop</small><b>${money(s.active)}</b></div>
-<div class="stat"><small>Stop 손실</small><b>${money(r.loss)}</b></div>`;
+if(!p)
+return;
 
-const riskRatio=settings.maxRiskPct?r.risk/settings.maxRiskPct*100:0;
-$('riskbar').style.width=Math.min(100,riskRatio)+'%';
 
-$('riskText').innerHTML=
-'현재 Risk <b>'+r.risk.toFixed(2)+'%</b> / Limit '+settings.maxRiskPct.toFixed(2)+'%'+
-(r.risk>settings.maxRiskPct?' · <span class="bad"><b>RISK LIMIT EXCEEDED</b></span>':'');
+const s =
+activeStop(symbol);
 
-$('stopEngine').innerHTML=`
-<div class="signal"><span>TECH STOP</span><b>${money(s.tech)}</b></div>
-<div class="signal"><span>Tech Basis</span><b>${d?.stopBasis||'DATA WAIT'}</b></div>
-<div class="signal"><span>MANUAL STOP</span><b>${s.manual?money(s.manual):'NOT SET'}</b></div>
-<div class="signal"><span>ACTIVE STOP</span><b class="blue">${money(s.active)}</b></div>
-<div class="signal"><span>Risk Source</span><b>${s.manual?'MANUAL':'TECH'}</b></div>`;
+
+const r =
+positionRisk(symbol);
+
+
+const state =
+displayState(symbol);
+
+
+$('detailTicker').textContent =
+symbol;
+
+
+$('currentPrice').textContent =
+d
+?money(d.price)
+:'DATA WAIT';
+
+
+$('bottomScore').textContent =
+d?.bottomScore ?? '—';
+
+
+$('topScore').textContent =
+d?.topScore ?? '—';
+
+
+$('bottomLabel').textContent =
+d?.bottomLabel || '—';
+
+
+$('topLabel').textContent =
+d?.topLabel || '—';
+
+
+$('turnBadge').textContent =
+state;
+
+
+$('turnBadge').className =
+'badge '+
+badgeClass(state);
+
+
+const ct =
+symbolCacheTime(symbol);
+
+
+$('detailDataAge').textContent =
+ct
+?'DATA · '+ageText(Date.now()-ct)
+:'DATA WAIT';
+
+
+$('turnConfidence').textContent =
+'CONFIDENCE '+
+(d?.confidence || '—');
+
+
+
+const invested =
+(+p.qty||0) *
+(+p.avg||0);
+
+
+const value =
+d
+?d.price *
+(+p.qty||0)
+:0;
+
+
+const pnl =
+d
+?value-invested
+:0;
+
+
+const pnlPct =
+invested
+?pnl/invested*100
+:0;
+
+
+$('positionStats').innerHTML = `
+
+<div class="stat">
+<small>수량</small>
+<b>${(+p.qty||0).toLocaleString()}</b>
+</div>
+
+<div class="stat">
+<small>평단</small>
+<b>${money(p.avg)}</b>
+</div>
+
+<div class="stat">
+<small>투자금액</small>
+<b>${money(invested)}</b>
+</div>
+
+<div class="stat">
+<small>현재 평가금</small>
+<b>${d?money(value):'—'}</b>
+</div>
+
+<div class="stat">
+<small>P/L</small>
+<b class="${pnl>=0?'good':'bad'}">
+${d?money(pnl):'—'}
+</b>
+</div>
+
+<div class="stat">
+<small>수익률</small>
+<b class="${pnlPct>=0?'good':'bad'}">
+${d?pct(pnlPct):'—'}
+</b>
+</div>
+
+<div class="stat">
+<small>Active Stop</small>
+<b>${money(s.active)}</b>
+</div>
+
+<div class="stat">
+<small>Stop 손실</small>
+<b>${money(r.loss)}</b>
+</div>
+
+`;
+
+
+const riskRatio =
+settings.maxRiskPct
+?r.risk /
+settings.maxRiskPct *
+100
+:0;
+
+
+$('riskbar').style.width =
+Math.min(
+100,
+riskRatio
+)+'%';
+
+
+$('riskText').innerHTML =
+
+'현재 Risk <b>'+
+r.risk.toFixed(2)+
+'%</b> / Limit '+
+settings.maxRiskPct.toFixed(2)+
+'%'+
+
+(
+r.risk >
+settings.maxRiskPct
+
+?' · <span class="bad"><b>RISK LIMIT EXCEEDED</b></span>'
+
+:''
+);
+
+
+
+$('stopEngine').innerHTML = `
+
+<div class="signal">
+<span>TECH STOP</span>
+<b>${money(s.tech)}</b>
+</div>
+
+<div class="signal">
+<span>Tech Basis</span>
+<b>${d?.stopBasis||'DATA WAIT'}</b>
+</div>
+
+<div class="signal">
+<span>MANUAL STOP</span>
+<b>${s.manual?money(s.manual):'NOT SET'}</b>
+</div>
+
+<div class="signal">
+<span>ACTIVE STOP</span>
+<b class="blue">${money(s.active)}</b>
+</div>
+
+<div class="signal">
+<span>Risk Source</span>
+<b>${s.manual?'MANUAL':'TECH'}</b>
+</div>
+
+`;
+
+
 
 if(d){
-const ma200Text=d.hasMA200
-?(d.price>d.ma200?'ABOVE':'BELOW')
-:'DATA LIMITED';
 
-const ma200Class=!d.hasMA200?'warn':d.price>d.ma200?'good':'bad';
+$('turnEngine').innerHTML = `
 
-$('signalEngine').innerHTML=`
-<div class="signal"><span>MA200</span><b class="${ma200Class}">${ma200Text}</b></div>
-<div class="signal"><span>MA50 / MA200</span><b>${d.hasMA200&&d.hasMA50?(d.ma50>d.ma200?'BULLISH':'WEAK'):'DATA LIMITED'}</b></div>
-<div class="signal"><span>MA200 Trend</span><b>${d.ma200Rising===null?'DATA LIMITED':d.ma200Rising?'RISING':'FALLING'}</b></div>
-<div class="signal"><span>4H Timing</span><b class="${d.timing?'good':'warn'}">${d.timing?'READY':'WAIT'}</b></div>
-<div class="signal"><span>Daily RSI</span><b>${d.rsi===null?'—':Math.round(d.rsi)}</b></div>
-<div class="signal"><span>Relative Volume</span><b>${d.relVolume===null?'—':d.relVolume.toFixed(2)+'x'}</b></div>
-<div class="signal"><span>CHASE RISK</span><b class="${d.overextended?'warn':'good'}">${d.overextended?'HIGH':'NORMAL'}</b></div>
-<div class="signal"><span>Long Trend</span><b>${d.longTrend}</b></div>
-<div class="signal"><span>Data</span><b>${d.dailyBars}D / ${d.h4Bars} 4H</b></div>`;
-}else{
-$('signalEngine').innerHTML='<div class="empty">시장 데이터 업데이트 대기</div>';
+<div class="signal">
+<span>Weekly Bars</span>
+<b>${d.weekCount}</b>
+</div>
+
+<div class="signal">
+<span>Weekly RSI</span>
+<b>${d.weeklyRSI==null?'—':d.weeklyRSI.toFixed(1)}</b>
+</div>
+
+<div class="signal">
+<span>Stochastic</span>
+<b>${d.stoch==null?'—':d.stoch.toFixed(1)}</b>
+</div>
+
+<div class="signal">
+<span>RSI Bull Divergence</span>
+<b class="${d.bullDiv?'good':''}">
+${d.bullDiv?'YES':'NO'}
+</b>
+</div>
+
+<div class="signal">
+<span>RSI Bear Divergence</span>
+<b class="${d.bearDiv?'bad':''}">
+${d.bearDiv?'YES':'NO'}
+</b>
+</div>
+
+<div class="signal">
+<span>Higher Low</span>
+<b>${d.higherLow?'YES':'NO'}</b>
+</div>
+
+<div class="signal">
+<span>Lower High</span>
+<b>${d.lowerHigh?'YES':'NO'}</b>
+</div>
+
+<div class="signal">
+<span>Bottom Confirmation</span>
+<b class="${d.bottomConfirmed?'good':''}">
+${d.bottomConfirmed?'YES':'WAIT'}
+</b>
+</div>
+
+<div class="signal">
+<span>Top Confirmation</span>
+<b class="${d.topConfirmed?'bad':''}">
+${d.topConfirmed?'YES':'WAIT'}
+</b>
+</div>
+
+`;
+
+
+$('bottomEvidence').innerHTML =
+evidenceHTML(
+d.bottomEvidence,
+'현재 강한 바닥 증거가 없습니다.'
+);
+
+
+$('topEvidence').innerHTML =
+evidenceHTML(
+d.topEvidence,
+'현재 강한 고점 증거가 없습니다.'
+);
+
+
+$('timingEngine').innerHTML = `
+
+<div class="signal">
+<span>4H Timing</span>
+<b class="${d.timing?'good':'warn'}">
+${d.timing?'READY':'WAIT'}
+</b>
+</div>
+
+<div class="signal">
+<span>4H RSI</span>
+<b>
+${d.h4rsi==null?'—':d.h4rsi.toFixed(1)}
+</b>
+</div>
+
+<div class="signal">
+<span>Weekly Bottom</span>
+<b class="good">
+${d.bottomScore}/100
+</b>
+</div>
+
+<div class="signal">
+<span>Weekly Top</span>
+<b class="bad">
+${d.topScore}/100
+</b>
+</div>
+
+<div class="signal">
+<span>Execution View</span>
+<b>
+${
+d.bottomScore>=60 && d.timing
+?'BOTTOM + 4H READY'
+:d.topScore>=60
+?'SCALE OUT WATCH'
+:'WAIT'
 }
+</b>
+</div>
+
+`;
+
+}
+else{
+
+$('turnEngine').innerHTML =
+'<div class="empty">시장 데이터 업데이트 대기</div>';
+
+$('bottomEvidence').innerHTML =
+'<div class="empty">DATA WAIT</div>';
+
+$('topEvidence').innerHTML =
+'<div class="empty">DATA WAIT</div>';
+
+$('timingEngine').innerHTML =
+'<div class="empty">DATA WAIT</div>';
+
+}
+
 
 renderScaleIn(symbol);
+
 renderScaleOut(symbol);
 
+
 $('addQty').value='';
+
 $('addPrice').value='';
+
 simulateAdd();
 
-$('detail').classList.add('open');
+
+$('detail').classList.add(
+'open'
+);
+
 }
+
+
 
 function suggestedLevels(symbol){
-const d=data[symbol];
-if(!d)return [];
 
-const levels=[];
+const d =
+data[symbol];
 
-let l1=d.price;
-let l2=d.ma20;
-let l3=d.ma50;
 
-if(d.atr){
-if(!l2||l2>=l1)l2=l1-d.atr;
-if(!l3||l3>=l2)l3=l1-(d.atr*2);
+if(!d)
+return [];
+
+
+const daily =
+cache[
+symbol+'__1day'
+]?.values || [];
+
+
+const closes =
+daily.map(
+x=>x.c
+);
+
+
+const ma20 =
+exactSMA(
+closes,
+20
+);
+
+
+const ma50 =
+exactSMA(
+closes,
+50
+);
+
+
+const atr =
+ATR(
+daily,
+14
+);
+
+
+let l1 =
+d.price;
+
+
+let l2 =
+ma20;
+
+
+let l3 =
+ma50;
+
+
+if(atr){
+
+if(
+!l2 ||
+l2>=l1
+)
+l2 =
+l1-atr;
+
+
+if(
+!l3 ||
+l3>=l2
+)
+l3 =
+l1-atr*2;
+
 }
 
-if(!l2)l2=l1*.97;
-if(!l3)l3=l1*.94;
 
-l2=Math.min(l2,l1);
-l3=Math.min(l3,l2);
+if(!l2)
+l2 =
+l1*.97;
+
+
+if(!l3)
+l3 =
+l1*.94;
+
+
+l2 =
+Math.min(
+l2,
+l1
+);
+
+
+l3 =
+Math.min(
+l3,
+l2
+);
+
 
 return [
-{label:'1차',name:'4H / Current',price:l1},
-{label:'2차',name:'MA20 Pullback',price:l2},
-{label:'3차',name:'MA50 / ATR Deep',price:l3}
-];
+
+{
+label:'1차',
+name:'4H / Current',
+price:l1
+},
+
+{
+label:'2차',
+name:'Daily Pullback',
+price:l2
+},
+
+{
+label:'3차',
+name:'Deep Pullback',
+price:l3
 }
+
+];
+
+}
+
+
 
 function renderScaleIn(symbol){
-const levels=suggestedLevels(symbol);
 
-if(!levels.length){
-$('scaleInPlan').innerHTML='<div class="empty">시장 데이터가 필요합니다.</div>';
+const d =
+data[symbol];
+
+
+const levels =
+suggestedLevels(symbol);
+
+
+if(
+!levels.length
+){
+
+$('scaleInPlan').innerHTML =
+'<div class="empty">시장 데이터가 필요합니다.</div>';
+
 return;
+
 }
 
-$('scaleInPlan').innerHTML=levels.map((x,i)=>`
+
+let guide =
+'WAIT';
+
+
+if(
+d.bottomScore>=80 &&
+d.timing
+)
+guide =
+'BOTTOM STRONG + 4H READY';
+
+
+else if(
+d.bottomScore>=60
+)
+guide =
+'EARLY BOTTOM · SPLIT ENTRY WATCH';
+
+
+else if(
+d.topScore>=60
+)
+guide =
+'TOP RISK · ADD CAUTION';
+
+
+$('scaleInPlan').innerHTML = `
+
+<div class="notice">
+${guide}
+</div>
+
+` +
+
+levels.map(
+(x,i)=>`
+
 <div class="plan">
+
 <div class="planhead">
-<b>${x.label} · ${x.name}</b>
-<span>${money(x.price)}</span>
+
+<b>
+${x.label} · ${x.name}
+</b>
+
+<span>
+${money(x.price)}
+</span>
+
 </div>
+
 <div class="planmeta">
-${i===0?'현재/4H 타이밍 기준':
-i===1?'단기 추세 눌림 기준':
-'중기 추세 또는 변동성 심화 구간'}
-</div>
-</div>`).join('');
+
+${
+i===0
+?'현재 가격 및 4H 실행 타이밍'
+:i===1
+?'일봉 단기 눌림 기준'
+:'일봉 중기/ATR 깊은 눌림 기준'
 }
+
+</div>
+
+</div>
+
+`
+)
+.join('');
+
+}
+
+
 
 function renderScaleOut(symbol){
-const p=positions[symbol];
-const d=data[symbol];
-const s=activeStop(symbol);
 
-if(!p||!s.active){
-$('scaleOutPlan').innerHTML='<div class="empty">Active Stop이 필요합니다.</div>';
+const p =
+positions[symbol];
+
+const d =
+data[symbol];
+
+const s =
+activeStop(symbol);
+
+
+if(
+!p ||
+!s.active
+){
+
+$('scaleOutPlan').innerHTML =
+'<div class="empty">Active Stop이 필요합니다.</div>';
+
 return;
+
 }
 
-const avg=+p.avg;
-const qty=+p.qty;
-const R=Math.max(0,avg-s.active);
+
+const avg =
++p.avg;
+
+
+const qty =
++p.qty;
+
+
+const R =
+Math.max(
+0,
+avg-s.active
+);
+
 
 if(!R){
-$('scaleOutPlan').innerHTML='<div class="empty">평단과 Stop 구조를 확인하세요.</div>';
+
+$('scaleOutPlan').innerHTML =
+'<div class="empty">평단과 Stop 구조를 확인하세요.</div>';
+
 return;
+
 }
 
-const plans=[
-['T1','1R',avg+R,25],
-['T2','2R',avg+R*2,25],
-['T3','3R',avg+R*3,30],
-['RUNNER','4R+',avg+R*4,20]
+
+let weights =
+[25,25,30,20];
+
+
+if(
+d?.topScore>=80
+){
+
+weights =
+[35,30,25,10];
+
+}
+else if(
+d?.topScore>=60
+){
+
+weights =
+[30,30,25,15];
+
+}
+
+
+const plans = [
+
+['T1','1R',avg+R,weights[0]],
+
+['T2','2R',avg+R*2,weights[1]],
+
+['T3','3R',avg+R*3,weights[2]],
+
+['RUNNER','4R+',avg+R*4,weights[3]]
+
 ];
 
-$('scaleOutPlan').innerHTML=plans.map(x=>{
-const sellQty=qty*x[3]/100;
-const proceeds=sellQty*x[2];
-const profit=sellQty*(x[2]-avg);
+
+$('scaleOutPlan').innerHTML = `
+
+<div class="notice">
+
+Weekly TOP ${d?.topScore??'—'}/100 ·
+${
+d?.topScore>=80
+?'고점 경고가 강해 기본 익절 비중을 높였습니다.'
+:d?.topScore>=60
+?'고점 가능성이 올라와 분할매도를 주의 깊게 봅니다.'
+:'고점 신호가 강하지 않아 기본 분할익절 구조를 사용합니다.'
+}
+
+</div>
+
+` +
+
+plans.map(
+x=>{
+
+const sellQty =
+qty*x[3]/100;
+
+
+const proceeds =
+sellQty*x[2];
+
+
+const profit =
+sellQty*
+(x[2]-avg);
+
 
 return `
+
 <div class="plan">
+
 <div class="planhead">
-<b>${x[0]} · ${x[1]}</b>
-<span>${money(x[2])}</span>
+
+<b>
+${x[0]} · ${x[1]}
+</b>
+
+<span>
+${money(x[2])}
+</span>
+
 </div>
+
 <div class="planmeta">
-기본 ${x[3]}% · 약 ${sellQty.toFixed(2)}주<br>
-예상 회수 ${money(proceeds)} · 예상 이익 ${money(profit)}
+
+기본 ${x[3]}% · 약 ${sellQty.toFixed(2)}주
+
+<br>
+
+예상 회수 ${money(proceeds)}
+· 예상 이익 ${money(profit)}
+
 </div>
-</div>`;
-}).join('');
+
+</div>
+
+`;
+
 }
+)
+.join('');
+
+}
+
+
 
 function simulateAdd(){
-if(!currentTicker)return;
 
-const p=positions[currentTicker];
-if(!p)return;
-
-const aq=+$('addQty').value||0;
-const ap=+$('addPrice').value||0;
-
-if(!aq||!ap){
-$('newQty').textContent='—';
-$('newAvg').textContent='—';
-$('newInvested').textContent='—';
-$('newRisk').textContent='—';
-$('newRiskBar').style.width='0%';
-$('newRiskText').textContent='추가 수량과 가격을 입력하면 자동 계산됩니다.';
+if(!currentTicker)
 return;
+
+
+const p =
+positions[currentTicker];
+
+
+if(!p)
+return;
+
+
+const aq =
++$('addQty').value || 0;
+
+
+const ap =
++$('addPrice').value || 0;
+
+
+if(
+!aq ||
+!ap
+){
+
+$('newQty').textContent='—';
+
+$('newAvg').textContent='—';
+
+$('newInvested').textContent='—';
+
+$('newRisk').textContent='—';
+
+$('newRiskBar').style.width='0%';
+
+$('newRiskText').textContent =
+'추가 수량과 가격을 입력하면 자동 계산됩니다.';
+
+return;
+
 }
 
-const oldRisk=positionRisk(currentTicker).risk;
-const totalQty=(+p.qty||0)+aq;
-const totalCost=((+p.qty||0)*(+p.avg||0))+(aq*ap);
-const newAvg=totalCost/totalQty;
-const r=positionRisk(currentTicker,newAvg,totalQty);
 
-$('newQty').textContent=totalQty.toLocaleString();
-$('newAvg').textContent=money(newAvg);
-$('newInvested').textContent=money(totalCost);
-$('newRisk').textContent=r.risk.toFixed(2)+'%';
+const oldRisk =
+positionRisk(
+currentTicker
+).risk;
 
-const ratio=settings.maxRiskPct?r.risk/settings.maxRiskPct*100:0;
-$('newRiskBar').style.width=Math.min(100,ratio)+'%';
 
-$('newRiskText').innerHTML=
-'Risk <b>'+oldRisk.toFixed(2)+'%</b> → <b>'+r.risk.toFixed(2)+'%</b> / Limit '+
-settings.maxRiskPct.toFixed(2)+'%'+
-(r.risk>settings.maxRiskPct?' · <span class="bad"><b>HIGH RISK</b></span>':'');
+const totalQty =
+(+p.qty||0) +
+aq;
+
+
+const totalCost =
+
+((+p.qty||0) *
+(+p.avg||0))
+
++
+
+(aq*ap);
+
+
+const newAvg =
+totalCost /
+totalQty;
+
+
+const r =
+positionRisk(
+currentTicker,
+newAvg,
+totalQty
+);
+
+
+$('newQty').textContent =
+totalQty.toLocaleString();
+
+
+$('newAvg').textContent =
+money(newAvg);
+
+
+$('newInvested').textContent =
+money(totalCost);
+
+
+$('newRisk').textContent =
+r.risk.toFixed(2)+'%';
+
+
+const ratio =
+settings.maxRiskPct
+?r.risk/settings.maxRiskPct*100
+:0;
+
+
+$('newRiskBar').style.width =
+Math.min(
+100,
+ratio
+)+'%';
+
+
+$('newRiskText').innerHTML =
+
+'Risk <b>'+
+oldRisk.toFixed(2)+
+'%</b> → <b>'+
+r.risk.toFixed(2)+
+'%</b> / Limit '+
+settings.maxRiskPct.toFixed(2)+
+'%'+
+
+(
+r.risk >
+settings.maxRiskPct
+
+?' · <span class="bad"><b>HIGH RISK</b></span>'
+
+:''
+);
+
 }
 
-async function updateData(force=false){
-const syms=symbols();
+
+
+async function updateData(
+force=false
+){
+
+const syms =
+symbols();
+
 
 if(!syms.length){
-$('sync').textContent='NO POSITION';
+
+$('sync').textContent =
+'NO POSITION';
+
 renderDataStatus();
+
 return;
+
 }
 
-$('sync').textContent='SYNCING';
-$('dataStatus').textContent='SYNCING';
+
+$('sync').textContent =
+'SYNCING';
+
+
+$('dataStatus').textContent =
+'SYNCING';
+
 
 let usedLive=false;
 let hadData=false;
 
-for(const symbol of syms){
-const h=await fetchSeries(symbol,'4h',force);
-if(h.mode==='LIVE')usedLive=true;
 
-const d=await fetchSeries(symbol,'1day',force);
-if(d.mode==='LIVE')usedLive=true;
+for(
+const symbol of syms
+){
 
-if(d.values.length){
-data[symbol]=analyse(symbol,d.values,h.values);
+const h =
+await fetchSeries(
+symbol,
+'4h',
+force
+);
+
+
+if(
+h.mode==='LIVE'
+)
+usedLive=true;
+
+
+const d =
+await fetchSeries(
+symbol,
+'1day',
+force
+);
+
+
+if(
+d.mode==='LIVE'
+)
+usedLive=true;
+
+
+if(
+d.values.length
+){
+
+data[symbol] =
+analyseTurning(
+symbol,
+d.values,
+h.values
+);
+
+
 hadData=true;
-render();
-}
-
-await new Promise(r=>setTimeout(r,1200));
-}
-
-lastFetchMode=usedLive?'LIVE':hadData?'CACHED':'ERROR';
 
 render();
+
+}
+
+
+await new Promise(
+r=>setTimeout(
+r,
+1200
+)
+);
+
+}
+
+
+lastFetchMode =
+usedLive
+?'LIVE'
+:hadData
+?'CACHED'
+:'ERROR';
+
+
+render();
+
 renderDataStatus();
 
-if(currentTicker&&positions[currentTicker]){
-openPosition(currentTicker);
+
+if(
+currentTicker &&
+positions[currentTicker]
+){
+
+openPosition(
+currentTicker
+);
+
 }
+
 }
+
+
 
 function resetStockForm(){
+
 editingTicker=null;
+
 $('ticker').disabled=false;
+
 $('ticker').value='';
+
 $('qty').value='';
+
 $('avgPrice').value='';
+
 $('stopPrice').value='';
+
 $('investedCalc').textContent='$0';
+
 $('saveStock').textContent='포지션 등록';
+
 $('cancelEdit').style.display='none';
-$('stockEditBanner').classList.remove('show');
+
+$('stockEditBanner')
+.classList
+.remove('show');
+
 }
+
+
 
 function startStockEdit(symbol){
-const p=positions[symbol];
-if(!p)return;
 
-editingTicker=symbol;
+const p =
+positions[symbol];
 
-$('ticker').value=symbol;
-$('ticker').disabled=true;
-$('qty').value=p.qty;
-$('avgPrice').value=p.avg;
-$('stopPrice').value=p.stop||'';
-$('investedCalc').textContent=money((+p.qty||0)*(+p.avg||0));
 
-$('saveStock').textContent='수정 저장';
-$('cancelEdit').style.display='block';
-$('stockEditBanner').classList.add('show');
+if(!p)
+return;
 
-$('detail').classList.remove('open');
+
+editingTicker =
+symbol;
+
+
+$('ticker').value =
+symbol;
+
+
+$('ticker').disabled =
+true;
+
+
+$('qty').value =
+p.qty;
+
+
+$('avgPrice').value =
+p.avg;
+
+
+$('stopPrice').value =
+p.stop || '';
+
+
+$('investedCalc').textContent =
+money(
+(+p.qty||0) *
+(+p.avg||0)
+);
+
+
+$('saveStock').textContent =
+'수정 저장';
+
+
+$('cancelEdit').style.display =
+'block';
+
+
+$('stockEditBanner')
+.classList
+.add('show');
+
+
+$('detail')
+.classList
+.remove('open');
+
+
 go(1);
+
 }
+
+
 
 function resetCryptoForm(){
+
 editingCryptoIndex=null;
+
 $('cryptoSymbol').disabled=false;
+
 $('cryptoSymbol').value='';
+
 $('cryptoSide').value='LONG';
+
 $('cryptoLev').value=5;
+
 $('cryptoEntry').value='';
+
 $('cryptoSize').value='';
+
 $('cryptoStop').value='';
+
 $('cryptoLiq').value='';
-$('saveCrypto').textContent='포지션 등록';
-$('cancelCryptoEdit').style.display='none';
-$('cryptoEditBanner').classList.remove('show');
+
+$('saveCrypto').textContent =
+'포지션 등록';
+
+$('cancelCryptoEdit').style.display =
+'none';
+
+$('cryptoEditBanner')
+.classList
+.remove('show');
+
 }
 
+
+
 function editCrypto(i){
-const p=crypto[i];
-if(!p)return;
+
+const p =
+crypto[i];
+
+
+if(!p)
+return;
+
 
 editingCryptoIndex=i;
 
-document.querySelectorAll('.seg button').forEach(x=>{
-x.classList.toggle('active',x.dataset.mode==='crypto');
-});
 
-$('stockForm').style.display='none';
-$('cryptoForm').style.display='block';
+document
+.querySelectorAll(
+'.seg button'
+)
+.forEach(
+x=>{
 
-$('cryptoSymbol').value=p.symbol;
-$('cryptoSymbol').disabled=true;
-$('cryptoSide').value=p.side;
-$('cryptoLev').value=p.leverage;
-$('cryptoEntry').value=p.entry;
-$('cryptoSize').value=p.size;
-$('cryptoStop').value=p.stop||'';
-$('cryptoLiq').value=p.liq||'';
+x.classList.toggle(
+'active',
+x.dataset.mode==='crypto'
+);
 
-$('saveCrypto').textContent='수정 저장';
-$('cancelCryptoEdit').style.display='block';
-$('cryptoEditBanner').classList.add('show');
+}
+);
+
+
+$('stockForm').style.display =
+'none';
+
+
+$('cryptoForm').style.display =
+'block';
+
+
+$('cryptoSymbol').value =
+p.symbol;
+
+
+$('cryptoSymbol').disabled =
+true;
+
+
+$('cryptoSide').value =
+p.side;
+
+
+$('cryptoLev').value =
+p.leverage;
+
+
+$('cryptoEntry').value =
+p.entry;
+
+
+$('cryptoSize').value =
+p.size;
+
+
+$('cryptoStop').value =
+p.stop || '';
+
+
+$('cryptoLiq').value =
+p.liq || '';
+
+
+$('saveCrypto').textContent =
+'수정 저장';
+
+
+$('cancelCryptoEdit').style.display =
+'block';
+
+
+$('cryptoEditBanner')
+.classList
+.add('show');
+
 
 go(1);
+
 }
 
-$('qty').oninput=$('avgPrice').oninput=()=>{
-const q=+$('qty').value||0;
-const a=+$('avgPrice').value||0;
-$('investedCalc').textContent=money(q*a);
+
+
+$('qty').oninput =
+$('avgPrice').oninput =
+()=>{
+
+const q =
++$('qty').value || 0;
+
+const a =
++$('avgPrice').value || 0;
+
+$('investedCalc').textContent =
+money(
+q*a
+);
+
 };
 
-$('addQty').oninput=simulateAdd;
-$('addPrice').oninput=simulateAdd;
 
-$('saveStock').onclick=()=>{
-const symbol=(editingTicker||$('ticker').value.trim().toUpperCase());
-if(!symbol)return;
 
-positions[symbol]={
-qty:+$('qty').value||0,
-avg:+$('avgPrice').value||0,
-stop:+$('stopPrice').value||0
+$('addQty').oninput =
+simulateAdd;
+
+
+$('addPrice').oninput =
+simulateAdd;
+
+
+
+$('saveStock').onclick =
+()=>{
+
+const symbol =
+editingTicker ||
+$('ticker')
+.value
+.trim()
+.toUpperCase();
+
+
+if(!symbol)
+return;
+
+
+positions[symbol] = {
+
+qty:
++$('qty').value || 0,
+
+avg:
++$('avgPrice').value || 0,
+
+stop:
++$('stopPrice').value || 0
+
 };
 
-store.set(POSITIONS_KEY,positions);
+
+store.set(
+POSITIONS_KEY,
+positions
+);
+
+
 resetStockForm();
+
 render();
+
 updateData(false);
+
 };
 
-$('cancelEdit').onclick=resetStockForm;
 
-$('editPosition').onclick=()=>{
-if(currentTicker)startStockEdit(currentTicker);
+
+$('cancelEdit').onclick =
+resetStockForm;
+
+
+
+$('editPosition').onclick =
+()=>{
+
+if(currentTicker)
+startStockEdit(
+currentTicker
+);
+
 };
 
-$('deletePosition').onclick=()=>{
-if(!currentTicker)return;
 
-if(confirm(currentTicker+' 포지션을 삭제할까요?')){
-delete positions[currentTicker];
-store.set(POSITIONS_KEY,positions);
+
+$('deletePosition').onclick =
+()=>{
+
+if(!currentTicker)
+return;
+
+
+if(
+confirm(
+currentTicker +
+' 포지션을 삭제할까요?'
+)
+){
+
+delete positions[
+currentTicker
+];
+
+
+store.set(
+POSITIONS_KEY,
+positions
+);
+
+
 currentTicker=null;
-$('detail').classList.remove('open');
+
+
+$('detail')
+.classList
+.remove('open');
+
+
 render();
+
 }
+
 };
 
-$('saveCrypto').onclick=()=>{
-const symbol=(editingCryptoIndex!==null
-?crypto[editingCryptoIndex].symbol
-:$('cryptoSymbol').value.trim().toUpperCase());
 
-if(!symbol)return;
 
-const p={
+$('saveCrypto').onclick =
+()=>{
+
+const symbol =
+
+editingCryptoIndex!==null
+
+?crypto[
+editingCryptoIndex
+].symbol
+
+:$('cryptoSymbol')
+.value
+.trim()
+.toUpperCase();
+
+
+if(!symbol)
+return;
+
+
+const p = {
+
 symbol,
-side:$('cryptoSide').value,
-leverage:+$('cryptoLev').value||1,
-entry:+$('cryptoEntry').value||0,
-size:+$('cryptoSize').value||0,
-stop:+$('cryptoStop').value||0,
-liq:+$('cryptoLiq').value||0
+
+side:
+$('cryptoSide').value,
+
+leverage:
++$('cryptoLev').value || 1,
+
+entry:
++$('cryptoEntry').value || 0,
+
+size:
++$('cryptoSize').value || 0,
+
+stop:
++$('cryptoStop').value || 0,
+
+liq:
++$('cryptoLiq').value || 0
+
 };
 
-if(editingCryptoIndex!==null){
-crypto[editingCryptoIndex]=p;
-}else{
+
+if(
+editingCryptoIndex!==null
+){
+
+crypto[
+editingCryptoIndex
+] = p;
+
+}
+else{
+
 crypto.push(p);
+
 }
 
-store.set(CRYPTO_KEY,crypto);
+
+store.set(
+CRYPTO_KEY,
+crypto
+);
+
+
 resetCryptoForm();
+
 render();
+
 updateData(false);
+
 };
 
-$('cancelCryptoEdit').onclick=resetCryptoForm;
 
-$('saveRisk').onclick=()=>{
-settings={
-equity:+$('equity').value||100000,
-maxRiskPct:+$('riskLimit').value||2
+
+$('cancelCryptoEdit').onclick =
+resetCryptoForm;
+
+
+
+$('saveRisk').onclick =
+()=>{
+
+settings = {
+
+equity:
++$('equity').value || 100000,
+
+maxRiskPct:
++$('riskLimit').value || 2
+
 };
-store.set(SETTINGS_KEY,settings);
+
+
+store.set(
+SETTINGS_KEY,
+settings
+);
+
+
 render();
-if(currentTicker)openPosition(currentTicker);
+
+
+if(
+currentTicker
+)
+openPosition(
+currentTicker
+);
+
 };
 
-$('refresh').onclick=()=>updateData(true);
-$('back').onclick=()=>$('detail').classList.remove('open');
 
-document.querySelectorAll('.seg button').forEach(b=>{
-b.onclick=()=>{
-document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('active',x===b));
-const cm=b.dataset.mode==='crypto';
-$('stockForm').style.display=cm?'none':'block';
-$('cryptoForm').style.display=cm?'block':'none';
+
+$('refresh').onclick =
+()=>updateData(true);
+
+
+
+$('back').onclick =
+()=>{
+
+$('detail')
+.classList
+.remove('open');
+
 };
-});
+
+
+
+document
+.querySelectorAll(
+'.seg button'
+)
+.forEach(
+b=>{
+
+b.onclick =
+()=>{
+
+document
+.querySelectorAll(
+'.seg button'
+)
+.forEach(
+x=>
+x.classList.toggle(
+'active',
+x===b
+)
+);
+
+
+const cm =
+b.dataset.mode ===
+'crypto';
+
+
+$('stockForm').style.display =
+cm
+?'none'
+:'block';
+
+
+$('cryptoForm').style.display =
+cm
+?'block'
+:'none';
+
+};
+
+}
+);
+
+
 
 function go(i){
-page=i;
-$('track').classList.add('anim');
-$('track').style.transform=`translateX(${-i*100}%)`;
 
-document.querySelectorAll('.tab').forEach((b,n)=>{
-b.classList.toggle('active',n===i);
-});
+page=i;
+
+
+$('track')
+.classList
+.add('anim');
+
+
+$('track').style.transform =
+`translateX(${-i*100}%)`;
+
+
+document
+.querySelectorAll(
+'.tab'
+)
+.forEach(
+(b,n)=>{
+
+b.classList.toggle(
+'active',
+n===i
+);
+
+}
+);
+
 }
 
-document.querySelectorAll('.tab').forEach(b=>{
-b.onclick=()=>go(+b.dataset.page);
-});
+
+
+document
+.querySelectorAll(
+'.tab'
+)
+.forEach(
+b=>{
+
+b.onclick =
+()=>go(
++b.dataset.page
+);
+
+}
+);
+
+
 
 let sx=0;
 
-$('viewport').addEventListener('touchstart',e=>{
-if($('detail').classList.contains('open'))return;
-sx=e.touches[0].clientX;
-},{passive:true});
 
-$('viewport').addEventListener('touchend',e=>{
-if($('detail').classList.contains('open'))return;
+$('viewport')
+.addEventListener(
+'touchstart',
+e=>{
 
-const dx=e.changedTouches[0].clientX-sx;
+if(
+$('detail')
+.classList
+.contains('open')
+)
+return;
 
-if(dx<-70&&page<2)go(page+1);
-if(dx>70&&page>0)go(page-1);
-},{passive:true});
 
-$('equity').value=settings.equity;
-$('riskLimit').value=settings.maxRiskPct;
+sx =
+e.touches[0]
+.clientX;
+
+},
+{
+passive:true
+}
+);
+
+
+
+$('viewport')
+.addEventListener(
+'touchend',
+e=>{
+
+if(
+$('detail')
+.classList
+.contains('open')
+)
+return;
+
+
+const dx =
+e.changedTouches[0]
+.clientX -
+sx;
+
+
+if(
+dx<-70 &&
+page<2
+)
+go(
+page+1
+);
+
+
+if(
+dx>70 &&
+page>0
+)
+go(
+page-1
+);
+
+},
+{
+passive:true
+}
+);
+
+
+
+$('equity').value =
+settings.equity;
+
+
+$('riskLimit').value =
+settings.maxRiskPct;
+
+
 
 function hydrateCache(){
-symbols().forEach(symbol=>{
-const d=cache[symbol+'__1day']?.values||[];
-const h=cache[symbol+'__4h']?.values||[];
 
-if(d.length){
-data[symbol]=analyse(symbol,d,h);
+symbols()
+.forEach(
+symbol=>{
+
+const d =
+cache[
+symbol+'__1day'
+]?.values || [];
+
+
+const h =
+cache[
+symbol+'__4h'
+]?.values || [];
+
+
+if(
+d.length
+){
+
+data[symbol] =
+analyseTurning(
+symbol,
+d,
+h
+);
+
 }
-});
+
 }
+);
+
+}
+
+
 
 hydrateCache();
+
 render();
+
 go(0);
 
-setInterval(renderDataStatus,60000);
+setInterval(
+renderDataStatus,
+60000
+);
 
 updateData(false);
+
 </script>
+
 </body>
 </html>
