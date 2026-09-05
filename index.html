@@ -4,135 +4,688 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#090b0e">
-<title>STOCKPM v0.3.8</title>
+<title>STOCKPM v0.3.9</title>
 
 <style>
 :root{
-  --bg:#090b0e;--panel:#12161b;--panel2:#181d24;--panel3:#0f1318;
-  --text:#f6f8fb;--muted:#8d97a6;--line:#252c35;
-  --good:#31d07c;--warn:#f5b942;--bad:#ff6678;--blue:#75aaff;
-  --violet:#a78bfa;--radius:20px;--safe:max(14px,env(safe-area-inset-bottom))
+  --bg:#090b0e;
+  --panel:#12161b;
+  --panel2:#181d24;
+  --panel3:#0f1318;
+  --text:#f6f8fb;
+  --muted:#8d97a6;
+  --line:#252c35;
+  --good:#31d07c;
+  --warn:#f5b942;
+  --bad:#ff6678;
+  --blue:#75aaff;
+  --violet:#a78bfa;
+  --radius:20px;
+  --safe:max(14px,env(safe-area-inset-bottom));
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-body{overflow:hidden}
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  overscroll-behavior:none;
+}
+
+body{
+  overflow:hidden;
+  touch-action:pan-y;
+}
+
 button,input{font:inherit}
 button{cursor:pointer}
-.app{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+
+.app{
+  height:100dvh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
 .topbar{
-  height:62px;flex:0 0 62px;padding:14px 16px 10px;display:flex;align-items:center;
-  justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.05);
-  background:rgba(9,11,14,.94);backdrop-filter:blur(18px);z-index:20
+  height:62px;
+  flex:0 0 62px;
+  padding:14px 16px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  background:rgba(9,11,14,.94);
+  backdrop-filter:blur(18px);
+  z-index:20;
 }
-.brand{display:flex;gap:10px;align-items:center}
+
+.brand{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
 .logo{
-  width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#fff,#778399);
-  color:#0b0d10;display:grid;place-items:center;font-weight:900
+  width:34px;
+  height:34px;
+  border-radius:11px;
+  background:linear-gradient(135deg,#fff,#778399);
+  color:#0b0d10;
+  display:grid;
+  place-items:center;
+  font-weight:900;
 }
-.brand h1{font-size:17px;margin:0}
-.brand small{display:block;color:var(--muted);font-size:10px;margin-top:4px;letter-spacing:.07em}
-.sync{font-size:10px;color:var(--muted);border:1px solid var(--line);background:var(--panel);padding:8px 10px;border-radius:999px}
-.viewport{flex:1;position:relative;overflow:hidden}
-.track{height:100%;display:flex;will-change:transform}
-.track.anim{transition:transform .45s cubic-bezier(.22,.85,.25,1)}
-.page{flex:0 0 100%;height:100%;overflow-y:auto;padding:16px 14px calc(94px + var(--safe));scrollbar-width:none}
+
+.brand h1{
+  font-size:17px;
+  margin:0;
+}
+
+.brand small{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+  letter-spacing:.07em;
+}
+
+.sync{
+  font-size:10px;
+  color:var(--muted);
+  border:1px solid var(--line);
+  background:var(--panel);
+  padding:8px 10px;
+  border-radius:999px;
+}
+
+.viewport{
+  flex:1;
+  position:relative;
+  overflow:hidden;
+  touch-action:pan-y;
+}
+
+.track{
+  height:100%;
+  display:flex;
+  will-change:transform;
+  transform:translate3d(0,0,0);
+}
+
+.track.snap{
+  transition:transform .48s cubic-bezier(.22,.82,.2,1);
+}
+
+.page{
+  flex:0 0 100%;
+  width:100%;
+  height:100%;
+  overflow-y:auto;
+  padding:16px 14px calc(94px + var(--safe));
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+
 .page::-webkit-scrollbar{display:none}
-.inner{max-width:900px;margin:auto}
-h2{font-size:27px;margin:4px 0 3px}
-.subtitle{color:var(--muted);font-size:13px;margin-bottom:16px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px}
-.section{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.section h3{font-size:12px;letter-spacing:.08em;margin:0;color:#cbd2dc;text-transform:uppercase}
-.section span{font-size:10px;color:var(--muted)}
-.field input{width:100%;border:1px solid var(--line);background:var(--panel3);color:var(--text);padding:13px;border-radius:13px;outline:none}
-.addrow{display:grid;grid-template-columns:1fr auto;gap:8px}
-.btn{border:0;border-radius:12px;padding:12px 14px;background:#f5f7fa;color:#090b0e;font-weight:850}
-.btn.danger{background:#2a1217;border:1px solid #5a2630;color:var(--bad)}
-.btn.full{width:100%}
-.list{display:grid;gap:8px}
-.row{
-  display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
-  background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:14px
+
+.inner{
+  max-width:900px;
+  margin:auto;
 }
+
+h2{
+  font-size:27px;
+  margin:4px 0 3px;
+}
+
+.subtitle{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:16px;
+  line-height:1.5;
+}
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:16px;
+  margin-bottom:12px;
+}
+
+.section{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.section h3{
+  font-size:12px;
+  letter-spacing:.08em;
+  margin:0;
+  color:#cbd2dc;
+  text-transform:uppercase;
+}
+
+.section span{
+  font-size:10px;
+  color:var(--muted);
+}
+
+.field input{
+  width:100%;
+  border:1px solid var(--line);
+  background:var(--panel3);
+  color:var(--text);
+  padding:13px;
+  border-radius:13px;
+  outline:none;
+}
+
+.addrow{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+}
+
+.btn{
+  border:0;
+  border-radius:12px;
+  padding:12px 14px;
+  background:#f5f7fa;
+  color:#090b0e;
+  font-weight:850;
+}
+
+.btn.danger{
+  background:#2a1217;
+  border:1px solid #5a2630;
+  color:var(--bad);
+}
+
+.btn.full{width:100%}
+
+.list{
+  display:grid;
+  gap:8px;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  align-items:center;
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:14px;
+}
+
 .name{font-weight:900}
-.meta{font-size:11px;color:var(--muted);line-height:1.65;margin-top:5px}
-.price{text-align:right;font-weight:900}
-.badge{display:inline-flex;padding:6px 8px;border-radius:999px;font-size:9px;font-weight:900;border:1px solid;margin-left:5px}
-.badge.good{color:var(--good);background:#0d2118;border-color:#1d4933}
-.badge.warn{color:var(--warn);background:#261e0d;border-color:#5d4617}
-.badge.bad{color:var(--bad);background:#271216;border-color:#5a2630}
-.badge.violet{color:var(--violet);background:#1b1728;border-color:#443766}
-.badge.neutral{color:#c7ced8;background:#171c22;border-color:#2a323c}
+
+.meta{
+  font-size:11px;
+  color:var(--muted);
+  line-height:1.65;
+  margin-top:5px;
+}
+
+.price{
+  text-align:right;
+  font-weight:900;
+}
+
+.badge{
+  display:inline-flex;
+  padding:6px 8px;
+  border-radius:999px;
+  font-size:9px;
+  font-weight:900;
+  border:1px solid;
+  margin-left:5px;
+}
+
+.badge.good{
+  color:var(--good);
+  background:#0d2118;
+  border-color:#1d4933;
+}
+
+.badge.warn{
+  color:var(--warn);
+  background:#261e0d;
+  border-color:#5d4617;
+}
+
+.badge.bad{
+  color:var(--bad);
+  background:#271216;
+  border-color:#5a2630;
+}
+
+.badge.violet{
+  color:var(--violet);
+  background:#1b1728;
+  border-color:#443766;
+}
+
+.badge.neutral{
+  color:#c7ced8;
+  background:#171c22;
+  border-color:#2a323c;
+}
+
 .good{color:var(--good)}
 .warn{color:var(--warn)}
 .bad{color:var(--bad)}
 .violet{color:var(--violet)}
-.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.sum{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:11px 4px;text-align:center}
-.sum small{display:block;color:var(--muted);font-size:8px}
-.sum b{display:block;font-size:17px;margin-top:4px}
-.scoregrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.scorebox{background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:12px}
-.scorebox small{display:block;color:var(--muted);font-size:8px;line-height:1.4}
-.scorebox b{display:block;font-size:22px;margin-top:5px}
-.scorebox em{display:block;font-style:normal;color:var(--muted);font-size:8px;margin-top:5px;line-height:1.4}
-.signal{display:grid;grid-template-columns:1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
-.signal:last-child{border-bottom:0}
-.signal span,.signal b{font-size:12px}
-.signal b{text-align:right}
-.turncard{background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:14px;margin-bottom:8px}
-.turnhead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.turnhead small{display:block;color:var(--muted);font-size:9px;margin-bottom:4px}
-.turnhead b{font-size:17px}
-.turnscore{text-align:right}
-.turnscore strong{display:block;font-size:24px}
-.turnscore small{font-size:8px;color:var(--muted)}
-.turnmeta{margin-top:9px;font-size:10px;color:var(--muted);line-height:1.7}
-.notice{
-  font-size:11px;line-height:1.65;color:#d6bd83;background:#241b0e;
-  border:1px solid #5a4317;padding:11px;border-radius:12px;margin-bottom:12px
+.blue{color:var(--blue)}
+
+.summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
 }
-.empty{text-align:center;color:var(--muted);font-size:12px;padding:25px}
-.progress{height:7px;border-radius:999px;overflow:hidden;background:#0d1116;border:1px solid var(--line);margin-top:8px}
-.progress span{display:block;height:100%}
+
+.sum{
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:11px 4px;
+  text-align:center;
+}
+
+.sum small{
+  display:block;
+  color:var(--muted);
+  font-size:8px;
+}
+
+.sum b{
+  display:block;
+  font-size:17px;
+  margin-top:4px;
+}
+
+.scoregrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+}
+
+.scorebox{
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:12px;
+}
+
+.scorebox small{
+  display:block;
+  color:var(--muted);
+  font-size:8px;
+  line-height:1.4;
+}
+
+.scorebox b{
+  display:block;
+  font-size:22px;
+  margin-top:5px;
+}
+
+.scorebox em{
+  display:block;
+  font-style:normal;
+  color:var(--muted);
+  font-size:8px;
+  margin-top:5px;
+  line-height:1.4;
+}
+
+.signal{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  padding:11px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.signal:last-child{border-bottom:0}
+
+.signal span,
+.signal b{
+  font-size:12px;
+}
+
+.signal b{text-align:right}
+
+.turncard{
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:14px;
+  margin-bottom:8px;
+}
+
+.turnhead{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+}
+
+.turnhead small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-bottom:4px;
+}
+
+.turnhead b{font-size:17px}
+
+.turnscore{text-align:right}
+
+.turnscore strong{
+  display:block;
+  font-size:24px;
+}
+
+.turnscore small{
+  font-size:8px;
+  color:var(--muted);
+}
+
+.turnmeta{
+  margin-top:9px;
+  font-size:10px;
+  color:var(--muted);
+  line-height:1.7;
+}
+
+.notice{
+  font-size:11px;
+  line-height:1.65;
+  color:#d6bd83;
+  background:#241b0e;
+  border:1px solid #5a4317;
+  padding:11px;
+  border-radius:12px;
+  margin-bottom:12px;
+}
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  padding:25px;
+}
+
+.progress{
+  height:7px;
+  border-radius:999px;
+  overflow:hidden;
+  background:#0d1116;
+  border:1px solid var(--line);
+  margin-top:8px;
+}
+
+.progress span{
+  display:block;
+  height:100%;
+}
+
 .bottomfill{background:var(--good)}
 .topfill{background:var(--bad)}
 .simfill{background:var(--violet)}
+
+.indicator{
+  padding:13px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.indicator:last-child{
+  border-bottom:0;
+}
+
+.indicator-main{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  gap:10px;
+}
+
+.indicator-name{
+  font-size:12px;
+  font-weight:800;
+}
+
+.indicator-value{
+  font-size:12px;
+  font-weight:900;
+  text-align:right;
+}
+
+.indicator-score{
+  margin-top:6px;
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+.point{
+  font-size:9px;
+  font-weight:900;
+  padding:5px 7px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:var(--panel3);
+  color:var(--muted);
+}
+
+.point.bottom.on{
+  color:var(--good);
+  border-color:#24553d;
+  background:#0e2118;
+}
+
+.point.top.on{
+  color:var(--bad);
+  border-color:#603039;
+  background:#271216;
+}
+
+.entrybox{
+  border-radius:15px;
+  padding:14px;
+  margin-top:10px;
+  border:1px solid var(--line);
+  background:var(--panel2);
+}
+
+.entrybox strong{
+  display:block;
+  font-size:19px;
+}
+
+.entrybox small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-bottom:5px;
+}
+
+.entrybox p{
+  margin:7px 0 0;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.6;
+}
+
+.entrybox.strong{
+  background:#0d2118;
+  border-color:#24553d;
+}
+
+.entrybox.watch{
+  background:#261e0d;
+  border-color:#5d4617;
+}
+
+.entrybox.wait{
+  background:#171c22;
+}
+
 .bottom{
-  position:absolute;left:10px;right:10px;bottom:var(--safe);height:64px;
-  border:1px solid rgba(255,255,255,.08);border-radius:22px;background:rgba(18,22,27,.94);
-  backdrop-filter:blur(22px);display:grid;grid-template-columns:repeat(3,1fr);z-index:30
+  position:absolute;
+  left:10px;
+  right:10px;
+  bottom:var(--safe);
+  height:64px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:22px;
+  background:rgba(18,22,27,.94);
+  backdrop-filter:blur(22px);
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  z-index:30;
 }
-.tab{border:0;background:none;color:#738090;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;font-weight:800;gap:3px}
-.tab i{font-style:normal;font-size:20px}
+
+.tab{
+  border:0;
+  background:none;
+  color:#738090;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  font-size:9px;
+  font-weight:800;
+  gap:3px;
+}
+
+.tab i{
+  font-style:normal;
+  font-size:20px;
+}
+
 .tab.active{color:white}
+
 .detail{
-  position:absolute;inset:0;background:var(--bg);z-index:50;transform:translateX(100%);
-  transition:transform .45s cubic-bezier(.22,.85,.25,1);display:flex;flex-direction:column
+  position:absolute;
+  inset:0;
+  background:var(--bg);
+  z-index:50;
+  transform:translateX(100%);
+  transition:transform .45s cubic-bezier(.22,.85,.25,1);
+  display:flex;
+  flex-direction:column;
 }
-.detail.open{transform:translateX(0)}
+
+.detail.open{
+  transform:translateX(0);
+}
+
 .detailhead{
-  height:60px;flex:0 0 60px;display:grid;grid-template-columns:42px 1fr 42px;
-  align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)
+  height:60px;
+  flex:0 0 60px;
+  display:grid;
+  grid-template-columns:42px 1fr 42px;
+  align-items:center;
+  padding:10px 14px;
+  border-bottom:1px solid var(--line);
 }
-.icon{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:white}
+
+.icon{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:white;
+}
+
 .detailtitle{text-align:center}
+
 .detailtitle b{display:block}
-.detailtitle small{font-size:10px;color:var(--muted)}
-.detailbody{flex:1;overflow-y:auto;padding:14px 14px calc(30px + var(--safe))}
-.hero{background:linear-gradient(145deg,#161b22,#101318);border:1px solid #27313d}
-.bigprice{font-size:29px;font-weight:900;margin:5px 0}
-.cycle{padding:13px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;margin-top:12px}
-.cycle small{color:var(--muted);font-size:9px}
-.cycle b{display:block;font-size:18px;margin-top:5px}
-.structural{
-  background:#101b16;border:1px solid #244735;border-radius:15px;
-  padding:14px;margin-top:10px
+
+.detailtitle small{
+  font-size:10px;
+  color:var(--muted);
 }
-.structural.top{background:#211216;border-color:#542831}
-.structural small{display:block;color:var(--muted);font-size:9px;margin-bottom:5px}
+
+.detailbody{
+  flex:1;
+  overflow-y:auto;
+  padding:14px 14px calc(30px + var(--safe));
+  -webkit-overflow-scrolling:touch;
+}
+
+.hero{
+  background:linear-gradient(145deg,#161b22,#101318);
+  border:1px solid #27313d;
+}
+
+.bigprice{
+  font-size:29px;
+  font-weight:900;
+  margin:5px 0;
+}
+
+.cycle{
+  padding:13px;
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  margin-top:12px;
+}
+
+.cycle small{
+  color:var(--muted);
+  font-size:9px;
+}
+
+.cycle b{
+  display:block;
+  font-size:18px;
+  margin-top:5px;
+}
+
+.structural{
+  background:#101b16;
+  border:1px solid #244735;
+  border-radius:15px;
+  padding:14px;
+  margin-top:10px;
+}
+
+.structural.top{
+  background:#211216;
+  border-color:#542831;
+}
+
+.structural small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-bottom:5px;
+}
+
 .structural strong{font-size:19px}
-.structural p{color:var(--muted);font-size:10px;line-height:1.6;margin:7px 0 0}
+
+.structural p{
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.6;
+  margin:7px 0 0;
+}
+
 @media(max-width:390px){
   .scorebox{padding:10px 8px}
   .scorebox b{font-size:19px}
@@ -141,227 +694,412 @@ h2{font-size:27px;margin:4px 0 3px}
 </head>
 
 <body>
+
 <div class="app">
 
 <header class="topbar">
-<div class="brand">
-<div class="logo">SP</div>
-<div>
-<h1>STOCKPM</h1>
-<small>BOTTOM QUALITY ENGINE · v0.3.8</small>
-</div>
-</div>
-<div class="sync" id="sync">DATA WAIT</div>
+  <div class="brand">
+    <div class="logo">SP</div>
+    <div>
+      <h1>STOCKPM</h1>
+      <small>BOTTOM / TOP ENGINE · v0.3.9</small>
+    </div>
+  </div>
+  <div class="sync" id="sync">DATA WAIT</div>
 </header>
 
 <div class="viewport" id="viewport">
+
 <div class="track" id="track">
 
 <section class="page">
 <div class="inner">
+
 <h2>Scanner</h2>
-<div class="subtitle">실제 바닥의 품질과 현재 바닥 신호를 분리해서 판독합니다.</div>
-
-<div class="card">
-<div class="section"><h3>Market State</h3><span>~1 YEAR</span></div>
-<div class="summary">
-<div class="sum"><small>BOTTOM</small><b class="good" id="bottomCount">0</b></div>
-<div class="sum"><small>TREND</small><b id="trendCount">0</b></div>
-<div class="sum"><small>TOP</small><b class="bad" id="topCount">0</b></div>
-</div>
+<div class="subtitle">
+현재 바닥 신호 → 과거 바닥 유사도 → 확정 Major Bottom을 분리해서 분석합니다.
 </div>
 
 <div class="card">
-<div class="section"><h3>My Symbols</h3><span id="symbolCount">0</span></div>
-<div class="list" id="homeList"></div>
+  <div class="section">
+    <h3>Market State</h3>
+    <span>~1 YEAR</span>
+  </div>
+
+  <div class="summary">
+    <div class="sum">
+      <small>BOTTOM</small>
+      <b class="good" id="bottomCount">0</b>
+    </div>
+
+    <div class="sum">
+      <small>TREND</small>
+      <b id="trendCount">0</b>
+    </div>
+
+    <div class="sum">
+      <small>TOP</small>
+      <b class="bad" id="topCount">0</b>
+    </div>
+  </div>
 </div>
+
+<div class="card">
+  <div class="section">
+    <h3>My Symbols</h3>
+    <span id="symbolCount">0</span>
+  </div>
+
+  <div class="list" id="homeList"></div>
+</div>
+
 </div>
 </section>
 
 <section class="page">
 <div class="inner">
+
 <h2>Symbols</h2>
-<div class="subtitle">Ticker만 등록하면 최근 약 1년 데이터를 자동 분석합니다.</div>
-
-<div class="card">
-<div class="section"><h3>Add Symbol</h3><span>STOCK / ETF</span></div>
-<div class="addrow">
-<div class="field"><input id="ticker" placeholder="TSLA · CRCL · NVDA · SOXL"></div>
-<button class="btn" id="addSymbol">등록</button>
-</div>
+<div class="subtitle">
+Ticker만 등록하면 일봉 데이터를 받아 현재 주봉과 과거 Major Turn을 자동 분석합니다.
 </div>
 
 <div class="card">
-<div class="section"><h3>Registered</h3><span id="registeredCount">0</span></div>
-<div class="list" id="registeredList"></div>
+  <div class="section">
+    <h3>Add Symbol</h3>
+    <span>STOCK / ETF</span>
+  </div>
+
+  <div class="addrow">
+    <div class="field">
+      <input id="ticker" placeholder="TSLA · CRCL · NVDA · SOXL">
+    </div>
+    <button class="btn" id="addSymbol">등록</button>
+  </div>
 </div>
+
+<div class="card">
+  <div class="section">
+    <h3>Registered</h3>
+    <span id="registeredCount">0</span>
+  </div>
+
+  <div class="list" id="registeredList"></div>
+</div>
+
 </div>
 </section>
 
 <section class="page">
 <div class="inner">
+
 <h2>More</h2>
-<div class="subtitle">Price-First Major Turn Engine</div>
+<div class="subtitle">STOCKPM Major Turn Engine</div>
 
 <div class="card">
-<div class="section"><h3>Market Data</h3><span>TWELVE DATA</span></div>
-<div class="signal"><span>Connection</span><b id="dataStatus">WAIT</b></div>
-<div class="signal"><span>Mode</span><b id="dataMode">—</b></div>
-<div class="signal"><span>Last Update</span><b id="lastUpdate">—</b></div>
-<div class="signal"><span>Tracked</span><b id="tracked">0</b></div>
-<button class="btn full" style="margin-top:12px" id="refresh">시장 데이터 업데이트</button>
+  <div class="section">
+    <h3>Market Data</h3>
+    <span>TWELVE DATA</span>
+  </div>
+
+  <div class="signal">
+    <span>Connection</span>
+    <b id="dataStatus">WAIT</b>
+  </div>
+
+  <div class="signal">
+    <span>Mode</span>
+    <b id="dataMode">—</b>
+  </div>
+
+  <div class="signal">
+    <span>Last Update</span>
+    <b id="lastUpdate">—</b>
+  </div>
+
+  <div class="signal">
+    <span>Tracked</span>
+    <b id="tracked">0</b>
+  </div>
+
+  <button class="btn full" style="margin-top:12px" id="refresh">
+    시장 데이터 업데이트
+  </button>
 </div>
 
 <div class="card">
-<div class="section"><h3>Score Definition</h3><span>v0.3.8</span></div>
-<div class="signal"><span>Bottom Quality</span><b>PAST BOTTOM</b></div>
-<div class="signal"><span>Current Bottom</span><b>NOW</b></div>
-<div class="signal"><span>Similarity</span><b>NOW ↔ PAST</b></div>
-<div class="signal"><span>Major Bottom Confirm</span><b>+15%</b></div>
-<div class="signal"><span>Major Top Confirm</span><b>-15%</b></div>
-<div class="signal"><span>Confirmation Window</span><b>10 WEEKS</b></div>
-<div class="signal"><span>Structure Break</span><b>2%</b></div>
+  <div class="section">
+    <h3>Score Definition</h3>
+    <span>v0.3.9</span>
+  </div>
+
+  <div class="signal">
+    <span>Current Bottom</span>
+    <b>현재 주봉</b>
+  </div>
+
+  <div class="signal">
+    <span>Historical Similarity</span>
+    <b>현재 ↔ 과거 바닥</b>
+  </div>
+
+  <div class="signal">
+    <span>Bottom Quality</span>
+    <b>확정된 과거 바닥</b>
+  </div>
+
+  <div class="signal">
+    <span>Major Bottom Confirm</span>
+    <b>+15%</b>
+  </div>
+
+  <div class="signal">
+    <span>Major Top Confirm</span>
+    <b>-15%</b>
+  </div>
+
+  <div class="signal">
+    <span>Confirmation Window</span>
+    <b>10 WEEKS</b>
+  </div>
+
+  <div class="signal">
+    <span>Structure Break</span>
+    <b>2%</b>
+  </div>
 </div>
 
 <div class="notice">
-Bottom Quality는 현재 점수가 아닙니다. 실제로 확인된 과거 바닥 자체의 품질입니다.
-Current Bottom은 지금 이 순간 다시 바닥형인지 평가하고, Similarity는 현재 패턴이 과거 실제 바닥 당시와 얼마나 닮았는지 평가합니다.
+Current Bottom은 이번 주 진행 중인 주봉의 실시간성 점수입니다.
+Major Bottom은 저점 이후 실제 +15% 이상 반등이 발생한 뒤 과거 데이터로 확정됩니다.
+따라서 Major Bottom은 당일 진입 신호가 아니라 사후 확인된 구조적 바닥입니다.
 </div>
+
 </div>
 </section>
 
 </div>
 
 <nav class="bottom">
-<button class="tab active" data-page="0"><i>⌂</i>SCANNER</button>
-<button class="tab" data-page="1"><i>＋</i>SYMBOLS</button>
-<button class="tab" data-page="2"><i>•••</i>MORE</button>
+  <button class="tab active" data-page="0">
+    <i>⌂</i>SCANNER
+  </button>
+
+  <button class="tab" data-page="1">
+    <i>＋</i>SYMBOLS
+  </button>
+
+  <button class="tab" data-page="2">
+    <i>•••</i>MORE
+  </button>
 </nav>
 
 <div class="detail" id="detail">
+
 <header class="detailhead">
-<button class="icon" id="back">‹</button>
-<div class="detailtitle">
-<b id="detailTicker">—</b>
-<small>QUALITY / CURRENT / SIMILARITY</small>
-</div>
-<div></div>
+  <button class="icon" id="back">‹</button>
+
+  <div class="detailtitle">
+    <b id="detailTicker">—</b>
+    <small>CURRENT / HISTORY / QUALITY</small>
+  </div>
+
+  <div></div>
 </header>
 
 <div class="detailbody">
 <div class="inner">
 
 <div class="card hero">
-<div class="meta">CURRENT PRICE</div>
-<div class="bigprice" id="currentPrice">—</div>
-<span class="badge neutral" id="stateBadge">DATA WAIT</span>
 
-<div class="cycle">
-<small>CURRENT CYCLE</small>
-<b id="cycleState">—</b>
-<div class="meta" id="cycleText"></div>
-</div>
+  <div class="meta">CURRENT PRICE</div>
 
-<div id="structuralBox"></div>
+  <div class="bigprice" id="currentPrice">—</div>
+
+  <span class="badge neutral" id="stateBadge">
+    DATA WAIT
+  </span>
+
+  <div class="cycle">
+    <small>CURRENT CYCLE</small>
+    <b id="cycleState">—</b>
+    <div class="meta" id="cycleText"></div>
+  </div>
+
+  <div id="entryBox"></div>
+
+  <div id="structuralBox"></div>
+
 </div>
 
 <div class="card">
-<div class="section"><h3>Bottom Analysis</h3><span>3 SEPARATE SCORES</span></div>
+
+<div class="section">
+  <h3>Bottom Analysis</h3>
+  <span>SEPARATE SCORES</span>
+</div>
 
 <div class="scoregrid">
+
 <div class="scorebox">
-<small>LAST BOTTOM<br>QUALITY</small>
-<b class="good" id="bottomQuality">—</b>
-<em id="bottomQualityLabel">PAST TURN</em>
-<div class="progress"><span class="bottomfill" id="bottomQualityBar"></span></div>
+  <small>LAST BOTTOM<br>QUALITY</small>
+  <b class="good" id="bottomQuality">—</b>
+  <em id="bottomQualityLabel">PAST TURN</em>
+  <div class="progress">
+    <span class="bottomfill" id="bottomQualityBar"></span>
+  </div>
 </div>
 
 <div class="scorebox">
-<small>CURRENT<br>BOTTOM</small>
-<b class="good" id="currentBottom">—</b>
-<em id="currentBottomLabel">NOW</em>
-<div class="progress"><span class="bottomfill" id="currentBottomBar"></span></div>
+  <small>CURRENT<br>BOTTOM</small>
+  <b class="good" id="currentBottom">—</b>
+  <em id="currentBottomLabel">NOW</em>
+  <div class="progress">
+    <span class="bottomfill" id="currentBottomBar"></span>
+  </div>
 </div>
 
 <div class="scorebox">
-<small>BOTTOM<br>SIMILARITY</small>
-<b class="violet" id="bottomSimilarity">—</b>
-<em id="bottomSimilarityLabel">NOW ↔ PAST</em>
-<div class="progress"><span class="simfill" id="bottomSimilarityBar"></span></div>
+  <small>BOTTOM<br>SIMILARITY</small>
+  <b class="violet" id="bottomSimilarity">—</b>
+  <em id="bottomSimilarityLabel">NOW ↔ PAST</em>
+  <div class="progress">
+    <span class="simfill" id="bottomSimilarityBar"></span>
+  </div>
 </div>
+
 </div>
 </div>
 
 <div class="card">
-<div class="section"><h3>Top Analysis</h3><span>3 SEPARATE SCORES</span></div>
 
-<div class="scoregrid">
-<div class="scorebox">
-<small>LAST TOP<br>QUALITY</small>
-<b class="bad" id="topQuality">—</b>
-<em id="topQualityLabel">PAST TURN</em>
-<div class="progress"><span class="topfill" id="topQualityBar"></span></div>
+<div class="section">
+  <h3>Current Indicators</h3>
+  <span>THIS WEEK</span>
 </div>
 
-<div class="scorebox">
-<small>CURRENT<br>TOP</small>
-<b class="bad" id="currentTop">—</b>
-<em id="currentTopLabel">NOW</em>
-<div class="progress"><span class="topfill" id="currentTopBar"></span></div>
+<div class="notice">
+각 지표 오른쪽의 B +점수 / T +점수는 현재 주봉의
+Current Bottom / Current Top 점수에 실제로 더해진 기여점수입니다.
 </div>
 
-<div class="scorebox">
-<small>TOP<br>SIMILARITY</small>
-<b class="violet" id="topSimilarity">—</b>
-<em id="topSimilarityLabel">NOW ↔ PAST</em>
-<div class="progress"><span class="simfill" id="topSimilarityBar"></span></div>
-</div>
-</div>
-</div>
-
-<div class="card">
-<div class="section"><h3>Active Major Bottom</h3><span>PRICE CONFIRMED</span></div>
-<div id="activeBottom"></div>
-</div>
-
-<div class="card">
-<div class="section"><h3>Active Major Top</h3><span>PRICE CONFIRMED</span></div>
-<div id="activeTop"></div>
-</div>
-
-<div class="card">
-<div class="section"><h3>Historical Major Bottoms</h3><span>QUALITY SCORE</span></div>
-<div id="majorBottoms"></div>
-</div>
-
-<div class="card">
-<div class="section"><h3>Historical Major Tops</h3><span>QUALITY SCORE</span></div>
-<div id="majorTops"></div>
-</div>
-
-<div class="card">
-<div class="section"><h3>Daily Early Signal</h3><span>FAST</span></div>
-<div class="scoregrid" style="grid-template-columns:1fr 1fr">
-<div class="scorebox">
-<small>DAILY BOTTOM</small>
-<b class="good" id="dailyBottom">—</b>
-<em id="dailyBottomLabel">—</em>
-</div>
-<div class="scorebox">
-<small>DAILY TOP</small>
-<b class="bad" id="dailyTop">—</b>
-<em id="dailyTopLabel">—</em>
-</div>
-</div>
-</div>
-
-<div class="card">
-<div class="section"><h3>Current Indicators</h3><span>WEEKLY</span></div>
 <div id="indicatorList"></div>
+
+<div class="signal">
+  <span><b>CURRENT BOTTOM TOTAL</b></span>
+  <b class="good" id="indicatorBottomTotal">—</b>
+</div>
+
+<div class="signal">
+  <span><b>CURRENT TOP TOTAL</b></span>
+  <b class="bad" id="indicatorTopTotal">—</b>
+</div>
+
 </div>
 
 <div class="card">
-<button class="btn danger full" id="deleteSymbol">종목 삭제</button>
+
+<div class="section">
+  <h3>Top Analysis</h3>
+  <span>SEPARATE SCORES</span>
+</div>
+
+<div class="scoregrid">
+
+<div class="scorebox">
+  <small>LAST TOP<br>QUALITY</small>
+  <b class="bad" id="topQuality">—</b>
+  <em id="topQualityLabel">PAST TURN</em>
+  <div class="progress">
+    <span class="topfill" id="topQualityBar"></span>
+  </div>
+</div>
+
+<div class="scorebox">
+  <small>CURRENT<br>TOP</small>
+  <b class="bad" id="currentTop">—</b>
+  <em id="currentTopLabel">NOW</em>
+  <div class="progress">
+    <span class="topfill" id="currentTopBar"></span>
+  </div>
+</div>
+
+<div class="scorebox">
+  <small>TOP<br>SIMILARITY</small>
+  <b class="violet" id="topSimilarity">—</b>
+  <em id="topSimilarityLabel">NOW ↔ PAST</em>
+  <div class="progress">
+    <span class="simfill" id="topSimilarityBar"></span>
+  </div>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+  <div class="section">
+    <h3>Active Major Bottom</h3>
+    <span>PRICE CONFIRMED</span>
+  </div>
+
+  <div id="activeBottom"></div>
+</div>
+
+<div class="card">
+  <div class="section">
+    <h3>Active Major Top</h3>
+    <span>PRICE CONFIRMED</span>
+  </div>
+
+  <div id="activeTop"></div>
+</div>
+
+<div class="card">
+  <div class="section">
+    <h3>Historical Major Bottoms</h3>
+    <span>QUALITY SCORE</span>
+  </div>
+
+  <div id="majorBottoms"></div>
+</div>
+
+<div class="card">
+  <div class="section">
+    <h3>Historical Major Tops</h3>
+    <span>QUALITY SCORE</span>
+  </div>
+
+  <div id="majorTops"></div>
+</div>
+
+<div class="card">
+
+<div class="section">
+  <h3>Daily Early Signal</h3>
+  <span>FAST</span>
+</div>
+
+<div class="scoregrid" style="grid-template-columns:1fr 1fr">
+
+<div class="scorebox">
+  <small>DAILY BOTTOM</small>
+  <b class="good" id="dailyBottom">—</b>
+  <em id="dailyBottomLabel">—</em>
+</div>
+
+<div class="scorebox">
+  <small>DAILY TOP</small>
+  <b class="bad" id="dailyTop">—</b>
+  <em id="dailyTopLabel">—</em>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+  <button class="btn danger full" id="deleteSymbol">
+    종목 삭제
+  </button>
 </div>
 
 </div>
@@ -372,12 +1110,14 @@ Current Bottom은 지금 이 순간 다시 바닥형인지 평가하고, Similar
 </div>
 
 <script>
+
 const SUPABASE_URL='https://seuqhwmzmsqzuppemiuk.supabase.co';
 const KEY='sb_publishable_8T7Wafioftxn528m-T4fNA_-OZq9dwq';
 const MARKET=SUPABASE_URL+'/functions/v1/market-data';
 
 const SYMBOL_KEY='stockpm_scanner_symbols_v034';
 const CACHE_KEY='stockpm_market_cache_v022';
+
 const DAILY_TTL=60*60*1000;
 
 const CONFIRM_WEEKS=10;
@@ -391,15 +1131,22 @@ const $=id=>document.getElementById(id);
 
 const store={
   get(k,d){
-    try{return JSON.parse(localStorage.getItem(k))??d}
-    catch{return d}
+    try{
+      return JSON.parse(localStorage.getItem(k))??d;
+    }catch{
+      return d;
+    }
   },
-  set(k,v){localStorage.setItem(k,JSON.stringify(v))}
+
+  set(k,v){
+    localStorage.setItem(k,JSON.stringify(v));
+  }
 };
 
 let symbols=store.get(SYMBOL_KEY,[]);
 let cache=store.get(CACHE_KEY,{});
 let data={};
+
 let currentSymbol=null;
 let page=0;
 let lastMode='CACHED';
@@ -409,33 +1156,58 @@ function clamp(v,min=0,max=100){
 }
 
 function average(a){
-  return a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
+  return a.length
+    ?a.reduce((x,y)=>x+y,0)/a.length
+    :0;
 }
 
 function std(a){
+
   if(!a.length)return 0;
+
   const m=average(a);
-  return Math.sqrt(average(a.map(x=>(x-m)**2)));
+
+  return Math.sqrt(
+    average(
+      a.map(x=>(x-m)**2)
+    )
+  );
 }
 
 function money(v){
+
   if(!Number.isFinite(+v))return '—';
-  return '$'+(+v).toLocaleString(undefined,{maximumFractionDigits:2});
+
+  return '$'+(+v).toLocaleString(
+    undefined,
+    {maximumFractionDigits:2}
+  );
 }
 
 function pct(v){
+
   if(!Number.isFinite(v))return '—';
-  return (v>=0?'+':'')+v.toFixed(1)+'%';
+
+  return (v>=0?'+':'')+
+    v.toFixed(1)+'%';
 }
 
 function EMA(values,n){
+
   if(!values.length)return [];
+
   const k=2/(n+1);
+
   let p=values[0];
+
   const out=[p];
 
   for(let i=1;i<values.length;i++){
-    p=values[i]*k+p*(1-k);
+
+    p=
+      values[i]*k+
+      p*(1-k);
+
     out.push(p);
   }
 
@@ -443,43 +1215,73 @@ function EMA(values,n){
 }
 
 function RSI(closes,n=14){
+
   if(closes.length<n+1)return null;
 
   let gain=0;
   let loss=0;
 
-  for(let i=closes.length-n;i<closes.length;i++){
-    const d=closes[i]-closes[i-1];
+  for(
+    let i=closes.length-n;
+    i<closes.length;
+    i++
+  ){
+
+    const d=
+      closes[i]-
+      closes[i-1];
+
     if(d>0)gain+=d;
     else loss-=d;
   }
 
   if(loss===0)return 100;
 
-  const rs=(gain/n)/(loss/n);
-  return 100-(100/(1+rs));
+  const rs=
+    (gain/n)/
+    (loss/n);
+
+  return 100-
+    (100/(1+rs));
 }
 
 function MACD(closes){
+
   if(closes.length<35)return null;
 
   const e12=EMA(closes,12);
   const e26=EMA(closes,26);
-  const macd=closes.map((_,i)=>e12[i]-e26[i]);
-  const signal=EMA(macd,9);
-  const hist=macd.map((x,i)=>x-signal[i]);
 
-  return {macd,signal,hist};
+  const macd=
+    closes.map(
+      (_,i)=>e12[i]-e26[i]
+    );
+
+  const signal=EMA(macd,9);
+
+  const hist=
+    macd.map(
+      (x,i)=>x-signal[i]
+    );
+
+  return{
+    macd,
+    signal,
+    hist
+  };
 }
 
 function bollinger(closes,n=20){
+
   if(closes.length<n)return null;
 
-  const x=closes.slice(-n);
+  const x=
+    closes.slice(-n);
+
   const mid=average(x);
   const sd=std(x);
 
-  return {
+  return{
     mid,
     upper:mid+2*sd,
     lower:mid-2*sd
@@ -487,18 +1289,36 @@ function bollinger(closes,n=20){
 }
 
 function stochastic(bars,n=14){
+
   if(bars.length<n)return null;
 
-  const x=bars.slice(-n);
-  const hi=Math.max(...x.map(b=>b.h));
-  const lo=Math.min(...x.map(b=>b.l));
+  const x=
+    bars.slice(-n);
+
+  const hi=
+    Math.max(
+      ...x.map(b=>b.h)
+    );
+
+  const lo=
+    Math.min(
+      ...x.map(b=>b.l)
+    );
 
   if(hi===lo)return 50;
 
-  return ((bars.at(-1).c-lo)/(hi-lo))*100;
+  return(
+    (
+      bars.at(-1).c-lo
+    )/
+    (
+      hi-lo
+    )
+  )*100;
 }
 
 function normalize(values){
+
   return [...values]
     .reverse()
     .map(x=>({
@@ -509,29 +1329,53 @@ function normalize(values){
       c:+x.close,
       v:+x.volume||0
     }))
-    .filter(x=>Number.isFinite(x.c));
+    .filter(
+      x=>Number.isFinite(x.c)
+    );
 }
 
 function weekKey(s){
-  const d=new Date(s.substring(0,10)+'T12:00:00');
-  const day=(d.getDay()+6)%7;
-  d.setDate(d.getDate()-day);
 
-  return [
+  const d=
+    new Date(
+      s.substring(0,10)+
+      'T12:00:00'
+    );
+
+  const day=
+    (d.getDay()+6)%7;
+
+  d.setDate(
+    d.getDate()-day
+  );
+
+  return[
     d.getFullYear(),
-    String(d.getMonth()+1).padStart(2,'0'),
-    String(d.getDate()).padStart(2,'0')
+    String(
+      d.getMonth()+1
+    ).padStart(2,'0'),
+    String(
+      d.getDate()
+    ).padStart(2,'0')
   ].join('-');
 }
 
 function dailyToWeekly(daily){
+
   const weeks=[];
+
   let cur=null;
 
   for(const bar of daily){
-    const key=weekKey(bar.dt);
 
-    if(!cur||cur.key!==key){
+    const key=
+      weekKey(bar.dt);
+
+    if(
+      !cur||
+      cur.key!==key
+    ){
+
       cur={
         key,
         dt:key,
@@ -541,12 +1385,27 @@ function dailyToWeekly(daily){
         c:bar.c,
         v:bar.v||0
       };
+
       weeks.push(cur);
+
     }else{
-      cur.h=Math.max(cur.h,bar.h);
-      cur.l=Math.min(cur.l,bar.l);
+
+      cur.h=
+        Math.max(
+          cur.h,
+          bar.h
+        );
+
+      cur.l=
+        Math.min(
+          cur.l,
+          bar.l
+        );
+
       cur.c=bar.c;
-      cur.v+=bar.v||0;
+
+      cur.v+=
+        bar.v||0;
     }
   }
 
@@ -554,83 +1413,200 @@ function dailyToWeekly(daily){
 }
 
 function featureAt(bars,index){
-  const slice=bars.slice(0,index+1);
 
-  if(slice.length<MIN_HISTORY)return null;
+  const slice=
+    bars.slice(
+      0,
+      index+1
+    );
 
-  const closes=slice.map(x=>x.c);
-  const volumes=slice.map(x=>x.v||0);
+  if(
+    slice.length<
+    MIN_HISTORY
+  )return null;
 
-  const rsi=RSI(closes);
-  const prevRsi=RSI(closes.slice(0,-1));
-  const stoch=stochastic(slice);
-  const bb=bollinger(closes);
-  const macd=MACD(closes);
-  const last=slice.at(-1);
+  const closes=
+    slice.map(
+      x=>x.c
+    );
+
+  const volumes=
+    slice.map(
+      x=>x.v||0
+    );
+
+  const rsi=
+    RSI(closes);
+
+  const prevRsi=
+    RSI(
+      closes.slice(
+        0,
+        -1
+      )
+    );
+
+  const stoch=
+    stochastic(slice);
+
+  const bb=
+    bollinger(closes);
+
+  const macd=
+    MACD(closes);
+
+  const last=
+    slice.at(-1);
 
   let macdHist=0;
   let macdSlope=0;
   let macdCross=0;
 
   if(macd){
-    macdHist=macd.hist.at(-1)||0;
 
-    if(macd.hist.length>=2){
-      macdSlope=(macd.hist.at(-1)||0)-(macd.hist.at(-2)||0);
+    macdHist=
+      macd.hist.at(-1)||0;
+
+    if(
+      macd.hist.length>=2
+    ){
+
+      macdSlope=
+        (macd.hist.at(-1)||0)-
+        (macd.hist.at(-2)||0);
     }
 
-    if(macd.macd.length>=2){
-      if(
-        macd.macd.at(-2)<=macd.signal.at(-2) &&
-        macd.macd.at(-1)>macd.signal.at(-1)
-      ) macdCross=1;
+    if(
+      macd.macd.length>=2
+    ){
 
       if(
-        macd.macd.at(-2)>=macd.signal.at(-2) &&
-        macd.macd.at(-1)<macd.signal.at(-1)
-      ) macdCross=-1;
+        macd.macd.at(-2)<=
+        macd.signal.at(-2)
+        &&
+        macd.macd.at(-1)>
+        macd.signal.at(-1)
+      ){
+        macdCross=1;
+      }
+
+      if(
+        macd.macd.at(-2)>=
+        macd.signal.at(-2)
+        &&
+        macd.macd.at(-1)<
+        macd.signal.at(-1)
+      ){
+        macdCross=-1;
+      }
     }
   }
 
   let bbPosition=.5;
 
   if(bb){
-    const width=bb.upper-bb.lower;
-    if(width)bbPosition=(last.c-bb.lower)/width;
+
+    const width=
+      bb.upper-
+      bb.lower;
+
+    if(width){
+
+      bbPosition=
+        (
+          last.c-
+          bb.lower
+        )/
+        width;
+    }
   }
 
   const avgVol=
     volumes.length>=13
-    ?average(volumes.slice(-13,-1))
+    ?average(
+      volumes.slice(
+        -13,
+        -1
+      )
+    )
     :0;
 
-  const relVolume=avgVol?last.v/avgVol:1;
+  const relVolume=
+    avgVol
+    ?last.v/avgVol
+    :1;
 
-  const range=Math.max(last.h-last.l,.000001);
-  const closeLocation=(last.c-last.l)/range;
+  const range=
+    Math.max(
+      last.h-last.l,
+      .000001
+    );
+
+  const closeLocation=
+    (
+      last.c-
+      last.l
+    )/
+    range;
 
   const rsiSlope=
-    rsi!==null&&prevRsi!==null
+    rsi!==null&&
+    prevRsi!==null
     ?rsi-prevRsi
     :0;
 
-  const recent=slice.slice(-9);
-  const recentHigh=Math.max(...recent.map(x=>x.h));
-  const recentLow=Math.min(...recent.map(x=>x.l));
+  const recent=
+    slice.slice(-9);
+
+  const recentHigh=
+    Math.max(
+      ...recent.map(
+        x=>x.h
+      )
+    );
+
+  const recentLow=
+    Math.min(
+      ...recent.map(
+        x=>x.l
+      )
+    );
 
   const position8w=
-    recentHigh===recentLow
+    recentHigh===
+    recentLow
     ?.5
-    :(last.c-recentLow)/(recentHigh-recentLow);
+    :(
+      last.c-
+      recentLow
+    )/
+    (
+      recentHigh-
+      recentLow
+    );
 
   let return4w=0;
 
-  if(slice.length>=5){
-    const old=slice.at(-5).c;
-    if(old)return4w=((last.c-old)/old)*100;
+  if(
+    slice.length>=5
+  ){
+
+    const old=
+      slice.at(-5).c;
+
+    if(old){
+
+      return4w=
+        (
+          (
+            last.c-old
+          )/
+          old
+        )*100;
+    }
   }
 
-  return {
+  return{
     rsi:rsi??50,
     rsiSlope,
     stoch:stoch??50,
@@ -645,224 +1621,507 @@ function featureAt(bars,index){
   };
 }
 
-/* CURRENT SCORE
-   현재가 지금 바닥/고점형인가?
-   과거 바닥의 품질 점수와 완전히 별개.
-*/
-function currentTechnicalScore(f,type){
-  if(!f)return 0;
+/* =====================================================
+   CURRENT INDICATOR CONTRIBUTION
+   각 지표가 Bottom / Top에 실제 몇 점을 주는지 분리.
+===================================================== */
 
-  let score=0;
+function indicatorContributions(f){
 
-  if(type==='bottom'){
-    if(f.rsi<=25)score+=20;
-    else if(f.rsi<=30)score+=17;
-    else if(f.rsi<=38)score+=10;
+  const result={
+    rsi:{bottom:0,top:0},
+    rsiSlope:{bottom:0,top:0},
+    stoch:{bottom:0,top:0},
+    macdSlope:{bottom:0,top:0},
+    macdCross:{bottom:0,top:0},
+    bb:{bottom:0,top:0},
+    volume:{bottom:0,top:0},
+    closeLocation:{bottom:0,top:0},
+    position8w:{bottom:0,top:0}
+  };
 
-    if(f.rsiSlope>0&&f.rsi<42)score+=10;
+  if(!f)return result;
 
-    if(f.stoch<20)score+=10;
-    else if(f.stoch<30)score+=6;
-
-    if(f.macdSlope>0)score+=12;
-    if(f.macdCross===1)score+=14;
-
-    if(f.bbPosition<0)score+=12;
-    else if(f.bbPosition<.2)score+=8;
-
-    if(f.relVolume>=1.7)score+=8;
-    if(f.closeLocation>.6)score+=7;
-    if(f.position8w<.2)score+=7;
-  }else{
-    if(f.rsi>=75)score+=20;
-    else if(f.rsi>=70)score+=17;
-    else if(f.rsi>=62)score+=10;
-
-    if(f.rsiSlope<0&&f.rsi>58)score+=10;
-
-    if(f.stoch>80)score+=10;
-    else if(f.stoch>70)score+=6;
-
-    if(f.macdSlope<0)score+=12;
-    if(f.macdCross===-1)score+=14;
-
-    if(f.bbPosition>1)score+=12;
-    else if(f.bbPosition>.8)score+=8;
-
-    if(f.relVolume>=1.7)score+=8;
-    if(f.closeLocation<.4)score+=7;
-    if(f.position8w>.8)score+=7;
+  if(f.rsi<=25){
+    result.rsi.bottom=20;
+  }else if(f.rsi<=30){
+    result.rsi.bottom=17;
+  }else if(f.rsi<=38){
+    result.rsi.bottom=10;
   }
 
-  return clamp(Math.round(score));
+  if(f.rsi>=75){
+    result.rsi.top=20;
+  }else if(f.rsi>=70){
+    result.rsi.top=17;
+  }else if(f.rsi>=62){
+    result.rsi.top=10;
+  }
+
+  if(
+    f.rsiSlope>0&&
+    f.rsi<42
+  ){
+    result.rsiSlope.bottom=10;
+  }
+
+  if(
+    f.rsiSlope<0&&
+    f.rsi>58
+  ){
+    result.rsiSlope.top=10;
+  }
+
+  if(f.stoch<20){
+    result.stoch.bottom=10;
+  }else if(f.stoch<30){
+    result.stoch.bottom=6;
+  }
+
+  if(f.stoch>80){
+    result.stoch.top=10;
+  }else if(f.stoch>70){
+    result.stoch.top=6;
+  }
+
+  if(f.macdSlope>0){
+    result.macdSlope.bottom=12;
+  }
+
+  if(f.macdSlope<0){
+    result.macdSlope.top=12;
+  }
+
+  if(f.macdCross===1){
+    result.macdCross.bottom=14;
+  }
+
+  if(f.macdCross===-1){
+    result.macdCross.top=14;
+  }
+
+  if(f.bbPosition<0){
+    result.bb.bottom=12;
+  }else if(f.bbPosition<.2){
+    result.bb.bottom=8;
+  }
+
+  if(f.bbPosition>1){
+    result.bb.top=12;
+  }else if(f.bbPosition>.8){
+    result.bb.top=8;
+  }
+
+  if(f.relVolume>=1.7){
+
+    result.volume.bottom=8;
+    result.volume.top=8;
+  }
+
+  if(
+    f.closeLocation>.6
+  ){
+    result.closeLocation.bottom=7;
+  }
+
+  if(
+    f.closeLocation<.4
+  ){
+    result.closeLocation.top=7;
+  }
+
+  if(
+    f.position8w<.2
+  ){
+    result.position8w.bottom=7;
+  }
+
+  if(
+    f.position8w>.8
+  ){
+    result.position8w.top=7;
+  }
+
+  return result;
+}
+
+function currentTechnicalScore(f,type){
+
+  if(!f)return 0;
+
+  const c=
+    indicatorContributions(f);
+
+  let total=0;
+
+  Object.values(c)
+    .forEach(x=>{
+      total+=x[type]||0;
+    });
+
+  return clamp(
+    Math.round(total)
+  );
 }
 
 function isLocalLow(bars,i){
-  if(i<PIVOT_RADIUS||i>=bars.length-PIVOT_RADIUS)return false;
 
-  for(let n=1;n<=PIVOT_RADIUS;n++){
-    if(bars[i].l>bars[i-n].l)return false;
-    if(bars[i].l>bars[i+n].l)return false;
+  if(
+    i<PIVOT_RADIUS||
+    i>=
+    bars.length-
+    PIVOT_RADIUS
+  )return false;
+
+  for(
+    let n=1;
+    n<=PIVOT_RADIUS;
+    n++
+  ){
+
+    if(
+      bars[i].l>
+      bars[i-n].l
+    )return false;
+
+    if(
+      bars[i].l>
+      bars[i+n].l
+    )return false;
   }
 
   return true;
 }
 
 function isLocalHigh(bars,i){
-  if(i<PIVOT_RADIUS||i>=bars.length-PIVOT_RADIUS)return false;
 
-  for(let n=1;n<=PIVOT_RADIUS;n++){
-    if(bars[i].h<bars[i-n].h)return false;
-    if(bars[i].h<bars[i+n].h)return false;
+  if(
+    i<PIVOT_RADIUS||
+    i>=
+    bars.length-
+    PIVOT_RADIUS
+  )return false;
+
+  for(
+    let n=1;
+    n<=PIVOT_RADIUS;
+    n++
+  ){
+
+    if(
+      bars[i].h<
+      bars[i-n].h
+    )return false;
+
+    if(
+      bars[i].h<
+      bars[i+n].h
+    )return false;
   }
 
   return true;
 }
 
-/* BOTTOM QUALITY
-   이미 가격으로 확인된 과거 바닥 자체의 품질.
-   실제 반등 확인이 되었으므로 기본 40점.
-*/
+/* =====================================================
+   HISTORICAL BOTTOM / TOP QUALITY
+===================================================== */
+
 function bottomQuality(point,bars){
+
   if(!point)return 0;
 
   let score=40;
 
-  const f=point.feature||{};
+  const f=
+    point.feature||{};
 
-  /* 실제 반등 강도: 최대 +20 */
-  if(point.move>=50)score+=20;
-  else if(point.move>=35)score+=17;
-  else if(point.move>=25)score+=13;
-  else if(point.move>=20)score+=9;
-  else if(point.move>=15)score+=5;
+  if(point.move>=50){
+    score+=20;
+  }else if(point.move>=35){
+    score+=17;
+  }else if(point.move>=25){
+    score+=13;
+  }else if(point.move>=20){
+    score+=9;
+  }else if(point.move>=15){
+    score+=5;
+  }
 
-  /* RSI washout: 최대 +10 */
-  if(f.rsi<=25)score+=10;
-  else if(f.rsi<=30)score+=8;
-  else if(f.rsi<=38)score+=5;
-  else if(f.rsi<=45)score+=2;
+  if(f.rsi<=25){
+    score+=10;
+  }else if(f.rsi<=30){
+    score+=8;
+  }else if(f.rsi<=38){
+    score+=5;
+  }else if(f.rsi<=45){
+    score+=2;
+  }
 
-  /* Momentum turn: 최대 +10 */
-  if(f.macdCross===1)score+=10;
-  else if(f.macdSlope>0)score+=7;
-  else if(f.rsiSlope>0)score+=4;
+  if(f.macdCross===1){
+    score+=10;
+  }else if(f.macdSlope>0){
+    score+=7;
+  }else if(f.rsiSlope>0){
+    score+=4;
+  }
 
-  /* Bollinger extreme: 최대 +5 */
-  if(f.bbPosition<=0)score+=5;
-  else if(f.bbPosition<=.2)score+=3;
+  if(f.bbPosition<=0){
+    score+=5;
+  }else if(f.bbPosition<=.2){
+    score+=3;
+  }
 
-  /* Volume capitulation: 최대 +5 */
-  if(f.relVolume>=2)score+=5;
-  else if(f.relVolume>=1.5)score+=3;
+  if(f.relVolume>=2){
+    score+=5;
+  }else if(f.relVolume>=1.5){
+    score+=3;
+  }
 
-  /* Rejection / close recovery: 최대 +5 */
-  if(f.closeLocation>=.75)score+=5;
-  else if(f.closeLocation>=.6)score+=3;
+  if(f.closeLocation>=.75){
+    score+=5;
+  }else if(f.closeLocation>=.6){
+    score+=3;
+  }
 
-  /* 이후 저점 유지 기간: 최대 +10 */
-  const after=bars.slice(point.index+1);
+  const after=
+    bars.slice(
+      point.index+1
+    );
+
   let intactWeeks=0;
 
   for(const bar of after){
-    if(bar.l<point.price*(1-STRUCTURE_BREAK))break;
+
+    if(
+      bar.l<
+      point.price*
+      (1-STRUCTURE_BREAK)
+    ){
+      break;
+    }
+
     intactWeeks++;
   }
 
-  if(intactWeeks>=12)score+=10;
-  else if(intactWeeks>=8)score+=8;
-  else if(intactWeeks>=4)score+=5;
-  else if(intactWeeks>=2)score+=2;
+  if(intactWeeks>=12){
+    score+=10;
+  }else if(intactWeeks>=8){
+    score+=8;
+  }else if(intactWeeks>=4){
+    score+=5;
+  }else if(intactWeeks>=2){
+    score+=2;
+  }
 
-  return clamp(Math.round(score));
+  return clamp(
+    Math.round(score)
+  );
 }
 
 function topQuality(point,bars){
+
   if(!point)return 0;
 
   let score=40;
-  const f=point.feature||{};
 
-  if(point.move>=50)score+=20;
-  else if(point.move>=35)score+=17;
-  else if(point.move>=25)score+=13;
-  else if(point.move>=20)score+=9;
-  else if(point.move>=15)score+=5;
+  const f=
+    point.feature||{};
 
-  if(f.rsi>=75)score+=10;
-  else if(f.rsi>=70)score+=8;
-  else if(f.rsi>=62)score+=5;
-  else if(f.rsi>=55)score+=2;
+  if(point.move>=50){
+    score+=20;
+  }else if(point.move>=35){
+    score+=17;
+  }else if(point.move>=25){
+    score+=13;
+  }else if(point.move>=20){
+    score+=9;
+  }else if(point.move>=15){
+    score+=5;
+  }
 
-  if(f.macdCross===-1)score+=10;
-  else if(f.macdSlope<0)score+=7;
-  else if(f.rsiSlope<0)score+=4;
+  if(f.rsi>=75){
+    score+=10;
+  }else if(f.rsi>=70){
+    score+=8;
+  }else if(f.rsi>=62){
+    score+=5;
+  }else if(f.rsi>=55){
+    score+=2;
+  }
 
-  if(f.bbPosition>=1)score+=5;
-  else if(f.bbPosition>=.8)score+=3;
+  if(f.macdCross===-1){
+    score+=10;
+  }else if(f.macdSlope<0){
+    score+=7;
+  }else if(f.rsiSlope<0){
+    score+=4;
+  }
 
-  if(f.relVolume>=2)score+=5;
-  else if(f.relVolume>=1.5)score+=3;
+  if(f.bbPosition>=1){
+    score+=5;
+  }else if(f.bbPosition>=.8){
+    score+=3;
+  }
 
-  if(f.closeLocation<=.25)score+=5;
-  else if(f.closeLocation<=.4)score+=3;
+  if(f.relVolume>=2){
+    score+=5;
+  }else if(f.relVolume>=1.5){
+    score+=3;
+  }
 
-  const after=bars.slice(point.index+1);
+  if(f.closeLocation<=.25){
+    score+=5;
+  }else if(f.closeLocation<=.4){
+    score+=3;
+  }
+
+  const after=
+    bars.slice(
+      point.index+1
+    );
+
   let intactWeeks=0;
 
   for(const bar of after){
-    if(bar.h>point.price*(1+STRUCTURE_BREAK))break;
+
+    if(
+      bar.h>
+      point.price*
+      (1+STRUCTURE_BREAK)
+    ){
+      break;
+    }
+
     intactWeeks++;
   }
 
-  if(intactWeeks>=12)score+=10;
-  else if(intactWeeks>=8)score+=8;
-  else if(intactWeeks>=4)score+=5;
-  else if(intactWeeks>=2)score+=2;
+  if(intactWeeks>=12){
+    score+=10;
+  }else if(intactWeeks>=8){
+    score+=8;
+  }else if(intactWeeks>=4){
+    score+=5;
+  }else if(intactWeeks>=2){
+    score+=2;
+  }
 
-  return clamp(Math.round(score));
+  return clamp(
+    Math.round(score)
+  );
 }
 
 function discoverMajorTurns(bars){
+
   const bottoms=[];
   const tops=[];
 
-  for(let i=MIN_HISTORY;i<bars.length-1;i++){
-    const maxFuture=Math.min(bars.length,i+1+CONFIRM_WEEKS);
-    const future=bars.slice(i+1,maxFuture);
+  for(
+    let i=MIN_HISTORY;
+    i<bars.length-1;
+    i++
+  ){
+
+    const maxFuture=
+      Math.min(
+        bars.length,
+        i+1+
+        CONFIRM_WEEKS
+      );
+
+    const future=
+      bars.slice(
+        i+1,
+        maxFuture
+      );
 
     if(!future.length)continue;
 
-    if(isLocalLow(bars,i)){
-      const low=bars[i].l;
-      const highest=Math.max(...future.map(x=>x.h));
-      const rise=((highest-low)/low)*100;
+    if(
+      isLocalLow(
+        bars,
+        i
+      )
+    ){
 
-      if(rise>=BOTTOM_CONFIRM_MOVE){
+      const low=
+        bars[i].l;
+
+      const highest=
+        Math.max(
+          ...future.map(
+            x=>x.h
+          )
+        );
+
+      const rise=
+        (
+          (
+            highest-low
+          )/
+          low
+        )*100;
+
+      if(
+        rise>=
+        BOTTOM_CONFIRM_MOVE
+      ){
+
         bottoms.push({
           type:'bottom',
           index:i,
           date:bars[i].dt,
           price:low,
           move:rise,
-          feature:featureAt(bars,i)
+          feature:
+            featureAt(
+              bars,
+              i
+            )
         });
       }
     }
 
-    if(isLocalHigh(bars,i)){
-      const high=bars[i].h;
-      const lowest=Math.min(...future.map(x=>x.l));
-      const drop=((high-lowest)/high)*100;
+    if(
+      isLocalHigh(
+        bars,
+        i
+      )
+    ){
 
-      if(drop>=TOP_CONFIRM_MOVE){
+      const high=
+        bars[i].h;
+
+      const lowest=
+        Math.min(
+          ...future.map(
+            x=>x.l
+          )
+        );
+
+      const drop=
+        (
+          (
+            high-lowest
+          )/
+          high
+        )*100;
+
+      if(
+        drop>=
+        TOP_CONFIRM_MOVE
+      ){
+
         tops.push({
           type:'top',
           index:i,
           date:bars[i].dt,
           price:high,
           move:drop,
-          feature:featureAt(bars,i)
+          feature:
+            featureAt(
+              bars,
+              i
+            )
         });
       }
     }
@@ -871,11 +2130,28 @@ function discoverMajorTurns(bars){
   const cleanBottoms=[];
 
   for(const p of bottoms){
-    const prev=cleanBottoms.at(-1);
 
-    if(prev&&p.index-prev.index<=2){
-      if(p.price<prev.price)cleanBottoms[cleanBottoms.length-1]=p;
+    const prev=
+      cleanBottoms.at(-1);
+
+    if(
+      prev&&
+      p.index-
+      prev.index<=2
+    ){
+
+      if(
+        p.price<
+        prev.price
+      ){
+
+        cleanBottoms[
+          cleanBottoms.length-1
+        ]=p;
+      }
+
     }else{
+
       cleanBottoms.push(p);
     }
   }
@@ -883,239 +2159,719 @@ function discoverMajorTurns(bars){
   const cleanTops=[];
 
   for(const p of tops){
-    const prev=cleanTops.at(-1);
 
-    if(prev&&p.index-prev.index<=2){
-      if(p.price>prev.price)cleanTops[cleanTops.length-1]=p;
+    const prev=
+      cleanTops.at(-1);
+
+    if(
+      prev&&
+      p.index-
+      prev.index<=2
+    ){
+
+      if(
+        p.price>
+        prev.price
+      ){
+
+        cleanTops[
+          cleanTops.length-1
+        ]=p;
+      }
+
     }else{
+
       cleanTops.push(p);
     }
   }
 
-  cleanBottoms.forEach(p=>{
-    p.quality=bottomQuality(p,bars);
-  });
+  cleanBottoms.forEach(
+    p=>{
+      p.quality=
+        bottomQuality(
+          p,
+          bars
+        );
+    }
+  );
 
-  cleanTops.forEach(p=>{
-    p.quality=topQuality(p,bars);
-  });
+  cleanTops.forEach(
+    p=>{
+      p.quality=
+        topQuality(
+          p,
+          bars
+        );
+    }
+  );
 
-  return {
+  return{
     bottoms:cleanBottoms,
     tops:cleanTops
   };
 }
 
-function activeStructuralBottom(bars,bottoms){
-  for(let n=bottoms.length-1;n>=0;n--){
-    const p=bottoms[n];
-    const breakPrice=p.price*(1-STRUCTURE_BREAK);
-    const after=bars.slice(p.index+1);
-    const broken=after.some(x=>x.l<breakPrice);
+function activeStructuralBottom(
+  bars,
+  bottoms
+){
 
-    if(!broken)return {...p,intact:true};
+  for(
+    let n=
+      bottoms.length-1;
+    n>=0;
+    n--
+  ){
+
+    const p=
+      bottoms[n];
+
+    const breakPrice=
+      p.price*
+      (1-STRUCTURE_BREAK);
+
+    const after=
+      bars.slice(
+        p.index+1
+      );
+
+    const broken=
+      after.some(
+        x=>
+          x.l<
+          breakPrice
+      );
+
+    if(!broken){
+
+      return{
+        ...p,
+        intact:true
+      };
+    }
   }
 
   return null;
 }
 
-function activeStructuralTop(bars,tops){
-  for(let n=tops.length-1;n>=0;n--){
-    const p=tops[n];
-    const breakPrice=p.price*(1+STRUCTURE_BREAK);
-    const after=bars.slice(p.index+1);
-    const broken=after.some(x=>x.h>breakPrice);
+function activeStructuralTop(
+  bars,
+  tops
+){
 
-    if(!broken)return {...p,intact:true};
+  for(
+    let n=
+      tops.length-1;
+    n>=0;
+    n--
+  ){
+
+    const p=
+      tops[n];
+
+    const breakPrice=
+      p.price*
+      (1+STRUCTURE_BREAK);
+
+    const after=
+      bars.slice(
+        p.index+1
+      );
+
+    const broken=
+      after.some(
+        x=>
+          x.h>
+          breakPrice
+      );
+
+    if(!broken){
+
+      return{
+        ...p,
+        intact:true
+      };
+    }
   }
 
   return null;
 }
 
-function similarityPart(a,b,scale){
-  if(!Number.isFinite(a)||!Number.isFinite(b))return .5;
-  return 1-Math.min(1,Math.abs(a-b)/scale);
+/* =====================================================
+   HISTORICAL SIMILARITY
+===================================================== */
+
+function similarityPart(
+  a,
+  b,
+  scale
+){
+
+  if(
+    !Number.isFinite(a)||
+    !Number.isFinite(b)
+  )return .5;
+
+  return 1-
+    Math.min(
+      1,
+      Math.abs(a-b)/
+      scale
+    );
 }
 
-function featureSimilarity(current,reference){
-  if(!current||!reference)return 0;
+function featureSimilarity(
+  current,
+  reference
+){
+
+  if(
+    !current||
+    !reference
+  )return 0;
 
   const scores=[
-    similarityPart(current.rsi,reference.rsi,30),
-    similarityPart(current.rsiSlope,reference.rsiSlope,12),
-    similarityPart(current.stoch,reference.stoch,40),
-    similarityPart(current.bbPosition,reference.bbPosition,.75),
-    similarityPart(current.relVolume,reference.relVolume,2),
-    similarityPart(current.closeLocation,reference.closeLocation,.65),
-    similarityPart(current.position8w,reference.position8w,.7),
-    similarityPart(current.return4w,reference.return4w,30)
+
+    similarityPart(
+      current.rsi,
+      reference.rsi,
+      30
+    ),
+
+    similarityPart(
+      current.rsiSlope,
+      reference.rsiSlope,
+      12
+    ),
+
+    similarityPart(
+      current.stoch,
+      reference.stoch,
+      40
+    ),
+
+    similarityPart(
+      current.bbPosition,
+      reference.bbPosition,
+      .75
+    ),
+
+    similarityPart(
+      current.relVolume,
+      reference.relVolume,
+      2
+    ),
+
+    similarityPart(
+      current.closeLocation,
+      reference.closeLocation,
+      .65
+    ),
+
+    similarityPart(
+      current.position8w,
+      reference.position8w,
+      .7
+    ),
+
+    similarityPart(
+      current.return4w,
+      reference.return4w,
+      30
+    )
   ];
 
   scores.push(
-    Math.sign(current.macdSlope)===Math.sign(reference.macdSlope)
-    ?1:.25
+    Math.sign(
+      current.macdSlope
+    )===
+    Math.sign(
+      reference.macdSlope
+    )
+    ?1
+    :.25
   );
 
   scores.push(
-    current.macdCross===reference.macdCross
-    ?1:.4
+    current.macdCross===
+    reference.macdCross
+    ?1
+    :.4
   );
 
-  return clamp(Math.round(average(scores)*100));
+  return clamp(
+    Math.round(
+      average(scores)*
+      100
+    )
+  );
 }
 
-/* 가장 품질 높은 바닥만 기준으로 삼지 않고
-   현재 패턴과 가장 닮은 실제 바닥들을 비교.
-   품질이 높은 바닥에 약간 더 높은 가중치.
-*/
-function patternMatch(current,turns){
-  if(!current||!turns.length){
-    return {score:0,reference:null,matches:[]};
+function patternMatch(
+  current,
+  turns
+){
+
+  if(
+    !current||
+    !turns.length
+  ){
+
+    return{
+      score:0,
+      reference:null,
+      matches:[]
+    };
   }
 
-  const matches=turns.map(turn=>{
-    const similarity=featureSimilarity(current,turn.feature);
+  const matches=
+    turns.map(
+      turn=>{
 
-    const weightedMatch=
-      similarity*.8+
-      (turn.quality||0)*.2;
+        const similarity=
+          featureSimilarity(
+            current,
+            turn.feature
+          );
 
-    return {
-      ...turn,
-      similarity,
-      weightedMatch
-    };
-  }).sort((a,b)=>b.weightedMatch-a.weightedMatch);
+        const weightedMatch=
+          similarity*.8+
+          (turn.quality||0)*.2;
 
-  const top=matches.slice(0,Math.min(3,matches.length));
+        return{
+          ...turn,
+          similarity,
+          weightedMatch
+        };
+      }
+    )
+    .sort(
+      (a,b)=>
+        b.weightedMatch-
+        a.weightedMatch
+    );
+
+  const top=
+    matches.slice(
+      0,
+      Math.min(
+        3,
+        matches.length
+      )
+    );
 
   let total=0;
   let weights=0;
 
-  top.forEach((x,i)=>{
-    const w=i===0?3:i===1?2:1;
-    total+=x.similarity*w;
-    weights+=w;
-  });
+  top.forEach(
+    (x,i)=>{
 
-  return {
-    score:weights?Math.round(total/weights):0,
-    reference:matches[0]||null,
+      const w=
+        i===0
+        ?3
+        :i===1
+        ?2
+        :1;
+
+      total+=
+        x.similarity*w;
+
+      weights+=w;
+    }
+  );
+
+  return{
+    score:
+      weights
+      ?Math.round(
+        total/weights
+      )
+      :0,
+
+    reference:
+      matches[0]||null,
+
     matches
   };
 }
 
-function scoreLabel(type,score){
-  if(score>=90)return type==='bottom'?'EXTREME BOTTOM':'EXTREME TOP';
-  if(score>=80)return type==='bottom'?'STRONG BOTTOM':'STRONG TOP';
-  if(score>=65)return type==='bottom'?'BOTTOM WATCH':'TOP WATCH';
-  if(score>=50)return 'BUILDING';
+function scoreLabel(
+  type,
+  score
+){
+
+  if(score>=95){
+    return type==='bottom'
+      ?'EXTREME BOTTOM'
+      :'EXTREME TOP';
+  }
+
+  if(score>=90){
+    return type==='bottom'
+      ?'VERY STRONG'
+      :'VERY STRONG';
+  }
+
+  if(score>=85){
+    return type==='bottom'
+      ?'STRONG BOTTOM'
+      :'STRONG TOP';
+  }
+
+  if(score>=80){
+    return type==='bottom'
+      ?'ENTRY WATCH'
+      :'TOP WATCH';
+  }
+
+  if(score>=65){
+    return type==='bottom'
+      ?'BOTTOM WATCH'
+      :'TOP WATCH';
+  }
+
+  if(score>=50){
+    return 'BUILDING';
+  }
+
   return 'LOW SIGNAL';
 }
 
 function qualityLabel(score){
-  if(score>=95)return 'EXCEPTIONAL TURN';
-  if(score>=90)return 'VERY STRONG TURN';
-  if(score>=80)return 'STRONG TURN';
-  if(score>=70)return 'VALID TURN';
-  if(score>=60)return 'WEAK TURN';
+
+  if(score>=95)
+    return 'EXCEPTIONAL TURN';
+
+  if(score>=90)
+    return 'VERY STRONG TURN';
+
+  if(score>=80)
+    return 'STRONG TURN';
+
+  if(score>=70)
+    return 'VALID TURN';
+
+  if(score>=60)
+    return 'WEAK TURN';
+
   return 'BASIC CONFIRMED TURN';
 }
 
 function similarityLabel(score){
-  if(score>=90)return 'VERY STRONG MATCH';
-  if(score>=80)return 'STRONG MATCH';
-  if(score>=70)return 'GOOD MATCH';
-  if(score>=60)return 'PARTIAL MATCH';
+
+  if(score>=90)
+    return 'VERY STRONG MATCH';
+
+  if(score>=80)
+    return 'STRONG MATCH';
+
+  if(score>=70)
+    return 'GOOD MATCH';
+
+  if(score>=60)
+    return 'PARTIAL MATCH';
+
   return 'LOW MATCH';
 }
 
 function badgeClass(state){
-  if(state.includes('BOTTOM'))return 'good';
-  if(state.includes('TOP'))return 'bad';
+
+  if(
+    state.includes(
+      'BOTTOM'
+    )
+  )return 'good';
+
+  if(
+    state.includes(
+      'TOP'
+    )
+  )return 'bad';
+
   return 'neutral';
 }
 
-function analyse(symbol,daily){
-  if(!daily.length)return null;
+/* =====================================================
+   ENTRY INTERPRETATION
+   단순 점수 표시용.
+   확률 의미 아님.
+===================================================== */
 
-  const weekly=dailyToWeekly(daily);
-  const price=daily.at(-1).c;
+function entryState(
+  bottom,
+  similarity
+){
 
-  const weeklyFeature=featureAt(weekly,weekly.length-1);
-  const dailyFeature=featureAt(daily,daily.length-1);
+  if(
+    bottom>=85&&
+    similarity>=75
+  ){
 
-  const currentBottom=currentTechnicalScore(weeklyFeature,'bottom');
-  const currentTop=currentTechnicalScore(weeklyFeature,'top');
-
-  const dailyBottom=currentTechnicalScore(dailyFeature,'bottom');
-  const dailyTop=currentTechnicalScore(dailyFeature,'top');
-
-  const turns=discoverMajorTurns(weekly);
-
-  const majorBottom=activeStructuralBottom(weekly,turns.bottoms);
-  const majorTop=activeStructuralTop(weekly,turns.tops);
-
-  const bottomPattern=patternMatch(weeklyFeature,turns.bottoms);
-  const topPattern=patternMatch(weeklyFeature,turns.tops);
-
-  const bottomQuality=majorBottom?.quality||0;
-  const topQuality=majorTop?.quality||0;
-
-  let state='TREND / NEUTRAL';
-
-  if(currentBottom>=80&&currentBottom>currentTop+10){
-    state='STRONG BOTTOM';
-  }else if(currentBottom>=65&&currentBottom>currentTop+8){
-    state='BOTTOM WATCH';
-  }else if(currentTop>=80&&currentTop>currentBottom+10){
-    state='STRONG TOP';
-  }else if(currentTop>=65&&currentTop>currentBottom+8){
-    state='TOP WATCH';
-  }
-
-  let cycle='TREND / NEUTRAL';
-  let cycleText='현재 가격은 확인된 주요 바닥·고점 사이의 추세 구간입니다.';
-
-  if(majorBottom){
-    const gain=((price-majorBottom.price)/majorBottom.price)*100;
-
-    cycle='RISING FROM MAJOR BOTTOM';
-    cycleText=
-      `${majorBottom.date} ${money(majorBottom.price)} 바닥은 Quality ${majorBottom.quality}/100으로 확인되었습니다. `+
-      `현재가는 해당 바닥 대비 ${pct(gain)}입니다. 현재 Bottom Score ${currentBottom}/100은 지금 다시 바닥인지 나타내는 별도 점수입니다.`;
+    return{
+      level:'strong',
+      title:'STRONG ENTRY ZONE',
+      text:
+        `Current Bottom ${bottom}/100 · Similarity ${similarity}/100. `+
+        `현재 주봉 바닥 신호와 과거 실제 바닥 패턴이 동시에 강하게 겹치는 구간입니다.`
+    };
   }
 
   if(
-    majorTop &&
-    majorTop.index>(majorBottom?.index??-1)
+    bottom>=80&&
+    similarity>=65
   ){
-    const move=((price-majorTop.price)/majorTop.price)*100;
 
-    cycle='FALLING FROM MAJOR TOP';
+    return{
+      level:'watch',
+      title:'ENTRY WATCH',
+      text:
+        `Current Bottom ${bottom}/100 · Similarity ${similarity}/100. `+
+        `바닥 후보가 강해지고 있지만 추가 확인이 필요한 구간입니다.`
+    };
+  }
+
+  if(
+    bottom>=90
+  ){
+
+    return{
+      level:'watch',
+      title:'STRONG CURRENT SIGNAL',
+      text:
+        `Current Bottom은 ${bottom}/100으로 매우 높지만 Historical Similarity는 ${similarity}/100입니다.`
+    };
+  }
+
+  return{
+    level:'wait',
+    title:'WAIT / MONITOR',
+    text:
+      `Current Bottom ${bottom}/100 · Similarity ${similarity}/100.`
+  };
+}
+
+/* =====================================================
+   ANALYSIS
+===================================================== */
+
+function analyse(
+  symbol,
+  daily
+){
+
+  if(!daily.length)
+    return null;
+
+  const weekly=
+    dailyToWeekly(daily);
+
+  const price=
+    daily.at(-1).c;
+
+  const weeklyFeature=
+    featureAt(
+      weekly,
+      weekly.length-1
+    );
+
+  const dailyFeature=
+    featureAt(
+      daily,
+      daily.length-1
+    );
+
+  const currentBottom=
+    currentTechnicalScore(
+      weeklyFeature,
+      'bottom'
+    );
+
+  const currentTop=
+    currentTechnicalScore(
+      weeklyFeature,
+      'top'
+    );
+
+  const dailyBottom=
+    currentTechnicalScore(
+      dailyFeature,
+      'bottom'
+    );
+
+  const dailyTop=
+    currentTechnicalScore(
+      dailyFeature,
+      'top'
+    );
+
+  const contributions=
+    indicatorContributions(
+      weeklyFeature
+    );
+
+  const turns=
+    discoverMajorTurns(
+      weekly
+    );
+
+  const majorBottom=
+    activeStructuralBottom(
+      weekly,
+      turns.bottoms
+    );
+
+  const majorTop=
+    activeStructuralTop(
+      weekly,
+      turns.tops
+    );
+
+  const bottomPattern=
+    patternMatch(
+      weeklyFeature,
+      turns.bottoms
+    );
+
+  const topPattern=
+    patternMatch(
+      weeklyFeature,
+      turns.tops
+    );
+
+  const bottomQuality=
+    majorBottom?.quality||0;
+
+  const topQuality=
+    majorTop?.quality||0;
+
+  let state=
+    'TREND / NEUTRAL';
+
+  if(
+    currentBottom>=80&&
+    currentBottom>
+    currentTop+10
+  ){
+
+    state=
+      'STRONG BOTTOM';
+
+  }else if(
+    currentBottom>=65&&
+    currentBottom>
+    currentTop+8
+  ){
+
+    state=
+      'BOTTOM WATCH';
+
+  }else if(
+    currentTop>=80&&
+    currentTop>
+    currentBottom+10
+  ){
+
+    state=
+      'STRONG TOP';
+
+  }else if(
+    currentTop>=65&&
+    currentTop>
+    currentBottom+8
+  ){
+
+    state=
+      'TOP WATCH';
+  }
+
+  let cycle=
+    'TREND / NEUTRAL';
+
+  let cycleText=
+    '현재 가격은 확인된 주요 바닥·고점 사이의 추세 구간입니다.';
+
+  if(majorBottom){
+
+    const gain=
+      (
+        (
+          price-
+          majorBottom.price
+        )/
+        majorBottom.price
+      )*100;
+
+    cycle=
+      'RISING FROM MAJOR BOTTOM';
+
     cycleText=
-      `${majorTop.date} ${money(majorTop.price)} 고점은 Quality ${majorTop.quality}/100으로 확인되었습니다. `+
+      `${majorBottom.date} ${money(majorBottom.price)} 바닥은 `+
+      `Quality ${majorBottom.quality}/100으로 사후 확인되었습니다. `+
+      `현재가는 해당 바닥 대비 ${pct(gain)}입니다. `+
+      `Current Bottom ${currentBottom}/100은 지금 이 순간의 별도 신호입니다.`;
+  }
+
+  if(
+    majorTop&&
+    majorTop.index>
+    (majorBottom?.index??-1)
+  ){
+
+    const move=
+      (
+        (
+          price-
+          majorTop.price
+        )/
+        majorTop.price
+      )*100;
+
+    cycle=
+      'FALLING FROM MAJOR TOP';
+
+    cycleText=
+      `${majorTop.date} ${money(majorTop.price)} 고점은 `+
+      `Quality ${majorTop.quality}/100으로 사후 확인되었습니다. `+
       `현재가는 해당 고점 대비 ${pct(move)}입니다.`;
   }
 
-  if(currentBottom>=85&&currentBottom>currentTop){
-    cycle='CURRENT BOTTOM SETUP';
+  if(
+    currentBottom>=85&&
+    currentBottom>
+    currentTop
+  ){
+
+    cycle=
+      'CURRENT BOTTOM SETUP';
+
     cycleText=
-      `현재 구간 자체가 강한 바닥형 신호입니다. Current Bottom ${currentBottom}/100 · Historical Similarity ${bottomPattern.score}/100`;
+      `현재 진행 중인 주봉 자체가 강한 바닥형입니다. `+
+      `Current Bottom ${currentBottom}/100 · `+
+      `Historical Similarity ${bottomPattern.score}/100`;
   }
 
-  if(currentTop>=85&&currentTop>currentBottom){
-    cycle='CURRENT TOP SETUP';
+  if(
+    currentTop>=85&&
+    currentTop>
+    currentBottom
+  ){
+
+    cycle=
+      'CURRENT TOP SETUP';
+
     cycleText=
-      `현재 구간 자체가 강한 고점형 신호입니다. Current Top ${currentTop}/100 · Historical Similarity ${topPattern.score}/100`;
+      `현재 진행 중인 주봉 자체가 강한 고점형입니다. `+
+      `Current Top ${currentTop}/100 · `+
+      `Historical Similarity ${topPattern.score}/100`;
   }
 
-  return {
+  return{
     symbol,
     price,
     weekly,
     weeklyFeature,
     dailyFeature,
+    contributions,
     turns,
     majorBottom,
     majorTop,
@@ -1133,83 +2889,188 @@ function analyse(symbol,daily){
   };
 }
 
-async function fetchDaily(symbol,force=false){
-  const key=symbol+'__1day';
-  const old=cache[key];
+/* =====================================================
+   MARKET DATA
+===================================================== */
+
+async function fetchDaily(
+  symbol,
+  force=false
+){
+
+  const key=
+    symbol+'__1day';
+
+  const old=
+    cache[key];
 
   if(
-    !force &&
-    old?.values?.length &&
-    Date.now()-old.time<DAILY_TTL
+    !force&&
+    old?.values?.length&&
+    Date.now()-
+    old.time<
+    DAILY_TTL
   ){
-    return {values:old.values,mode:'CACHED'};
+
+    return{
+      values:old.values,
+      mode:'CACHED'
+    };
   }
 
   try{
-    const url=new URL(MARKET);
-    url.searchParams.set('symbol',symbol);
-    url.searchParams.set('interval','1day');
 
-    const response=await fetch(url,{
-      headers:{apikey:KEY}
-    });
+    const url=
+      new URL(MARKET);
 
-    const json=await response.json();
+    url.searchParams.set(
+      'symbol',
+      symbol
+    );
 
-    if(!response.ok||!Array.isArray(json.values)){
-      throw new Error(json?.message||'FETCH ERROR');
+    url.searchParams.set(
+      'interval',
+      '1day'
+    );
+
+    const response=
+      await fetch(
+        url,
+        {
+          headers:{
+            apikey:KEY
+          }
+        }
+      );
+
+    const json=
+      await response.json();
+
+    if(
+      !response.ok||
+      !Array.isArray(
+        json.values
+      )
+    ){
+
+      throw new Error(
+        json?.message||
+        'FETCH ERROR'
+      );
     }
 
-    const values=normalize(json.values);
+    const values=
+      normalize(
+        json.values
+      );
 
     cache[key]={
       values,
       time:Date.now(),
-      sourceTime:json.fetched_at||new Date().toISOString()
+      sourceTime:
+        json.fetched_at||
+        new Date().toISOString()
     };
 
-    store.set(CACHE_KEY,cache);
+    store.set(
+      CACHE_KEY,
+      cache
+    );
 
-    return {values,mode:'LIVE'};
+    return{
+      values,
+      mode:'LIVE'
+    };
 
   }catch(error){
-    return {
-      values:old?.values||[],
-      mode:old?.values?.length?'CACHED':'ERROR'
+
+    return{
+      values:
+        old?.values||[],
+      mode:
+        old?.values?.length
+        ?'CACHED'
+        :'ERROR'
     };
   }
 }
 
+/* =====================================================
+   RENDER HELPERS
+===================================================== */
+
 function structuralHTML(d){
+
   let html='';
 
   if(d.majorBottom){
-    const gain=((d.price-d.majorBottom.price)/d.majorBottom.price)*100;
+
+    const gain=
+      (
+        (
+          d.price-
+          d.majorBottom.price
+        )/
+        d.majorBottom.price
+      )*100;
 
     html+=`
       <div class="structural">
-        <small>ACTIVE MAJOR BOTTOM · QUALITY ${d.majorBottom.quality}/100</small>
-        <strong class="good">${money(d.majorBottom.price)}</strong>
+
+        <small>
+          ACTIVE MAJOR BOTTOM ·
+          QUALITY ${d.majorBottom.quality}/100
+        </small>
+
+        <strong class="good">
+          ${money(d.majorBottom.price)}
+        </strong>
+
         <p>
-          ${d.majorBottom.date} · 현재 ${pct(gain)}<br>
-          이 바닥은 실제 +${d.majorBottom.move.toFixed(1)}% 반등으로 확인되었습니다.<br>
-          Bottom Quality와 Current Bottom Score는 서로 다른 값입니다.
+          ${d.majorBottom.date}
+          · 현재 ${pct(gain)}
+          <br>
+          실제 +${d.majorBottom.move.toFixed(1)}%
+          반등으로 사후 확인된 바닥입니다.
+          <br>
+          Major Bottom은 당일 예측 신호가 아닙니다.
         </p>
+
       </div>
     `;
   }
 
   if(d.majorTop){
-    const move=((d.price-d.majorTop.price)/d.majorTop.price)*100;
+
+    const move=
+      (
+        (
+          d.price-
+          d.majorTop.price
+        )/
+        d.majorTop.price
+      )*100;
 
     html+=`
       <div class="structural top">
-        <small>ACTIVE MAJOR TOP · QUALITY ${d.majorTop.quality}/100</small>
-        <strong class="bad">${money(d.majorTop.price)}</strong>
+
+        <small>
+          ACTIVE MAJOR TOP ·
+          QUALITY ${d.majorTop.quality}/100
+        </small>
+
+        <strong class="bad">
+          ${money(d.majorTop.price)}
+        </strong>
+
         <p>
-          ${d.majorTop.date} · 현재 ${pct(move)}<br>
-          이 고점은 실제 -${d.majorTop.move.toFixed(1)}% 하락으로 확인되었습니다.
+          ${d.majorTop.date}
+          · 현재 ${pct(move)}
+          <br>
+          실제 -${d.majorTop.move.toFixed(1)}%
+          하락으로 사후 확인된 고점입니다.
         </p>
+
       </div>
     `;
   }
@@ -1217,356 +3078,1025 @@ function structuralHTML(d){
   return html;
 }
 
-function activeTurnCard(point,type,currentPrice){
-  if(!point){
-    return `<div class="empty">현재 유지 중인 Major ${type==='bottom'?'Bottom':'Top'}이 없습니다.</div>`;
-  }
+function entryHTML(d){
 
-  const distance=((currentPrice-point.price)/point.price)*100;
-  const f=point.feature||{};
+  const e=
+    entryState(
+      d.currentBottom,
+      d.bottomPattern.score
+    );
 
-  return `
-    <div class="turncard">
-      <div class="turnhead">
-        <div>
-          <small>${point.date}</small>
-          <b>${money(point.price)}</b>
-        </div>
+  return`
+    <div class="entrybox ${e.level}">
 
-        <div class="turnscore">
-          <strong class="${type==='bottom'?'good':'bad'}">${point.quality}/100</strong>
-          <small>${qualityLabel(point.quality)}</small>
-        </div>
-      </div>
+      <small>
+        CURRENT SIGNAL
+      </small>
 
-      <div class="turnmeta">
-        ${type==='bottom'?'Actual rebound':'Actual decline'} ·
-        <b class="${type==='bottom'?'good':'bad'}">
-          ${type==='bottom'?'+':'-'}${point.move.toFixed(1)}%
-        </b>
+      <strong>
+        ${e.title}
+      </strong>
+
+      <p>
+        ${e.text}
         <br>
-        Current price distance · <b>${pct(distance)}</b>
-        <br><br>
-        RSI · ${f.rsi?.toFixed(1)??'—'}
-        <br>
-        RSI slope · ${f.rsiSlope?.toFixed(1)??'—'}
-        <br>
-        Stochastic · ${f.stoch?.toFixed(1)??'—'}
-        <br>
-        Bollinger · ${f.bbPosition?.toFixed(2)??'—'}
-        <br>
-        Relative volume · ${f.relVolume?.toFixed(2)??'—'}x
-        <br>
-        4W return · ${f.return4w?.toFixed(1)??'—'}%
-      </div>
+        점수는 기술적 조건 충족도이며
+        실제 상승 확률을 의미하지 않습니다.
+      </p>
+
     </div>
   `;
 }
 
-function historicalTurnsHTML(turns,type,currentPrice){
-  if(!turns.length){
-    return `<div class="empty">확인된 Historical ${type==='bottom'?'Bottom':'Top'}이 없습니다.</div>`;
+function activeTurnCard(
+  point,
+  type,
+  currentPrice
+){
+
+  if(!point){
+
+    return`
+      <div class="empty">
+        현재 유지 중인
+        Major
+        ${type==='bottom'
+          ?'Bottom'
+          :'Top'}
+        이 없습니다.
+      </div>
+    `;
   }
 
-  return [...turns]
-    .reverse()
-    .slice(0,5)
-    .map(point=>{
-      const distance=((currentPrice-point.price)/point.price)*100;
+  const distance=
+    (
+      (
+        currentPrice-
+        point.price
+      )/
+      point.price
+    )*100;
 
-      return `
-        <div class="turncard">
-          <div class="turnhead">
-            <div>
-              <small>${point.date}</small>
-              <b>${money(point.price)}</b>
-            </div>
+  const f=
+    point.feature||{};
 
-            <div class="turnscore">
-              <strong class="${type==='bottom'?'good':'bad'}">${point.quality}/100</strong>
-              <small>${qualityLabel(point.quality)}</small>
-            </div>
-          </div>
+  return`
+    <div class="turncard">
 
-          <div class="turnmeta">
-            ${type==='bottom'?'Confirmed rebound':'Confirmed decline'} ·
-            ${type==='bottom'?'+':'-'}${point.move.toFixed(1)}%
-            <br>
-            Current distance · ${pct(distance)}
-          </div>
+      <div class="turnhead">
+
+        <div>
+          <small>
+            ${point.date}
+          </small>
+
+          <b>
+            ${money(point.price)}
+          </b>
         </div>
-      `;
-    })
-    .join('');
-}
 
-function indicatorsHTML(d){
-  const f=d.weeklyFeature;
+        <div class="turnscore">
 
-  if(!f)return '<div class="empty">DATA LIMITED</div>';
+          <strong class="${
+            type==='bottom'
+            ?'good'
+            :'bad'
+          }">
+            ${point.quality}/100
+          </strong>
 
-  return `
-    <div class="signal"><span>RSI</span><b>${f.rsi.toFixed(1)}</b></div>
-    <div class="signal"><span>RSI Slope</span><b class="${f.rsiSlope>=0?'good':'bad'}">${f.rsiSlope>=0?'+':''}${f.rsiSlope.toFixed(1)}</b></div>
-    <div class="signal"><span>Stochastic</span><b>${f.stoch.toFixed(1)}</b></div>
-    <div class="signal"><span>MACD Direction</span><b class="${f.macdSlope>=0?'good':'bad'}">${f.macdSlope>=0?'UP':'DOWN'}</b></div>
-    <div class="signal"><span>Bollinger Position</span><b>${f.bbPosition.toFixed(2)}</b></div>
-    <div class="signal"><span>Relative Volume</span><b>${f.relVolume.toFixed(2)}x</b></div>
-    <div class="signal"><span>8W Price Position</span><b>${Math.round(f.position8w*100)}%</b></div>
-    <div class="signal"><span>4W Return</span><b class="${f.return4w>=0?'good':'bad'}">${pct(f.return4w)}</b></div>
+          <small>
+            ${qualityLabel(
+              point.quality
+            )}
+          </small>
+
+        </div>
+      </div>
+
+      <div class="turnmeta">
+
+        ${
+          type==='bottom'
+          ?'Actual rebound'
+          :'Actual decline'
+        }
+        ·
+
+        <b class="${
+          type==='bottom'
+          ?'good'
+          :'bad'
+        }">
+
+          ${
+            type==='bottom'
+            ?'+'
+            :'-'
+          }
+          ${point.move.toFixed(1)}%
+
+        </b>
+
+        <br>
+
+        Current price distance ·
+        <b>
+          ${pct(distance)}
+        </b>
+
+        <br><br>
+
+        RSI ·
+        ${f.rsi?.toFixed(1)??'—'}
+
+        <br>
+
+        RSI slope ·
+        ${f.rsiSlope?.toFixed(1)??'—'}
+
+        <br>
+
+        Stochastic ·
+        ${f.stoch?.toFixed(1)??'—'}
+
+        <br>
+
+        Bollinger ·
+        ${f.bbPosition?.toFixed(2)??'—'}
+
+        <br>
+
+        Relative volume ·
+        ${f.relVolume?.toFixed(2)??'—'}x
+
+        <br>
+
+        4W return ·
+        ${f.return4w?.toFixed(1)??'—'}%
+
+      </div>
+
+    </div>
   `;
 }
 
+function historicalTurnsHTML(
+  turns,
+  type,
+  currentPrice
+){
+
+  if(!turns.length){
+
+    return`
+      <div class="empty">
+        확인된 Historical
+        ${
+          type==='bottom'
+          ?'Bottom'
+          :'Top'
+        }
+        이 없습니다.
+      </div>
+    `;
+  }
+
+  return [...turns]
+    .sort(
+      (a,b)=>
+        b.index-a.index
+    )
+    .slice(0,5)
+    .map(
+      point=>{
+
+        const distance=
+          (
+            (
+              currentPrice-
+              point.price
+            )/
+            point.price
+          )*100;
+
+        return`
+          <div class="turncard">
+
+            <div class="turnhead">
+
+              <div>
+
+                <small>
+                  ${point.date}
+                </small>
+
+                <b>
+                  ${money(point.price)}
+                </b>
+
+              </div>
+
+              <div class="turnscore">
+
+                <strong class="${
+                  type==='bottom'
+                  ?'good'
+                  :'bad'
+                }">
+
+                  ${point.quality}/100
+
+                </strong>
+
+                <small>
+                  ${qualityLabel(
+                    point.quality
+                  )}
+                </small>
+
+              </div>
+            </div>
+
+            <div class="turnmeta">
+
+              ${
+                type==='bottom'
+                ?'Confirmed rebound'
+                :'Confirmed decline'
+              }
+
+              ·
+
+              ${
+                type==='bottom'
+                ?'+'
+                :'-'
+              }
+
+              ${point.move.toFixed(1)}%
+
+              <br>
+
+              Current distance ·
+              ${pct(distance)}
+
+            </div>
+
+          </div>
+        `;
+      }
+    )
+    .join('');
+}
+
+function pointHTML(
+  type,
+  score
+){
+
+  return`
+    <span class="point ${type} ${
+      score>0
+      ?'on'
+      :''
+    }">
+      ${
+        type==='bottom'
+        ?'B'
+        :'T'
+      }
+      +${score}
+    </span>
+  `;
+}
+
+function indicatorRow(
+  name,
+  value,
+  contribution
+){
+
+  return`
+    <div class="indicator">
+
+      <div class="indicator-main">
+
+        <div class="indicator-name">
+          ${name}
+        </div>
+
+        <div class="indicator-value">
+          ${value}
+        </div>
+
+      </div>
+
+      <div class="indicator-score">
+
+        ${pointHTML(
+          'bottom',
+          contribution.bottom
+        )}
+
+        ${pointHTML(
+          'top',
+          contribution.top
+        )}
+
+      </div>
+
+    </div>
+  `;
+}
+
+function indicatorsHTML(d){
+
+  const f=
+    d.weeklyFeature;
+
+  const c=
+    d.contributions;
+
+  if(!f){
+
+    return`
+      <div class="empty">
+        DATA LIMITED
+      </div>
+    `;
+  }
+
+  const macdText=
+    f.macdSlope>0
+    ?'UP'
+    :f.macdSlope<0
+    ?'DOWN'
+    :'FLAT';
+
+  const crossText=
+    f.macdCross===1
+    ?'BULL CROSS'
+    :f.macdCross===-1
+    ?'BEAR CROSS'
+    :'NO CROSS';
+
+  return[
+
+    indicatorRow(
+      'RSI',
+      f.rsi.toFixed(1),
+      c.rsi
+    ),
+
+    indicatorRow(
+      'RSI Slope',
+      (
+        f.rsiSlope>=0
+        ?'+'
+        :''
+      )+
+      f.rsiSlope.toFixed(1),
+      c.rsiSlope
+    ),
+
+    indicatorRow(
+      'Stochastic',
+      f.stoch.toFixed(1),
+      c.stoch
+    ),
+
+    indicatorRow(
+      'MACD Direction',
+      macdText,
+      c.macdSlope
+    ),
+
+    indicatorRow(
+      'MACD Cross',
+      crossText,
+      c.macdCross
+    ),
+
+    indicatorRow(
+      'Bollinger Position',
+      f.bbPosition.toFixed(2),
+      c.bb
+    ),
+
+    indicatorRow(
+      'Relative Volume',
+      f.relVolume.toFixed(2)+'x',
+      c.volume
+    ),
+
+    indicatorRow(
+      'Candle Close Location',
+      Math.round(
+        f.closeLocation*100
+      )+'%',
+      c.closeLocation
+    ),
+
+    indicatorRow(
+      '8W Price Position',
+      Math.round(
+        f.position8w*100
+      )+'%',
+      c.position8w
+    ),
+
+    indicatorRow(
+      '4W Return',
+      pct(
+        f.return4w
+      ),
+      {
+        bottom:0,
+        top:0
+      }
+    )
+
+  ].join('');
+}
+
+/* =====================================================
+   MAIN RENDER
+===================================================== */
+
 function render(){
+
   let home='';
   let registered='';
+
   let bottoms=0;
   let tops=0;
   let trends=0;
 
-  for(const symbol of symbols){
-    const d=data[symbol];
+  for(
+    const symbol of symbols
+  ){
 
-    if(d?.state.includes('BOTTOM'))bottoms++;
-    else if(d?.state.includes('TOP'))tops++;
-    else trends++;
+    const d=
+      data[symbol];
+
+    if(
+      d?.state.includes(
+        'BOTTOM'
+      )
+    ){
+
+      bottoms++;
+
+    }else if(
+      d?.state.includes(
+        'TOP'
+      )
+    ){
+
+      tops++;
+
+    }else{
+
+      trends++;
+    }
 
     home+=`
-      <div class="row" data-symbol="${symbol}">
+      <div class="row"
+           data-symbol="${symbol}">
+
         <div>
+
+          <div class="name">
+
+            ${symbol}
+
+            <span class="badge ${
+              badgeClass(
+                d?.state||''
+              )
+            }">
+
+              ${
+                d?.state||
+                'DATA WAIT'
+              }
+
+            </span>
+
+          </div>
+
+          <div class="meta">
+
+            ${
+              d
+              ?`
+                ${
+                  d.majorBottom
+                  ?`
+                    MAJOR BOTTOM ·
+                    ${money(
+                      d.majorBottom.price
+                    )}
+                    · QUALITY
+                    ${d.majorBottom.quality}/100
+                    <br>
+                  `
+                  :''
+                }
+
+                CURRENT BOTTOM ·
+                ${d.currentBottom}/100
+
+                · SIM ·
+                ${d.bottomPattern.score}/100
+
+                <br>
+
+                CURRENT TOP ·
+                ${d.currentTop}/100
+
+                · SIM ·
+                ${d.topPattern.score}/100
+              `
+              :'시장 데이터 대기'
+            }
+
+          </div>
+
+        </div>
+
+        <div class="price">
+          ${
+            d
+            ?money(d.price)
+            :'WAIT'
+          }
+        </div>
+
+      </div>
+    `;
+
+    registered+=`
+      <div class="row"
+           data-symbol="${symbol}">
+
+        <div>
+
           <div class="name">
             ${symbol}
-            <span class="badge ${badgeClass(d?.state||'')}">${d?.state||'DATA WAIT'}</span>
           </div>
 
           <div class="meta">
             ${
               d
-              ?`
-                ${d.majorBottom
-                  ?`LAST BOTTOM · ${money(d.majorBottom.price)} · QUALITY ${d.majorBottom.quality}/100<br>`
-                  :''
-                }
-                CURRENT BOTTOM · ${d.currentBottom}/100
-                · SIM ${d.bottomPattern.score}/100
-                <br>
-                CURRENT TOP · ${d.currentTop}/100
-                · SIM ${d.topPattern.score}/100
-              `
+              ?d.cycle
               :'시장 데이터 대기'
             }
           </div>
+
         </div>
 
-        <div class="price">${d?money(d.price):'WAIT'}</div>
-      </div>
-    `;
-
-    registered+=`
-      <div class="row" data-symbol="${symbol}">
-        <div>
-          <div class="name">${symbol}</div>
-          <div class="meta">${d?d.cycle:'시장 데이터 대기'}</div>
+        <div class="price">
+          ${
+            d
+            ?money(d.price)
+            :'WAIT'
+          }
         </div>
-        <div class="price">${d?money(d.price):'WAIT'}</div>
+
       </div>
     `;
   }
 
   $('homeList').innerHTML=
-    home||'<div class="empty">SYMBOLS 탭에서 종목을 등록하세요.</div>';
+    home||
+    `
+      <div class="empty">
+        SYMBOLS 탭에서
+        종목을 등록하세요.
+      </div>
+    `;
 
   $('registeredList').innerHTML=
-    registered||'<div class="empty">등록된 종목이 없습니다.</div>';
+    registered||
+    `
+      <div class="empty">
+        등록된 종목이 없습니다.
+      </div>
+    `;
 
-  $('symbolCount').textContent=symbols.length;
-  $('registeredCount').textContent=symbols.length;
-  $('tracked').textContent=symbols.length;
+  $('symbolCount').textContent=
+    symbols.length;
 
-  $('bottomCount').textContent=bottoms;
-  $('topCount').textContent=tops;
-  $('trendCount').textContent=trends;
+  $('registeredCount').textContent=
+    symbols.length;
 
-  document.querySelectorAll('[data-symbol]').forEach(el=>{
-    el.onclick=()=>openDetail(el.dataset.symbol);
-  });
+  $('tracked').textContent=
+    symbols.length;
+
+  $('bottomCount').textContent=
+    bottoms;
+
+  $('topCount').textContent=
+    tops;
+
+  $('trendCount').textContent=
+    trends;
+
+  document
+    .querySelectorAll(
+      '[data-symbol]'
+    )
+    .forEach(
+      el=>{
+
+        el.onclick=
+          ()=>openDetail(
+            el.dataset.symbol
+          );
+      }
+    );
 
   renderStatus();
 }
 
 function openDetail(symbol){
+
   currentSymbol=symbol;
 
-  const d=data[symbol];
+  const d=
+    data[symbol];
 
-  $('detailTicker').textContent=symbol;
+  $('detailTicker').textContent=
+    symbol;
 
   if(!d){
-    $('currentPrice').textContent='DATA WAIT';
-    $('stateBadge').textContent='DATA WAIT';
-    $('stateBadge').className='badge neutral';
-    $('detail').classList.add('open');
+
+    $('currentPrice').textContent=
+      'DATA WAIT';
+
+    $('stateBadge').textContent=
+      'DATA WAIT';
+
+    $('stateBadge').className=
+      'badge neutral';
+
+    $('detail')
+      .classList
+      .add('open');
+
     return;
   }
 
-  $('currentPrice').textContent=money(d.price);
+  $('currentPrice').textContent=
+    money(d.price);
 
-  $('stateBadge').textContent=d.state;
-  $('stateBadge').className='badge '+badgeClass(d.state);
+  $('stateBadge').textContent=
+    d.state;
 
-  $('cycleState').textContent=d.cycle;
-  $('cycleText').textContent=d.cycleText;
+  $('stateBadge').className=
+    'badge '+
+    badgeClass(d.state);
 
-  $('structuralBox').innerHTML=structuralHTML(d);
+  $('cycleState').textContent=
+    d.cycle;
+
+  $('cycleText').textContent=
+    d.cycleText;
+
+  $('entryBox').innerHTML=
+    entryHTML(d);
+
+  $('structuralBox').innerHTML=
+    structuralHTML(d);
 
   $('bottomQuality').textContent=
     d.majorBottom
-    ?d.majorBottom.quality+'/100'
+    ?d.majorBottom.quality+
+      '/100'
     :'—';
 
   $('bottomQualityLabel').textContent=
     d.majorBottom
-    ?qualityLabel(d.majorBottom.quality)
+    ?qualityLabel(
+      d.majorBottom.quality
+    )
     :'NO ACTIVE BOTTOM';
 
   $('bottomQualityBar').style.width=
-    (d.majorBottom?.quality||0)+'%';
+    (
+      d.majorBottom?.quality||
+      0
+    )+'%';
 
-  $('currentBottom').textContent=d.currentBottom+'/100';
-  $('currentBottomLabel').textContent=scoreLabel('bottom',d.currentBottom);
-  $('currentBottomBar').style.width=d.currentBottom+'%';
+  $('currentBottom').textContent=
+    d.currentBottom+
+    '/100';
 
-  $('bottomSimilarity').textContent=d.bottomPattern.score+'/100';
-  $('bottomSimilarityLabel').textContent=similarityLabel(d.bottomPattern.score);
-  $('bottomSimilarityBar').style.width=d.bottomPattern.score+'%';
+  $('currentBottomLabel').textContent=
+    scoreLabel(
+      'bottom',
+      d.currentBottom
+    );
+
+  $('currentBottomBar').style.width=
+    d.currentBottom+
+    '%';
+
+  $('bottomSimilarity').textContent=
+    d.bottomPattern.score+
+    '/100';
+
+  $('bottomSimilarityLabel').textContent=
+    similarityLabel(
+      d.bottomPattern.score
+    );
+
+  $('bottomSimilarityBar').style.width=
+    d.bottomPattern.score+
+    '%';
 
   $('topQuality').textContent=
     d.majorTop
-    ?d.majorTop.quality+'/100'
+    ?d.majorTop.quality+
+      '/100'
     :'—';
 
   $('topQualityLabel').textContent=
     d.majorTop
-    ?qualityLabel(d.majorTop.quality)
+    ?qualityLabel(
+      d.majorTop.quality
+    )
     :'NO ACTIVE TOP';
 
   $('topQualityBar').style.width=
-    (d.majorTop?.quality||0)+'%';
+    (
+      d.majorTop?.quality||
+      0
+    )+'%';
 
-  $('currentTop').textContent=d.currentTop+'/100';
-  $('currentTopLabel').textContent=scoreLabel('top',d.currentTop);
-  $('currentTopBar').style.width=d.currentTop+'%';
+  $('currentTop').textContent=
+    d.currentTop+
+    '/100';
 
-  $('topSimilarity').textContent=d.topPattern.score+'/100';
-  $('topSimilarityLabel').textContent=similarityLabel(d.topPattern.score);
-  $('topSimilarityBar').style.width=d.topPattern.score+'%';
+  $('currentTopLabel').textContent=
+    scoreLabel(
+      'top',
+      d.currentTop
+    );
+
+  $('currentTopBar').style.width=
+    d.currentTop+
+    '%';
+
+  $('topSimilarity').textContent=
+    d.topPattern.score+
+    '/100';
+
+  $('topSimilarityLabel').textContent=
+    similarityLabel(
+      d.topPattern.score
+    );
+
+  $('topSimilarityBar').style.width=
+    d.topPattern.score+
+    '%';
+
+  $('indicatorList').innerHTML=
+    indicatorsHTML(d);
+
+  $('indicatorBottomTotal').textContent=
+    d.currentBottom+
+    '/100';
+
+  $('indicatorTopTotal').textContent=
+    d.currentTop+
+    '/100';
 
   $('activeBottom').innerHTML=
-    activeTurnCard(d.majorBottom,'bottom',d.price);
+    activeTurnCard(
+      d.majorBottom,
+      'bottom',
+      d.price
+    );
 
   $('activeTop').innerHTML=
-    activeTurnCard(d.majorTop,'top',d.price);
+    activeTurnCard(
+      d.majorTop,
+      'top',
+      d.price
+    );
 
   $('majorBottoms').innerHTML=
-    historicalTurnsHTML(d.turns.bottoms,'bottom',d.price);
+    historicalTurnsHTML(
+      d.turns.bottoms,
+      'bottom',
+      d.price
+    );
 
   $('majorTops').innerHTML=
-    historicalTurnsHTML(d.turns.tops,'top',d.price);
+    historicalTurnsHTML(
+      d.turns.tops,
+      'top',
+      d.price
+    );
 
-  $('dailyBottom').textContent=d.dailyBottom+'/100';
-  $('dailyTop').textContent=d.dailyTop+'/100';
+  $('dailyBottom').textContent=
+    d.dailyBottom+
+    '/100';
+
+  $('dailyTop').textContent=
+    d.dailyTop+
+    '/100';
 
   $('dailyBottomLabel').textContent=
-    scoreLabel('bottom',d.dailyBottom);
+    scoreLabel(
+      'bottom',
+      d.dailyBottom
+    );
 
   $('dailyTopLabel').textContent=
-    scoreLabel('top',d.dailyTop);
+    scoreLabel(
+      'top',
+      d.dailyTop
+    );
 
-  $('indicatorList').innerHTML=indicatorsHTML(d);
-
-  $('detail').classList.add('open');
+  $('detail')
+    .classList
+    .add('open');
 }
 
+/* =====================================================
+   STATUS
+===================================================== */
+
 function lastCacheTime(){
+
   let t=0;
 
-  symbols.forEach(s=>{
-    const x=cache[s+'__1day']?.time||0;
-    if(x>t)t=x;
-  });
+  symbols.forEach(
+    s=>{
+
+      const x=
+        cache[
+          s+'__1day'
+        ]?.time||0;
+
+      if(x>t)t=x;
+    }
+  );
 
   return t;
 }
 
 function ageText(ms){
-  const m=Math.floor(ms/60000);
 
-  if(m<1)return '방금 전';
-  if(m<60)return m+'분 전';
+  const m=
+    Math.floor(
+      ms/60000
+    );
 
-  const h=Math.floor(m/60);
+  if(m<1)
+    return '방금 전';
 
-  if(h<24)return h+'시간 전';
+  if(m<60)
+    return m+'분 전';
 
-  return Math.floor(h/24)+'일 전';
+  const h=
+    Math.floor(
+      m/60
+    );
+
+  if(h<24)
+    return h+'시간 전';
+
+  return Math.floor(
+    h/24
+  )+'일 전';
 }
 
 function renderStatus(){
-  const t=lastCacheTime();
+
+  const t=
+    lastCacheTime();
 
   if(!symbols.length){
-    $('sync').textContent='NO SYMBOL';
-    $('dataStatus').textContent='NO SYMBOL';
-    $('dataMode').textContent='—';
-    $('lastUpdate').textContent='—';
+
+    $('sync').textContent=
+      'NO SYMBOL';
+
+    $('dataStatus').textContent=
+      'NO SYMBOL';
+
+    $('dataMode').textContent=
+      '—';
+
+    $('lastUpdate').textContent=
+      '—';
+
     return;
   }
 
   if(t){
+
     $('lastUpdate').textContent=
-      new Date(t).toLocaleString()+
+      new Date(t)
+        .toLocaleString()+
       ' · '+
-      ageText(Date.now()-t);
+      ageText(
+        Date.now()-t
+      );
   }
 
-  $('dataMode').textContent=lastMode;
+  $('dataMode').textContent=
+    lastMode;
 
   if(lastMode==='LIVE'){
-    $('sync').textContent='LIVE';
-    $('dataStatus').textContent='CONNECTED';
+
+    $('sync').textContent=
+      'LIVE';
+
+    $('dataStatus').textContent=
+      'CONNECTED';
+
   }else if(t){
-    $('sync').textContent='CACHED';
-    $('dataStatus').textContent='CONNECTED';
+
+    $('sync').textContent=
+      'CACHED';
+
+    $('dataStatus').textContent=
+      'CONNECTED';
+
   }else{
-    $('sync').textContent='DATA WAIT';
-    $('dataStatus').textContent='WAIT';
+
+    $('sync').textContent=
+      'DATA WAIT';
+
+    $('dataStatus').textContent=
+      'WAIT';
   }
 }
 
-async function updateData(force=false){
+async function updateData(
+  force=false
+){
+
   if(!symbols.length){
+
     render();
     return;
   }
 
-  $('sync').textContent='SYNCING';
-  $('dataStatus').textContent='SYNCING';
+  $('sync').textContent=
+    'SYNCING';
+
+  $('dataStatus').textContent=
+    'SYNCING';
 
   let live=false;
   let any=false;
 
-  for(const symbol of symbols){
-    const result=await fetchDaily(symbol,force);
+  for(
+    const symbol of symbols
+  ){
 
-    if(result.mode==='LIVE')live=true;
+    const result=
+      await fetchDaily(
+        symbol,
+        force
+      );
 
-    if(result.values.length){
-      data[symbol]=analyse(symbol,result.values);
+    if(
+      result.mode===
+      'LIVE'
+    ){
+
+      live=true;
+    }
+
+    if(
+      result.values.length
+    ){
+
+      data[symbol]=
+        analyse(
+          symbol,
+          result.values
+        );
+
       any=true;
+
       render();
     }
 
-    await new Promise(resolve=>setTimeout(resolve,1100));
+    await new Promise(
+      resolve=>
+        setTimeout(
+          resolve,
+          1100
+        )
+    );
   }
 
   lastMode=
@@ -1578,103 +4108,574 @@ async function updateData(force=false){
 
   render();
 
-  if(currentSymbol&&data[currentSymbol]){
-    openDetail(currentSymbol);
+  if(
+    currentSymbol&&
+    data[currentSymbol]
+  ){
+
+    openDetail(
+      currentSymbol
+    );
   }
 }
 
-$('addSymbol').onclick=()=>{
-  const symbol=$('ticker').value.trim().toUpperCase();
+/* =====================================================
+   SYMBOL ACTIONS
+===================================================== */
+
+$('addSymbol').onclick=
+()=>{
+
+  const symbol=
+    $('ticker')
+      .value
+      .trim()
+      .toUpperCase();
 
   if(!symbol)return;
 
-  if(!symbols.includes(symbol)){
+  if(
+    !symbols.includes(
+      symbol
+    )
+  ){
+
     symbols.push(symbol);
-    store.set(SYMBOL_KEY,symbols);
+
+    store.set(
+      SYMBOL_KEY,
+      symbols
+    );
   }
 
   $('ticker').value='';
 
   render();
+
   updateData(false);
 };
 
-$('ticker').addEventListener('keydown',e=>{
-  if(e.key==='Enter')$('addSymbol').click();
-});
+$('ticker')
+.addEventListener(
+  'keydown',
+  e=>{
 
-$('deleteSymbol').onclick=()=>{
-  if(!currentSymbol)return;
+    if(
+      e.key===
+      'Enter'
+    ){
 
-  if(confirm(currentSymbol+' 종목을 삭제할까요?')){
-    symbols=symbols.filter(x=>x!==currentSymbol);
+      $('addSymbol')
+        .click();
+    }
+  }
+);
 
-    store.set(SYMBOL_KEY,symbols);
+$('deleteSymbol').onclick=
+()=>{
 
-    delete data[currentSymbol];
+  if(!currentSymbol)
+    return;
+
+  if(
+    confirm(
+      currentSymbol+
+      ' 종목을 삭제할까요?'
+    )
+  ){
+
+    symbols=
+      symbols.filter(
+        x=>
+          x!==
+          currentSymbol
+      );
+
+    store.set(
+      SYMBOL_KEY,
+      symbols
+    );
+
+    delete data[
+      currentSymbol
+    ];
 
     currentSymbol=null;
 
-    $('detail').classList.remove('open');
+    $('detail')
+      .classList
+      .remove('open');
 
     render();
   }
 };
 
-$('refresh').onclick=()=>updateData(true);
+$('refresh').onclick=
+()=>updateData(true);
 
-$('back').onclick=()=>{
-  $('detail').classList.remove('open');
+$('back').onclick=
+()=>{
+
+  $('detail')
+    .classList
+    .remove('open');
 };
 
-function go(i){
-  page=i;
+/* =====================================================
+   PAGE NAVIGATION
+===================================================== */
 
-  $('track').classList.add('anim');
-  $('track').style.transform=`translateX(${-i*100}%)`;
+const track=
+  $('track');
 
-  document.querySelectorAll('.tab').forEach((b,n)=>{
-    b.classList.toggle('active',n===i);
-  });
+const viewport=
+  $('viewport');
+
+function viewportWidth(){
+  return viewport.clientWidth;
 }
 
-document.querySelectorAll('.tab').forEach(b=>{
-  b.onclick=()=>go(+b.dataset.page);
-});
+function setTrackPosition(
+  px,
+  animate=false
+){
 
-let sx=0;
+  if(animate){
 
-$('viewport').addEventListener('touchstart',e=>{
-  if($('detail').classList.contains('open'))return;
-  sx=e.touches[0].clientX;
-},{passive:true});
+    track.classList
+      .add('snap');
 
-$('viewport').addEventListener('touchend',e=>{
-  if($('detail').classList.contains('open'))return;
+  }else{
 
-  const dx=e.changedTouches[0].clientX-sx;
+    track.classList
+      .remove('snap');
+  }
 
-  if(dx<-70&&page<2)go(page+1);
-  if(dx>70&&page>0)go(page-1);
-},{passive:true});
+  track.style.transform=
+    `translate3d(${px}px,0,0)`;
+}
+
+function updateTabs(){
+
+  document
+    .querySelectorAll(
+      '.tab'
+    )
+    .forEach(
+      (b,n)=>{
+
+        b.classList.toggle(
+          'active',
+          n===page
+        );
+      }
+    );
+}
+
+function go(
+  i,
+  animate=true
+){
+
+  page=
+    Math.max(
+      0,
+      Math.min(
+        2,
+        i
+      )
+    );
+
+  const x=
+    -page*
+    viewportWidth();
+
+  setTrackPosition(
+    x,
+    animate
+  );
+
+  updateTabs();
+}
+
+document
+.querySelectorAll(
+  '.tab'
+)
+.forEach(
+  b=>{
+
+    b.onclick=
+      ()=>go(
+        +b.dataset.page,
+        true
+      );
+  }
+);
+
+/* =====================================================
+   iPHONE-LIKE LIVE SWIPE
+   - 손가락을 따라 실시간 이동
+   - 세로 스크롤과 방향 잠금
+   - 끝 페이지 rubber resistance
+   - 빠른 flick 지원
+   - release 후 부드러운 snap
+===================================================== */
+
+let gesture={
+  active:false,
+  locked:false,
+  horizontal:false,
+  startX:0,
+  startY:0,
+  lastX:0,
+  lastTime:0,
+  velocity:0,
+  baseX:0
+};
+
+function rubberBand(distance){
+
+  const sign=
+    distance<0
+    ?-1
+    :1;
+
+  const abs=
+    Math.abs(distance);
+
+  return sign*
+    (
+      1-
+      1/
+      (
+        abs*
+        .003+
+        1
+      )
+    )*
+    115;
+}
+
+viewport.addEventListener(
+  'touchstart',
+  e=>{
+
+    if(
+      $('detail')
+        .classList
+        .contains('open')
+    )return;
+
+    if(
+      e.touches.length!==1
+    )return;
+
+    const t=
+      e.touches[0];
+
+    gesture.active=true;
+    gesture.locked=false;
+    gesture.horizontal=false;
+
+    gesture.startX=
+      t.clientX;
+
+    gesture.startY=
+      t.clientY;
+
+    gesture.lastX=
+      t.clientX;
+
+    gesture.lastTime=
+      performance.now();
+
+    gesture.velocity=0;
+
+    gesture.baseX=
+      -page*
+      viewportWidth();
+
+    track.classList
+      .remove('snap');
+
+  },
+  {passive:true}
+);
+
+viewport.addEventListener(
+  'touchmove',
+  e=>{
+
+    if(
+      !gesture.active||
+      e.touches.length!==1
+    )return;
+
+    if(
+      $('detail')
+        .classList
+        .contains('open')
+    )return;
+
+    const t=
+      e.touches[0];
+
+    const dx=
+      t.clientX-
+      gesture.startX;
+
+    const dy=
+      t.clientY-
+      gesture.startY;
+
+    if(
+      !gesture.locked
+    ){
+
+      if(
+        Math.abs(dx)<7&&
+        Math.abs(dy)<7
+      )return;
+
+      gesture.locked=true;
+
+      gesture.horizontal=
+        Math.abs(dx)>
+        Math.abs(dy)*1.15;
+
+      if(
+        !gesture.horizontal
+      ){
+
+        gesture.active=false;
+        return;
+      }
+    }
+
+    if(
+      !gesture.horizontal
+    )return;
+
+    e.preventDefault();
+
+    const now=
+      performance.now();
+
+    const dt=
+      Math.max(
+        1,
+        now-
+        gesture.lastTime
+      );
+
+    const instantVelocity=
+      (
+        t.clientX-
+        gesture.lastX
+      )/
+      dt;
+
+    gesture.velocity=
+      gesture.velocity*.7+
+      instantVelocity*.3;
+
+    gesture.lastX=
+      t.clientX;
+
+    gesture.lastTime=
+      now;
+
+    let dragX=dx;
+
+    if(
+      page===0&&
+      dx>0
+    ){
+
+      dragX=
+        rubberBand(dx);
+    }
+
+    if(
+      page===2&&
+      dx<0
+    ){
+
+      dragX=
+        rubberBand(dx);
+    }
+
+    setTrackPosition(
+      gesture.baseX+
+      dragX,
+      false
+    );
+
+  },
+  {passive:false}
+);
+
+function finishSwipe(
+  clientX
+){
+
+  if(
+    !gesture.active||
+    !gesture.horizontal
+  ){
+
+    gesture.active=false;
+    return;
+  }
+
+  const dx=
+    clientX-
+    gesture.startX;
+
+  const width=
+    viewportWidth();
+
+  const distanceTrigger=
+    width*.22;
+
+  const fastFlick=
+    Math.abs(
+      gesture.velocity
+    )>.45;
+
+  let target=
+    page;
+
+  if(
+    dx<
+    -distanceTrigger||
+    (
+      fastFlick&&
+      gesture.velocity<0
+    )
+  ){
+
+    target=
+      Math.min(
+        2,
+        page+1
+      );
+
+  }else if(
+    dx>
+    distanceTrigger||
+    (
+      fastFlick&&
+      gesture.velocity>0
+    )
+  ){
+
+    target=
+      Math.max(
+        0,
+        page-1
+      );
+  }
+
+  gesture.active=false;
+
+  go(
+    target,
+    true
+  );
+}
+
+viewport.addEventListener(
+  'touchend',
+  e=>{
+
+    if(
+      !gesture.active
+    )return;
+
+    finishSwipe(
+      e.changedTouches[0]
+        .clientX
+    );
+  },
+  {passive:true}
+);
+
+viewport.addEventListener(
+  'touchcancel',
+  ()=>{
+
+    if(
+      !gesture.active
+    )return;
+
+    gesture.active=false;
+
+    go(
+      page,
+      true
+    );
+  },
+  {passive:true}
+);
+
+window.addEventListener(
+  'resize',
+  ()=>{
+
+    go(
+      page,
+      false
+    );
+  }
+);
+
+/* =====================================================
+   START
+===================================================== */
 
 function hydrate(){
-  symbols.forEach(symbol=>{
-    const values=cache[symbol+'__1day']?.values||[];
 
-    if(values.length){
-      data[symbol]=analyse(symbol,values);
+  symbols.forEach(
+    symbol=>{
+
+      const values=
+        cache[
+          symbol+
+          '__1day'
+        ]?.values||[];
+
+      if(
+        values.length
+      ){
+
+        data[symbol]=
+          analyse(
+            symbol,
+            values
+          );
+      }
     }
-  });
+  );
 }
 
 hydrate();
-render();
-go(0);
 
-setInterval(renderStatus,60000);
+render();
+
+go(
+  0,
+  false
+);
+
+setInterval(
+  renderStatus,
+  60000
+);
 
 updateData(false);
+
 </script>
 
 </body>
