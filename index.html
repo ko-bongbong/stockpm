@@ -5,25 +5,30 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>STOCKPM v0.5.1</title>
+<meta name="theme-color" content="#090b0e">
+<title>STOCKPM v0.5.2</title>
 
 <style>
 :root{
-  --bg:#eef1f4;
-  --surface:#f8f9fb;
-  --card:#f4f6f8;
-  --card2:#e9edf1;
-  --text:#11151b;
-  --sub:#747b86;
-  --line:#dfe4e9;
-  --green:#118b5b;
-  --yellow:#b98710;
-  --orange:#d66a15;
-  --red:#d13d3d;
-  --blue:#3377e8;
+  --bg:#090b0e;
+  --surface:#0f1318;
+  --card:#12161b;
+  --card2:#181d24;
+  --text:#f6f8fb;
+  --sub:#8d97a6;
+  --line:#252c35;
+  --green:#31d07c;
+  --yellow:#f5b942;
+  --orange:#ff914d;
+  --red:#ff6678;
+  --blue:#75aaff;
 }
 
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
 html,body{
   margin:0;
   min-height:100%;
@@ -31,9 +36,19 @@ html,body{
   color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Pretendard",Arial,sans-serif;
 }
-body{min-height:100vh}
-button,input{font:inherit}
-button{cursor:pointer}
+
+body{
+  min-height:100vh;
+  overscroll-behavior-y:none;
+}
+
+button,input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
 
 .app{
   max-width:520px;
@@ -45,12 +60,15 @@ button{cursor:pointer}
 
 .header{
   padding:calc(env(safe-area-inset-top) + 18px) 20px 14px;
+  background:var(--bg);
 }
+
 .brand{
   font-size:28px;
   font-weight:950;
   letter-spacing:-1.3px;
 }
+
 .version{
   margin-top:4px;
   font-size:11px;
@@ -64,20 +82,24 @@ button{cursor:pointer}
   overflow:hidden;
   touch-action:pan-y;
 }
+
 .track{
   display:flex;
   width:300%;
   transform:translate3d(0,0,0);
   will-change:transform;
 }
+
 .track.snap{
   transition:transform .48s cubic-bezier(.22,.8,.22,1);
 }
+
 .page{
   width:33.333333%;
   flex:0 0 33.333333%;
   padding:0 16px 110px;
   min-height:calc(100vh - 145px);
+  background:var(--bg);
 }
 
 .sectionTitle{
@@ -94,7 +116,7 @@ button{cursor:pointer}
   border-radius:22px;
   padding:17px;
   margin-bottom:12px;
-  box-shadow:0 5px 18px rgba(26,34,44,.035);
+  box-shadow:0 8px 28px rgba(0,0,0,.24);
 }
 
 .status{
@@ -103,6 +125,7 @@ button{cursor:pointer}
   font-size:11px;
   font-weight:850;
 }
+
 .status.live{color:var(--green)}
 .status.error{color:var(--red)}
 
@@ -111,6 +134,7 @@ button{cursor:pointer}
   grid-template-columns:repeat(3,1fr);
   gap:8px;
 }
+
 .boardItem{
   background:var(--card);
   border:1px solid var(--line);
@@ -118,11 +142,13 @@ button{cursor:pointer}
   padding:12px 6px;
   text-align:center;
 }
+
 .boardNum{
   font-size:22px;
   line-height:1;
   font-weight:950;
 }
+
 .boardLabel{
   margin-top:5px;
   font-size:9px;
@@ -130,29 +156,36 @@ button{cursor:pointer}
   color:var(--sub);
 }
 
-.symbolCard{position:relative}
+.symbolCard{
+  position:relative;
+}
+
 .symbolTop{
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
   gap:12px;
 }
+
 .symbol{
   font-size:23px;
   font-weight:950;
   letter-spacing:-.6px;
 }
+
 .price{
   margin-top:3px;
   color:var(--sub);
   font-size:13px;
   font-weight:750;
 }
+
 .command{
   text-align:right;
   font-size:15px;
   font-weight:950;
 }
+
 .commandScore{
   margin-top:4px;
   text-align:right;
@@ -160,39 +193,46 @@ button{cursor:pointer}
   font-size:10px;
   font-weight:850;
 }
+
 .reason{
   margin-top:13px;
-  color:#515862;
+  color:#c1c7d0;
   font-size:13px;
   line-height:1.45;
 }
+
 .miniGrid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:7px;
   margin-top:13px;
 }
+
 .mini{
   padding:9px;
   border-radius:13px;
   background:var(--card2);
+  border:1px solid rgba(255,255,255,.025);
 }
+
 .miniLabel{
   color:var(--sub);
   font-size:8px;
   font-weight:950;
 }
+
 .miniValue{
   margin-top:3px;
   font-size:15px;
   font-weight:950;
 }
+
 .trendLine{
   margin-top:10px;
   padding:9px 11px;
   border-radius:12px;
   background:var(--card2);
-  color:#626973;
+  color:#aeb6c2;
   font-size:10px;
   font-weight:850;
 }
@@ -201,6 +241,7 @@ button{cursor:pointer}
   display:flex;
   gap:8px;
 }
+
 .symbolInput{
   flex:1;
   min-width:0;
@@ -213,14 +254,20 @@ button{cursor:pointer}
   text-transform:uppercase;
   font-weight:900;
 }
+
+.symbolInput::placeholder{
+  color:#606977;
+}
+
 .primaryBtn{
   border:0;
   border-radius:15px;
   padding:0 18px;
-  background:#161a20;
-  color:#fff;
+  background:#f5f7fa;
+  color:#090b0e;
   font-weight:950;
 }
+
 .refreshBtn{
   width:100%;
   margin-top:9px;
@@ -231,12 +278,13 @@ button{cursor:pointer}
   color:var(--text);
   font-weight:900;
 }
+
 .deleteBtn{
-  border:0;
+  border:1px solid var(--line);
   border-radius:10px;
   padding:6px 9px;
   background:var(--card2);
-  color:#777e88;
+  color:#9aa3af;
   font-size:11px;
 }
 
@@ -250,20 +298,25 @@ button{cursor:pointer}
   display:grid;
   grid-template-columns:repeat(3,1fr);
   padding:8px 14px calc(env(safe-area-inset-bottom) + 8px);
-  border-top:1px solid rgba(0,0,0,.07);
-  background:rgba(238,241,244,.93);
+  border-top:1px solid rgba(255,255,255,.08);
+  background:rgba(18,22,27,.94);
   backdrop-filter:blur(22px);
   -webkit-backdrop-filter:blur(22px);
 }
+
 .navBtn{
   border:0;
   background:transparent;
-  color:#89909a;
+  color:#69727f;
   padding:8px 3px;
   font-size:10px;
   font-weight:900;
 }
-.navBtn.active{color:var(--text)}
+
+.navBtn.active{
+  color:var(--text);
+}
+
 .navIcon{
   display:block;
   margin-bottom:3px;
@@ -279,9 +332,13 @@ button{cursor:pointer}
 }
 
 .help{
-  color:#505761;
+  color:#c1c7d0;
   font-size:13px;
   line-height:1.65;
+}
+
+.help b{
+  color:var(--text);
 }
 
 .detailOverlay{
@@ -292,18 +349,25 @@ button{cursor:pointer}
   overflow:auto;
   background:var(--bg);
 }
-.detailOverlay.open{display:block}
+
+.detailOverlay.open{
+  display:block;
+}
+
 .detailWrap{
   max-width:520px;
   min-height:100vh;
   margin:auto;
   padding:calc(env(safe-area-inset-top) + 10px) 16px 60px;
+  background:var(--bg);
 }
+
 .detailHeader{
   display:flex;
   align-items:center;
   gap:10px;
 }
+
 .backBtn{
   width:40px;
   height:40px;
@@ -313,26 +377,31 @@ button{cursor:pointer}
   color:var(--text);
   font-size:20px;
 }
+
 .detailSymbol{
   font-size:22px;
   font-weight:950;
 }
+
 .hero{
   margin-top:15px;
   padding:24px 15px;
   text-align:center;
 }
+
 .heroLabel{
   color:var(--sub);
   font-size:10px;
   font-weight:900;
 }
+
 .heroCommand{
   margin-top:7px;
   font-size:30px;
   font-weight:950;
   letter-spacing:-1px;
 }
+
 .heroScore{
   margin-top:6px;
   color:var(--sub);
@@ -345,28 +414,33 @@ button{cursor:pointer}
   grid-template-columns:repeat(3,1fr);
   gap:8px;
 }
+
 .metric{
   padding:12px 6px;
   text-align:center;
   border-radius:14px;
   background:var(--card2);
 }
+
 .metricName{
   color:var(--sub);
   font-size:8px;
   font-weight:950;
 }
+
 .metricValue{
   margin-top:4px;
   font-size:19px;
   font-weight:950;
 }
+
 .change{
   margin-top:10px;
   text-align:center;
   font-size:11px;
   font-weight:950;
 }
+
 .up{color:var(--green)}
 .down{color:var(--red)}
 .flat{color:var(--sub)}
@@ -374,7 +448,7 @@ button{cursor:pointer}
 .reasonList{
   margin:5px 0 0;
   padding-left:20px;
-  color:#505761;
+  color:#c1c7d0;
   font-size:13px;
   line-height:1.7;
 }
@@ -387,11 +461,16 @@ button{cursor:pointer}
   border-bottom:1px solid var(--line);
   font-size:12px;
 }
-.infoLine:last-child{border-bottom:0}
+
+.infoLine:last-child{
+  border-bottom:0;
+}
+
 .infoLabel{
   color:var(--sub);
   font-weight:800;
 }
+
 .infoValue{
   text-align:right;
   font-weight:950;
@@ -399,28 +478,37 @@ button{cursor:pointer}
 
 .advancedBtn{
   width:100%;
-  border:0;
+  border:1px solid var(--line);
   border-radius:13px;
   padding:12px;
   background:var(--card2);
   color:var(--text);
   font-weight:950;
 }
+
 .advanced{
   display:none;
   margin-top:12px;
 }
-.advanced.open{display:block}
+
+.advanced.open{
+  display:block;
+}
 
 .turn{
   padding:10px 0;
   border-bottom:1px solid var(--line);
 }
-.turn:last-child{border-bottom:0}
+
+.turn:last-child{
+  border-bottom:0;
+}
+
 .turnTitle{
   font-size:12px;
   font-weight:950;
 }
+
 .turnSub{
   margin-top:3px;
   color:var(--sub);
@@ -430,84 +518,120 @@ button{cursor:pointer}
 </head>
 
 <body>
+
 <div class="app">
-  <header class="header">
-    <div class="brand">STOCKPM</div>
-    <div class="version">DAILY-FIRST SIGNAL ENGINE · v0.5.1</div>
-  </header>
 
-  <div class="viewport" id="viewport">
-    <div class="track snap" id="track">
+<header class="header">
+  <div class="brand">STOCKPM</div>
+  <div class="version">DAILY-FIRST SIGNAL ENGINE · v0.5.2</div>
+</header>
 
-      <main class="page">
-        <div class="status" id="status">READY</div>
+<div class="viewport" id="viewport">
+<div class="track snap" id="track">
 
-        <div class="sectionTitle">DECISION BOARD</div>
-        <div class="board" id="board"></div>
+<main class="page">
 
-        <div class="sectionTitle">DAILY SIGNALS</div>
-        <div id="scanner"></div>
-      </main>
+  <div class="status" id="status">READY</div>
 
-      <main class="page">
-        <div class="sectionTitle">SYMBOLS</div>
+  <div class="sectionTitle">DECISION BOARD</div>
+  <div class="board" id="board"></div>
 
-        <div class="card">
-          <div class="addRow">
-            <input id="symbolInput" class="symbolInput" placeholder="NVDA">
-            <button class="primaryBtn" id="addBtn">추가</button>
-          </div>
-          <button class="refreshBtn" id="refreshBtn">전체 새로고침</button>
-        </div>
+  <div class="sectionTitle">DAILY SIGNALS</div>
+  <div id="scanner"></div>
 
-        <div id="symbolList"></div>
-      </main>
+</main>
 
-      <main class="page">
-        <div class="sectionTitle">ENGINE</div>
+<main class="page">
 
-        <div class="card help">
-          <b>v0.5.1 · DAILY-FIRST</b><br><br>
-          매수·매도 판단은 <b>일봉을 중심</b>으로 계산합니다.<br>
-          주봉은 큰 추세를 확인하는 보조 필터입니다.<br><br>
-          일봉 현재 신호 <b>60%</b><br>
-          주봉 추세 <b>20%</b><br>
-          과거 일봉 패턴 <b>10%</b><br>
-          가격 위치·모멘텀 <b>10%</b>
-        </div>
+  <div class="sectionTitle">SYMBOLS</div>
 
-        <div class="card help">
-          🟢 <b>매수해</b> — 일봉 바닥 + 반전 강함<br>
-          🟢 <b>1차 매수</b> — 바닥 가능성 상승 + 반전 시작<br>
-          🟡 <b>매수 관심</b> — 바닥 후보 형성 중<br>
-          ⚪ <b>기다려</b> — 방향 불명확<br>
-          🔴 <b>하락 지속</b> — 신저가/하락 추세, 바닥 미확인<br>
-          🟠 <b>매수하지 마</b> — 고점 위험 우세<br>
-          🔴 <b>매도해</b> — 고점 + 하락 전환 확인
-        </div>
-
-        <div class="card help">
-          <b>신저가 필터</b><br><br>
-          RSI가 과매도여도 계속 신저가를 만들고
-          MACD·RSI가 하락 중이면 바닥으로 인정하지 않습니다.
-          이런 경우 <b>하락 지속</b>으로 표시합니다.
-        </div>
-      </main>
-
+  <div class="card">
+    <div class="addRow">
+      <input
+        id="symbolInput"
+        class="symbolInput"
+        placeholder="NVDA"
+        autocomplete="off"
+        autocapitalize="characters"
+      >
+      <button class="primaryBtn" id="addBtn">
+        추가
+      </button>
     </div>
+
+    <button class="refreshBtn" id="refreshBtn">
+      전체 새로고침
+    </button>
   </div>
 
-  <nav class="bottomNav">
-    <button class="navBtn active" data-page="0">
-      <span class="navIcon">◉</span>SCANNER
-    </button>
-    <button class="navBtn" data-page="1">
-      <span class="navIcon">＋</span>SYMBOLS
-    </button>
-    <button class="navBtn" data-page="2">
-      <span class="navIcon">•••</span>MORE
-    </button>
-  </nav>
+  <div id="symbolList"></div>
+
+</main>
+
+<main class="page">
+
+  <div class="sectionTitle">ENGINE</div>
+
+  <div class="card help">
+    <b>v0.5.2 · DAILY-FIRST</b><br><br>
+
+    실제 매수·매도 판단은
+    <b>일봉 중심</b>으로 계산합니다.<br>
+    주봉은 큰 방향을 확인하는
+    보조 필터입니다.<br><br>
+
+    일봉 현재 신호 <b>60%</b><br>
+    주봉 추세 <b>20%</b><br>
+    과거 일봉 패턴 <b>10%</b><br>
+    가격 위치·모멘텀 <b>10%</b>
+  </div>
+
+  <div class="card help">
+    🟢 <b>매수해</b> — 바닥 + 반전 강함<br>
+    🟢 <b>1차 매수</b> — 바닥 가능성 상승 + 반전 시작<br>
+    🟡 <b>매수 관심</b> — 바닥 후보 형성 중<br>
+    ⚪ <b>기다려</b> — 방향 불명확<br>
+    🔴 <b>하락 지속</b> — 신저가/하락추세, 바닥 미확인<br>
+    🟠 <b>매수하지 마</b> — 고점 위험 우세<br>
+    🔴 <b>매도해</b> — 고점 + 하락 전환
+  </div>
+
+  <div class="card help">
+    <b>신저가 필터</b><br><br>
+
+    RSI가 과매도여도 계속 신저가를 만들고
+    MACD·RSI가 하락 중이면 바닥으로
+    인정하지 않습니다.<br><br>
+
+    이런 종목은 단순
+    <b>기다려</b>가 아니라
+    <b>하락 지속</b>으로 분류합니다.
+  </div>
+
+</main>
+
+</div>
+</div>
+
+<nav class="bottomNav">
+
+  <button class="navBtn active" data-page="0">
+    <span class="navIcon">◉</span>
+    SCANNER
+  </button>
+
+  <button class="navBtn" data-page="1">
+    <span class="navIcon">＋</span>
+    SYMBOLS
+  </button>
+
+  <button class="navBtn" data-page="2">
+    <span class="navIcon">•••</span>
+    MORE
+  </button>
+
+</nav>
+
 </div>
 
 <div class="detailOverlay" id="detailOverlay">
@@ -515,26 +639,51 @@ button{cursor:pointer}
 </div>
 
 <script>
-const SUPABASE_URL='https://seuqhwmzmsqzuppemiuk.supabase.co';
-const KEY='sb_publishable_8T7Wafioftxn528m-T4fNA_-OZq9dwq';
-const MARKET=SUPABASE_URL+'/functions/v1/market-data';
+const SUPABASE_URL=
+  'https://seuqhwmzmsqzuppemiuk.supabase.co';
 
-const SYMBOL_KEY='stockpm_scanner_symbols_v034';
-const CACHE_KEY='stockpm_market_cache_v022';
-const DAILY_TTL=60*60*1000;
+const KEY=
+  'sb_publishable_8T7Wafioftxn528m-T4fNA_-OZq9dwq';
+
+const MARKET=
+  SUPABASE_URL+
+  '/functions/v1/market-data';
+
+const SYMBOL_KEY=
+  'stockpm_scanner_symbols_v034';
+
+const CACHE_KEY=
+  'stockpm_market_cache_v022';
+
+const DAILY_TTL=
+  60*60*1000;
 
 const MIN_HISTORY=35;
 const TURN_LOOKAHEAD=20;
 const BOTTOM_CONFIRM_MOVE=15;
 const TOP_CONFIRM_MOVE=15;
 
-let symbols=loadJSON(SYMBOL_KEY,['TSLA','NVDA','NKE']);
-let cache=loadJSON(CACHE_KEY,{});
+let symbols=
+  loadJSON(
+    SYMBOL_KEY,
+    ['TSLA','NVDA','NKE']
+  );
+
+let cache=
+  loadJSON(
+    CACHE_KEY,
+    {}
+  );
+
 let analyses={};
 
 function loadJSON(key,fallback){
   try{
-    const value=JSON.parse(localStorage.getItem(key));
+    const value=
+      JSON.parse(
+        localStorage.getItem(key)
+      );
+
     return value ?? fallback;
   }catch{
     return fallback;
@@ -542,21 +691,35 @@ function loadJSON(key,fallback){
 }
 
 function saveJSON(key,value){
-  localStorage.setItem(key,JSON.stringify(value));
+  localStorage.setItem(
+    key,
+    JSON.stringify(value)
+  );
 }
 
 function clamp(value,min=0,max=100){
-  return Math.max(min,Math.min(max,value));
+  return Math.max(
+    min,
+    Math.min(max,value)
+  );
 }
 
 function avg(values){
-  const valid=values.filter(Number.isFinite);
+  const valid=
+    values.filter(Number.isFinite);
+
   if(!valid.length)return 0;
-  return valid.reduce((a,b)=>a+b,0)/valid.length;
+
+  return valid.reduce(
+    (a,b)=>a+b,
+    0
+  )/valid.length;
 }
 
 function pct(from,to){
-  return from ? (to/from-1)*100 : 0;
+  return from
+    ? (to/from-1)*100
+    : 0;
 }
 
 function fmt(value,digits=2){
@@ -566,61 +729,110 @@ function fmt(value,digits=2){
 }
 
 function normalize(values){
-  return [...values].reverse().map(x=>({
-    datetime:x.datetime,
-    open:+x.open,
-    high:+x.high,
-    low:+x.low,
-    close:+x.close,
-    volume:Number.isFinite(+x.volume)?+x.volume:0
-  }));
+  return [...values]
+    .reverse()
+    .map(x=>({
+      datetime:x.datetime,
+      open:+x.open,
+      high:+x.high,
+      low:+x.low,
+      close:+x.close,
+      volume:
+        Number.isFinite(+x.volume)
+          ? +x.volume
+          : 0
+    }));
 }
 
 function dailyToWeekly(daily){
   const groups=new Map();
 
   daily.forEach(bar=>{
-    const date=new Date(bar.datetime+'T12:00:00');
-    const weekday=date.getDay() || 7;
+    const date=
+      new Date(
+        bar.datetime+
+        'T12:00:00'
+      );
 
-    const monday=new Date(date);
-    monday.setDate(date.getDate()-weekday+1);
+    const weekday=
+      date.getDay() || 7;
+
+    const monday=
+      new Date(date);
+
+    monday.setDate(
+      date.getDate()-
+      weekday+
+      1
+    );
 
     const key=[
       monday.getFullYear(),
-      String(monday.getMonth()+1).padStart(2,'0'),
-      String(monday.getDate()).padStart(2,'0')
+      String(
+        monday.getMonth()+1
+      ).padStart(2,'0'),
+      String(
+        monday.getDate()
+      ).padStart(2,'0')
     ].join('-');
 
     if(!groups.has(key)){
-      groups.set(key,{
-        datetime:key,
-        open:bar.open,
-        high:bar.high,
-        low:bar.low,
-        close:bar.close,
-        volume:bar.volume
-      });
+      groups.set(
+        key,
+        {
+          datetime:key,
+          open:bar.open,
+          high:bar.high,
+          low:bar.low,
+          close:bar.close,
+          volume:bar.volume
+        }
+      );
     }else{
-      const week=groups.get(key);
-      week.high=Math.max(week.high,bar.high);
-      week.low=Math.min(week.low,bar.low);
-      week.close=bar.close;
-      week.volume+=bar.volume;
+      const week=
+        groups.get(key);
+
+      week.high=
+        Math.max(
+          week.high,
+          bar.high
+        );
+
+      week.low=
+        Math.min(
+          week.low,
+          bar.low
+        );
+
+      week.close=
+        bar.close;
+
+      week.volume+=
+        bar.volume;
     }
   });
 
-  return [...groups.values()];
+  return [
+    ...groups.values()
+  ];
 }
 
 function emaSeries(values,period){
   const output=[];
-  const k=2/(period+1);
+  const k=
+    2/(period+1);
+
   let ema=null;
 
   for(const value of values){
-    if(ema===null)ema=value;
-    else ema=value*k+ema*(1-k);
+    if(ema===null){
+      ema=value;
+    }else{
+      ema=
+        value*k+
+        ema*(1-k);
+    }
+
     output.push(ema);
   }
 
@@ -628,160 +840,376 @@ function emaSeries(values,period){
 }
 
 function rsiSeries(values,period=14){
-  const output=new Array(values.length).fill(null);
+  const output=
+    new Array(
+      values.length
+    ).fill(null);
 
-  if(values.length<=period)return output;
+  if(
+    values.length<=period
+  ){
+    return output;
+  }
 
   let gain=0;
   let loss=0;
 
-  for(let i=1;i<=period;i++){
-    const change=values[i]-values[i-1];
-    gain+=Math.max(change,0);
-    loss+=Math.max(-change,0);
+  for(
+    let i=1;
+    i<=period;
+    i++
+  ){
+    const change=
+      values[i]-
+      values[i-1];
+
+    gain+=
+      Math.max(
+        change,
+        0
+      );
+
+    loss+=
+      Math.max(
+        -change,
+        0
+      );
   }
 
-  let avgGain=gain/period;
-  let avgLoss=loss/period;
+  let avgGain=
+    gain/period;
 
-  output[period]=avgLoss===0
-    ? 100
-    : 100-(100/(1+avgGain/avgLoss));
+  let avgLoss=
+    loss/period;
 
-  for(let i=period+1;i<values.length;i++){
-    const change=values[i]-values[i-1];
-
-    avgGain=(avgGain*(period-1)+Math.max(change,0))/period;
-    avgLoss=(avgLoss*(period-1)+Math.max(-change,0))/period;
-
-    output[i]=avgLoss===0
+  output[period]=
+    avgLoss===0
       ? 100
-      : 100-(100/(1+avgGain/avgLoss));
+      : 100-
+        (
+          100/
+          (
+            1+
+            avgGain/
+            avgLoss
+          )
+        );
+
+  for(
+    let i=period+1;
+    i<values.length;
+    i++
+  ){
+    const change=
+      values[i]-
+      values[i-1];
+
+    avgGain=
+      (
+        avgGain*
+        (period-1)+
+        Math.max(change,0)
+      )/period;
+
+    avgLoss=
+      (
+        avgLoss*
+        (period-1)+
+        Math.max(-change,0)
+      )/period;
+
+    output[i]=
+      avgLoss===0
+        ? 100
+        : 100-
+          (
+            100/
+            (
+              1+
+              avgGain/
+              avgLoss
+            )
+          );
   }
 
   return output;
 }
 
 function macdSeries(values){
-  const ema12=emaSeries(values,12);
-  const ema26=emaSeries(values,26);
+  const ema12=
+    emaSeries(
+      values,
+      12
+    );
 
-  const macd=values.map((_,i)=>ema12[i]-ema26[i]);
-  const signal=emaSeries(macd,9);
-  const hist=macd.map((value,i)=>value-signal[i]);
+  const ema26=
+    emaSeries(
+      values,
+      26
+    );
 
-  return {macd,signal,hist};
+  const macd=
+    values.map(
+      (_,i)=>
+        ema12[i]-
+        ema26[i]
+    );
+
+  const signal=
+    emaSeries(
+      macd,
+      9
+    );
+
+  const hist=
+    macd.map(
+      (value,i)=>
+        value-
+        signal[i]
+    );
+
+  return{
+    macd,
+    signal,
+    hist
+  };
 }
 
 function std(values){
-  if(!values.length)return 0;
+  if(!values.length){
+    return 0;
+  }
 
-  const mean=avg(values);
+  const mean=
+    avg(values);
+
   return Math.sqrt(
-    avg(values.map(value=>(value-mean)**2))
-  );
-}
-
-function smaAt(bars,index,period){
-  if(index<period-1)return null;
-  return avg(
-    bars.slice(index-period+1,index+1).map(x=>x.close)
+    avg(
+      values.map(
+        value=>
+          (value-mean)**2
+      )
+    )
   );
 }
 
 function featureAt(bars,index){
-  if(index<20)return null;
+  if(index<20){
+    return null;
+  }
 
-  const closes=bars.map(x=>x.close);
-  const rsis=rsiSeries(closes,14);
-  const macd=macdSeries(closes);
+  const closes=
+    bars.map(
+      x=>x.close
+    );
 
-  const bar=bars[index];
+  const rsis=
+    rsiSeries(
+      closes,
+      14
+    );
 
-  const rsi=rsis[index] ?? 50;
-  const previousRsi=rsis[index-1] ?? rsi;
-  const rsiSlope=rsi-previousRsi;
+  const macd=
+    macdSeries(
+      closes
+    );
+
+  const bar=
+    bars[index];
+
+  const rsi=
+    rsis[index] ?? 50;
+
+  const previousRsi=
+    rsis[index-1] ?? rsi;
+
+  const rsiSlope=
+    rsi-
+    previousRsi;
 
   const stochasticBars=
-    bars.slice(Math.max(0,index-13),index+1);
+    bars.slice(
+      Math.max(
+        0,
+        index-13
+      ),
+      index+1
+    );
 
-  const highestHigh=Math.max(
-    ...stochasticBars.map(x=>x.high)
-  );
+  const highestHigh=
+    Math.max(
+      ...stochasticBars.map(
+        x=>x.high
+      )
+    );
 
-  const lowestLow=Math.min(
-    ...stochasticBars.map(x=>x.low)
-  );
+  const lowestLow=
+    Math.min(
+      ...stochasticBars.map(
+        x=>x.low
+      )
+    );
 
   const stochastic=
     highestHigh===lowestLow
       ? 50
-      : (bar.close-lowestLow)/
-        (highestHigh-lowestLow)*100;
+      : (
+          (
+            bar.close-
+            lowestLow
+          )/
+          (
+            highestHigh-
+            lowestLow
+          )
+        )*100;
 
   const bollingerCloses=
-    closes.slice(Math.max(0,index-19),index+1);
+    closes.slice(
+      Math.max(
+        0,
+        index-19
+      ),
+      index+1
+    );
 
-  const middle=avg(bollingerCloses);
-  const deviation=std(bollingerCloses);
+  const middle=
+    avg(
+      bollingerCloses
+    );
 
-  const upper=middle+deviation*2;
-  const lower=middle-deviation*2;
+  const deviation=
+    std(
+      bollingerCloses
+    );
+
+  const upper=
+    middle+
+    deviation*2;
+
+  const lower=
+    middle-
+    deviation*2;
 
   const bbPos=
     upper===lower
       ? .5
-      : (bar.close-lower)/(upper-lower);
+      : (
+          bar.close-
+          lower
+        )/
+        (
+          upper-
+          lower
+        );
 
   const previousVolumes=
     bars
-      .slice(Math.max(0,index-20),index)
-      .map(x=>x.volume)
-      .filter(x=>x>0);
+      .slice(
+        Math.max(
+          0,
+          index-20
+        ),
+        index
+      )
+      .map(
+        x=>x.volume
+      )
+      .filter(
+        x=>x>0
+      );
 
-  const averageVolume=avg(previousVolumes);
+  const averageVolume=
+    avg(
+      previousVolumes
+    );
 
   const relVol=
     averageVolume
-      ? bar.volume/averageVolume
+      ? bar.volume/
+        averageVolume
       : 1;
 
-  const range=bar.high-bar.low;
+  const range=
+    bar.high-
+    bar.low;
 
   const closeLocation=
     range
-      ? (bar.close-bar.low)/range
+      ? (
+          bar.close-
+          bar.low
+        )/range
       : .5;
 
   const recent20=
-    bars.slice(Math.max(0,index-19),index+1);
+    bars.slice(
+      Math.max(
+        0,
+        index-19
+      ),
+      index+1
+    );
 
-  const high20=Math.max(...recent20.map(x=>x.high));
-  const low20=Math.min(...recent20.map(x=>x.low));
+  const high20=
+    Math.max(
+      ...recent20.map(
+        x=>x.high
+      )
+    );
+
+  const low20=
+    Math.min(
+      ...recent20.map(
+        x=>x.low
+      )
+    );
 
   const position20=
     high20===low20
       ? .5
-      : (bar.close-low20)/(high20-low20);
+      : (
+          bar.close-
+          low20
+        )/
+        (
+          high20-
+          low20
+        );
 
   const ret5=
     index>=5
-      ? pct(bars[index-5].close,bar.close)
+      ? pct(
+          bars[index-5].close,
+          bar.close
+        )
       : 0;
 
   const ret10=
     index>=10
-      ? pct(bars[index-10].close,bar.close)
+      ? pct(
+          bars[index-10].close,
+          bar.close
+        )
       : 0;
 
   const ret20=
     index>=20
-      ? pct(bars[index-20].close,bar.close)
+      ? pct(
+          bars[index-20].close,
+          bar.close
+        )
       : 0;
 
-  const hist=macd.hist[index] ?? 0;
-  const previousHist=macd.hist[index-1] ?? hist;
-  const macdSlope=hist-previousHist;
+  const hist=
+    macd.hist[index] ?? 0;
+
+  const previousHist=
+    macd.hist[index-1] ?? hist;
+
+  const macdSlope=
+    hist-
+    previousHist;
 
   let macdCross=0;
 
@@ -821,149 +1249,368 @@ function featureAt(bars,index){
   };
 }
 
-function dailyTechnicalScore(feature,type){
-  if(!feature)return 0;
+function dailyTechnicalScore(
+  feature,
+  type
+){
+  if(!feature){
+    return 0;
+  }
 
   let score=0;
 
   if(type==='bottom'){
-    if(feature.rsi<=25)score+=20;
-    else if(feature.rsi<=30)score+=17;
-    else if(feature.rsi<=38)score+=11;
-    else if(feature.rsi<=45)score+=5;
+    if(feature.rsi<=25){
+      score+=20;
+    }else if(feature.rsi<=30){
+      score+=17;
+    }else if(feature.rsi<=38){
+      score+=11;
+    }else if(feature.rsi<=45){
+      score+=5;
+    }
 
     if(
       feature.rsiSlope>0 &&
       feature.rsi<45
-    )score+=12;
+    ){
+      score+=12;
+    }
 
-    if(feature.stochastic<20)score+=10;
-    else if(feature.stochastic<30)score+=6;
+    if(
+      feature.stochastic<20
+    ){
+      score+=10;
+    }else if(
+      feature.stochastic<30
+    ){
+      score+=6;
+    }
 
-    if(feature.macdSlope>0)score+=14;
-    if(feature.macdCross===1)score+=16;
+    if(
+      feature.macdSlope>0
+    ){
+      score+=14;
+    }
 
-    if(feature.bbPos<0)score+=10;
-    else if(feature.bbPos<.2)score+=7;
+    if(
+      feature.macdCross===1
+    ){
+      score+=16;
+    }
 
-    if(feature.relVol>=1.7)score+=6;
-    else if(feature.relVol>=1.3)score+=3;
+    if(
+      feature.bbPos<0
+    ){
+      score+=10;
+    }else if(
+      feature.bbPos<.2
+    ){
+      score+=7;
+    }
 
-    if(feature.closeLocation>.65)score+=6;
+    if(
+      feature.relVol>=1.7
+    ){
+      score+=6;
+    }else if(
+      feature.relVol>=1.3
+    ){
+      score+=3;
+    }
 
-    if(feature.position20<.15)score+=6;
-    else if(feature.position20<.3)score+=3;
+    if(
+      feature.closeLocation>.65
+    ){
+      score+=6;
+    }
+
+    if(
+      feature.position20<.15
+    ){
+      score+=6;
+    }else if(
+      feature.position20<.3
+    ){
+      score+=3;
+    }
   }
 
   if(type==='top'){
-    if(feature.rsi>=75)score+=20;
-    else if(feature.rsi>=70)score+=17;
-    else if(feature.rsi>=62)score+=11;
-    else if(feature.rsi>=55)score+=5;
+    if(feature.rsi>=75){
+      score+=20;
+    }else if(feature.rsi>=70){
+      score+=17;
+    }else if(feature.rsi>=62){
+      score+=11;
+    }else if(feature.rsi>=55){
+      score+=5;
+    }
 
     if(
       feature.rsiSlope<0 &&
       feature.rsi>55
-    )score+=12;
+    ){
+      score+=12;
+    }
 
-    if(feature.stochastic>80)score+=10;
-    else if(feature.stochastic>70)score+=6;
+    if(
+      feature.stochastic>80
+    ){
+      score+=10;
+    }else if(
+      feature.stochastic>70
+    ){
+      score+=6;
+    }
 
-    if(feature.macdSlope<0)score+=14;
-    if(feature.macdCross===-1)score+=16;
+    if(
+      feature.macdSlope<0
+    ){
+      score+=14;
+    }
 
-    if(feature.bbPos>1)score+=10;
-    else if(feature.bbPos>.8)score+=7;
+    if(
+      feature.macdCross===-1
+    ){
+      score+=16;
+    }
 
-    if(feature.relVol>=1.7)score+=6;
-    else if(feature.relVol>=1.3)score+=3;
+    if(
+      feature.bbPos>1
+    ){
+      score+=10;
+    }else if(
+      feature.bbPos>.8
+    ){
+      score+=7;
+    }
 
-    if(feature.closeLocation<.35)score+=6;
+    if(
+      feature.relVol>=1.7
+    ){
+      score+=6;
+    }else if(
+      feature.relVol>=1.3
+    ){
+      score+=3;
+    }
 
-    if(feature.position20>.85)score+=6;
-    else if(feature.position20>.7)score+=3;
+    if(
+      feature.closeLocation<.35
+    ){
+      score+=6;
+    }
+
+    if(
+      feature.position20>.85
+    ){
+      score+=6;
+    }else if(
+      feature.position20>.7
+    ){
+      score+=3;
+    }
   }
 
   return clamp(score);
 }
 
 function reversalScore(feature){
-  if(!feature)return 0;
+  if(!feature){
+    return 0;
+  }
 
   let score=0;
 
-  if(feature.rsiSlope>0)score+=20;
-  if(feature.macdSlope>0)score+=25;
-  if(feature.macdCross===1)score+=25;
-  if(feature.closeLocation>.6)score+=10;
-  if(feature.ret5>0)score+=10;
+  if(
+    feature.rsiSlope>0
+  ){
+    score+=20;
+  }
+
+  if(
+    feature.macdSlope>0
+  ){
+    score+=25;
+  }
+
+  if(
+    feature.macdCross===1
+  ){
+    score+=25;
+  }
+
+  if(
+    feature.closeLocation>.6
+  ){
+    score+=10;
+  }
+
+  if(
+    feature.ret5>0
+  ){
+    score+=10;
+  }
 
   if(
     feature.stochastic<35 &&
     feature.rsiSlope>0
-  )score+=10;
-
-  return clamp(score);
-}
-
-function bearishReversalScore(feature){
-  if(!feature)return 0;
-
-  let score=0;
-
-  if(feature.rsiSlope<0)score+=20;
-  if(feature.macdSlope<0)score+=25;
-  if(feature.macdCross===-1)score+=25;
-  if(feature.closeLocation<.4)score+=10;
-  if(feature.ret5<0)score+=10;
-
-  if(
-    feature.stochastic>65 &&
-    feature.rsiSlope<0
-  )score+=10;
-
-  return clamp(score);
-}
-
-function weeklyTrendScore(weekly,type){
-  if(weekly.length<10)return 50;
-
-  const index=weekly.length-1;
-  const feature=featureAt(weekly,index);
-
-  if(!feature)return 50;
-
-  const current=weekly[index].close;
-
-  const ma4=avg(
-    weekly.slice(-4).map(x=>x.close)
-  );
-
-  const ma10=avg(
-    weekly.slice(-10).map(x=>x.close)
-  );
-
-  let score=50;
-
-  if(type==='bull'){
-    current>ma4 ? score+=12 : score-=12;
-    ma4>ma10 ? score+=15 : score-=15;
-    feature.ret5>0 ? score+=10 : score-=10;
-    feature.macdSlope>0 ? score+=8 : score-=8;
-    feature.rsiSlope>0 ? score+=5 : score-=5;
-  }else{
-    current<ma4 ? score+=12 : score-=12;
-    ma4<ma10 ? score+=15 : score-=15;
-    feature.ret5<0 ? score+=10 : score-=10;
-    feature.macdSlope<0 ? score+=8 : score-=8;
-    feature.rsiSlope<0 ? score+=5 : score-=5;
+  ){
+    score+=10;
   }
 
   return clamp(score);
 }
 
-function detectDowntrend(bars,feature){
-  if(bars.length<50 || !feature){
+function bearishReversalScore(
+  feature
+){
+  if(!feature){
+    return 0;
+  }
+
+  let score=0;
+
+  if(
+    feature.rsiSlope<0
+  ){
+    score+=20;
+  }
+
+  if(
+    feature.macdSlope<0
+  ){
+    score+=25;
+  }
+
+  if(
+    feature.macdCross===-1
+  ){
+    score+=25;
+  }
+
+  if(
+    feature.closeLocation<.4
+  ){
+    score+=10;
+  }
+
+  if(
+    feature.ret5<0
+  ){
+    score+=10;
+  }
+
+  if(
+    feature.stochastic>65 &&
+    feature.rsiSlope<0
+  ){
+    score+=10;
+  }
+
+  return clamp(score);
+}
+
+function weeklyTrendScore(
+  weekly,
+  type
+){
+  if(
+    weekly.length<10
+  ){
+    return 50;
+  }
+
+  const index=
+    weekly.length-1;
+
+  const feature=
+    featureAt(
+      weekly,
+      index
+    );
+
+  if(!feature){
+    return 50;
+  }
+
+  const current=
+    weekly[index].close;
+
+  const ma4=
+    avg(
+      weekly
+        .slice(-4)
+        .map(
+          x=>x.close
+        )
+    );
+
+  const ma10=
+    avg(
+      weekly
+        .slice(-10)
+        .map(
+          x=>x.close
+        )
+    );
+
+  let score=50;
+
+  if(type==='bull'){
+    current>ma4
+      ? score+=12
+      : score-=12;
+
+    ma4>ma10
+      ? score+=15
+      : score-=15;
+
+    feature.ret5>0
+      ? score+=10
+      : score-=10;
+
+    feature.macdSlope>0
+      ? score+=8
+      : score-=8;
+
+    feature.rsiSlope>0
+      ? score+=5
+      : score-=5;
+  }else{
+    current<ma4
+      ? score+=12
+      : score-=12;
+
+    ma4<ma10
+      ? score+=15
+      : score-=15;
+
+    feature.ret5<0
+      ? score+=10
+      : score-=10;
+
+    feature.macdSlope<0
+      ? score+=8
+      : score-=8;
+
+    feature.rsiSlope<0
+      ? score+=5
+      : score-=5;
+  }
+
+  return clamp(score);
+}
+
+function detectDowntrend(
+  bars,
+  feature
+){
+  if(
+    bars.length<50 ||
+    !feature
+  ){
     return{
       active:false,
       score:0,
@@ -972,88 +1619,165 @@ function detectDowntrend(bars,feature){
     };
   }
 
-  const current=bars[bars.length-1];
+  const current=
+    bars[
+      bars.length-1
+    ];
 
-  const previous20=bars.slice(-21,-1);
-  const previous40=bars.slice(-41,-1);
+  const previous20=
+    bars.slice(
+      -21,
+      -1
+    );
 
-  const low20=Math.min(
-    ...previous20.map(x=>x.low)
-  );
+  const previous40=
+    bars.slice(
+      -41,
+      -1
+    );
 
-  const low40=Math.min(
-    ...previous40.map(x=>x.low)
-  );
+  const low20=
+    Math.min(
+      ...previous20.map(
+        x=>x.low
+      )
+    );
 
-  const newLow20=current.low<=low20;
-  const newLow40=current.low<=low40;
+  const low40=
+    Math.min(
+      ...previous40.map(
+        x=>x.low
+      )
+    );
 
-  const closes=bars.map(x=>x.close);
+  const newLow20=
+    current.low<=low20;
 
-  const ma10=avg(closes.slice(-10));
-  const ma20=avg(closes.slice(-20));
-  const ma50=avg(closes.slice(-50));
+  const newLow40=
+    current.low<=low40;
+
+  const closes=
+    bars.map(
+      x=>x.close
+    );
+
+  const ma10=
+    avg(
+      closes.slice(-10)
+    );
+
+  const ma20=
+    avg(
+      closes.slice(-20)
+    );
+
+  const ma50=
+    avg(
+      closes.slice(-50)
+    );
 
   let score=0;
+
   const reasons=[];
 
   if(newLow20){
     score+=28;
-    reasons.push('최근 20거래일 신저가 갱신');
+    reasons.push(
+      '최근 20거래일 신저가 갱신'
+    );
   }
 
   if(newLow40){
     score+=12;
-    reasons.push('최근 40거래일 저점도 갱신');
+    reasons.push(
+      '최근 40거래일 저점도 갱신'
+    );
   }
 
-  if(current.close<ma10){
+  if(
+    current.close<ma10
+  ){
     score+=10;
-    reasons.push('종가가 10일 평균 아래');
+    reasons.push(
+      '종가가 10일 평균 아래'
+    );
   }
 
-  if(ma10<ma20){
+  if(
+    ma10<ma20
+  ){
     score+=12;
-    reasons.push('단기 하락 추세 지속');
+    reasons.push(
+      '단기 하락 추세 지속'
+    );
   }
 
-  if(ma20<ma50){
+  if(
+    ma20<ma50
+  ){
     score+=10;
-    reasons.push('중기 하락 추세 지속');
+    reasons.push(
+      '중기 하락 추세 지속'
+    );
   }
 
-  if(feature.ret5<0){
+  if(
+    feature.ret5<0
+  ){
     score+=8;
-    reasons.push('최근 5일 수익률 음수');
+    reasons.push(
+      '최근 5일 수익률 음수'
+    );
   }
 
-  if(feature.ret20<0){
+  if(
+    feature.ret20<0
+  ){
     score+=8;
   }
 
-  if(feature.macdSlope<0){
+  if(
+    feature.macdSlope<0
+  ){
     score+=7;
-    reasons.push('MACD 하락 모멘텀');
+    reasons.push(
+      'MACD 하락 모멘텀'
+    );
   }
 
-  if(feature.rsiSlope<0){
+  if(
+    feature.rsiSlope<0
+  ){
     score+=5;
-    reasons.push('RSI도 아직 하락 중');
+    reasons.push(
+      'RSI도 아직 하락 중'
+    );
   }
 
-  score=clamp(score);
+  score=
+    clamp(score);
 
   return{
     active:
       score>=55 &&
-      (newLow20 || newLow40),
+      (
+        newLow20 ||
+        newLow40
+      ),
+
     score,
-    newLow:newLow20 || newLow40,
+
+    newLow:
+      newLow20 ||
+      newLow40,
+
     reasons
   };
 }
 
-function discoverDailyTurns(bars){
+function discoverDailyTurns(
+  bars
+){
   const bottoms=[];
   const tops=[];
 
@@ -1062,9 +1786,14 @@ function discoverDailyTurns(bars){
     i<bars.length-2;
     i++
   ){
-    const bar=bars[i];
-    const previous=bars[i-1];
-    const next=bars[i+1];
+    const bar=
+      bars[i];
+
+    const previous=
+      bars[i-1];
+
+    const next=
+      bars[i+1];
 
     const localBottom=
       bar.low<=previous.low &&
@@ -1079,22 +1808,37 @@ function discoverDailyTurns(bars){
         i+1,
         Math.min(
           bars.length,
-          i+1+TURN_LOOKAHEAD
+          i+1+
+          TURN_LOOKAHEAD
         )
       );
 
-    if(localBottom && future.length){
-      const futureHigh=Math.max(
-        ...future.map(x=>x.high)
-      );
+    if(
+      localBottom &&
+      future.length
+    ){
+      const futureHigh=
+        Math.max(
+          ...future.map(
+            x=>x.high
+          )
+        );
 
-      const rebound=pct(
-        bar.low,
-        futureHigh
-      );
+      const rebound=
+        pct(
+          bar.low,
+          futureHigh
+        );
 
-      if(rebound>=BOTTOM_CONFIRM_MOVE){
-        const feature=featureAt(bars,i);
+      if(
+        rebound>=
+        BOTTOM_CONFIRM_MOVE
+      ){
+        const feature=
+          featureAt(
+            bars,
+            i
+          );
 
         if(feature){
           bottoms.push({
@@ -1104,27 +1848,45 @@ function discoverDailyTurns(bars){
             price:bar.low,
             move:rebound,
             feature,
-            quality:turnQuality(
-              feature,
-              rebound,
-              'bottom'
-            )
+            quality:
+              turnQuality(
+                feature,
+                rebound,
+                'bottom'
+              )
           });
         }
       }
     }
 
-    if(localTop && future.length){
-      const futureLow=Math.min(
-        ...future.map(x=>x.low)
-      );
+    if(
+      localTop &&
+      future.length
+    ){
+      const futureLow=
+        Math.min(
+          ...future.map(
+            x=>x.low
+          )
+        );
 
       const drop=
-        (bar.high-futureLow)/
-        bar.high*100;
+        (
+          bar.high-
+          futureLow
+        )/
+        bar.high*
+        100;
 
-      if(drop>=TOP_CONFIRM_MOVE){
-        const feature=featureAt(bars,i);
+      if(
+        drop>=
+        TOP_CONFIRM_MOVE
+      ){
+        const feature=
+          featureAt(
+            bars,
+            i
+          );
 
         if(feature){
           tops.push({
@@ -1134,11 +1896,12 @@ function discoverDailyTurns(bars){
             price:bar.high,
             move:drop,
             feature,
-            quality:turnQuality(
-              feature,
-              drop,
-              'top'
-            )
+            quality:
+              turnQuality(
+                feature,
+                drop,
+                'top'
+              )
           });
         }
       }
@@ -1146,36 +1909,63 @@ function discoverDailyTurns(bars){
   }
 
   return{
-    bottoms:clusterTurns(
-      bottoms,
-      'bottom'
-    ),
-    tops:clusterTurns(
-      tops,
-      'top'
-    )
+    bottoms:
+      clusterTurns(
+        bottoms,
+        'bottom'
+      ),
+
+    tops:
+      clusterTurns(
+        tops,
+        'top'
+      )
   };
 }
 
-function clusterTurns(turns,type){
-  if(!turns.length)return [];
+function clusterTurns(
+  turns,
+  type
+){
+  if(!turns.length){
+    return [];
+  }
 
   const output=[];
 
-  for(const turn of turns){
-    const last=output[output.length-1];
+  for(
+    const turn
+    of turns
+  ){
+    const last=
+      output[
+        output.length-1
+      ];
 
     if(
       last &&
-      turn.index-last.index<=5
+      turn.index-
+      last.index<=5
     ){
-      if(type==='bottom'){
-        if(turn.price<last.price){
-          output[output.length-1]=turn;
+      if(
+        type==='bottom'
+      ){
+        if(
+          turn.price<
+          last.price
+        ){
+          output[
+            output.length-1
+          ]=turn;
         }
       }else{
-        if(turn.price>last.price){
-          output[output.length-1]=turn;
+        if(
+          turn.price>
+          last.price
+        ){
+          output[
+            output.length-1
+          ]=turn;
         }
       }
     }else{
@@ -1186,60 +1976,163 @@ function clusterTurns(turns,type){
   return output;
 }
 
-function turnQuality(feature,move,type){
+function turnQuality(
+  feature,
+  move,
+  type
+){
   let score=40;
 
-  if(move>=40)score+=20;
-  else if(move>=30)score+=17;
-  else if(move>=22)score+=13;
-  else if(move>=18)score+=9;
-  else score+=5;
+  if(move>=40){
+    score+=20;
+  }else if(move>=30){
+    score+=17;
+  }else if(move>=22){
+    score+=13;
+  }else if(move>=18){
+    score+=9;
+  }else{
+    score+=5;
+  }
 
   if(type==='bottom'){
-    if(feature.rsi<=25)score+=10;
-    else if(feature.rsi<=30)score+=8;
-    else if(feature.rsi<=38)score+=5;
+    if(
+      feature.rsi<=25
+    ){
+      score+=10;
+    }else if(
+      feature.rsi<=30
+    ){
+      score+=8;
+    }else if(
+      feature.rsi<=38
+    ){
+      score+=5;
+    }
 
-    if(feature.macdCross===1)score+=10;
-    else if(feature.macdSlope>0)score+=7;
-    else if(feature.rsiSlope>0)score+=4;
+    if(
+      feature.macdCross===1
+    ){
+      score+=10;
+    }else if(
+      feature.macdSlope>0
+    ){
+      score+=7;
+    }else if(
+      feature.rsiSlope>0
+    ){
+      score+=4;
+    }
 
-    if(feature.bbPos<=0)score+=5;
-    else if(feature.bbPos<=.2)score+=3;
+    if(
+      feature.bbPos<=0
+    ){
+      score+=5;
+    }else if(
+      feature.bbPos<=.2
+    ){
+      score+=3;
+    }
 
-    if(feature.relVol>=2)score+=5;
-    else if(feature.relVol>=1.5)score+=3;
+    if(
+      feature.relVol>=2
+    ){
+      score+=5;
+    }else if(
+      feature.relVol>=1.5
+    ){
+      score+=3;
+    }
 
-    if(feature.closeLocation>=.75)score+=5;
-    else if(feature.closeLocation>=.6)score+=3;
+    if(
+      feature.closeLocation>=.75
+    ){
+      score+=5;
+    }else if(
+      feature.closeLocation>=.6
+    ){
+      score+=3;
+    }
   }else{
-    if(feature.rsi>=75)score+=10;
-    else if(feature.rsi>=70)score+=8;
-    else if(feature.rsi>=62)score+=5;
+    if(
+      feature.rsi>=75
+    ){
+      score+=10;
+    }else if(
+      feature.rsi>=70
+    ){
+      score+=8;
+    }else if(
+      feature.rsi>=62
+    ){
+      score+=5;
+    }
 
-    if(feature.macdCross===-1)score+=10;
-    else if(feature.macdSlope<0)score+=7;
-    else if(feature.rsiSlope<0)score+=4;
+    if(
+      feature.macdCross===-1
+    ){
+      score+=10;
+    }else if(
+      feature.macdSlope<0
+    ){
+      score+=7;
+    }else if(
+      feature.rsiSlope<0
+    ){
+      score+=4;
+    }
 
-    if(feature.bbPos>=1)score+=5;
-    else if(feature.bbPos>=.8)score+=3;
+    if(
+      feature.bbPos>=1
+    ){
+      score+=5;
+    }else if(
+      feature.bbPos>=.8
+    ){
+      score+=3;
+    }
 
-    if(feature.relVol>=2)score+=5;
-    else if(feature.relVol>=1.5)score+=3;
+    if(
+      feature.relVol>=2
+    ){
+      score+=5;
+    }else if(
+      feature.relVol>=1.5
+    ){
+      score+=3;
+    }
 
-    if(feature.closeLocation<=.25)score+=5;
-    else if(feature.closeLocation<=.4)score+=3;
+    if(
+      feature.closeLocation<=.25
+    ){
+      score+=5;
+    }else if(
+      feature.closeLocation<=.4
+    ){
+      score+=3;
+    }
   }
 
   return clamp(score);
 }
 
-function similarity(current,reference){
-  if(!current || !reference)return 0;
+function similarity(
+  current,
+  reference
+){
+  if(
+    !current ||
+    !reference
+  ){
+    return 0;
+  }
 
   const scores=[
     1-Math.min(
-      Math.abs(current.rsi-reference.rsi)/35,
+      Math.abs(
+        current.rsi-
+        reference.rsi
+      )/35,
       1
     ),
 
@@ -1291,96 +2184,151 @@ function similarity(current,reference){
       1
     ),
 
-    Math.sign(current.rsiSlope)===
-    Math.sign(reference.rsiSlope)
+    Math.sign(
+      current.rsiSlope
+    )===
+    Math.sign(
+      reference.rsiSlope
+    )
       ? 1
       : .3,
 
-    Math.sign(current.macdSlope)===
-    Math.sign(reference.macdSlope)
+    Math.sign(
+      current.macdSlope
+    )===
+    Math.sign(
+      reference.macdSlope
+    )
       ? 1
       : .3
   ];
 
-  return clamp(avg(scores)*100);
+  return clamp(
+    avg(scores)*100
+  );
 }
 
-function patternMatch(current,turns){
-  if(!current || !turns.length){
+function patternMatch(
+  current,
+  turns
+){
+  if(
+    !current ||
+    !turns.length
+  ){
     return{
       score:50,
       reference:null
     };
   }
 
-  const list=turns
-    .map(turn=>({
-      turn,
-      similarity:
-        similarity(
-          current,
-          turn.feature
-        )
-    }))
-    .sort(
-      (a,b)=>
-        b.similarity-
-        a.similarity
-    );
+  const list=
+    turns
+      .map(
+        turn=>({
+          turn,
+          similarity:
+            similarity(
+              current,
+              turn.feature
+            )
+        })
+      )
+      .sort(
+        (a,b)=>
+          b.similarity-
+          a.similarity
+      );
 
-  const top=list.slice(0,3);
-  const weights=[3,2,1];
+  const top=
+    list.slice(0,3);
+
+  const weights=
+    [3,2,1];
 
   let total=0;
   let weight=0;
 
-  top.forEach((item,index)=>{
-    total+=
-      item.similarity*
-      weights[index];
+  top.forEach(
+    (item,index)=>{
+      total+=
+        item.similarity*
+        weights[index];
 
-    weight+=weights[index];
-  });
+      weight+=
+        weights[index];
+    }
+  );
 
   return{
     score:
       weight
         ? total/weight
         : 50,
+
     reference:
-      top[0]?.turn || null
+      top[0]?.turn ||
+      null
   };
 }
 
-function priceLocationScore(daily,type){
-  const recent=daily.slice(-60);
+function priceLocationScore(
+  daily,
+  type
+){
+  const recent=
+    daily.slice(-60);
 
-  if(!recent.length)return 50;
+  if(!recent.length){
+    return 50;
+  }
 
-  const high=Math.max(
-    ...recent.map(x=>x.high)
-  );
+  const high=
+    Math.max(
+      ...recent.map(
+        x=>x.high
+      )
+    );
 
-  const low=Math.min(
-    ...recent.map(x=>x.low)
-  );
+  const low=
+    Math.min(
+      ...recent.map(
+        x=>x.low
+      )
+    );
 
   const current=
-    recent[recent.length-1].close;
+    recent[
+      recent.length-1
+    ].close;
 
   const position=
     high===low
       ? .5
-      : (current-low)/(high-low);
+      : (
+          current-
+          low
+        )/
+        (
+          high-
+          low
+        );
 
   return type==='bottom'
-    ? clamp((1-position)*100)
-    : clamp(position*100);
+    ? clamp(
+        (1-position)*100
+      )
+    : clamp(
+        position*100
+      );
 }
 
 function makeDecision(data){
-  const B=data.dailyBottom;
-  const T=data.dailyTop;
+  const B=
+    data.dailyBottom;
+
+  const T=
+    data.dailyTop;
 
   const previousBottom=
     data.previousBottom;
@@ -1413,7 +2361,8 @@ function makeDecision(data){
     data.feature;
 
   const bottomDelta=
-    B-previousBottom;
+    B-
+    previousBottom;
 
   const improving=
     bottomDelta>=8;
@@ -1424,12 +2373,14 @@ function makeDecision(data){
   let action='기다려';
   let key='WAIT';
   let icon='⚪';
-  let score=Math.round(
-    Math.max(
-      buyScore,
-      sellScore
-    )
-  );
+
+  let score=
+    Math.round(
+      Math.max(
+        buyScore,
+        sellScore
+      )
+    );
 
   const reasons=[];
 
@@ -1442,25 +2393,35 @@ function makeDecision(data){
     action='매도해';
     key='SELL';
     icon='🔴';
-    score=Math.round(sellScore);
+
+    score=
+      Math.round(
+        sellScore
+      );
 
     reasons.push(
       '일봉 고점 신호와 하락 전환이 동시에 강함'
     );
 
-    if(bearishReversal>=60){
+    if(
+      bearishReversal>=60
+    ){
       reasons.push(
         '하락 모멘텀 전환 확인'
       );
     }
 
-    if(feature.macdCross===-1){
+    if(
+      feature.macdCross===-1
+    ){
       reasons.push(
         'MACD 데드크로스 발생'
       );
     }
 
-    if(topPattern.score>=65){
+    if(
+      topPattern.score>=65
+    ){
       reasons.push(
         `과거 일봉 고점과 ${Math.round(topPattern.score)}% 유사`
       );
@@ -1475,9 +2436,11 @@ function makeDecision(data){
     action='하락 지속';
     key='DOWN';
     icon='🔴';
-    score=Math.round(
-      downtrend.score
-    );
+
+    score=
+      Math.round(
+        downtrend.score
+      );
 
     reasons.push(
       '신저가 또는 강한 하락 추세가 계속되고 있음'
@@ -1485,8 +2448,11 @@ function makeDecision(data){
 
     downtrend.reasons
       .slice(0,3)
-      .forEach(reason=>
-        reasons.push(reason)
+      .forEach(
+        reason=>
+          reasons.push(
+            reason
+          )
       );
 
     reasons.push(
@@ -1502,7 +2468,11 @@ function makeDecision(data){
     action='매수하지 마';
     key='AVOID';
     icon='🟠';
-    score=Math.round(sellScore);
+
+    score=
+      Math.round(
+        sellScore
+      );
 
     reasons.push(
       '현재 고점 위험이 매수 신호보다 강함'
@@ -1514,7 +2484,9 @@ function makeDecision(data){
       );
     }
 
-    if(bearishReversal>=50){
+    if(
+      bearishReversal>=50
+    ){
       reasons.push(
         '하락 방향 모멘텀이 나타나는 중'
       );
@@ -1538,31 +2510,43 @@ function makeDecision(data){
     action='매수해';
     key='BUY';
     icon='🟢';
-    score=Math.round(buyScore);
+
+    score=
+      Math.round(
+        buyScore
+      );
 
     reasons.push(
       '일봉 바닥 신호와 반전 신호가 강하게 겹침'
     );
 
-    if(reversal>=60){
+    if(
+      reversal>=60
+    ){
       reasons.push(
         '일봉 모멘텀이 상승 방향으로 전환'
       );
     }
 
-    if(rapidlyImproving){
+    if(
+      rapidlyImproving
+    ){
       reasons.push(
         `바닥 점수가 전일 대비 ${Math.round(bottomDelta)}점 급상승`
       );
     }
 
-    if(bottomPattern.score>=65){
+    if(
+      bottomPattern.score>=65
+    ){
       reasons.push(
         `과거 일봉 바닥과 ${Math.round(bottomPattern.score)}% 유사`
       );
     }
 
-    if(weeklyBull>=60){
+    if(
+      weeklyBull>=60
+    ){
       reasons.push(
         '주봉 큰 흐름도 매수 방향을 지원'
       );
@@ -1587,7 +2571,11 @@ function makeDecision(data){
     action='1차 매수';
     key='FIRST';
     icon='🟢';
-    score=Math.round(buyScore);
+
+    score=
+      Math.round(
+        buyScore
+      );
 
     reasons.push(
       '일봉 기준 바닥 가능성이 높아지고 있음'
@@ -1599,13 +2587,17 @@ function makeDecision(data){
       );
     }
 
-    if(reversal>=50){
+    if(
+      reversal>=50
+    ){
       reasons.push(
         '반전 모멘텀이 나타나기 시작'
       );
     }
 
-    if(bottomPattern.score>=65){
+    if(
+      bottomPattern.score>=65
+    ){
       reasons.push(
         '과거 실제 바닥 패턴과 유사'
       );
@@ -1635,9 +2627,11 @@ function makeDecision(data){
       action='하락 지속';
       key='DOWN';
       icon='🔴';
-      score=Math.round(
-        downtrend.score
-      );
+
+      score=
+        Math.round(
+          downtrend.score
+        );
 
       reasons.push(
         '바닥 점수는 높지만 아직 신저가 추세가 끝나지 않음'
@@ -1650,7 +2644,11 @@ function makeDecision(data){
       action='매수 관심';
       key='WATCH';
       icon='🟡';
-      score=Math.round(buyScore);
+
+      score=
+        Math.round(
+          buyScore
+        );
 
       reasons.push(
         '일봉에서 바닥 후보가 형성되는 중'
@@ -1662,13 +2660,17 @@ function makeDecision(data){
         );
       }
 
-      if(reversal>=35){
+      if(
+        reversal>=35
+      ){
         reasons.push(
           '초기 반전 신호가 나타남'
         );
       }
 
-      if(bottomPattern.score>=65){
+      if(
+        bottomPattern.score>=65
+      ){
         reasons.push(
           `과거 바닥 패턴과 ${Math.round(bottomPattern.score)}% 유사`
         );
@@ -1681,7 +2683,10 @@ function makeDecision(data){
     key='WAIT';
     icon='⚪';
 
-    if(B<55 && T<55){
+    if(
+      B<55 &&
+      T<55
+    ){
       reasons.push(
         '현재 바닥·고점 어느 방향도 충분히 강하지 않음'
       );
@@ -1721,9 +2726,14 @@ function makeDecision(data){
   };
 }
 
-function analyze(symbol,daily){
+function analyze(
+  symbol,
+  daily
+){
   const weekly=
-    dailyToWeekly(daily);
+    dailyToWeekly(
+      daily
+    );
 
   const feature=
     featureAt(
@@ -1774,13 +2784,19 @@ function analyze(symbol,daily){
     );
 
   const reversal=
-    reversalScore(feature);
+    reversalScore(
+      feature
+    );
 
   const bearishReversal=
-    bearishReversalScore(feature);
+    bearishReversalScore(
+      feature
+    );
 
   const turns=
-    discoverDailyTurns(daily);
+    discoverDailyTurns(
+      daily
+    );
 
   const bottomPattern=
     patternMatch(
@@ -1807,9 +2823,9 @@ function analyze(symbol,daily){
     );
 
   let buyScore=
-    dailyBottom*.60 +
-    weeklyBull*.20 +
-    bottomPattern.score*.10 +
+    dailyBottom*.60+
+    weeklyBull*.20+
+    bottomPattern.score*.10+
     (
       (
         bottomLocation+
@@ -1818,9 +2834,9 @@ function analyze(symbol,daily){
     )*.10;
 
   let sellScore=
-    dailyTop*.60 +
-    weeklyBear*.20 +
-    topPattern.score*.10 +
+    dailyTop*.60+
+    weeklyBear*.20+
+    topPattern.score*.10+
     (
       (
         topLocation+
@@ -1828,50 +2844,111 @@ function analyze(symbol,daily){
       )/2
     )*.10;
 
-  if(dailyBottom>=80)buyScore+=4;
-  if(dailyBottom>=90)buyScore+=4;
-  if(reversal>=60)buyScore+=4;
-  if(feature.macdCross===1)buyScore+=3;
+  if(
+    dailyBottom>=80
+  ){
+    buyScore+=4;
+  }
 
-  if(dailyTop>=80)sellScore+=4;
-  if(dailyTop>=90)sellScore+=4;
-  if(bearishReversal>=60)sellScore+=4;
-  if(feature.macdCross===-1)sellScore+=3;
+  if(
+    dailyBottom>=90
+  ){
+    buyScore+=4;
+  }
 
-  if(downtrend.active){
+  if(
+    reversal>=60
+  ){
+    buyScore+=4;
+  }
+
+  if(
+    feature.macdCross===1
+  ){
+    buyScore+=3;
+  }
+
+  if(
+    dailyTop>=80
+  ){
+    sellScore+=4;
+  }
+
+  if(
+    dailyTop>=90
+  ){
+    sellScore+=4;
+  }
+
+  if(
+    bearishReversal>=60
+  ){
+    sellScore+=4;
+  }
+
+  if(
+    feature.macdCross===-1
+  ){
+    sellScore+=3;
+  }
+
+  if(
+    downtrend.active
+  ){
     buyScore-=12;
   }
 
-  buyScore=clamp(buyScore);
-  sellScore=clamp(sellScore);
+  buyScore=
+    clamp(
+      buyScore
+    );
+
+  sellScore=
+    clamp(
+      sellScore
+    );
 
   const data={
     symbol,
     daily,
     weekly,
+
     price:
-      daily[daily.length-1].close,
+      daily[
+        daily.length-1
+      ].close,
+
     feature,
     previousFeature,
+
     dailyBottom,
     dailyTop,
     previousBottom,
+
     weeklyBull,
     weeklyBear,
+
     downtrend,
+
     reversal,
     bearishReversal,
+
     bottomPattern,
     topPattern,
+
     bottomLocation,
     topLocation,
+
     buyScore,
     sellScore,
+
     turns
   };
 
   data.decision=
-    makeDecision(data);
+    makeDecision(
+      data
+    );
 
   return data;
 }
@@ -1880,13 +2957,15 @@ async function fetchSymbol(
   symbol,
   force=false
 ){
-  const cached=cache[symbol];
+  const cached=
+    cache[symbol];
 
   if(
     !force &&
     cached &&
-    Date.now()-cached.time<
-      DAILY_TTL
+    Date.now()-
+    cached.time<
+    DAILY_TTL
   ){
     return cached.data;
   }
@@ -1911,7 +2990,9 @@ async function fetchSymbol(
     !response.ok ||
     !data.ok
   ){
-    if(cached?.data){
+    if(
+      cached?.data
+    ){
       return cached.data;
     }
 
@@ -1922,7 +3003,9 @@ async function fetchSymbol(
   }
 
   const daily=
-    normalize(data.values);
+    normalize(
+      data.values
+    );
 
   cache[symbol]={
     time:Date.now(),
@@ -1937,7 +3020,9 @@ async function fetchSymbol(
   return daily;
 }
 
-async function refreshAll(force=false){
+async function refreshAll(
+  force=false
+){
   setStatus(
     '데이터 업데이트 중...'
   );
@@ -1947,7 +3032,8 @@ async function refreshAll(force=false){
     i<symbols.length;
     i++
   ){
-    const symbol=symbols[i];
+    const symbol=
+      symbols[i];
 
     try{
       const daily=
@@ -1956,7 +3042,9 @@ async function refreshAll(force=false){
           force
         );
 
-      if(daily.length<50){
+      if(
+        daily.length<50
+      ){
         throw new Error(
           '데이터 부족'
         );
@@ -2006,13 +3094,18 @@ async function refreshAll(force=false){
   );
 }
 
-function setStatus(text,type=''){
+function setStatus(
+  text,
+  type=''
+){
   const element=
     document.getElementById(
       'status'
     );
 
-  element.textContent=text;
+  element.textContent=
+    text;
+
   element.className=
     'status '+type;
 }
@@ -2021,22 +3114,30 @@ function commandColor(key){
   if(
     key==='BUY' ||
     key==='FIRST'
-  )return 'var(--green)';
+  ){
+    return 'var(--green)';
+  }
 
-  if(key==='WATCH'){
+  if(
+    key==='WATCH'
+  ){
     return 'var(--yellow)';
   }
 
-  if(key==='AVOID'){
+  if(
+    key==='AVOID'
+  ){
     return 'var(--orange)';
   }
 
   if(
     key==='SELL' ||
     key==='DOWN'
-  )return 'var(--red)';
+  ){
+    return 'var(--red)';
+  }
 
-  return '#777e88';
+  return '#89929e';
 }
 
 function renderBoard(){
@@ -2051,44 +3152,72 @@ function renderBoard(){
   };
 
   Object
-    .values(analyses)
-    .forEach(item=>{
-      counts[
-        item.decision.key
-      ]++;
-    });
+    .values(
+      analyses
+    )
+    .forEach(
+      item=>{
+        counts[
+          item.decision.key
+        ]++;
+      }
+    );
 
   document.getElementById(
     'board'
   ).innerHTML=`
     <div class="boardItem">
-      <div class="boardNum">${counts.BUY}</div>
-      <div class="boardLabel">매수</div>
+      <div class="boardNum">
+        ${counts.BUY}
+      </div>
+      <div class="boardLabel">
+        매수
+      </div>
     </div>
 
     <div class="boardItem">
-      <div class="boardNum">${counts.FIRST}</div>
-      <div class="boardLabel">1차 매수</div>
+      <div class="boardNum">
+        ${counts.FIRST}
+      </div>
+      <div class="boardLabel">
+        1차 매수
+      </div>
     </div>
 
     <div class="boardItem">
-      <div class="boardNum">${counts.WATCH}</div>
-      <div class="boardLabel">관심</div>
+      <div class="boardNum">
+        ${counts.WATCH}
+      </div>
+      <div class="boardLabel">
+        관심
+      </div>
     </div>
 
     <div class="boardItem">
-      <div class="boardNum">${counts.WAIT}</div>
-      <div class="boardLabel">대기</div>
+      <div class="boardNum">
+        ${counts.WAIT}
+      </div>
+      <div class="boardLabel">
+        대기
+      </div>
     </div>
 
     <div class="boardItem">
-      <div class="boardNum">${counts.DOWN}</div>
-      <div class="boardLabel">하락 지속</div>
+      <div class="boardNum">
+        ${counts.DOWN}
+      </div>
+      <div class="boardLabel">
+        하락 지속
+      </div>
     </div>
 
     <div class="boardItem">
-      <div class="boardNum">${counts.SELL+counts.AVOID}</div>
-      <div class="boardLabel">주의/매도</div>
+      <div class="boardNum">
+        ${counts.SELL+counts.AVOID}
+      </div>
+      <div class="boardLabel">
+        주의/매도
+      </div>
     </div>
   `;
 }
@@ -2099,93 +3228,128 @@ function renderScanner(){
       'scanner'
     );
 
-  if(!symbols.length){
+  if(
+    !symbols.length
+  ){
     root.innerHTML=
       '<div class="empty">SYMBOLS에서 종목을 추가하세요.</div>';
+
     return;
   }
 
   root.innerHTML=
-    symbols.map(symbol=>{
-      const analysis=
-        analyses[symbol];
+    symbols
+      .map(
+        symbol=>{
+          const analysis=
+            analyses[symbol];
 
-      if(!analysis){
-        return`
-          <div class="card symbolCard">
-            <div class="symbol">${symbol}</div>
-            <div class="price">데이터 로딩 중...</div>
-          </div>
-        `;
-      }
+          if(!analysis){
+            return`
+              <div class="card symbolCard">
+                <div class="symbol">
+                  ${symbol}
+                </div>
+                <div class="price">
+                  데이터 로딩 중...
+                </div>
+              </div>
+            `;
+          }
 
-      const decision=
-        analysis.decision;
+          const decision=
+            analysis.decision;
 
-      const delta=
-        analysis.dailyBottom-
-        analysis.previousBottom;
+          const delta=
+            analysis.dailyBottom-
+            analysis.previousBottom;
 
-      return`
-        <div
-          class="card symbolCard"
-          onclick="openDetail('${symbol}')"
-        >
-          <div class="symbolTop">
-            <div>
-              <div class="symbol">${symbol}</div>
-              <div class="price">$${fmt(analysis.price)}</div>
-            </div>
+          return`
+            <div
+              class="card symbolCard"
+              onclick="openDetail('${symbol}')"
+            >
+              <div class="symbolTop">
 
-            <div>
-              <div
-                class="command"
-                style="color:${commandColor(decision.key)}"
-              >
-                ${decision.icon}
-                ${decision.action}
+                <div>
+                  <div class="symbol">
+                    ${symbol}
+                  </div>
+
+                  <div class="price">
+                    $${fmt(analysis.price)}
+                  </div>
+                </div>
+
+                <div>
+                  <div
+                    class="command"
+                    style="color:${commandColor(decision.key)}"
+                  >
+                    ${decision.icon}
+                    ${decision.action}
+                  </div>
+
+                  <div class="commandScore">
+                    판단 점수
+                    ${decision.score}/100
+                  </div>
+                </div>
+
               </div>
 
-              <div class="commandScore">
-                판단 점수 ${decision.score}/100
+              <div class="reason">
+                ${decision.reasons[0] || ''}
               </div>
+
+              <div class="miniGrid">
+
+                <div class="mini">
+                  <div class="miniLabel">
+                    DAILY BOTTOM
+                  </div>
+                  <div class="miniValue">
+                    ${Math.round(analysis.dailyBottom)}
+                  </div>
+                </div>
+
+                <div class="mini">
+                  <div class="miniLabel">
+                    REVERSAL
+                  </div>
+                  <div class="miniValue">
+                    ${Math.round(analysis.reversal)}
+                  </div>
+                </div>
+
+                <div class="mini">
+                  <div class="miniLabel">
+                    DOWNTREND
+                  </div>
+                  <div class="miniValue">
+                    ${Math.round(analysis.downtrend.score)}
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="trendLine">
+                ${
+                  delta>0
+                    ? `▲ 전일 대비 Bottom +${Math.round(delta)}`
+                    : delta<0
+                    ? `▼ 전일 대비 Bottom ${Math.round(delta)}`
+                    : 'Bottom Score 전일과 동일'
+                }
+                · 주봉 상승
+                ${Math.round(analysis.weeklyBull)}
+              </div>
+
             </div>
-          </div>
-
-          <div class="reason">
-            ${decision.reasons[0] || ''}
-          </div>
-
-          <div class="miniGrid">
-            <div class="mini">
-              <div class="miniLabel">DAILY BOTTOM</div>
-              <div class="miniValue">${Math.round(analysis.dailyBottom)}</div>
-            </div>
-
-            <div class="mini">
-              <div class="miniLabel">REVERSAL</div>
-              <div class="miniValue">${Math.round(analysis.reversal)}</div>
-            </div>
-
-            <div class="mini">
-              <div class="miniLabel">DOWNTREND</div>
-              <div class="miniValue">${Math.round(analysis.downtrend.score)}</div>
-            </div>
-          </div>
-
-          <div class="trendLine">
-            ${
-              delta>0
-                ? `▲ 전일 대비 Bottom +${Math.round(delta)}`
-                : delta<0
-                ? `▼ 전일 대비 Bottom ${Math.round(delta)}`
-                : 'Bottom Score 전일과 동일'
-            }
-            · 주봉 상승 ${Math.round(analysis.weeklyBull)}
-          </div>
-        </div>
-      `;
-    }).join('');
+          `;
+        }
+      )
+      .join('');
 }
 
 function renderSymbols(){
@@ -2194,36 +3358,48 @@ function renderSymbols(){
       'symbolList'
     );
 
-  if(!symbols.length){
+  if(
+    !symbols.length
+  ){
     root.innerHTML=
       '<div class="empty">등록된 종목이 없습니다.</div>';
+
     return;
   }
 
   root.innerHTML=
-    symbols.map(symbol=>`
-      <div class="card">
-        <div class="symbolTop">
-          <div>
-            <div class="symbol">${symbol}</div>
-            <div class="price">
-              ${
-                analyses[symbol]
-                  ? 'DAILY DATA CONNECTED'
-                  : '대기 중'
-              }
+    symbols
+      .map(
+        symbol=>`
+          <div class="card">
+            <div class="symbolTop">
+
+              <div>
+                <div class="symbol">
+                  ${symbol}
+                </div>
+
+                <div class="price">
+                  ${
+                    analyses[symbol]
+                      ? 'DAILY DATA CONNECTED'
+                      : '대기 중'
+                  }
+                </div>
+              </div>
+
+              <button
+                class="deleteBtn"
+                onclick="removeSymbol('${symbol}')"
+              >
+                삭제
+              </button>
+
             </div>
           </div>
-
-          <button
-            class="deleteBtn"
-            onclick="removeSymbol('${symbol}')"
-          >
-            삭제
-          </button>
-        </div>
-      </div>
-    `).join('');
+        `
+      )
+      .join('');
 }
 
 function renderAll(){
@@ -2243,12 +3419,18 @@ function addSymbol(){
       .trim()
       .toUpperCase();
 
-  if(!symbol)return;
+  if(!symbol){
+    return;
+  }
 
   if(
-    !symbols.includes(symbol)
+    !symbols.includes(
+      symbol
+    )
   ){
-    symbols.push(symbol);
+    symbols.push(
+      symbol
+    );
 
     saveJSON(
       SYMBOL_KEY,
@@ -2259,16 +3441,24 @@ function addSymbol(){
   input.value='';
 
   renderAll();
-  refreshAll(false);
+
+  refreshAll(
+    false
+  );
 }
 
-function removeSymbol(symbol){
+function removeSymbol(
+  symbol
+){
   symbols=
     symbols.filter(
-      item=>item!==symbol
+      item=>
+        item!==symbol
     );
 
-  delete analyses[symbol];
+  delete analyses[
+    symbol
+  ];
 
   saveJSON(
     SYMBOL_KEY,
@@ -2278,11 +3468,15 @@ function removeSymbol(symbol){
   renderAll();
 }
 
-function openDetail(symbol){
+function openDetail(
+  symbol
+){
   const analysis=
     analyses[symbol];
 
-  if(!analysis)return;
+  if(!analysis){
+    return;
+  }
 
   const decision=
     analysis.decision;
@@ -2306,31 +3500,46 @@ function openDetail(symbol){
       : '전일과 동일';
 
   const bottomRef=
-    analysis.bottomPattern.reference;
+    analysis
+      .bottomPattern
+      .reference;
 
   const topRef=
-    analysis.topPattern.reference;
+    analysis
+      .topPattern
+      .reference;
 
   document.getElementById(
     'detailWrap'
   ).innerHTML=`
+
     <div class="detailHeader">
+
       <button
         class="backBtn"
         onclick="closeDetail()"
-      >‹</button>
+      >
+        ‹
+      </button>
 
       <div>
-        <div class="detailSymbol">${symbol}</div>
+        <div class="detailSymbol">
+          ${symbol}
+        </div>
+
         <div class="price">
           $${fmt(analysis.price)}
           · DAILY-FIRST
         </div>
       </div>
+
     </div>
 
     <div class="card hero">
-      <div class="heroLabel">지금 판단</div>
+
+      <div class="heroLabel">
+        지금 판단
+      </div>
 
       <div
         class="heroCommand"
@@ -2343,6 +3552,7 @@ function openDetail(symbol){
       <div class="heroScore">
         ${decision.score}/100
       </div>
+
     </div>
 
     <div class="sectionTitle">
@@ -2350,11 +3560,14 @@ function openDetail(symbol){
     </div>
 
     <div class="card">
+
       <div class="metricRow">
+
         <div class="metric">
           <div class="metricName">
             DAILY BOTTOM
           </div>
+
           <div class="metricValue">
             ${Math.round(analysis.dailyBottom)}
           </div>
@@ -2364,6 +3577,7 @@ function openDetail(symbol){
           <div class="metricName">
             REVERSAL
           </div>
+
           <div class="metricValue">
             ${Math.round(analysis.reversal)}
           </div>
@@ -2373,11 +3587,14 @@ function openDetail(symbol){
           <div class="metricName">
             DOWNTREND
           </div>
+
           <div class="metricValue">
             ${Math.round(analysis.downtrend.score)}
           </div>
         </div>
+
       </div>
+
     </div>
 
     <div class="sectionTitle">
@@ -2385,11 +3602,14 @@ function openDetail(symbol){
     </div>
 
     <div class="card">
+
       <div class="metricRow">
+
         <div class="metric">
           <div class="metricName">
             PREVIOUS DAY
           </div>
+
           <div class="metricValue">
             ${Math.round(analysis.previousBottom)}
           </div>
@@ -2399,6 +3619,7 @@ function openDetail(symbol){
           <div class="metricName">
             LATEST DAY
           </div>
+
           <div class="metricValue">
             ${Math.round(analysis.dailyBottom)}
           </div>
@@ -2408,15 +3629,18 @@ function openDetail(symbol){
           <div class="metricName">
             CHANGE
           </div>
+
           <div class="metricValue">
             ${delta>0?'+':''}${Math.round(delta)}
           </div>
         </div>
+
       </div>
 
       <div class="change ${deltaClass}">
         ${deltaText}
       </div>
+
     </div>
 
     <div class="sectionTitle">
@@ -2424,9 +3648,11 @@ function openDetail(symbol){
     </div>
 
     <div class="card">
+
       <ul class="reasonList">
         ${
-          decision.reasons
+          decision
+            .reasons
             .map(
               reason=>
                 `<li>${reason}</li>`
@@ -2434,6 +3660,7 @@ function openDetail(symbol){
             .join('')
         }
       </ul>
+
     </div>
 
     <div class="sectionTitle">
@@ -2441,10 +3668,12 @@ function openDetail(symbol){
     </div>
 
     <div class="card">
+
       <div class="infoLine">
         <span class="infoLabel">
           주봉 상승 추세
         </span>
+
         <span class="infoValue">
           ${Math.round(analysis.weeklyBull)}/100
         </span>
@@ -2454,6 +3683,7 @@ function openDetail(symbol){
         <span class="infoLabel">
           주봉 하락 추세
         </span>
+
         <span class="infoValue">
           ${Math.round(analysis.weeklyBear)}/100
         </span>
@@ -2463,13 +3693,16 @@ function openDetail(symbol){
         <span class="infoLabel">
           일봉 하락 지속
         </span>
+
         <span class="infoValue">
           ${Math.round(analysis.downtrend.score)}/100
         </span>
       </div>
+
     </div>
 
     <div class="card">
+
       <button
         class="advancedBtn"
         onclick="toggleAdvanced()"
@@ -2481,6 +3714,7 @@ function openDetail(symbol){
         class="advanced"
         id="advanced"
       >
+
         <div class="sectionTitle">
           CURRENT DAILY SIGNAL
         </div>
@@ -2489,6 +3723,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             Buy Composite
           </span>
+
           <span class="infoValue">
             ${Math.round(analysis.buyScore)}/100
           </span>
@@ -2498,6 +3733,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             Sell Composite
           </span>
+
           <span class="infoValue">
             ${Math.round(analysis.sellScore)}/100
           </span>
@@ -2507,6 +3743,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             Daily Bottom
           </span>
+
           <span class="infoValue">
             ${Math.round(analysis.dailyBottom)}/100
           </span>
@@ -2516,6 +3753,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             Daily Top
           </span>
+
           <span class="infoValue">
             ${Math.round(analysis.dailyTop)}/100
           </span>
@@ -2525,6 +3763,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             Reversal
           </span>
+
           <span class="infoValue">
             ${Math.round(analysis.reversal)}/100
           </span>
@@ -2534,6 +3773,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             Bearish Reversal
           </span>
+
           <span class="infoValue">
             ${Math.round(analysis.bearishReversal)}/100
           </span>
@@ -2547,6 +3787,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             RSI 14
           </span>
+
           <span class="infoValue">
             ${fmt(analysis.feature.rsi,1)}
           </span>
@@ -2556,6 +3797,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             RSI Slope
           </span>
+
           <span class="infoValue">
             ${fmt(analysis.feature.rsiSlope,2)}
           </span>
@@ -2565,6 +3807,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             Stochastic
           </span>
+
           <span class="infoValue">
             ${fmt(analysis.feature.stochastic,1)}
           </span>
@@ -2574,6 +3817,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             MACD Histogram
           </span>
+
           <span class="infoValue">
             ${fmt(analysis.feature.macdHist,3)}
           </span>
@@ -2583,6 +3827,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             MACD Slope
           </span>
+
           <span class="infoValue">
             ${fmt(analysis.feature.macdSlope,3)}
           </span>
@@ -2592,6 +3837,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             Bollinger Position
           </span>
+
           <span class="infoValue">
             ${fmt(analysis.feature.bbPos,2)}
           </span>
@@ -2601,6 +3847,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             Relative Volume
           </span>
+
           <span class="infoValue">
             ${fmt(analysis.feature.relVol,2)}x
           </span>
@@ -2610,6 +3857,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             5D Return
           </span>
+
           <span class="infoValue">
             ${fmt(analysis.feature.ret5,1)}%
           </span>
@@ -2619,6 +3867,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             20D Return
           </span>
+
           <span class="infoValue">
             ${fmt(analysis.feature.ret20,1)}%
           </span>
@@ -2632,6 +3881,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             Bottom Similarity
           </span>
+
           <span class="infoValue">
             ${Math.round(analysis.bottomPattern.score)}/100
           </span>
@@ -2641,6 +3891,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             Top Similarity
           </span>
+
           <span class="infoValue">
             ${Math.round(analysis.topPattern.score)}/100
           </span>
@@ -2651,12 +3902,16 @@ function openDetail(symbol){
             ? `
               <div class="turn">
                 <div class="turnTitle">
-                  유사 과거 바닥 · ${bottomRef.date}
+                  유사 과거 바닥 ·
+                  ${bottomRef.date}
                 </div>
+
                 <div class="turnSub">
                   $${fmt(bottomRef.price)}
-                  · 이후 +${fmt(bottomRef.move,1)}%
-                  · Quality ${Math.round(bottomRef.quality)}
+                  · 이후
+                  +${fmt(bottomRef.move,1)}%
+                  · Quality
+                  ${Math.round(bottomRef.quality)}
                 </div>
               </div>
             `
@@ -2668,12 +3923,16 @@ function openDetail(symbol){
             ? `
               <div class="turn">
                 <div class="turnTitle">
-                  유사 과거 고점 · ${topRef.date}
+                  유사 과거 고점 ·
+                  ${topRef.date}
                 </div>
+
                 <div class="turnSub">
                   $${fmt(topRef.price)}
-                  · 이후 -${fmt(topRef.move,1)}%
-                  · Quality ${Math.round(topRef.quality)}
+                  · 이후
+                  -${fmt(topRef.move,1)}%
+                  · Quality
+                  ${Math.round(topRef.quality)}
                 </div>
               </div>
             `
@@ -2688,6 +3947,7 @@ function openDetail(symbol){
           <span class="infoLabel">
             Confirmed Bottoms
           </span>
+
           <span class="infoValue">
             ${analysis.turns.bottoms.length}
           </span>
@@ -2697,11 +3957,14 @@ function openDetail(symbol){
           <span class="infoLabel">
             Confirmed Tops
           </span>
+
           <span class="infoValue">
             ${analysis.turns.tops.length}
           </span>
         </div>
+
       </div>
+
     </div>
   `;
 
@@ -2724,7 +3987,8 @@ function closeDetail(){
     .classList
     .remove('open');
 
-  document.body.style.overflow='';
+  document.body.style.overflow=
+    '';
 }
 
 function toggleAdvanced(){
@@ -2737,7 +4001,9 @@ function toggleAdvanced(){
 }
 
 document
-  .getElementById('addBtn')
+  .getElementById(
+    'addBtn'
+  )
   .addEventListener(
     'click',
     addSymbol
@@ -2750,7 +4016,9 @@ document
   .addEventListener(
     'keydown',
     event=>{
-      if(event.key==='Enter'){
+      if(
+        event.key==='Enter'
+      ){
         addSymbol();
       }
     }
@@ -2789,11 +4057,12 @@ function setPage(
   target,
   animate=true
 ){
-  page=clamp(
-    target,
-    0,
-    2
-  );
+  page=
+    clamp(
+      target,
+      0,
+      2
+    );
 
   if(animate){
     track.classList.add(
@@ -2848,22 +4117,32 @@ viewport.addEventListener(
         )
         .classList
         .contains('open')
-    )return;
+    ){
+      return;
+    }
 
     const touch=
       event.touches[0];
 
-    startX=touch.clientX;
-    startY=touch.clientY;
+    startX=
+      touch.clientX;
+
+    startY=
+      touch.clientY;
+
     dragX=0;
     horizontal=null;
-    startTime=performance.now();
+
+    startTime=
+      performance.now();
 
     track.classList.remove(
       'snap'
     );
   },
-  {passive:true}
+  {
+    passive:true
+  }
 );
 
 viewport.addEventListener(
@@ -2876,7 +4155,9 @@ viewport.addEventListener(
         )
         .classList
         .contains('open')
-    )return;
+    ){
+      return;
+    }
 
     const touch=
       event.touches[0];
@@ -2901,15 +4182,25 @@ viewport.addEventListener(
         Math.abs(dragY)*1.15;
     }
 
-    if(!horizontal)return;
+    if(!horizontal){
+      return;
+    }
 
     event.preventDefault();
 
-    let movement=dragX;
+    let movement=
+      dragX;
 
     if(
-      (page===0 && dragX>0) ||
-      (page===2 && dragX<0)
+      (
+        page===0 &&
+        dragX>0
+      )
+      ||
+      (
+        page===2 &&
+        dragX<0
+      )
     ){
       movement=
         dragX*.28;
@@ -2918,7 +4209,9 @@ viewport.addEventListener(
     track.style.transform=
       `translate3d(${(-page*viewport.clientWidth)+movement}px,0,0)`;
   },
-  {passive:false}
+  {
+    passive:false
+  }
 );
 
 viewport.addEventListener(
@@ -2933,7 +4226,9 @@ viewport.addEventListener(
         );
 
       const velocity=
-        Math.abs(dragX)/
+        Math.abs(
+          dragX
+        )/
         elapsed;
 
       const threshold=
@@ -2941,8 +4236,11 @@ viewport.addEventListener(
         .18;
 
       if(
-        Math.abs(dragX)>
-          threshold ||
+        Math.abs(
+          dragX
+        )>
+        threshold
+        ||
         velocity>.34
       ){
         if(
@@ -2982,5 +4280,6 @@ renderAll();
 setPage(0,false);
 refreshAll(false);
 </script>
+
 </body>
 </html>
