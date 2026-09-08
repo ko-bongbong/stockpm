@@ -2,5138 +2,1983 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#090b0e">
-<title>STOCKPM v0.4.2</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>STOCKPM v0.5.0</title>
 
 <style>
 :root{
-  --bg:#090b0e;--panel:#12161b;--panel2:#181d24;--panel3:#0e1217;
-  --text:#f7f9fc;--muted:#8d97a6;--line:#252c35;
-  --good:#31d07c;--warn:#f5b942;--orange:#ff914d;--bad:#ff6678;
-  --blue:#75aaff;--violet:#a78bfa;
-  --safe:max(14px,env(safe-area-inset-bottom));
+  --bg:#f4f5f7;
+  --card:#fff;
+  --text:#111318;
+  --sub:#727783;
+  --line:#e7e9ee;
+  --green:#16a36a;
+  --yellow:#d99b12;
+  --orange:#e87817;
+  --red:#df4141;
+  --blue:#3478f6;
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box}
 html,body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  overscroll-behavior:none
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Pretendard",Arial,sans-serif;
 }
-body{overflow:hidden}
+body{min-height:100vh}
 button,input{font:inherit}
 button{cursor:pointer}
-.app{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 
-/* HEADER */
-.topbar{
-  height:62px;flex:0 0 62px;padding:14px 16px 10px;
-  display:flex;align-items:center;justify-content:space-between;
-  border-bottom:1px solid rgba(255,255,255,.05);
-  background:rgba(9,11,14,.94);backdrop-filter:blur(18px);z-index:20
-}
-.brand{display:flex;align-items:center;gap:10px}
-.logo{
-  width:34px;height:34px;border-radius:11px;
-  background:linear-gradient(135deg,#fff,#778399);color:#090b0e;
-  display:grid;place-items:center;font-weight:950
-}
-.brand h1{margin:0;font-size:17px}
-.brand small{
-  display:block;color:var(--muted);font-size:10px;
-  margin-top:4px;letter-spacing:.07em
-}
-.sync{
-  font-size:10px;color:var(--muted);border:1px solid var(--line);
-  background:var(--panel);padding:8px 10px;border-radius:999px
+.app{
+  max-width:520px;
+  margin:auto;
+  min-height:100vh;
+  background:var(--bg);
+  overflow:hidden;
 }
 
-/* PAGES */
-.viewport{flex:1;position:relative;overflow:hidden}
+.header{
+  padding:calc(env(safe-area-inset-top) + 18px) 20px 14px;
+}
+.brand{
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:-1.3px;
+}
+.version{
+  margin-top:4px;
+  font-size:11px;
+  font-weight:800;
+  color:var(--sub);
+  letter-spacing:.8px;
+}
+
+.viewport{
+  overflow:hidden;
+  width:100%;
+}
 .track{
-  height:100%;display:flex;
-  will-change:transform;
-  transform:translate3d(0,0,0)
+  display:flex;
+  width:300%;
+  transform:translate3d(0,0,0);
 }
 .track.snap{
-  transition:transform .48s cubic-bezier(.22,.8,.22,1)
+  transition:transform .48s cubic-bezier(.22,.8,.22,1);
 }
 .page{
-  flex:0 0 100%;width:100%;height:100%;
-  overflow-y:auto;
-  padding:16px 14px calc(94px + var(--safe));
-  scrollbar-width:none;
-  -webkit-overflow-scrolling:touch
-}
-.page::-webkit-scrollbar{display:none}
-.inner{max-width:900px;margin:auto}
-
-h2{font-size:27px;margin:4px 0 3px}
-.subtitle{
-  color:var(--muted);font-size:13px;
-  margin-bottom:16px;line-height:1.55
+  width:33.333333%;
+  flex:0 0 33.333333%;
+  padding:0 16px 110px;
+  min-height:calc(100vh - 150px);
 }
 
-/* CARD */
 .card{
-  background:var(--panel);
+  background:var(--card);
   border:1px solid var(--line);
-  border-radius:20px;
-  padding:16px;
-  margin-bottom:12px
-}
-.section{
-  display:flex;justify-content:space-between;
-  align-items:center;margin-bottom:12px
-}
-.section h3{
-  font-size:12px;letter-spacing:.08em;
-  margin:0;color:#cbd2dc;text-transform:uppercase
-}
-.section span{color:var(--muted);font-size:10px}
-
-/* DASHBOARD */
-.summary{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:5px
-}
-.sum{
-  background:var(--panel2);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:9px 2px;
-  text-align:center
-}
-.sum small{display:block;color:var(--muted);font-size:7px}
-.sum b{display:block;margin-top:4px;font-size:15px}
-
-.good{color:var(--good)}
-.warn{color:var(--warn)}
-.orange{color:var(--orange)}
-.bad{color:var(--bad)}
-.violet{color:var(--violet)}
-.blue{color:var(--blue)}
-
-/* STOCK LIST */
-.list{display:grid;gap:9px}
-.stock{
-  background:var(--panel2);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:14px
-}
-.stockTop{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:10px
-}
-.stockTicker{font-size:18px;font-weight:950}
-.stockPrice{text-align:right;font-size:17px;font-weight:900}
-.meta{
-  color:var(--muted);
-  font-size:10px;
-  line-height:1.65;
-  margin-top:5px
+  border-radius:22px;
+  padding:17px;
+  margin-bottom:12px;
+  box-shadow:0 4px 16px rgba(0,0,0,.035);
 }
 
-/* DECISION */
-.decision{
-  margin-top:12px;
-  padding:14px;
-  border-radius:15px;
-  border:1px solid var(--line)
-}
-.decision.buy{
-  background:#0d2118;
-  border-color:#24553d
-}
-.decision.watch{
-  background:#261e0d;
-  border-color:#5d4617
-}
-.decision.wait{background:#171c22}
-.decision.avoid{
-  background:#2b1c10;
-  border-color:#71431d
-}
-.decision.sell{
-  background:#2b1117;
-  border-color:#7b2937
-}
-.decisionLine{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px
-}
-.decisionTitle{
-  font-size:20px;
-  font-weight:950
-}
-.decisionScore{
-  font-size:22px;
-  font-weight:950
-}
-.decisionReason{
-  color:var(--muted);
-  font-size:10px;
-  line-height:1.55;
-  margin-top:7px
+.sectionTitle{
+  font-size:12px;
+  font-weight:900;
+  color:var(--sub);
+  letter-spacing:.7px;
+  margin:20px 4px 10px;
 }
 
-.miniScores{
+.board{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:6px;
-  margin-top:10px
+  gap:8px;
+}
+.boardItem{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:12px 7px;
+  text-align:center;
+}
+.boardNum{
+  font-size:22px;
+  font-weight:900;
+}
+.boardLabel{
+  font-size:10px;
+  color:var(--sub);
+  margin-top:3px;
+  font-weight:800;
+}
+
+.symbolCard{
+  position:relative;
+}
+.symbolTop{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:flex-start;
+}
+.symbol{
+  font-size:23px;
+  font-weight:950;
+  letter-spacing:-.6px;
+}
+.price{
+  margin-top:3px;
+  font-size:13px;
+  color:var(--sub);
+  font-weight:700;
+}
+.command{
+  font-size:15px;
+  font-weight:950;
+  text-align:right;
+}
+.commandScore{
+  font-size:11px;
+  color:var(--sub);
+  margin-top:4px;
+  text-align:right;
+  font-weight:800;
+}
+.reason{
+  margin-top:13px;
+  font-size:13px;
+  line-height:1.45;
+  color:#4e535d;
+}
+.miniGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  margin-top:13px;
 }
 .mini{
-  border:1px solid var(--line);
-  border-radius:11px;
-  background:rgba(0,0,0,.12);
-  padding:8px 5px;
-  text-align:center
-}
-.mini small{
-  display:block;
-  color:var(--muted);
-  font-size:7px
-}
-.mini b{
-  display:block;
-  margin-top:3px;
-  font-size:13px
-}
-
-/* FORM */
-.field input{
-  width:100%;
-  border:1px solid var(--line);
-  background:var(--panel3);
-  color:var(--text);
-  padding:13px;
   border-radius:13px;
-  outline:none
+  background:#f7f8fa;
+  padding:9px;
 }
-.addrow{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:8px
-}
-.btn{
-  border:0;
-  border-radius:12px;
-  padding:12px 14px;
-  background:#f5f7fa;
-  color:#090b0e;
-  font-weight:900
-}
-.btn.full{width:100%}
-.btn.danger{
-  background:#2a1217;
-  color:var(--bad);
-  border:1px solid #5a2630
-}
-.registeredRow{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:10px;
-  align-items:center;
-  background:var(--panel2);
-  border:1px solid var(--line);
-  border-radius:15px;
-  padding:14px
-}
-.name{font-weight:900}
-.price{font-weight:900;text-align:right}
-
-/* SIGNAL */
-.signal{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:10px;
-  padding:11px 0;
-  border-bottom:1px solid var(--line)
-}
-.signal:last-child{border-bottom:0}
-.signal span,.signal b{font-size:12px}
-.signal b{text-align:right}
-
-.notice{
-  font-size:11px;
-  line-height:1.65;
-  color:#d6bd83;
-  background:#241b0e;
-  border:1px solid #5a4317;
-  padding:11px;
-  border-radius:12px;
-  margin-bottom:12px
-}
-.empty{
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-  padding:25px
-}
-
-/* NAV */
-.bottomNav{
-  position:absolute;
-  left:10px;right:10px;
-  bottom:var(--safe);
-  height:64px;
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:22px;
-  background:rgba(18,22,27,.94);
-  backdrop-filter:blur(22px);
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  z-index:30
-}
-.tab{
-  border:0;
-  background:none;
-  color:#738090;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
+.miniLabel{
   font-size:9px;
+  font-weight:900;
+  color:var(--sub);
+}
+.miniValue{
+  margin-top:3px;
+  font-size:15px;
+  font-weight:950;
+}
+.trendLine{
+  margin-top:11px;
+  padding:9px 11px;
+  border-radius:12px;
+  background:#f7f8fa;
+  font-size:11px;
   font-weight:800;
-  gap:3px
+  color:#60656f;
 }
-.tab i{font-style:normal;font-size:20px}
-.tab.active{color:white}
-
-/* DETAIL */
-.detail{
-  position:absolute;
-  inset:0;
-  z-index:50;
-  background:var(--bg);
-  transform:translateX(100%);
-  transition:transform .45s cubic-bezier(.22,.85,.25,1);
-  display:flex;
-  flex-direction:column
-}
-.detail.open{transform:translateX(0)}
-
-.detailhead{
-  height:60px;
-  flex:0 0 60px;
-  display:grid;
-  grid-template-columns:42px 1fr 42px;
-  align-items:center;
-  padding:10px 14px;
-  border-bottom:1px solid var(--line)
-}
-.icon{
-  width:38px;height:38px;
-  border-radius:12px;
-  border:1px solid var(--line);
-  background:var(--panel);
-  color:white
-}
-.detailtitle{text-align:center}
-.detailtitle b{display:block}
-.detailtitle small{
-  color:var(--muted);
-  font-size:9px
-}
-.detailbody{
-  flex:1;
-  overflow-y:auto;
-  padding:14px 14px calc(30px + var(--safe));
-  -webkit-overflow-scrolling:touch
-}
-
-/* HERO */
-.heroDecision{
-  padding:22px 18px;
-  border-radius:22px;
-  margin-bottom:12px;
-  border:1px solid var(--line);
-  text-align:center
-}
-.heroDecision.buy{
-  background:linear-gradient(145deg,#10281d,#0b1712);
-  border-color:#285b41
-}
-.heroDecision.watch{
-  background:linear-gradient(145deg,#2b210e,#17130b);
-  border-color:#664c18
-}
-.heroDecision.wait{
-  background:linear-gradient(145deg,#181d24,#101318)
-}
-.heroDecision.avoid{
-  background:linear-gradient(145deg,#302010,#171009);
-  border-color:#73441d
-}
-.heroDecision.sell{
-  background:linear-gradient(145deg,#32131a,#180b0f);
-  border-color:#7b2937
-}
-.heroEyebrow{
-  color:var(--muted);
-  font-size:9px;
-  letter-spacing:.1em
-}
-.heroAction{
-  margin-top:8px;
-  font-size:34px;
-  font-weight:1000
-}
-.heroScore{
-  font-size:52px;
-  line-height:1;
-  font-weight:1000;
-  margin-top:12px
-}
-.heroScore small{
-  font-size:14px;
-  color:var(--muted)
-}
-.heroScoreLabel{
-  color:var(--muted);
-  font-size:9px;
-  margin-top:5px
-}
-.heroReason{
-  max-width:500px;
-  margin:12px auto 0;
-  color:#b9c1cc;
+.deleteBtn{
+  border:0;
+  background:#f4f5f7;
+  border-radius:10px;
+  padding:6px 9px;
   font-size:11px;
-  line-height:1.65
+  color:#888;
 }
 
-/* SCORES */
-.scoregrid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:7px
-}
-.scorebox{
-  background:var(--panel2);
-  border:1px solid var(--line);
-  border-radius:15px;
-  padding:12px 8px;
-  text-align:center
-}
-.scorebox small{
-  display:block;
-  color:var(--muted);
-  font-size:8px;
-  line-height:1.4
-}
-.scorebox b{
-  display:block;
-  font-size:21px;
-  margin-top:5px
-}
-.scorebox em{
-  display:block;
-  color:var(--muted);
-  font-size:8px;
-  font-style:normal;
-  margin-top:5px
-}
-
-.progress{
-  height:6px;
-  overflow:hidden;
-  border-radius:999px;
-  background:#0d1116;
-  border:1px solid var(--line);
-  margin-top:8px
-}
-.progress span{
-  display:block;
-  height:100%
-}
-.bottomfill{background:var(--good)}
-.topfill{background:var(--bad)}
-.simfill{background:var(--violet)}
-
-/* WEEK TREND */
-.weekCompare{
-  display:grid;
-  grid-template-columns:1fr 46px 1fr;
+.addRow{
+  display:flex;
   gap:8px;
-  align-items:center
 }
-.weekBox{
-  background:var(--panel2);
+.symbolInput{
+  flex:1;
   border:1px solid var(--line);
-  border-radius:15px;
-  padding:13px 8px;
-  text-align:center
-}
-.weekBox small{
-  color:var(--muted);
-  font-size:8px
-}
-.weekBox b{
-  display:block;
-  font-size:23px;
-  margin-top:5px
-}
-.arrow{
-  text-align:center;
-  font-size:20px;
-  font-weight:950
-}
-.delta{
-  text-align:center;
-  margin-top:10px;
-  font-size:11px;
-  color:var(--muted)
-}
-
-/* ADVANCED */
-.analysisToggle{
-  width:100%;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:var(--panel2);
-  color:var(--text);
-  padding:13px;
-  font-weight:900
-}
-.advanced{
-  display:none;
-  margin-top:12px
-}
-.advanced.open{display:block}
-
-/* INDICATORS */
-.indicator{
-  padding:12px 0;
-  border-bottom:1px solid var(--line)
-}
-.indicator:last-child{border-bottom:0}
-.indicatorMain{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:10px
-}
-.indicatorName{
-  font-size:12px;
-  font-weight:800
-}
-.indicatorValue{
-  font-size:12px;
-  font-weight:900
-}
-.points{
-  display:flex;
-  gap:6px;
-  margin-top:6px;
-  flex-wrap:wrap
-}
-.point{
-  padding:5px 7px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:var(--panel3);
-  color:var(--muted);
-  font-size:9px;
-  font-weight:900
-}
-.point.bottom.on{
-  color:var(--good);
-  border-color:#24553d;
-  background:#0e2118
-}
-.point.top.on{
-  color:var(--bad);
-  border-color:#603039;
-  background:#271216
-}
-
-/* TURN CARDS */
-.turncard{
-  background:var(--panel2);
-  border:1px solid var(--line);
+  background:white;
   border-radius:15px;
   padding:14px;
-  margin-bottom:8px
+  text-transform:uppercase;
+  outline:none;
+  font-weight:850;
 }
-.turnhead{
-  display:flex;
-  justify-content:space-between;
-  gap:10px
+.primaryBtn{
+  border:0;
+  background:#111318;
+  color:white;
+  border-radius:15px;
+  padding:0 17px;
+  font-weight:900;
 }
-.turnhead small{
-  display:block;
-  color:var(--muted);
-  font-size:9px;
-  margin-bottom:4px
-}
-.turnhead b{font-size:17px}
-.turnscore{text-align:right}
-.turnscore strong{
-  display:block;
-  font-size:22px
-}
-.turnscore small{
-  color:var(--muted);
-  font-size:8px
-}
-.turnmeta{
+.refreshBtn{
+  width:100%;
+  border:1px solid var(--line);
+  background:white;
+  padding:13px;
+  border-radius:15px;
+  font-weight:900;
   margin-top:9px;
-  color:var(--muted);
-  font-size:10px;
-  line-height:1.7
 }
 
-@media(max-width:390px){
-  .summary{gap:3px}
-  .sum small{font-size:6px}
-  .sum b{font-size:14px}
-  .heroAction{font-size:30px}
-  .heroScore{font-size:46px}
-  .scorebox b{font-size:18px}
+.status{
+  margin:0 4px 12px;
+  font-size:11px;
+  font-weight:800;
+  color:var(--sub);
+}
+.status.live{color:var(--green)}
+.status.error{color:var(--red)}
+
+.bottomNav{
+  position:fixed;
+  z-index:50;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(520px,100%);
+  padding:8px 14px calc(env(safe-area-inset-bottom) + 8px);
+  background:rgba(249,249,250,.93);
+  backdrop-filter:blur(20px);
+  border-top:1px solid rgba(0,0,0,.07);
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+}
+.navBtn{
+  border:0;
+  background:transparent;
+  padding:9px 3px;
+  font-size:11px;
+  color:#8b9099;
+  font-weight:850;
+}
+.navBtn.active{color:#111318}
+.navIcon{
+  display:block;
+  font-size:20px;
+  margin-bottom:3px;
+}
+
+.hero{
+  text-align:center;
+  padding:23px 15px;
+}
+.heroLabel{
+  font-size:11px;
+  color:var(--sub);
+  font-weight:900;
+}
+.heroCommand{
+  font-size:30px;
+  font-weight:950;
+  margin-top:7px;
+  letter-spacing:-1px;
+}
+.heroScore{
+  margin-top:6px;
+  color:var(--sub);
+  font-weight:850;
+  font-size:13px;
+}
+
+.metricRow{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+.metric{
+  padding:12px 7px;
+  text-align:center;
+  background:#f7f8fa;
+  border-radius:14px;
+}
+.metricName{
+  font-size:9px;
+  color:var(--sub);
+  font-weight:900;
+}
+.metricValue{
+  font-size:19px;
+  font-weight:950;
+  margin-top:4px;
+}
+
+.detailOverlay{
+  display:none;
+  position:fixed;
+  z-index:100;
+  inset:0;
+  background:var(--bg);
+  overflow:auto;
+}
+.detailOverlay.open{display:block}
+.detailWrap{
+  max-width:520px;
+  margin:auto;
+  padding:calc(env(safe-area-inset-top) + 10px) 16px 60px;
+}
+.detailHeader{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.backBtn{
+  border:0;
+  background:white;
+  border-radius:13px;
+  width:40px;
+  height:40px;
+  font-size:20px;
+}
+.detailSymbol{
+  font-size:22px;
+  font-weight:950;
+}
+
+.reasonList{
+  padding-left:20px;
+  margin:8px 0 0;
+  color:#50555f;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.change{
+  margin-top:10px;
+  text-align:center;
+  font-size:12px;
+  font-weight:900;
+}
+.up{color:var(--green)}
+.down{color:var(--red)}
+.flat{color:var(--sub)}
+
+.advancedBtn{
+  width:100%;
+  border:0;
+  background:#f6f7f9;
+  padding:12px;
+  border-radius:13px;
+  font-weight:900;
+}
+.advanced{display:none;margin-top:12px}
+.advanced.open{display:block}
+.infoLine{
+  display:flex;
+  justify-content:space-between;
+  padding:9px 0;
+  border-bottom:1px solid var(--line);
+  font-size:12px;
+}
+.infoLine:last-child{border-bottom:0}
+.infoLabel{color:var(--sub);font-weight:750}
+.infoValue{font-weight:900;text-align:right}
+
+.turn{
+  padding:10px 0;
+  border-bottom:1px solid var(--line);
+}
+.turn:last-child{border:0}
+.turnTitle{font-weight:900;font-size:12px}
+.turnSub{font-size:11px;color:var(--sub);margin-top:3px}
+
+.empty{
+  padding:35px 10px;
+  text-align:center;
+  color:var(--sub);
+  font-size:13px;
+  line-height:1.6;
+}
+.help{
+  font-size:13px;
+  line-height:1.65;
+  color:#4e535d;
+}
+.badge{
+  display:inline-block;
+  padding:5px 8px;
+  border-radius:9px;
+  font-size:10px;
+  font-weight:900;
+  background:#f3f4f6;
 }
 </style>
 </head>
 
 <body>
 <div class="app">
+  <header class="header">
+    <div class="brand">STOCKPM</div>
+    <div class="version">DAILY-FIRST SIGNAL ENGINE · v0.5.0</div>
+  </header>
 
-<header class="topbar">
-  <div class="brand">
-    <div class="logo">SP</div>
-    <div>
-      <h1>STOCKPM</h1>
-      <small>CURRENT SIGNAL ENGINE · v0.4.2</small>
-    </div>
-  </div>
-  <div class="sync" id="sync">DATA WAIT</div>
-</header>
+  <div class="viewport" id="viewport">
+    <div class="track snap" id="track">
 
-<div class="viewport" id="viewport">
-<div class="track" id="track">
+      <main class="page">
+        <div class="status" id="status">READY</div>
 
-<!-- SCANNER -->
-<section class="page">
-<div class="inner">
+        <div class="sectionTitle">DECISION BOARD</div>
+        <div class="board" id="board"></div>
 
-<h2>Scanner</h2>
-<div class="subtitle">
-현재 신호를 중심으로 바닥·고점·반전 강도를 분석합니다.
-</div>
+        <div class="sectionTitle">DAILY SIGNALS</div>
+        <div id="scanner"></div>
+      </main>
 
-<div class="card">
-  <div class="section">
-    <h3>Decision Board</h3>
-    <span>CURRENT FIRST</span>
-  </div>
+      <main class="page">
+        <div class="sectionTitle">SYMBOLS</div>
+        <div class="card">
+          <div class="addRow">
+            <input id="symbolInput" class="symbolInput" placeholder="NVDA">
+            <button class="primaryBtn" id="addBtn">추가</button>
+          </div>
+          <button class="refreshBtn" id="refreshBtn">전체 새로고침</button>
+        </div>
+        <div id="symbolList"></div>
+      </main>
 
-  <div class="summary">
-    <div class="sum"><small>매수</small><b class="good" id="buyCount">0</b></div>
-    <div class="sum"><small>관심</small><b class="warn" id="watchCount">0</b></div>
-    <div class="sum"><small>대기</small><b id="waitCount">0</b></div>
-    <div class="sum"><small>주의</small><b class="orange" id="avoidCount">0</b></div>
-    <div class="sum"><small>매도</small><b class="bad" id="sellCount">0</b></div>
-  </div>
-</div>
+      <main class="page">
+        <div class="sectionTitle">ENGINE</div>
 
-<div class="card">
-  <div class="section">
-    <h3>My Symbols</h3>
-    <span id="symbolCount">0</span>
-  </div>
-  <div class="list" id="homeList"></div>
-</div>
+        <div class="card help">
+          <b>v0.5.0 DAILY-FIRST</b><br><br>
+          실제 매수·매도 판단은 <b>일봉</b>을 중심으로 계산합니다.<br>
+          주봉은 큰 추세를 확인하는 보조 필터로 사용합니다.<br><br>
 
-</div>
-</section>
+          <b>판단 비중</b><br>
+          일봉 현재 신호 60%<br>
+          주봉 추세 20%<br>
+          과거 일봉 패턴 10%<br>
+          가격 위치·모멘텀 10%
+        </div>
 
-<!-- SYMBOLS -->
-<section class="page">
-<div class="inner">
+        <div class="card help">
+          <b>명령 의미</b><br><br>
+          🟢 <b>매수해</b> — 일봉 바닥 + 반전 신호가 강함<br>
+          🟢 <b>1차 매수</b> — 바닥 가능성이 높아지고 반전 시작<br>
+          🟡 <b>매수 관심</b> — 바닥 후보 형성 중<br>
+          ⚪ <b>기다려</b> — 방향 불명확<br>
+          🔴 <b>하락 지속</b> — 신저가/하락추세, 바닥 미확인<br>
+          🟠 <b>매수하지 마</b> — 고점 위험 우세<br>
+          🔴 <b>매도해</b> — 고점 + 하락 전환 확인
+        </div>
 
-<h2>Symbols</h2>
-<div class="subtitle">
-Ticker만 등록하면 최근 약 1년 데이터를 자동 분석합니다.
-</div>
+        <div class="card help">
+          <b>중요</b><br><br>
+          RSI 과매도만으로 매수 신호를 만들지 않습니다.
+          계속 신저가를 갱신하면서 모멘텀이 하락 중이면
+          Bottom Score가 높더라도 <b>하락 지속</b>으로 분류합니다.
+        </div>
+      </main>
 
-<div class="card">
-  <div class="section">
-    <h3>Add Symbol</h3>
-    <span>STOCK / ETF</span>
-  </div>
-
-  <div class="addrow">
-    <div class="field">
-      <input id="ticker" placeholder="TSLA · CRCL · NVDA · SOXL">
-    </div>
-    <button class="btn" id="addSymbol">등록</button>
-  </div>
-</div>
-
-<div class="card">
-  <div class="section">
-    <h3>Registered</h3>
-    <span id="registeredCount">0</span>
-  </div>
-  <div class="list" id="registeredList"></div>
-</div>
-
-</div>
-</section>
-
-<!-- MORE -->
-<section class="page">
-<div class="inner">
-
-<h2>More</h2>
-<div class="subtitle">STOCKPM v0.4.2</div>
-
-<div class="card">
-  <div class="section">
-    <h3>Market Data</h3>
-    <span>TWELVE DATA</span>
-  </div>
-
-  <div class="signal"><span>Connection</span><b id="dataStatus">WAIT</b></div>
-  <div class="signal"><span>Mode</span><b id="dataMode">—</b></div>
-  <div class="signal"><span>Last Update</span><b id="lastUpdate">—</b></div>
-  <div class="signal"><span>Tracked</span><b id="tracked">0</b></div>
-
-  <button class="btn full" style="margin-top:12px" id="refresh">
-    시장 데이터 업데이트
-  </button>
-</div>
-
-<div class="card">
-  <div class="section">
-    <h3>Decision</h3>
-    <span>v0.4.2</span>
-  </div>
-
-  <div class="signal"><span>🟢 매수해</span><b>강한 바닥 + 반전</b></div>
-  <div class="signal"><span>🟡 매수 관심</span><b>바닥 형성 중</b></div>
-  <div class="signal"><span>⚪ 기다려</span><b>방향 불명확</b></div>
-  <div class="signal"><span>🟠 매수하지 마</span><b>고점 위험</b></div>
-  <div class="signal"><span>🔴 매도해</span><b>고점 + 하락전환</b></div>
-</div>
-
-<div class="card">
-  <div class="section">
-    <h3>Engine Weight</h3>
-    <span>CURRENT FIRST</span>
-  </div>
-
-  <div class="signal"><span>Current Weekly Signal</span><b>45%</b></div>
-  <div class="signal"><span>Daily Confirmation</span><b>20%</b></div>
-  <div class="signal"><span>Historical Similarity</span><b>15%</b></div>
-  <div class="signal"><span>Price Location</span><b>10%</b></div>
-  <div class="signal"><span>Momentum</span><b>10%</b></div>
-</div>
-
-<div class="notice">
-Current Bottom/Top을 가장 중요하게 봅니다. Historical Similarity는 보조 확인값입니다. 현재 주봉은 아직 마감되지 않았다면 주중에 점수가 변할 수 있습니다. 점수는 기술적 조건 충족도이며 실제 수익 확률이 아닙니다.
-</div>
-
-</div>
-</section>
-
-</div>
-
-<nav class="bottomNav">
-  <button class="tab active" data-page="0"><i>⌂</i>SCANNER</button>
-  <button class="tab" data-page="1"><i>＋</i>SYMBOLS</button>
-  <button class="tab" data-page="2"><i>•••</i>MORE</button>
-</nav>
-
-<!-- DETAIL -->
-<div class="detail" id="detail">
-
-<header class="detailhead">
-  <button class="icon" id="back">‹</button>
-  <div class="detailtitle">
-    <b id="detailTicker">—</b>
-    <small>STOCKPM DECISION</small>
-  </div>
-  <div></div>
-</header>
-
-<div class="detailbody">
-<div class="inner">
-
-<div class="heroDecision wait" id="heroDecision">
-  <div class="heroEyebrow">지금 판단</div>
-  <div class="heroAction" id="heroAction">분석 중</div>
-
-  <div class="heroScore">
-    <span id="decisionScore">—</span>
-    <small>/100</small>
-  </div>
-
-  <div class="heroScoreLabel" id="decisionScoreLabel">
-    SIGNAL SCORE
-  </div>
-
-  <div class="heroReason" id="heroReason">
-    데이터를 분석하고 있습니다.
-  </div>
-</div>
-
-<!-- 핵심 -->
-<div class="card">
-  <div class="section">
-    <h3>한눈에 보기</h3>
-    <span id="currentPrice">—</span>
-  </div>
-
-  <div class="scoregrid">
-
-    <div class="scorebox">
-      <small>CURRENT<br>BOTTOM</small>
-      <b class="good" id="currentBottomMain">—</b>
-      <em>현재 바닥 신호</em>
-      <div class="progress">
-        <span class="bottomfill" id="currentBottomBar"></span>
-      </div>
-    </div>
-
-    <div class="scorebox">
-      <small>BOTTOM<br>SIMILARITY</small>
-      <b class="violet" id="bottomSimilarityMain">—</b>
-      <em>과거 바닥 유사도</em>
-      <div class="progress">
-        <span class="simfill" id="bottomSimilarityBar"></span>
-      </div>
-    </div>
-
-    <div class="scorebox">
-      <small>TOP<br>RISK</small>
-      <b class="bad" id="topRiskMain">—</b>
-      <em>현재 고점 위험</em>
-      <div class="progress">
-        <span class="topfill" id="topRiskBar"></span>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- WEEK CHANGE -->
-<div class="card">
-  <div class="section">
-    <h3>Bottom Signal 변화</h3>
-    <span>WEEKLY</span>
-  </div>
-
-  <div class="weekCompare">
-    <div class="weekBox">
-      <small>PREVIOUS WEEK</small>
-      <b id="prevBottomScore">—</b>
-    </div>
-
-    <div class="arrow">→</div>
-
-    <div class="weekBox">
-      <small>LATEST WEEK</small>
-      <b class="good" id="latestBottomScore">—</b>
     </div>
   </div>
 
-  <div class="delta" id="bottomDelta">—</div>
+  <nav class="bottomNav">
+    <button class="navBtn active" data-page="0"><span class="navIcon">◉</span>SCANNER</button>
+    <button class="navBtn" data-page="1"><span class="navIcon">＋</span>SYMBOLS</button>
+    <button class="navBtn" data-page="2"><span class="navIcon">•••</span>MORE</button>
+  </nav>
 </div>
 
-<!-- WHY -->
-<div class="card">
-  <div class="section">
-    <h3>왜 이렇게 판단했나</h3>
-    <span>AUTO</span>
-  </div>
-
-  <div id="reasonList"></div>
-</div>
-
-<!-- ADVANCED -->
-<div class="card">
-
-<button class="analysisToggle" id="analysisToggle">
-상세 분석 보기 ↓
-</button>
-
-<div class="advanced" id="advanced">
-
-<div class="card" style="margin-top:12px;margin-bottom:8px">
-  <div class="section">
-    <h3>Current Signal</h3>
-    <span>WEEKLY</span>
-  </div>
-
-  <div class="scoregrid">
-
-    <div class="scorebox">
-      <small>CURRENT<br>BOTTOM</small>
-      <b class="good" id="currentBottom">—</b>
-      <em>현재 바닥</em>
-    </div>
-
-    <div class="scorebox">
-      <small>CURRENT<br>TOP</small>
-      <b class="bad" id="currentTop">—</b>
-      <em>현재 고점</em>
-    </div>
-
-    <div class="scorebox">
-      <small>NET<br>DIRECTION</small>
-      <b id="netDirection">—</b>
-      <em>바닥 - 고점</em>
-    </div>
-
-  </div>
-</div>
-
-<div class="card" style="margin-bottom:8px">
-  <div class="section">
-    <h3>Historical Pattern</h3>
-    <span>REFERENCE</span>
-  </div>
-
-  <div class="scoregrid">
-
-    <div class="scorebox">
-      <small>BOTTOM<br>SIMILARITY</small>
-      <b class="violet" id="bottomSimilarity">—</b>
-      <em>과거 바닥</em>
-    </div>
-
-    <div class="scorebox">
-      <small>TOP<br>SIMILARITY</small>
-      <b class="violet" id="topSimilarity">—</b>
-      <em>과거 고점</em>
-    </div>
-
-    <div class="scorebox">
-      <small>LAST BOTTOM<br>QUALITY</small>
-      <b class="good" id="bottomQuality">—</b>
-      <em>확정 바닥</em>
-    </div>
-
-  </div>
-</div>
-
-<div class="card" style="margin-bottom:8px">
-  <div class="section">
-    <h3>Daily Early Signal</h3>
-    <span>FAST</span>
-  </div>
-
-  <div class="scoregrid" style="grid-template-columns:1fr 1fr">
-
-    <div class="scorebox">
-      <small>DAILY BOTTOM</small>
-      <b class="good" id="dailyBottom">—</b>
-      <em>일봉 바닥</em>
-    </div>
-
-    <div class="scorebox">
-      <small>DAILY TOP</small>
-      <b class="bad" id="dailyTop">—</b>
-      <em>일봉 고점</em>
-    </div>
-
-  </div>
-</div>
-
-<div class="card" style="margin-bottom:8px">
-  <div class="section">
-    <h3>Current Indicators</h3>
-    <span>CONTRIBUTION</span>
-  </div>
-
-  <div id="indicatorList"></div>
-
-  <div class="signal">
-    <span><b>BOTTOM TOTAL</b></span>
-    <b class="good" id="indicatorBottomTotal">—</b>
-  </div>
-
-  <div class="signal">
-    <span><b>TOP TOTAL</b></span>
-    <b class="bad" id="indicatorTopTotal">—</b>
-  </div>
-
-</div>
-
-<div class="card" style="margin-bottom:8px">
-  <div class="section">
-    <h3>Active Major Bottom</h3>
-    <span>CONFIRMED</span>
-  </div>
-  <div id="activeBottom"></div>
-</div>
-
-<div class="card" style="margin-bottom:8px">
-  <div class="section">
-    <h3>Active Major Top</h3>
-    <span>CONFIRMED</span>
-  </div>
-  <div id="activeTop"></div>
-</div>
-
-<div class="card" style="margin-bottom:8px">
-  <div class="section">
-    <h3>Historical Major Bottoms</h3>
-    <span>QUALITY</span>
-  </div>
-  <div id="majorBottoms"></div>
-</div>
-
-<div class="card" style="margin-bottom:8px">
-  <div class="section">
-    <h3>Historical Major Tops</h3>
-    <span>QUALITY</span>
-  </div>
-  <div id="majorTops"></div>
-</div>
-
-</div>
-</div>
-
-<div class="card">
-  <button class="btn danger full" id="deleteSymbol">
-    종목 삭제
-  </button>
-</div>
-
-</div>
-</div>
-</div>
-
-</div>
+<div class="detailOverlay" id="detailOverlay">
+  <div class="detailWrap" id="detailWrap"></div>
 </div>
 
 <script>
-
-/* =====================================================
-   CONFIG
-===================================================== */
-
 const SUPABASE_URL='https://seuqhwmzmsqzuppemiuk.supabase.co';
 const KEY='sb_publishable_8T7Wafioftxn528m-T4fNA_-OZq9dwq';
 const MARKET=SUPABASE_URL+'/functions/v1/market-data';
 
-const SYMBOL_KEY='stockpm_scanner_symbols_v034';
-const CACHE_KEY='stockpm_market_cache_v022';
-
+const SYMBOL_KEY='stockpm_scanner_symbols_v050';
+const CACHE_KEY='stockpm_market_cache_v050';
 const DAILY_TTL=60*60*1000;
 
-const CONFIRM_WEEKS=10;
+const MIN_HISTORY=35;
+const TURN_LOOKAHEAD=20;
 const BOTTOM_CONFIRM_MOVE=15;
 const TOP_CONFIRM_MOVE=15;
-const PIVOT_RADIUS=1;
 const STRUCTURE_BREAK=.02;
-const MIN_HISTORY=20;
 
-const $=id=>document.getElementById(id);
+let symbols=loadJSON(SYMBOL_KEY,['TSLA','NVDA','NKE']);
+let cache=loadJSON(CACHE_KEY,{});
+let analyses={};
 
-const store={
-  get(k,d){
-    try{
-      return JSON.parse(localStorage.getItem(k))??d
-    }catch{
-      return d
-    }
-  },
-  set(k,v){
-    localStorage.setItem(k,JSON.stringify(v))
+function loadJSON(k,fallback){
+  try{
+    const v=JSON.parse(localStorage.getItem(k));
+    return v ?? fallback;
+  }catch{
+    return fallback;
   }
-};
-
-let symbols=store.get(SYMBOL_KEY,[]);
-let cache=store.get(CACHE_KEY,{});
-let data={};
-
-let currentSymbol=null;
-let page=0;
-let lastMode='CACHED';
-
-
-/* =====================================================
-   UTIL
-===================================================== */
-
-function clamp(v,min=0,max=100){
-  return Math.max(min,Math.min(max,v));
+}
+function saveJSON(k,v){
+  localStorage.setItem(k,JSON.stringify(v));
+}
+function clamp(v,a=0,b=100){
+  return Math.max(a,Math.min(b,v));
+}
+function avg(a){
+  const v=a.filter(Number.isFinite);
+  return v.length ? v.reduce((x,y)=>x+y,0)/v.length : 0;
+}
+function pct(a,b){
+  return a ? (b/a-1)*100 : 0;
+}
+function fmt(v,d=2){
+  return Number.isFinite(v)?Number(v).toFixed(d):'-';
+}
+function normalize(values){
+  return [...values].reverse().map(x=>({
+    datetime:x.datetime,
+    open:+x.open,
+    high:+x.high,
+    low:+x.low,
+    close:+x.close,
+    volume:Number.isFinite(+x.volume)?+x.volume:0
+  }));
 }
 
-function average(a){
-  return a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
-}
+function dailyToWeekly(daily){
+  const groups=new Map();
 
-function std(a){
-  if(!a.length)return 0;
-  const m=average(a);
-  return Math.sqrt(average(a.map(x=>(x-m)**2)));
-}
+  daily.forEach(b=>{
+    const d=new Date(b.datetime+'T12:00:00');
+    const day=d.getDay()||7;
+    const monday=new Date(d);
+    monday.setDate(d.getDate()-day+1);
 
-function money(v){
-  if(!Number.isFinite(+v))return '—';
+    const key=[
+      monday.getFullYear(),
+      String(monday.getMonth()+1).padStart(2,'0'),
+      String(monday.getDate()).padStart(2,'0')
+    ].join('-');
 
-  return '$'+(+v).toLocaleString(undefined,{
-    maximumFractionDigits:2
+    if(!groups.has(key)){
+      groups.set(key,{
+        datetime:key,
+        open:b.open,
+        high:b.high,
+        low:b.low,
+        close:b.close,
+        volume:b.volume
+      });
+    }else{
+      const w=groups.get(key);
+      w.high=Math.max(w.high,b.high);
+      w.low=Math.min(w.low,b.low);
+      w.close=b.close;
+      w.volume+=b.volume;
+    }
   });
+
+  return [...groups.values()];
 }
 
-function pct(v){
-  if(!Number.isFinite(v))return '—';
-  return (v>=0?'+':'')+v.toFixed(1)+'%';
+function emaSeries(values,period){
+  const out=[];
+  const k=2/(period+1);
+  let e=null;
+
+  for(let i=0;i<values.length;i++){
+    const v=values[i];
+    if(e===null)e=v;
+    else e=v*k+e*(1-k);
+    out.push(e);
+  }
+  return out;
 }
 
+function rsiSeries(values,period=14){
+  const out=new Array(values.length).fill(null);
+  if(values.length<=period)return out;
 
-/* =====================================================
-   INDICATORS
-===================================================== */
+  let gain=0,loss=0;
 
-function EMA(values,n){
+  for(let i=1;i<=period;i++){
+    const c=values[i]-values[i-1];
+    gain+=Math.max(c,0);
+    loss+=Math.max(-c,0);
+  }
 
-  if(!values.length)return [];
+  let ag=gain/period;
+  let al=loss/period;
+  out[period]=al===0?100:100-(100/(1+ag/al));
 
-  const k=2/(n+1);
+  for(let i=period+1;i<values.length;i++){
+    const c=values[i]-values[i-1];
+    const g=Math.max(c,0);
+    const l=Math.max(-c,0);
 
-  let p=values[0];
+    ag=(ag*(period-1)+g)/period;
+    al=(al*(period-1)+l)/period;
 
-  const out=[p];
-
-  for(let i=1;i<values.length;i++){
-
-    p=values[i]*k+p*(1-k);
-
-    out.push(p);
+    out[i]=al===0?100:100-(100/(1+ag/al));
   }
 
   return out;
 }
 
-
-function RSI(closes,n=14){
-
-  if(closes.length<n+1)return null;
-
-  let gain=0;
-  let loss=0;
-
-  for(let i=closes.length-n;i<closes.length;i++){
-
-    const d=closes[i]-closes[i-1];
-
-    if(d>0)gain+=d;
-    else loss-=d;
-  }
-
-  if(loss===0)return 100;
-
-  const rs=(gain/n)/(loss/n);
-
-  return 100-(100/(1+rs));
+function macdSeries(values){
+  const e12=emaSeries(values,12);
+  const e26=emaSeries(values,26);
+  const macd=values.map((_,i)=>e12[i]-e26[i]);
+  const signal=emaSeries(macd,9);
+  const hist=macd.map((v,i)=>v-signal[i]);
+  return {macd,signal,hist};
 }
 
-
-function MACD(closes){
-
-  if(closes.length<35)return null;
-
-  const e12=EMA(closes,12);
-  const e26=EMA(closes,26);
-
-  const macd=closes.map((_,i)=>e12[i]-e26[i]);
-
-  const signal=EMA(macd,9);
-
-  const hist=macd.map((x,i)=>x-signal[i]);
-
-  return{
-    macd,
-    signal,
-    hist
-  };
+function std(arr){
+  if(!arr.length)return 0;
+  const m=avg(arr);
+  return Math.sqrt(avg(arr.map(x=>(x-m)**2)));
 }
-
-
-function bollinger(closes,n=20){
-
-  if(closes.length<n)return null;
-
-  const x=closes.slice(-n);
-
-  const mid=average(x);
-
-  const sd=std(x);
-
-  return{
-    mid,
-    upper:mid+2*sd,
-    lower:mid-2*sd
-  };
-}
-
-
-function stochastic(bars,n=14){
-
-  if(bars.length<n)return null;
-
-  const x=bars.slice(-n);
-
-  const hi=Math.max(...x.map(b=>b.h));
-  const lo=Math.min(...x.map(b=>b.l));
-
-  if(hi===lo)return 50;
-
-  return(
-    (bars.at(-1).c-lo)/(hi-lo)
-  )*100;
-}
-
-
-/* =====================================================
-   DATA NORMALIZE
-===================================================== */
-
-function normalize(values){
-
-  return [...values]
-  .reverse()
-  .map(x=>({
-
-    dt:x.datetime,
-
-    o:+x.open,
-    h:+x.high,
-    l:+x.low,
-    c:+x.close,
-
-    v:+x.volume||0
-
-  }))
-  .filter(x=>Number.isFinite(x.c));
-}
-
-
-/* =====================================================
-   WEEKLY
-===================================================== */
-
-function weekKey(s){
-
-  const d=new Date(
-    s.substring(0,10)+'T12:00:00'
-  );
-
-  const day=(d.getDay()+6)%7;
-
-  d.setDate(
-    d.getDate()-day
-  );
-
-  return[
-    d.getFullYear(),
-    String(d.getMonth()+1).padStart(2,'0'),
-    String(d.getDate()).padStart(2,'0')
-  ].join('-');
-}
-
-
-function dailyToWeekly(daily){
-
-  const weeks=[];
-
-  let cur=null;
-
-  for(const bar of daily){
-
-    const key=weekKey(bar.dt);
-
-    if(!cur||cur.key!==key){
-
-      cur={
-        key,
-        dt:key,
-        o:bar.o,
-        h:bar.h,
-        l:bar.l,
-        c:bar.c,
-        v:bar.v||0
-      };
-
-      weeks.push(cur);
-
-    }else{
-
-      cur.h=Math.max(cur.h,bar.h);
-      cur.l=Math.min(cur.l,bar.l);
-      cur.c=bar.c;
-      cur.v+=bar.v||0;
-    }
-  }
-
-  return weeks;
-}
-
-
-/* =====================================================
-   FEATURE
-===================================================== */
 
 function featureAt(bars,index){
+  if(index<20)return null;
 
-  const slice=bars.slice(0,index+1);
+  const closes=bars.map(x=>x.close);
+  const rsis=rsiSeries(closes,14);
+  const macd=macdSeries(closes);
 
-  if(slice.length<MIN_HISTORY)return null;
+  const b=bars[index];
+  const rsi=rsis[index] ?? 50;
+  const prevRsi=rsis[index-1] ?? rsi;
+  const rsiSlope=rsi-prevRsi;
 
-  const closes=slice.map(x=>x.c);
+  const stStart=Math.max(0,index-13);
+  const stBars=bars.slice(stStart,index+1);
+  const hh=Math.max(...stBars.map(x=>x.high));
+  const ll=Math.min(...stBars.map(x=>x.low));
+  const stochastic=hh===ll?50:(b.close-ll)/(hh-ll)*100;
 
-  const volumes=slice.map(x=>x.v||0);
+  const bbStart=Math.max(0,index-19);
+  const bbCloses=closes.slice(bbStart,index+1);
+  const mid=avg(bbCloses);
+  const sd=std(bbCloses);
+  const upper=mid+sd*2;
+  const lower=mid-sd*2;
+  const bbPos=upper===lower?.5:(b.close-lower)/(upper-lower);
 
-  const rsi=RSI(closes);
+  const volStart=Math.max(0,index-20);
+  const previousVol=bars.slice(volStart,index).map(x=>x.volume).filter(x=>x>0);
+  const volAvg=avg(previousVol);
+  const relVol=volAvg?b.volume/volAvg:1;
 
-  const prevRsi=RSI(
-    closes.slice(0,-1)
-  );
+  const range=b.high-b.low;
+  const closeLocation=range?(b.close-b.low)/range:.5;
 
-  const stoch=stochastic(slice);
+  const posStart=Math.max(0,index-19);
+  const recent=bars.slice(posStart,index+1);
+  const recentHigh=Math.max(...recent.map(x=>x.high));
+  const recentLow=Math.min(...recent.map(x=>x.low));
+  const position20=recentHigh===recentLow?.5:(b.close-recentLow)/(recentHigh-recentLow);
 
-  const bb=bollinger(closes);
+  const ret5=index>=5?pct(bars[index-5].close,b.close):0;
+  const ret10=index>=10?pct(bars[index-10].close,b.close):0;
+  const ret20=index>=20?pct(bars[index-20].close,b.close):0;
 
-  const macd=MACD(closes);
+  const hist=macd.hist[index] ?? 0;
+  const prevHist=macd.hist[index-1] ?? hist;
+  const macdSlope=hist-prevHist;
 
-  const last=slice.at(-1);
-
-  let macdHist=0;
-  let macdSlope=0;
   let macdCross=0;
-
-  if(macd){
-
-    macdHist=
-      macd.hist.at(-1)||0;
-
-    if(macd.hist.length>=2){
-
-      macdSlope=
-        (macd.hist.at(-1)||0)-
-        (macd.hist.at(-2)||0);
-    }
-
-    if(macd.macd.length>=2){
-
-      if(
-        macd.macd.at(-2)<=macd.signal.at(-2)&&
-        macd.macd.at(-1)>macd.signal.at(-1)
-      ){
-        macdCross=1;
-      }
-
-      if(
-        macd.macd.at(-2)>=macd.signal.at(-2)&&
-        macd.macd.at(-1)<macd.signal.at(-1)
-      ){
-        macdCross=-1;
-      }
-    }
+  if(index>0){
+    if(macd.hist[index]>0 && macd.hist[index-1]<=0)macdCross=1;
+    if(macd.hist[index]<0 && macd.hist[index-1]>=0)macdCross=-1;
   }
 
-  let bbPosition=.5;
-
-  if(bb){
-
-    const width=
-      bb.upper-bb.lower;
-
-    if(width){
-
-      bbPosition=
-        (last.c-bb.lower)/width;
-    }
-  }
-
-  const avgVol=
-    volumes.length>=13
-    ?average(
-      volumes.slice(-13,-1)
-    )
-    :0;
-
-  const relVolume=
-    avgVol
-    ?last.v/avgVol
-    :1;
-
-  const range=
-    Math.max(
-      last.h-last.l,
-      .000001
-    );
-
-  const closeLocation=
-    (last.c-last.l)/range;
-
-  const rsiSlope=
-    rsi!==null&&prevRsi!==null
-    ?rsi-prevRsi
-    :0;
-
-  const recent=
-    slice.slice(-9);
-
-  const recentHigh=
-    Math.max(...recent.map(x=>x.h));
-
-  const recentLow=
-    Math.min(...recent.map(x=>x.l));
-
-  const position8w=
-    recentHigh===recentLow
-    ?.5
-    :(last.c-recentLow)/
-     (recentHigh-recentLow);
-
-  let return4w=0;
-
-  if(slice.length>=5){
-
-    const old=
-      slice.at(-5).c;
-
-    if(old){
-
-      return4w=
-        ((last.c-old)/old)*100;
-    }
-  }
-
-  return{
-
-    rsi:rsi??50,
-
+  return {
+    index,
+    date:b.datetime,
+    price:b.close,
+    rsi,
     rsiSlope,
-
-    stoch:stoch??50,
-
-    macdHist,
-
-    macdSlope,
-
-    macdCross,
-
-    bbPosition,
-
-    relVolume,
-
+    stochastic,
+    bbPos,
+    relVol,
     closeLocation,
-
-    position8w,
-
-    return4w
+    position20,
+    ret5,
+    ret10,
+    ret20,
+    macdHist:hist,
+    macdSlope,
+    macdCross
   };
 }
 
-
-/* =====================================================
-   TECHNICAL CONTRIBUTIONS
-===================================================== */
-
-function indicatorContributions(f){
-
-  const r={
-
-    rsi:{bottom:0,top:0},
-
-    rsiSlope:{bottom:0,top:0},
-
-    stoch:{bottom:0,top:0},
-
-    macdSlope:{bottom:0,top:0},
-
-    macdCross:{bottom:0,top:0},
-
-    bb:{bottom:0,top:0},
-
-    volume:{bottom:0,top:0},
-
-    closeLocation:{bottom:0,top:0},
-
-    position8w:{bottom:0,top:0}
-  };
-
-  if(!f)return r;
-
-
-  /* RSI */
-
-  if(f.rsi<=25)
-    r.rsi.bottom=20;
-
-  else if(f.rsi<=30)
-    r.rsi.bottom=17;
-
-  else if(f.rsi<=38)
-    r.rsi.bottom=10;
-
-
-  if(f.rsi>=75)
-    r.rsi.top=20;
-
-  else if(f.rsi>=70)
-    r.rsi.top=17;
-
-  else if(f.rsi>=62)
-    r.rsi.top=10;
-
-
-  /* RSI TURN */
-
-  if(
-    f.rsiSlope>0 &&
-    f.rsi<45
-  ){
-    r.rsiSlope.bottom=10;
-  }
-
-  if(
-    f.rsiSlope<0 &&
-    f.rsi>55
-  ){
-    r.rsiSlope.top=10;
-  }
-
-
-  /* STOCH */
-
-  if(f.stoch<20)
-    r.stoch.bottom=10;
-
-  else if(f.stoch<30)
-    r.stoch.bottom=6;
-
-
-  if(f.stoch>80)
-    r.stoch.top=10;
-
-  else if(f.stoch>70)
-    r.stoch.top=6;
-
-
-  /* MACD */
-
-  if(f.macdSlope>0)
-    r.macdSlope.bottom=12;
-
-  if(f.macdSlope<0)
-    r.macdSlope.top=12;
-
-
-  if(f.macdCross===1)
-    r.macdCross.bottom=14;
-
-  if(f.macdCross===-1)
-    r.macdCross.top=14;
-
-
-  /* BOLLINGER */
-
-  if(f.bbPosition<0)
-    r.bb.bottom=12;
-
-  else if(f.bbPosition<.2)
-    r.bb.bottom=8;
-
-
-  if(f.bbPosition>1)
-    r.bb.top=12;
-
-  else if(f.bbPosition>.8)
-    r.bb.top=8;
-
-
-  /* VOLUME */
-
-  if(f.relVolume>=1.7){
-
-    r.volume.bottom=8;
-
-    r.volume.top=8;
-  }
-
-
-  /* CANDLE */
-
-  if(f.closeLocation>.6)
-    r.closeLocation.bottom=7;
-
-  if(f.closeLocation<.4)
-    r.closeLocation.top=7;
-
-
-  /* PRICE POSITION */
-
-  if(f.position8w<.2)
-    r.position8w.bottom=7;
-
-  if(f.position8w>.8)
-    r.position8w.top=7;
-
-
-  return r;
-}
-
-
-function currentTechnicalScore(f,type){
-
+function dailyTechnicalScore(f,type){
   if(!f)return 0;
-
-  const c=
-    indicatorContributions(f);
-
-  let total=0;
-
-  Object.values(c)
-  .forEach(x=>{
-
-    total+=
-      x[type]||0;
-  });
-
-  return clamp(
-    Math.round(total)
-  );
-}
-
-
-/* =====================================================
-   HISTORICAL TURN
-===================================================== */
-
-function isLocalLow(bars,i){
-
-  if(
-    i<PIVOT_RADIUS ||
-    i>=bars.length-PIVOT_RADIUS
-  ){
-    return false;
-  }
-
-  for(
-    let n=1;
-    n<=PIVOT_RADIUS;
-    n++
-  ){
-
-    if(
-      bars[i].l>bars[i-n].l ||
-      bars[i].l>bars[i+n].l
-    ){
-      return false;
-    }
-  }
-
-  return true;
-}
-
-
-function isLocalHigh(bars,i){
-
-  if(
-    i<PIVOT_RADIUS ||
-    i>=bars.length-PIVOT_RADIUS
-  ){
-    return false;
-  }
-
-  for(
-    let n=1;
-    n<=PIVOT_RADIUS;
-    n++
-  ){
-
-    if(
-      bars[i].h<bars[i-n].h ||
-      bars[i].h<bars[i+n].h
-    ){
-      return false;
-    }
-  }
-
-  return true;
-}
-
-
-function bottomQuality(point,bars){
-
-  if(!point)return 0;
-
-  let score=40;
-
-  const f=
-    point.feature||{};
-
-
-  if(point.move>=50)score+=20;
-
-  else if(point.move>=35)score+=17;
-
-  else if(point.move>=25)score+=13;
-
-  else if(point.move>=20)score+=9;
-
-  else if(point.move>=15)score+=5;
-
-
-  if(f.rsi<=25)score+=10;
-
-  else if(f.rsi<=30)score+=8;
-
-  else if(f.rsi<=38)score+=5;
-
-  else if(f.rsi<=45)score+=2;
-
-
-  if(f.macdCross===1)
-    score+=10;
-
-  else if(f.macdSlope>0)
-    score+=7;
-
-  else if(f.rsiSlope>0)
-    score+=4;
-
-
-  if(f.bbPosition<=0)
-    score+=5;
-
-  else if(f.bbPosition<=.2)
-    score+=3;
-
-
-  if(f.relVolume>=2)
-    score+=5;
-
-  else if(f.relVolume>=1.5)
-    score+=3;
-
-
-  if(f.closeLocation>=.75)
-    score+=5;
-
-  else if(f.closeLocation>=.6)
-    score+=3;
-
-
-  let intact=0;
-
-  for(
-    const bar
-    of bars.slice(point.index+1)
-  ){
-
-    if(
-      bar.l<
-      point.price*
-      (1-STRUCTURE_BREAK)
-    ){
-      break;
-    }
-
-    intact++;
-  }
-
-
-  if(intact>=12)score+=10;
-
-  else if(intact>=8)score+=8;
-
-  else if(intact>=4)score+=5;
-
-  else if(intact>=2)score+=2;
-
-
-  return clamp(
-    Math.round(score)
-  );
-}
-
-
-function topQuality(point,bars){
-
-  if(!point)return 0;
-
-  let score=40;
-
-  const f=
-    point.feature||{};
-
-
-  if(point.move>=50)score+=20;
-
-  else if(point.move>=35)score+=17;
-
-  else if(point.move>=25)score+=13;
-
-  else if(point.move>=20)score+=9;
-
-  else if(point.move>=15)score+=5;
-
-
-  if(f.rsi>=75)score+=10;
-
-  else if(f.rsi>=70)score+=8;
-
-  else if(f.rsi>=62)score+=5;
-
-  else if(f.rsi>=55)score+=2;
-
-
-  if(f.macdCross===-1)
-    score+=10;
-
-  else if(f.macdSlope<0)
-    score+=7;
-
-  else if(f.rsiSlope<0)
-    score+=4;
-
-
-  if(f.bbPosition>=1)
-    score+=5;
-
-  else if(f.bbPosition>=.8)
-    score+=3;
-
-
-  if(f.relVolume>=2)
-    score+=5;
-
-  else if(f.relVolume>=1.5)
-    score+=3;
-
-
-  if(f.closeLocation<=.25)
-    score+=5;
-
-  else if(f.closeLocation<=.4)
-    score+=3;
-
-
-  let intact=0;
-
-  for(
-    const bar
-    of bars.slice(point.index+1)
-  ){
-
-    if(
-      bar.h>
-      point.price*
-      (1+STRUCTURE_BREAK)
-    ){
-      break;
-    }
-
-    intact++;
-  }
-
-
-  if(intact>=12)score+=10;
-
-  else if(intact>=8)score+=8;
-
-  else if(intact>=4)score+=5;
-
-  else if(intact>=2)score+=2;
-
-
-  return clamp(
-    Math.round(score)
-  );
-}
-
-
-function discoverMajorTurns(bars){
-
-  const bottoms=[];
-  const tops=[];
-
-
-  for(
-    let i=MIN_HISTORY;
-    i<bars.length-1;
-    i++
-  ){
-
-    const future=
-      bars.slice(
-        i+1,
-        Math.min(
-          bars.length,
-          i+1+CONFIRM_WEEKS
-        )
-      );
-
-    if(!future.length)
-      continue;
-
-
-    if(isLocalLow(bars,i)){
-
-      const low=
-        bars[i].l;
-
-      const highest=
-        Math.max(
-          ...future.map(x=>x.h)
-        );
-
-      const rise=
-        ((highest-low)/low)*100;
-
-
-      if(
-        rise>=BOTTOM_CONFIRM_MOVE
-      ){
-
-        bottoms.push({
-
-          type:'bottom',
-
-          index:i,
-
-          date:bars[i].dt,
-
-          price:low,
-
-          move:rise,
-
-          feature:
-            featureAt(bars,i)
-        });
-      }
-    }
-
-
-    if(isLocalHigh(bars,i)){
-
-      const high=
-        bars[i].h;
-
-      const lowest=
-        Math.min(
-          ...future.map(x=>x.l)
-        );
-
-      const drop=
-        ((high-lowest)/high)*100;
-
-
-      if(
-        drop>=TOP_CONFIRM_MOVE
-      ){
-
-        tops.push({
-
-          type:'top',
-
-          index:i,
-
-          date:bars[i].dt,
-
-          price:high,
-
-          move:drop,
-
-          feature:
-            featureAt(bars,i)
-        });
-      }
-    }
-  }
-
-
-  const cleanBottoms=[];
-
-  for(const p of bottoms){
-
-    const prev=
-      cleanBottoms.at(-1);
-
-    if(
-      prev &&
-      p.index-prev.index<=2
-    ){
-
-      if(p.price<prev.price){
-
-        cleanBottoms[
-          cleanBottoms.length-1
-        ]=p;
-      }
-
-    }else{
-
-      cleanBottoms.push(p);
-    }
-  }
-
-
-  const cleanTops=[];
-
-  for(const p of tops){
-
-    const prev=
-      cleanTops.at(-1);
-
-    if(
-      prev &&
-      p.index-prev.index<=2
-    ){
-
-      if(p.price>prev.price){
-
-        cleanTops[
-          cleanTops.length-1
-        ]=p;
-      }
-
-    }else{
-
-      cleanTops.push(p);
-    }
-  }
-
-
-  cleanBottoms.forEach(p=>{
-
-    p.quality=
-      bottomQuality(
-        p,
-        bars
-      );
-  });
-
-
-  cleanTops.forEach(p=>{
-
-    p.quality=
-      topQuality(
-        p,
-        bars
-      );
-  });
-
-
-  return{
-
-    bottoms:cleanBottoms,
-
-    tops:cleanTops
-  };
-}
-
-
-function activeStructuralBottom(
-  bars,
-  bottoms
-){
-
-  for(
-    let n=bottoms.length-1;
-    n>=0;
-    n--
-  ){
-
-    const p=
-      bottoms[n];
-
-    const broken=
-      bars
-      .slice(p.index+1)
-      .some(
-        x=>
-          x.l<
-          p.price*
-          (1-STRUCTURE_BREAK)
-      );
-
-    if(!broken){
-
-      return{
-        ...p,
-        intact:true
-      };
-    }
-  }
-
-  return null;
-}
-
-
-function activeStructuralTop(
-  bars,
-  tops
-){
-
-  for(
-    let n=tops.length-1;
-    n>=0;
-    n--
-  ){
-
-    const p=
-      tops[n];
-
-    const broken=
-      bars
-      .slice(p.index+1)
-      .some(
-        x=>
-          x.h>
-          p.price*
-          (1+STRUCTURE_BREAK)
-      );
-
-    if(!broken){
-
-      return{
-        ...p,
-        intact:true
-      };
-    }
-  }
-
-  return null;
-}
-
-
-/* =====================================================
-   PATTERN SIMILARITY
-===================================================== */
-
-function similarityPart(
-  a,
-  b,
-  scale
-){
-
-  if(
-    !Number.isFinite(a) ||
-    !Number.isFinite(b)
-  ){
-    return .5;
-  }
-
-  return 1-Math.min(
-    1,
-    Math.abs(a-b)/scale
-  );
-}
-
-
-function featureSimilarity(
-  current,
-  reference
-){
-
-  if(
-    !current ||
-    !reference
-  ){
-    return 0;
-  }
-
-
-  const scores=[
-
-    similarityPart(
-      current.rsi,
-      reference.rsi,
-      30
-    ),
-
-    similarityPart(
-      current.rsiSlope,
-      reference.rsiSlope,
-      12
-    ),
-
-    similarityPart(
-      current.stoch,
-      reference.stoch,
-      40
-    ),
-
-    similarityPart(
-      current.bbPosition,
-      reference.bbPosition,
-      .75
-    ),
-
-    similarityPart(
-      current.relVolume,
-      reference.relVolume,
-      2
-    ),
-
-    similarityPart(
-      current.closeLocation,
-      reference.closeLocation,
-      .65
-    ),
-
-    similarityPart(
-      current.position8w,
-      reference.position8w,
-      .7
-    ),
-
-    similarityPart(
-      current.return4w,
-      reference.return4w,
-      30
-    ),
-
-    Math.sign(current.macdSlope)===
-    Math.sign(reference.macdSlope)
-    ?1:.25,
-
-    current.macdCross===
-    reference.macdCross
-    ?1:.4
-  ];
-
-
-  return clamp(
-    Math.round(
-      average(scores)*100
-    )
-  );
-}
-
-
-function patternMatch(
-  current,
-  turns
-){
-
-  if(
-    !current ||
-    !turns.length
-  ){
-
-    return{
-      score:0,
-      reference:null,
-      matches:[]
-    };
-  }
-
-
-  const matches=
-    turns.map(turn=>{
-
-      const similarity=
-        featureSimilarity(
-          current,
-          turn.feature
-        );
-
-      return{
-
-        ...turn,
-
-        similarity,
-
-        weightedMatch:
-          similarity*.8+
-          (turn.quality||0)*.2
-      };
-
-    })
-    .sort(
-      (a,b)=>
-        b.weightedMatch-
-        a.weightedMatch
-    );
-
-
-  const top=
-    matches.slice(
-      0,
-      Math.min(
-        3,
-        matches.length
-      )
-    );
-
-
-  let total=0;
-  let weights=0;
-
-
-  top.forEach((x,i)=>{
-
-    const w=
-      i===0
-      ?3
-      :i===1
-      ?2
-      :1;
-
-    total+=
-      x.similarity*w;
-
-    weights+=w;
-  });
-
-
-  return{
-
-    score:
-      weights
-      ?Math.round(
-        total/weights
-      )
-      :0,
-
-    reference:
-      matches[0]||null,
-
-    matches
-  };
-}
-
-
-/* =====================================================
-   LOCATION / MOMENTUM
-===================================================== */
-
-function priceLocationScore(
-  weekly,
-  type
-){
-
-  if(!weekly.length)
-    return 50;
-
-  const recent=
-    weekly.slice(-13);
-
-  const hi=
-    Math.max(
-      ...recent.map(x=>x.h)
-    );
-
-  const lo=
-    Math.min(
-      ...recent.map(x=>x.l)
-    );
-
-  const close=
-    recent.at(-1).c;
-
-
-  if(hi===lo)
-    return 50;
-
-
-  const position=
-    clamp(
-      ((close-lo)/(hi-lo))*100
-    );
-
-
-  return type==='bottom'
-    ?Math.round(100-position)
-    :Math.round(position);
-}
-
-
-function momentumScore(
-  f,
-  type
-){
-
-  if(!f)
-    return 0;
-
-  let score=0;
-
+  let s=0;
 
   if(type==='bottom'){
+    if(f.rsi<=25)s+=20;
+    else if(f.rsi<=30)s+=17;
+    else if(f.rsi<=38)s+=11;
+    else if(f.rsi<=45)s+=5;
 
-    if(f.rsiSlope>0)
-      score+=25;
+    if(f.rsiSlope>0 && f.rsi<45)s+=12;
 
-    if(f.macdSlope>0)
-      score+=30;
+    if(f.stochastic<20)s+=10;
+    else if(f.stochastic<30)s+=6;
 
-    if(f.macdCross===1)
-      score+=25;
+    if(f.macdSlope>0)s+=14;
+    if(f.macdCross===1)s+=16;
 
-    if(f.closeLocation>.55)
-      score+=10;
+    if(f.bbPos<0)s+=10;
+    else if(f.bbPos<.2)s+=7;
 
-    if(f.return4w>0)
-      score+=10;
+    if(f.relVol>=1.7)s+=6;
+    else if(f.relVol>=1.3)s+=3;
 
+    if(f.closeLocation>.65)s+=6;
+    if(f.position20<.15)s+=6;
+    else if(f.position20<.3)s+=3;
   }else{
+    if(f.rsi>=75)s+=20;
+    else if(f.rsi>=70)s+=17;
+    else if(f.rsi>=62)s+=11;
+    else if(f.rsi>=55)s+=5;
 
-    if(f.rsiSlope<0)
-      score+=25;
+    if(f.rsiSlope<0 && f.rsi>55)s+=12;
 
-    if(f.macdSlope<0)
-      score+=30;
+    if(f.stochastic>80)s+=10;
+    else if(f.stochastic>70)s+=6;
 
-    if(f.macdCross===-1)
-      score+=25;
+    if(f.macdSlope<0)s+=14;
+    if(f.macdCross===-1)s+=16;
 
-    if(f.closeLocation<.45)
-      score+=10;
+    if(f.bbPos>1)s+=10;
+    else if(f.bbPos>.8)s+=7;
 
-    if(f.return4w<0)
-      score+=10;
+    if(f.relVol>=1.7)s+=6;
+    else if(f.relVol>=1.3)s+=3;
+
+    if(f.closeLocation<.35)s+=6;
+    if(f.position20>.85)s+=6;
+    else if(f.position20>.7)s+=3;
   }
 
+  return clamp(s);
+}
+
+function weeklyTrendScore(weekly,type){
+  if(weekly.length<10)return 50;
+
+  const i=weekly.length-1;
+  const f=featureAt(weekly,i);
+  if(!f)return 50;
+
+  const last=weekly[i].close;
+  const ma4=avg(weekly.slice(-4).map(x=>x.close));
+  const ma10=avg(weekly.slice(-10).map(x=>x.close));
+
+  let score=50;
+
+  if(type==='bull'){
+    if(last>ma4)score+=12; else score-=12;
+    if(ma4>ma10)score+=15; else score-=15;
+    if(f.ret5>0)score+=10; else score-=10;
+    if(f.macdSlope>0)score+=8; else score-=8;
+    if(f.rsiSlope>0)score+=5; else score-=5;
+  }else{
+    if(last<ma4)score+=12; else score-=12;
+    if(ma4<ma10)score+=15; else score-=15;
+    if(f.ret5<0)score+=10; else score-=10;
+    if(f.macdSlope<0)score+=8; else score-=8;
+    if(f.rsiSlope<0)score+=5; else score-=5;
+  }
 
   return clamp(score);
 }
 
-
-/* =====================================================
-   v0.4.2 CURRENT-FIRST DECISION ENGINE
-===================================================== */
-
-function makeDecision(d){
-
-  const WB=d.currentBottom;
-  const WT=d.currentTop;
-
-  const DB=d.dailyBottom;
-  const DT=d.dailyTop;
-
-  const BS=d.bottomPattern.score;
-  const TS=d.topPattern.score;
-
-  const BL=
-    priceLocationScore(
-      d.weekly,
-      'bottom'
-    );
-
-  const TL=
-    priceLocationScore(
-      d.weekly,
-      'top'
-    );
-
-  const BM=
-    momentumScore(
-      d.weeklyFeature,
-      'bottom'
-    );
-
-  const TM=
-    momentumScore(
-      d.weeklyFeature,
-      'top'
-    );
-
-
-  /*
-  ----------------------------------------
-  NEW SCORE MODEL
-
-  Weekly current signal   45%
-  Daily confirmation     20%
-  Historical similarity  15%
-  Price location         10%
-  Momentum               10%
-
-  핵심:
-  Historical similarity가 낮아도
-  Current signal이 강하면 판정을 막지 않는다.
-  ----------------------------------------
-  */
-
-
-  let buyScore=
-    WB*.45+
-    DB*.20+
-    BS*.15+
-    BL*.10+
-    BM*.10;
-
-
-  let sellScore=
-    WT*.45+
-    DT*.20+
-    TS*.15+
-    TL*.10+
-    TM*.10;
-
-
-  /*
-  CURRENT SIGNAL BONUS
-  */
-
-
-  if(WB>=90)
-    buyScore+=8;
-
-  else if(WB>=85)
-    buyScore+=6;
-
-  else if(WB>=80)
-    buyScore+=4;
-
-  else if(WB>=70)
-    buyScore+=2;
-
-
-  if(WT>=90)
-    sellScore+=8;
-
-  else if(WT>=85)
-    sellScore+=6;
-
-  else if(WT>=80)
-    sellScore+=4;
-
-  else if(WT>=70)
-    sellScore+=2;
-
-
-  /*
-  MULTI TIMEFRAME CONFIRMATION
-  */
-
-
-  if(
-    WB>=75 &&
-    DB>=60
-  ){
-    buyScore+=5;
-  }
-
-
-  if(
-    WT>=75 &&
-    DT>=60
-  ){
-    sellScore+=5;
-  }
-
-
-  /*
-  HISTORICAL PATTERN BONUS
-
-  이제 보조 역할만 한다.
-  */
-
-
-  if(
-    WB>=75 &&
-    BS>=70
-  ){
-    buyScore+=3;
-  }
-
-
-  if(
-    WT>=75 &&
-    TS>=70
-  ){
-    sellScore+=3;
-  }
-
-
-  /*
-  OPPOSITE SIGNAL PENALTY
-  */
-
-
-  if(WT>=75)
-    buyScore-=6;
-
-  else if(WT>=65)
-    buyScore-=3;
-
-
-  if(WB>=75)
-    sellScore-=6;
-
-  else if(WB>=65)
-    sellScore-=3;
-
-
-  buyScore=
-    clamp(
-      Math.round(buyScore)
-    );
-
-
-  sellScore=
-    clamp(
-      Math.round(sellScore)
-    );
-
-
-  /*
-  ----------------------------------------
-  COMMAND ENGINE
-
-  BUY:
-  Current Bottom 중심
-
-  WATCH:
-  바닥 신호가 형성되는 단계
-
-  SELL:
-  Top + 실제 하락 전환 확인
-
-  AVOID:
-  고점 위험은 크지만 SELL까지는 아님
-  ----------------------------------------
-  */
-
-
-  let action='기다려';
-  let code='WAIT';
-  let level='wait';
-
-
-  /*
-  SELL
-
-  단순 과매수는 SELL 아님.
-
-  고점 + 하락전환이 필요.
-  */
-
-
-  const bearishTurn=
-    TM>=55 ||
-    DT>=65 ||
-    (
-      d.weeklyFeature &&
-      d.weeklyFeature.macdCross===-1
-    );
-
-
-  if(
-    WT>=82 &&
-    sellScore>=78 &&
-    bearishTurn &&
-    sellScore>=buyScore+10
-  ){
-
-    action='매도해';
-    code='SELL';
-    level='sell';
-
-  }
-
-
-  /*
-  AVOID
-  */
-
-
-  else if(
-    WT>=68 &&
-    sellScore>=65 &&
-    sellScore>=buyScore+7
-  ){
-
-    action='매수하지 마';
-    code='AVOID';
-    level='avoid';
-
-  }
-
-
-  /*
-  BUY
-
-  Historical similarity를
-  필수 조건에서 제거.
-
-  Current Bottom이 매우 강하면
-  자체적으로 BUY 가능.
-  */
-
-
-  else if(
-
-    (
-      WB>=88 &&
-      buyScore>=72
-    )
-
-    ||
-
-    (
-      WB>=82 &&
-      DB>=60 &&
-      buyScore>=70
-    )
-
-    ||
-
-    (
-      WB>=80 &&
-      BS>=68 &&
-      BM>=50 &&
-      buyScore>=68
-    )
-
-  ){
-
-    if(
-      buyScore>=sellScore+5
-    ){
-
-      action='매수해';
-      code='BUY';
-      level='buy';
-
-    }else{
-
-      action='매수 관심';
-      code='WATCH';
-      level='watch';
-    }
-
-  }
-
-
-  /*
-  WATCH
-
-  기존보다 적극적으로
-  바닥 형성 초기부터 표시
-  */
-
-
-  else if(
-
-    WB>=65
-
-    ||
-
-    (
-      WB>=58 &&
-      DB>=60
-    )
-
-    ||
-
-    (
-      WB>=55 &&
-      BS>=70
-    )
-
-    ||
-
-    (
-      WB>=55 &&
-      BM>=60
-    )
-
-  ){
-
-    if(
-      sellScore<
-      buyScore+10
-    ){
-
-      action='매수 관심';
-      code='WATCH';
-      level='watch';
-
-    }else{
-
-      action='기다려';
-      code='WAIT';
-      level='wait';
-    }
-  }
-
-
-  /*
-  REASONS
-  */
-
-
+function detectDowntrend(bars,f){
+  if(bars.length<30 || !f)return {
+    active:false,
+    score:0,
+    newLow:false,
+    reasons:[]
+  };
+
+  const current=bars[bars.length-1];
+  const prev20=bars.slice(-21,-1);
+  const prev40=bars.slice(-41,-1);
+
+  const low20=Math.min(...prev20.map(x=>x.low));
+  const low40=Math.min(...prev40.map(x=>x.low));
+
+  const newLow20=current.low<=low20;
+  const newLow40=current.low<=low40;
+
+  const closes=bars.map(x=>x.close);
+  const ma10=avg(closes.slice(-10));
+  const ma20=avg(closes.slice(-20));
+  const ma50=avg(closes.slice(-50));
+
+  let score=0;
   const reasons=[];
 
-
-  if(code==='BUY'){
-
-    if(WB>=90)
-      reasons.push(
-        '현재 주봉 바닥 신호가 매우 강함'
-      );
-
-    else
-      reasons.push(
-        '현재 주봉 바닥 신호가 강함'
-      );
-
-
-    if(DB>=65)
-      reasons.push(
-        '일봉에서도 바닥·반전 신호 확인'
-      );
-
-
-    if(BM>=60)
-      reasons.push(
-        '상승 방향 모멘텀 전환 확인'
-      );
-
-
-    if(BS>=75)
-      reasons.push(
-        `과거 바닥 패턴과 ${BS}% 유사`
-      );
-
-
-    if(BL>=75)
-      reasons.push(
-        '최근 가격 범위의 저점권'
-      );
+  if(newLow20){
+    score+=28;
+    reasons.push('최근 20일 신저가 갱신');
   }
 
-
-  else if(code==='WATCH'){
-
-    reasons.push(
-      '바닥 형성 신호가 나타나는 중'
-    );
-
-
-    if(WB>=65)
-      reasons.push(
-        `현재 주봉 바닥 ${WB}/100`
-      );
-
-
-    if(DB>=60)
-      reasons.push(
-        '일봉 반전 신호가 먼저 나타남'
-      );
-
-
-    if(BM>=55)
-      reasons.push(
-        '모멘텀이 상승 방향으로 개선 중'
-      );
-
-
-    if(BS>=70)
-      reasons.push(
-        '과거 바닥 패턴과 유사'
-      );
+  if(newLow40){
+    score+=12;
+    reasons.push('중기 저점도 갱신 중');
   }
 
-
-  else if(code==='SELL'){
-
-    reasons.push(
-      '현재 주봉 고점 신호가 매우 강함'
-    );
-
-
-    if(DT>=65)
-      reasons.push(
-        '일봉에서도 하락 신호 확인'
-      );
-
-
-    if(TM>=55)
-      reasons.push(
-        '하락 모멘텀 전환 확인'
-      );
-
-
-    if(TS>=70)
-      reasons.push(
-        `과거 고점 패턴과 ${TS}% 유사`
-      );
-
-
-    if(TL>=80)
-      reasons.push(
-        '최근 가격 범위의 고점권'
-      );
+  if(current.close<ma10){
+    score+=10;
+    reasons.push('종가가 10일 평균 아래');
   }
 
-
-  else if(code==='AVOID'){
-
-    reasons.push(
-      '현재 고점 위험이 매수 신호보다 강함'
-    );
-
-
-    if(WT>=70)
-      reasons.push(
-        `현재 주봉 고점 ${WT}/100`
-      );
-
-
-    if(TS>=65)
-      reasons.push(
-        '과거 고점 패턴과 유사'
-      );
-
-
-    if(TL>=80)
-      reasons.push(
-        '가격이 최근 고점권에 위치'
-      );
+  if(ma10<ma20){
+    score+=12;
+    reasons.push('단기 추세 하락');
   }
 
-
-  else{
-
-    reasons.push(
-      '현재 바닥·고점 어느 방향도 충분히 강하지 않음'
-    );
-
-
-    if(
-      WB<55 &&
-      WT<55
-    ){
-      reasons.push(
-        '극단적인 기술적 위치가 아님'
-      );
-    }
-
-
-    if(
-      Math.abs(
-        buyScore-sellScore
-      )<10
-    ){
-      reasons.push(
-        '매수·매도 신호 차이가 작음'
-      );
-    }
+  if(bars.length>=50 && ma20<ma50){
+    score+=10;
+    reasons.push('중기 추세 하락');
   }
 
+  if(f.ret5<0){
+    score+=8;
+    reasons.push('최근 5일 수익률 음수');
+  }
 
-  return{
+  if(f.ret20<0){
+    score+=8;
+  }
 
-    buyScore,
+  if(f.macdSlope<0){
+    score+=7;
+    reasons.push('MACD 하락 모멘텀');
+  }
 
-    sellScore,
+  if(f.rsiSlope<0){
+    score+=5;
+    reasons.push('RSI도 아직 하락 중');
+  }
 
-    action,
+  score=clamp(score);
 
-    code,
-
-    level,
-
-    reasons,
-
-    bottomLocation:BL,
-
-    topLocation:TL,
-
-    bottomMomentum:BM,
-
-    topMomentum:TM
+  return {
+    active:score>=55 && (newLow20 || newLow40),
+    score,
+    newLow:newLow20||newLow40,
+    reasons
   };
 }
 
+function reversalScore(f){
+  if(!f)return 0;
+  let s=0;
 
-/* =====================================================
-   ANALYSIS
-===================================================== */
+  if(f.rsiSlope>0)s+=20;
+  if(f.macdSlope>0)s+=25;
+  if(f.macdCross===1)s+=25;
+  if(f.closeLocation>.6)s+=10;
+  if(f.ret5>0)s+=10;
+  if(f.stochastic<35 && f.rsiSlope>0)s+=10;
 
-function analyse(
-  symbol,
-  daily
-){
+  return clamp(s);
+}
 
-  if(!daily.length)
-    return null;
+function bearishReversalScore(f){
+  if(!f)return 0;
+  let s=0;
 
+  if(f.rsiSlope<0)s+=20;
+  if(f.macdSlope<0)s+=25;
+  if(f.macdCross===-1)s+=25;
+  if(f.closeLocation<.4)s+=10;
+  if(f.ret5<0)s+=10;
+  if(f.stochastic>65 && f.rsiSlope<0)s+=10;
 
-  const weekly=
-    dailyToWeekly(daily);
+  return clamp(s);
+}
 
+function discoverDailyTurns(bars){
+  const bottoms=[];
+  const tops=[];
 
-  const price=
-    daily.at(-1).c;
+  for(let i=MIN_HISTORY;i<bars.length-2;i++){
+    const b=bars[i];
+    const prev=bars[i-1];
+    const next=bars[i+1];
 
+    const localBottom=b.low<=prev.low && b.low<=next.low;
+    const localTop=b.high>=prev.high && b.high>=next.high;
 
-  const weeklyFeature=
-    featureAt(
-      weekly,
-      weekly.length-1
-    );
+    const future=bars.slice(i+1,Math.min(bars.length,i+1+TURN_LOOKAHEAD));
 
+    if(localBottom && future.length){
+      const futureHigh=Math.max(...future.map(x=>x.high));
+      const rebound=pct(b.low,futureHigh);
 
-  const prevWeeklyFeature=
-    featureAt(
-      weekly,
-      weekly.length-2
-    );
+      if(rebound>=BOTTOM_CONFIRM_MOVE){
+        const f=featureAt(bars,i);
+        if(f)bottoms.push({
+          type:'bottom',
+          index:i,
+          date:b.datetime,
+          price:b.low,
+          move:rebound,
+          feature:f,
+          quality:turnQuality(f,rebound,'bottom')
+        });
+      }
+    }
 
+    if(localTop && future.length){
+      const futureLow=Math.min(...future.map(x=>x.low));
+      const drop=(b.high-futureLow)/b.high*100;
 
-  const dailyFeature=
-    featureAt(
-      daily,
-      daily.length-1
-    );
+      if(drop>=TOP_CONFIRM_MOVE){
+        const f=featureAt(bars,i);
+        if(f)tops.push({
+          type:'top',
+          index:i,
+          date:b.datetime,
+          price:b.high,
+          move:drop,
+          feature:f,
+          quality:turnQuality(f,drop,'top')
+        });
+      }
+    }
+  }
 
+  return {
+    bottoms:clusterTurns(bottoms,'bottom'),
+    tops:clusterTurns(tops,'top')
+  };
+}
 
-  const currentBottom=
-    currentTechnicalScore(
-      weeklyFeature,
-      'bottom'
-    );
+function clusterTurns(turns,type){
+  if(!turns.length)return [];
+  const out=[];
 
+  for(const t of turns){
+    const last=out[out.length-1];
 
-  const currentTop=
-    currentTechnicalScore(
-      weeklyFeature,
-      'top'
-    );
+    if(last && t.index-last.index<=5){
+      if(type==='bottom'){
+        if(t.price<last.price)out[out.length-1]=t;
+      }else{
+        if(t.price>last.price)out[out.length-1]=t;
+      }
+    }else{
+      out.push(t);
+    }
+  }
+  return out;
+}
 
+function turnQuality(f,move,type){
+  let s=40;
 
-  const previousBottom=
-    currentTechnicalScore(
-      prevWeeklyFeature,
-      'bottom'
-    );
+  if(move>=40)s+=20;
+  else if(move>=30)s+=17;
+  else if(move>=22)s+=13;
+  else if(move>=18)s+=9;
+  else s+=5;
 
+  if(type==='bottom'){
+    if(f.rsi<=25)s+=10;
+    else if(f.rsi<=30)s+=8;
+    else if(f.rsi<=38)s+=5;
 
-  const previousTop=
-    currentTechnicalScore(
-      prevWeeklyFeature,
-      'top'
-    );
+    if(f.macdCross===1)s+=10;
+    else if(f.macdSlope>0)s+=7;
+    else if(f.rsiSlope>0)s+=4;
 
+    if(f.bbPos<=0)s+=5;
+    else if(f.bbPos<=.2)s+=3;
 
-  const dailyBottom=
-    currentTechnicalScore(
-      dailyFeature,
-      'bottom'
-    );
+    if(f.relVol>=2)s+=5;
+    else if(f.relVol>=1.5)s+=3;
 
+    if(f.closeLocation>=.75)s+=5;
+    else if(f.closeLocation>=.6)s+=3;
+  }else{
+    if(f.rsi>=75)s+=10;
+    else if(f.rsi>=70)s+=8;
+    else if(f.rsi>=62)s+=5;
 
-  const dailyTop=
-    currentTechnicalScore(
-      dailyFeature,
-      'top'
-    );
+    if(f.macdCross===-1)s+=10;
+    else if(f.macdSlope<0)s+=7;
+    else if(f.rsiSlope<0)s+=4;
 
+    if(f.bbPos>=1)s+=5;
+    else if(f.bbPos>=.8)s+=3;
 
-  const contributions=
-    indicatorContributions(
-      weeklyFeature
-    );
+    if(f.relVol>=2)s+=5;
+    else if(f.relVol>=1.5)s+=3;
 
+    if(f.closeLocation<=.25)s+=5;
+    else if(f.closeLocation<=.4)s+=3;
+  }
 
-  const turns=
-    discoverMajorTurns(
-      weekly
-    );
+  return clamp(s);
+}
 
+function similarity(a,b){
+  if(!a||!b)return 0;
 
-  const majorBottom=
-    activeStructuralBottom(
-      weekly,
-      turns.bottoms
-    );
+  const sims=[
+    1-Math.min(Math.abs(a.rsi-b.rsi)/35,1),
+    1-Math.min(Math.abs(a.stochastic-b.stochastic)/45,1),
+    1-Math.min(Math.abs(a.bbPos-b.bbPos)/.8,1),
+    1-Math.min(Math.abs(a.relVol-b.relVol)/2.5,1),
+    1-Math.min(Math.abs(a.closeLocation-b.closeLocation)/.7,1),
+    1-Math.min(Math.abs(a.position20-b.position20)/.8,1),
+    1-Math.min(Math.abs(a.ret5-b.ret5)/20,1),
+    Math.sign(a.rsiSlope)===Math.sign(b.rsiSlope)?1:.3,
+    Math.sign(a.macdSlope)===Math.sign(b.macdSlope)?1:.3
+  ];
 
+  return clamp(avg(sims)*100);
+}
 
-  const majorTop=
-    activeStructuralTop(
-      weekly,
-      turns.tops
-    );
+function patternMatch(current,turns){
+  if(!current || !turns.length)return {
+    score:50,
+    reference:null
+  };
 
+  const list=turns.map(t=>({
+    turn:t,
+    similarity:similarity(current,t.feature)
+  })).sort((a,b)=>b.similarity-a.similarity);
 
-  const bottomPattern=
-    patternMatch(
-      weeklyFeature,
-      turns.bottoms
-    );
+  const top=list.slice(0,3);
+  const weights=[3,2,1];
 
+  let sum=0,w=0;
 
-  const topPattern=
-    patternMatch(
-      weeklyFeature,
-      turns.tops
-    );
+  top.forEach((x,i)=>{
+    sum+=x.similarity*weights[i];
+    w+=weights[i];
+  });
 
+  return {
+    score:w?sum/w:50,
+    reference:top[0]?.turn||null
+  };
+}
 
-  const d={
+function priceLocationScore(daily,type){
+  const recent=daily.slice(-60);
+  if(!recent.length)return 50;
 
-    symbol,
+  const high=Math.max(...recent.map(x=>x.high));
+  const low=Math.min(...recent.map(x=>x.low));
+  const current=recent[recent.length-1].close;
 
-    price,
+  const pos=high===low?.5:(current-low)/(high-low);
 
-    weekly,
+  return type==='bottom'
+    ? clamp((1-pos)*100)
+    : clamp(pos*100);
+}
 
-    weeklyFeature,
+function analyze(symbol,daily){
+  const weekly=dailyToWeekly(daily);
 
-    prevWeeklyFeature,
+  const df=featureAt(daily,daily.length-1);
+  const prevDf=featureAt(daily,daily.length-2);
 
-    dailyFeature,
+  const dailyBottom=dailyTechnicalScore(df,'bottom');
+  const dailyTop=dailyTechnicalScore(df,'top');
+  const previousBottom=dailyTechnicalScore(prevDf,'bottom');
 
-    currentBottom,
+  const weeklyBull=weeklyTrendScore(weekly,'bull');
+  const weeklyBear=weeklyTrendScore(weekly,'bear');
 
-    currentTop,
+  const downtrend=detectDowntrend(daily,df);
+  const reversal=reversalScore(df);
+  const bearishReversal=bearishReversalScore(df);
 
-    previousBottom,
+  const turns=discoverDailyTurns(daily);
+  const bottomPattern=patternMatch(df,turns.bottoms);
+  const topPattern=patternMatch(df,turns.tops);
 
-    previousTop,
+  const bottomLocation=priceLocationScore(daily,'bottom');
+  const topLocation=priceLocationScore(daily,'top');
 
+  let buyScore=
+    dailyBottom*.60 +
+    weeklyBull*.20 +
+    bottomPattern.score*.10 +
+    ((bottomLocation+reversal)/2)*.10;
+
+  let sellScore=
+    dailyTop*.60 +
+    weeklyBear*.20 +
+    topPattern.score*.10 +
+    ((topLocation+bearishReversal)/2)*.10;
+
+  if(dailyBottom>=80)buyScore+=4;
+  if(dailyBottom>=90)buyScore+=4;
+  if(reversal>=60)buyScore+=4;
+  if(df.macdCross===1)buyScore+=3;
+
+  if(dailyTop>=80)sellScore+=4;
+  if(dailyTop>=90)sellScore+=4;
+  if(bearishReversal>=60)sellScore+=4;
+  if(df.macdCross===-1)sellScore+=3;
+
+  if(downtrend.active){
+    buyScore-=12;
+  }
+
+  buyScore=clamp(buyScore);
+  sellScore=clamp(sellScore);
+
+  const decision=makeDecision({
     dailyBottom,
-
     dailyTop,
-
-    contributions,
-
-    turns,
-
-    majorBottom,
-
-    majorTop,
-
+    previousBottom,
+    weeklyBull,
+    weeklyBear,
+    downtrend,
+    reversal,
+    bearishReversal,
     bottomPattern,
+    topPattern,
+    bottomLocation,
+    topLocation,
+    buyScore,
+    sellScore,
+    df
+  });
 
-    topPattern
+  return {
+    symbol,
+    daily,
+    weekly,
+    price:daily[daily.length-1].close,
+    feature:df,
+    previousFeature:prevDf,
+    dailyBottom,
+    dailyTop,
+    previousBottom,
+    weeklyBull,
+    weeklyBear,
+    downtrend,
+    reversal,
+    bearishReversal,
+    bottomPattern,
+    topPattern,
+    bottomLocation,
+    topLocation,
+    buyScore,
+    sellScore,
+    turns,
+    decision
   };
-
-
-  d.decision=
-    makeDecision(d);
-
-
-  return d;
 }
 
+function makeDecision(d){
+  const {
+    dailyBottom:B,
+    dailyTop:T,
+    previousBottom:PB,
+    weeklyBull:WB,
+    weeklyBear:WR,
+    downtrend:D,
+    reversal:R,
+    bearishReversal:BR,
+    bottomPattern:BS,
+    topPattern:TS,
+    buyScore,
+    sellScore,
+    df
+  }=d;
 
-/* =====================================================
-   FETCH
-===================================================== */
+  let action='기다려';
+  let key='WAIT';
+  let icon='⚪';
+  let score=Math.round(Math.max(buyScore,sellScore));
+  const reasons=[];
 
-async function fetchDaily(
-  symbol,
-  force=false
-){
-
-  const key=
-    symbol+'__1day';
-
-
-  const old=
-    cache[key];
-
+  const bottomImproving=B-PB>=8;
+  const bottomRapid=B-PB>=15;
 
   if(
-    !force &&
-    old?.values?.length &&
-    Date.now()-old.time<
-    DAILY_TTL
+    T>=82 &&
+    sellScore>=76 &&
+    BR>=55 &&
+    sellScore>=buyScore+8
   ){
+    action='매도해';
+    key='SELL';
+    icon='🔴';
+    score=Math.round(sellScore);
 
-    return{
-      values:old.values,
-      mode:'CACHED'
-    };
+    reasons.push('일봉 고점 신호와 하락 전환이 동시에 강함');
+    if(BR>=60)reasons.push('하락 모멘텀 전환 확인');
+    if(df.macdCross===-1)reasons.push('MACD 데드크로스 발생');
+    if(TS.score>=65)reasons.push(`과거 일봉 고점과 ${Math.round(TS.score)}% 유사`);
   }
 
+  else if(
+    D.active &&
+    D.score>=65 &&
+    R<45
+  ){
+    action='하락 지속';
+    key='DOWN';
+    icon='🔴';
+    score=Math.round(D.score);
 
-  try{
+    reasons.push('신저가 또는 강한 하락추세가 계속되고 있음');
+    D.reasons.slice(0,3).forEach(x=>reasons.push(x));
+    reasons.push('과매도만으로 바닥으로 판단하지 않음');
+  }
 
-    const url=
-      new URL(MARKET);
+  else if(
+    T>=68 &&
+    sellScore>=64 &&
+    sellScore>=buyScore+7
+  ){
+    action='매수하지 마';
+    key='AVOID';
+    icon='🟠';
+    score=Math.round(sellScore);
 
+    reasons.push('현재 고점 위험이 매수 신호보다 강함');
+    if(T>=70)reasons.push(`일봉 고점 신호 ${Math.round(T)}/100`);
+    if(BR>=50)reasons.push('하락 방향 모멘텀이 나타나는 중');
+  }
 
-    url.searchParams.set(
-      'symbol',
-      symbol
-    );
+  else if(
+    (
+      B>=84 &&
+      R>=55 &&
+      buyScore>=70
+    )
+    ||
+    (
+      B>=78 &&
+      R>=65 &&
+      buyScore>=68 &&
+      WB>=45
+    )
+  ){
+    action='매수해';
+    key='BUY';
+    icon='🟢';
+    score=Math.round(buyScore);
 
+    reasons.push('일봉 바닥 신호와 반전 신호가 강하게 겹침');
+    if(R>=60)reasons.push('일봉 모멘텀이 상승 방향으로 전환');
+    if(bottomRapid)reasons.push(`바닥 점수가 전일 대비 ${Math.round(B-PB)}점 급상승`);
+    if(BS.score>=65)reasons.push(`과거 일봉 바닥과 ${Math.round(BS.score)}% 유사`);
+    if(WB>=60)reasons.push('주봉 큰 흐름도 매수 방향을 지원');
+  }
 
-    url.searchParams.set(
-      'interval',
-      '1day'
-    );
+  else if(
+    (
+      B>=72 &&
+      R>=45 &&
+      buyScore>=62 &&
+      !D.active
+    )
+    ||
+    (
+      B>=68 &&
+      R>=55 &&
+      bottomImproving &&
+      D.score<60
+    )
+  ){
+    action='1차 매수';
+    key='FIRST';
+    icon='🟢';
+    score=Math.round(buyScore);
 
+    reasons.push('일봉 기준 바닥 가능성이 높아지고 있음');
+    if(bottomImproving)reasons.push(`바닥 신호가 전일 대비 ${Math.round(B-PB)}점 강화`);
+    if(R>=50)reasons.push('반전 모멘텀이 나타나기 시작');
+    if(BS.score>=65)reasons.push('과거 실제 바닥 패턴과 유사');
+  }
 
-    const response=
-      await fetch(
-        url,
-        {
-          headers:{
-            apikey:KEY
-          }
-        }
-      );
+  else if(
+    (
+      B>=58 &&
+      (R>=35 || bottomImproving)
+    )
+    ||
+    (
+      B>=52 &&
+      BS.score>=70 &&
+      R>=30
+    )
+  ){
+    if(D.active && D.score>=55 && R<50){
+      action='하락 지속';
+      key='DOWN';
+      icon='🔴';
+      score=Math.round(D.score);
+      reasons.push('바닥 점수는 높지만 아직 신저가 추세가 끝나지 않음');
+      reasons.push('신저가 멈춤 또는 반전 확인이 필요');
+    }else{
+      action='매수 관심';
+      key='WATCH';
+      icon='🟡';
+      score=Math.round(buyScore);
 
+      reasons.push('일봉에서 바닥 후보가 형성되는 중');
+      if(bottomImproving)reasons.push('바닥 신호가 전일보다 강화');
+      if(R>=35)reasons.push('초기 반전 신호가 나타남');
+      if(BS.score>=65)reasons.push(`과거 바닥 패턴과 ${Math.round(BS.score)}% 유사`);
+    }
+  }
 
-    const json=
-      await response.json();
+  else{
+    action='기다려';
+    key='WAIT';
+    icon='⚪';
 
-
-    if(
-      !response.ok ||
-      !Array.isArray(
-        json.values
-      )
-    ){
-
-      throw new Error(
-        json?.message||
-        'FETCH ERROR'
-      );
+    if(B<55 && T<55){
+      reasons.push('현재 바닥·고점 어느 방향도 충분히 강하지 않음');
+    }else{
+      reasons.push('현재 신호만으로 방향을 확정하기 어려움');
     }
 
+    if(Math.abs(buyScore-sellScore)<10){
+      reasons.push('매수·매도 점수 차이가 작음');
+    }
 
-    const values=
-      normalize(
-        json.values
-      );
-
-
-    cache[key]={
-
-      values,
-
-      time:Date.now(),
-
-      sourceTime:
-        json.fetched_at||
-        new Date().toISOString()
-    };
-
-
-    store.set(
-      CACHE_KEY,
-      cache
-    );
-
-
-    return{
-      values,
-      mode:'LIVE'
-    };
-
-
-  }catch(error){
-
-
-    return{
-
-      values:
-        old?.values||[],
-
-      mode:
-        old?.values?.length
-        ?'CACHED'
-        :'ERROR'
-    };
+    if(R<35 && BR<35){
+      reasons.push('뚜렷한 모멘텀 전환이 아직 없음');
+    }
   }
+
+  return {action,key,icon,score,reasons};
 }
 
+async function fetchSymbol(symbol,force=false){
+  const c=cache[symbol];
 
-/* =====================================================
-   UI HELPERS
-===================================================== */
+  if(!force && c && Date.now()-c.time<DAILY_TTL){
+    return c.data;
+  }
 
-function actionIcon(code){
+  const url=
+    `${MARKET}?symbol=${encodeURIComponent(symbol)}&interval=1day`;
 
-  if(code==='BUY')
-    return '🟢';
+  const res=await fetch(url,{
+    headers:{apikey:KEY}
+  });
 
-  if(code==='WATCH')
-    return '🟡';
+  const data=await res.json();
 
-  if(code==='AVOID')
-    return '🟠';
+  if(!res.ok || !data.ok){
+    if(c?.data)return c.data;
+    throw new Error(data?.message||'Market data error');
+  }
 
-  if(code==='SELL')
-    return '🔴';
+  const daily=normalize(data.values);
 
-  return '⚪';
+  cache[symbol]={
+    time:Date.now(),
+    data:daily
+  };
+
+  saveJSON(CACHE_KEY,cache);
+  return daily;
 }
 
+async function refreshAll(force=false){
+  setStatus('데이터 업데이트 중...');
 
-function decisionCard(d){
+  for(let i=0;i<symbols.length;i++){
+    const symbol=symbols[i];
 
-  const x=
-    d.decision;
+    try{
+      const daily=await fetchSymbol(symbol,force);
 
+      if(daily.length<40){
+        throw new Error('데이터 부족');
+      }
 
-  const displayedScore=
-    x.code==='SELL'||
-    x.code==='AVOID'
-    ?x.sellScore
-    :x.buyScore;
+      analyses[symbol]=analyze(symbol,daily);
+      renderAll();
+      setStatus(`CONNECTED · ${symbol}`,'live');
 
+    }catch(e){
+      console.error(symbol,e);
+      setStatus(`${symbol} · ${e.message}`,'error');
+    }
 
-  const sim=
-    x.code==='SELL'||
-    x.code==='AVOID'
-    ?d.topPattern.score
-    :d.bottomPattern.score;
+    if(i<symbols.length-1){
+      await new Promise(r=>setTimeout(r,1100));
+    }
+  }
 
+  setStatus('CONNECTED · DAILY-FIRST','live');
+}
 
-  return`
+function setStatus(text,type=''){
+  const el=document.getElementById('status');
+  el.textContent=text;
+  el.className='status '+type;
+}
 
-    <div class="decision ${x.level}">
+function commandColor(key){
+  if(key==='BUY'||key==='FIRST')return 'var(--green)';
+  if(key==='WATCH')return 'var(--yellow)';
+  if(key==='AVOID')return 'var(--orange)';
+  if(key==='SELL'||key==='DOWN')return 'var(--red)';
+  return '#7b8089';
+}
 
-      <div class="decisionLine">
+function renderBoard(){
+  const counts={
+    BUY:0,
+    FIRST:0,
+    WATCH:0,
+    WAIT:0,
+    DOWN:0,
+    SELL:0,
+    AVOID:0
+  };
 
-        <div class="decisionTitle">
-          ${actionIcon(x.code)}
-          ${x.action}
-        </div>
+  Object.values(analyses).forEach(a=>{
+    counts[a.decision.key]++;
+  });
 
-        <div class="decisionScore">
-          ${displayedScore}
-        </div>
+  document.getElementById('board').innerHTML=`
+    <div class="boardItem">
+      <div class="boardNum">${counts.BUY}</div>
+      <div class="boardLabel">매수</div>
+    </div>
 
-      </div>
+    <div class="boardItem">
+      <div class="boardNum">${counts.FIRST}</div>
+      <div class="boardLabel">1차 매수</div>
+    </div>
 
+    <div class="boardItem">
+      <div class="boardNum">${counts.WATCH}</div>
+      <div class="boardLabel">관심</div>
+    </div>
 
-      <div class="decisionReason">
-        ${x.reasons.slice(0,2).join(' · ')}
-      </div>
+    <div class="boardItem">
+      <div class="boardNum">${counts.WAIT}</div>
+      <div class="boardLabel">대기</div>
+    </div>
 
+    <div class="boardItem">
+      <div class="boardNum">${counts.DOWN}</div>
+      <div class="boardLabel">하락 지속</div>
+    </div>
 
-      <div class="miniScores">
-
-        <div class="mini">
-
-          <small>CURRENT BOTTOM</small>
-
-          <b class="good">
-            ${d.currentBottom}
-          </b>
-
-        </div>
-
-
-        <div class="mini">
-
-          <small>BOTTOM SIM</small>
-
-          <b class="violet">
-            ${d.bottomPattern.score}
-          </b>
-
-        </div>
-
-
-        <div class="mini">
-
-          <small>TOP RISK</small>
-
-          <b class="bad">
-            ${x.sellScore}
-          </b>
-
-        </div>
-
-      </div>
-
+    <div class="boardItem">
+      <div class="boardNum">${counts.SELL+counts.AVOID}</div>
+      <div class="boardLabel">주의/매도</div>
     </div>
   `;
 }
 
+function renderScanner(){
+  const root=document.getElementById('scanner');
 
-function reasonHTML(d){
+  if(!symbols.length){
+    root.innerHTML='<div class="empty">SYMBOLS에서 종목을 추가하세요.</div>';
+    return;
+  }
 
-  const x=
-    d.decision;
+  root.innerHTML=symbols.map(symbol=>{
+    const a=analyses[symbol];
 
-
-  let html='';
-
-
-  x.reasons.forEach(
-    reason=>{
-
-      html+=`
-
-        <div class="signal">
-
-          <span>
-            ${reason}
-          </span>
-
-          <b>✓</b>
-
+    if(!a){
+      return `
+        <div class="card symbolCard">
+          <div class="symbol">${symbol}</div>
+          <div class="price">데이터 로딩 중...</div>
         </div>
       `;
     }
-  );
 
-
-  html+=`
-
-    <div class="signal">
-
-      <span>
-        Current Bottom
-      </span>
-
-      <b class="good">
-        ${d.currentBottom}/100
-      </b>
-
-    </div>
-
-
-    <div class="signal">
-
-      <span>
-        Daily Bottom
-      </span>
-
-      <b class="good">
-        ${d.dailyBottom}/100
-      </b>
-
-    </div>
-
-
-    <div class="signal">
-
-      <span>
-        Bottom Similarity
-      </span>
-
-      <b class="violet">
-        ${d.bottomPattern.score}/100
-      </b>
-
-    </div>
-
-
-    <div class="signal">
-
-      <span>
-        Buy Composite
-      </span>
-
-      <b class="good">
-        ${x.buyScore}/100
-      </b>
-
-    </div>
-
-
-    <div class="signal">
-
-      <span>
-        Sell / Top Risk
-      </span>
-
-      <b class="bad">
-        ${x.sellScore}/100
-      </b>
-
-    </div>
-  `;
-
-
-  return html;
-}
-
-
-/* =====================================================
-   INDICATOR UI
-===================================================== */
-
-function pointHTML(
-  type,
-  score
-){
-
-  return`
-
-    <span class="point ${type} ${score>0?'on':''}">
-
-      ${type==='bottom'?'B':'T'}
-      +${score}
-
-    </span>
-  `;
-}
-
-
-function indicatorRow(
-  name,
-  value,
-  c
-){
-
-  return`
-
-    <div class="indicator">
-
-      <div class="indicatorMain">
-
-        <div class="indicatorName">
-          ${name}
-        </div>
-
-        <div class="indicatorValue">
-          ${value}
-        </div>
-
-      </div>
-
-
-      <div class="points">
-
-        ${pointHTML(
-          'bottom',
-          c.bottom
-        )}
-
-        ${pointHTML(
-          'top',
-          c.top
-        )}
-
-      </div>
-
-    </div>
-  `;
-}
-
-
-function indicatorsHTML(d){
-
-  const f=
-    d.weeklyFeature;
-
-  const c=
-    d.contributions;
-
-
-  if(!f){
-
-    return`
-      <div class="empty">
-        DATA LIMITED
-      </div>
-    `;
-  }
-
-
-  const macdText=
-    f.macdSlope>0
-    ?'UP'
-    :f.macdSlope<0
-    ?'DOWN'
-    :'FLAT';
-
-
-  const crossText=
-    f.macdCross===1
-    ?'BULL CROSS'
-    :f.macdCross===-1
-    ?'BEAR CROSS'
-    :'NO CROSS';
-
-
-  return[
-
-    indicatorRow(
-      'RSI',
-      f.rsi.toFixed(1),
-      c.rsi
-    ),
-
-    indicatorRow(
-      'RSI Slope',
-      (f.rsiSlope>=0?'+':'')+
-      f.rsiSlope.toFixed(1),
-      c.rsiSlope
-    ),
-
-    indicatorRow(
-      'Stochastic',
-      f.stoch.toFixed(1),
-      c.stoch
-    ),
-
-    indicatorRow(
-      'MACD Direction',
-      macdText,
-      c.macdSlope
-    ),
-
-    indicatorRow(
-      'MACD Cross',
-      crossText,
-      c.macdCross
-    ),
-
-    indicatorRow(
-      'Bollinger Position',
-      f.bbPosition.toFixed(2),
-      c.bb
-    ),
-
-    indicatorRow(
-      'Relative Volume',
-      f.relVolume.toFixed(2)+'x',
-      c.volume
-    ),
-
-    indicatorRow(
-      'Candle Close Location',
-      Math.round(
-        f.closeLocation*100
-      )+'%',
-      c.closeLocation
-    ),
-
-    indicatorRow(
-      '8W Price Position',
-      Math.round(
-        f.position8w*100
-      )+'%',
-      c.position8w
-    ),
-
-    indicatorRow(
-      '4W Return',
-      pct(
-        f.return4w
-      ),
-      {
-        bottom:0,
-        top:0
-      }
-    )
-
-  ].join('');
-}
-
-
-/* =====================================================
-   TURN UI
-===================================================== */
-
-function qualityLabel(score){
-
-  if(score>=95)
-    return 'EXCEPTIONAL';
-
-  if(score>=90)
-    return 'VERY STRONG';
-
-  if(score>=80)
-    return 'STRONG';
-
-  if(score>=70)
-    return 'VALID';
-
-  if(score>=60)
-    return 'WEAK';
-
-  return 'CONFIRMED';
-}
-
-
-function turnCard(
-  point,
-  type,
-  currentPrice
-){
-
-  if(!point){
-
-    return`
-      <div class="empty">
-        없음
-      </div>
-    `;
-  }
-
-
-  const distance=
-    (
-      (currentPrice-point.price)/
-      point.price
-    )*100;
-
-
-  return`
-
-    <div class="turncard">
-
-      <div class="turnhead">
-
-        <div>
-
-          <small>
-            ${point.date}
-          </small>
-
-          <b>
-            ${money(point.price)}
-          </b>
-
-        </div>
-
-
-        <div class="turnscore">
-
-          <strong class="${type==='bottom'?'good':'bad'}">
-
-            ${point.quality}/100
-
-          </strong>
-
-          <small>
-
-            ${qualityLabel(
-              point.quality
-            )}
-
-          </small>
-
-        </div>
-
-      </div>
-
-
-      <div class="turnmeta">
-
-        ${type==='bottom'
-          ?'Confirmed rebound'
-          :'Confirmed decline'
-        }
-
-        ·
-
-        ${type==='bottom'?'+':'-'}
-        ${point.move.toFixed(1)}%
-
-        <br>
-
-        현재가 거리 ·
-        ${pct(distance)}
-
-      </div>
-
-    </div>
-  `;
-}
-
-
-function turnsHTML(
-  turns,
-  type,
-  currentPrice
-){
-
-  if(!turns.length){
-
-    return`
-      <div class="empty">
-        확인된 데이터 없음
-      </div>
-    `;
-  }
-
-
-  return[
-    ...turns
-  ]
-  .sort(
-    (a,b)=>
-      b.index-a.index
-  )
-  .slice(0,5)
-  .map(
-    p=>
-      turnCard(
-        p,
-        type,
-        currentPrice
-      )
-  )
-  .join('');
-}
-
-
-/* =====================================================
-   RENDER
-===================================================== */
-
-function render(){
-
-  let home='';
-  let registered='';
-
-  let buy=0;
-  let watch=0;
-  let wait=0;
-  let avoid=0;
-  let sell=0;
-
-
-  for(
-    const symbol
-    of symbols
-  ){
-
-    const d=
-      data[symbol];
-
-
-    if(d){
-
-      if(
-        d.decision.code==='BUY'
-      ){
-        buy++;
-      }
-
-      else if(
-        d.decision.code==='WATCH'
-      ){
-        watch++;
-      }
-
-      else if(
-        d.decision.code==='AVOID'
-      ){
-        avoid++;
-      }
-
-      else if(
-        d.decision.code==='SELL'
-      ){
-        sell++;
-      }
-
-      else{
-        wait++;
-      }
-
-    }else{
-
-      wait++;
-    }
-
-
-    home+=`
-
-      <div class="stock"
-           data-symbol="${symbol}">
-
-        <div class="stockTop">
+    const d=a.decision;
+    const delta=a.dailyBottom-a.previousBottom;
+
+    return `
+      <div class="card symbolCard" onclick="openDetail('${symbol}')">
+        <div class="symbolTop">
+          <div>
+            <div class="symbol">${symbol}</div>
+            <div class="price">$${fmt(a.price)}</div>
+          </div>
 
           <div>
-
-            <div class="stockTicker">
-              ${symbol}
+            <div class="command" style="color:${commandColor(d.key)}">
+              ${d.icon} ${d.action}
             </div>
-
-            <div class="meta">
-
-              ${
-                d
-                ?`CURRENT BOTTOM ${d.currentBottom} · TOP ${d.currentTop}`
-                :'시장 데이터 대기'
-              }
-
+            <div class="commandScore">
+              판단 점수 ${d.score}/100
             </div>
-
           </div>
-
-
-          <div class="stockPrice">
-
-            ${
-              d
-              ?money(d.price)
-              :'WAIT'
-            }
-
-          </div>
-
         </div>
 
-
-        ${
-          d
-          ?decisionCard(d)
-          :''
-        }
-
-      </div>
-    `;
-
-
-    registered+=`
-
-      <div class="registeredRow"
-           data-symbol="${symbol}">
-
-        <div>
-
-          <div class="name">
-            ${symbol}
-          </div>
-
-          <div class="meta">
-
-            ${
-              d
-              ?`${actionIcon(d.decision.code)} ${d.decision.action}`
-              :'시장 데이터 대기'
-            }
-
-          </div>
-
+        <div class="reason">
+          ${d.reasons[0]||''}
         </div>
 
+        <div class="miniGrid">
+          <div class="mini">
+            <div class="miniLabel">DAILY BOTTOM</div>
+            <div class="miniValue">${Math.round(a.dailyBottom)}</div>
+          </div>
 
-        <div class="price">
+          <div class="mini">
+            <div class="miniLabel">REVERSAL</div>
+            <div class="miniValue">${Math.round(a.reversal)}</div>
+          </div>
 
+          <div class="mini">
+            <div class="miniLabel">DOWNTREND</div>
+            <div class="miniValue">${Math.round(a.downtrend.score)}</div>
+          </div>
+        </div>
+
+        <div class="trendLine">
           ${
-            d
-            ?money(d.price)
-            :'WAIT'
+            delta>0
+              ? `▲ 전일 대비 Bottom +${Math.round(delta)}`
+              : delta<0
+              ? `▼ 전일 대비 Bottom ${Math.round(delta)}`
+              : 'Bottom Score 전일과 동일'
           }
-
+          · 주봉 상승 ${Math.round(a.weeklyBull)}
         </div>
-
       </div>
     `;
-  }
-
-
-  $('homeList').innerHTML=
-    home||
-    `
-      <div class="empty">
-        SYMBOLS 탭에서 종목을 등록하세요.
-      </div>
-    `;
-
-
-  $('registeredList').innerHTML=
-    registered||
-    `
-      <div class="empty">
-        등록된 종목이 없습니다.
-      </div>
-    `;
-
-
-  $('symbolCount').textContent=
-    symbols.length;
-
-  $('registeredCount').textContent=
-    symbols.length;
-
-  $('tracked').textContent=
-    symbols.length;
-
-
-  $('buyCount').textContent=
-    buy;
-
-  $('watchCount').textContent=
-    watch;
-
-  $('waitCount').textContent=
-    wait;
-
-  $('avoidCount').textContent=
-    avoid;
-
-  $('sellCount').textContent=
-    sell;
-
-
-  document
-  .querySelectorAll(
-    '[data-symbol]'
-  )
-  .forEach(el=>{
-
-    el.onclick=()=>{
-
-      openDetail(
-        el.dataset.symbol
-      );
-    };
-  });
-
-
-  renderStatus();
+  }).join('');
 }
 
+function renderSymbols(){
+  const root=document.getElementById('symbolList');
 
-/* =====================================================
-   DETAIL
-===================================================== */
+  if(!symbols.length){
+    root.innerHTML='<div class="empty">등록된 종목이 없습니다.</div>';
+    return;
+  }
+
+  root.innerHTML=symbols.map(s=>`
+    <div class="card">
+      <div class="symbolTop">
+        <div>
+          <div class="symbol">${s}</div>
+          <div class="price">
+            ${analyses[s]?'DAILY DATA CONNECTED':'대기 중'}
+          </div>
+        </div>
+        <button class="deleteBtn" onclick="removeSymbol('${s}')">삭제</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderAll(){
+  renderBoard();
+  renderScanner();
+  renderSymbols();
+}
+
+function addSymbol(){
+  const input=document.getElementById('symbolInput');
+  const s=input.value.trim().toUpperCase();
+
+  if(!s)return;
+
+  if(!symbols.includes(s)){
+    symbols.push(s);
+    saveJSON(SYMBOL_KEY,symbols);
+  }
+
+  input.value='';
+  renderAll();
+  refreshAll(false);
+}
+
+function removeSymbol(s){
+  symbols=symbols.filter(x=>x!==s);
+  delete analyses[s];
+  saveJSON(SYMBOL_KEY,symbols);
+  renderAll();
+}
 
 function openDetail(symbol){
+  const a=analyses[symbol];
+  if(!a)return;
 
-  currentSymbol=
-    symbol;
+  const d=a.decision;
+  const delta=a.dailyBottom-a.previousBottom;
 
-
-  const d=
-    data[symbol];
-
-
-  $('detailTicker').textContent=
-    symbol;
-
-
-  if(!d){
-
-    $('detail')
-    .classList
-    .add('open');
-
-    return;
-  }
-
-
-  const x=
-    d.decision;
-
-
-  const isRisk=
-    x.code==='SELL'||
-    x.code==='AVOID';
-
-
-  const displayScore=
-    isRisk
-    ?x.sellScore
-    :x.buyScore;
-
-
-  $('heroDecision').className=
-    'heroDecision '+
-    x.level;
-
-
-  $('heroAction').textContent=
-    `${actionIcon(x.code)} ${x.action}`;
-
-
-  $('decisionScore').textContent=
-    displayScore;
-
-
-  $('decisionScoreLabel').textContent=
-    isRisk
-    ?'SELL / TOP RISK'
-    :'BUY SIGNAL';
-
-
-  $('heroReason').textContent=
-    x.reasons
-    .slice(0,3)
-    .join(' · ');
-
-
-  $('currentPrice').textContent=
-    money(d.price);
-
-
-  /* MAIN */
-
-  $('currentBottomMain').textContent=
-    d.currentBottom+'/100';
-
-  $('bottomSimilarityMain').textContent=
-    d.bottomPattern.score+'/100';
-
-  $('topRiskMain').textContent=
-    x.sellScore+'/100';
-
-
-  $('currentBottomBar').style.width=
-    d.currentBottom+'%';
-
-  $('bottomSimilarityBar').style.width=
-    d.bottomPattern.score+'%';
-
-  $('topRiskBar').style.width=
-    x.sellScore+'%';
-
-
-  /* WEEK CHANGE */
-
-  $('prevBottomScore').textContent=
-    d.previousBottom+'/100';
-
-  $('latestBottomScore').textContent=
-    d.currentBottom+'/100';
-
-
-  const delta=
-    d.currentBottom-
-    d.previousBottom;
-
-
-  $('bottomDelta').textContent=
-
+  const deltaClass=delta>0?'up':delta<0?'down':'flat';
+  const deltaText=
     delta>0
-    ?`▲ 지난주보다 +${delta}점 · 바닥 신호 강화`
-    :delta<0
-    ?`▼ 지난주보다 ${delta}점 · 바닥 신호 약화`
-    :'지난주와 동일';
+      ? `▲ 전일보다 +${Math.round(delta)}점 · 바닥 신호 강화`
+      : delta<0
+      ? `▼ 전일보다 ${Math.round(delta)}점 · 바닥 신호 약화`
+      : '전일과 동일';
 
+  const bottomRef=a.bottomPattern.reference;
+  const topRef=a.topPattern.reference;
 
-  $('bottomDelta').className=
-    'delta '+
-    (
-      delta>0
-      ?'good'
-      :delta<0
-      ?'bad'
-      :''
-    );
+  document.getElementById('detailWrap').innerHTML=`
+    <div class="detailHeader">
+      <button class="backBtn" onclick="closeDetail()">‹</button>
+      <div>
+        <div class="detailSymbol">${symbol}</div>
+        <div class="price">$${fmt(a.price)} · DAILY-FIRST</div>
+      </div>
+    </div>
 
+    <div class="card hero">
+      <div class="heroLabel">지금 판단</div>
+      <div class="heroCommand" style="color:${commandColor(d.key)}">
+        ${d.icon} ${d.action}
+      </div>
+      <div class="heroScore">${d.score}/100</div>
+    </div>
 
-  /* REASON */
+    <div class="sectionTitle">한눈에 보기</div>
+    <div class="card">
+      <div class="metricRow">
+        <div class="metric">
+          <div class="metricName">DAILY BOTTOM</div>
+          <div class="metricValue">${Math.round(a.dailyBottom)}</div>
+        </div>
+        <div class="metric">
+          <div class="metricName">REVERSAL</div>
+          <div class="metricValue">${Math.round(a.reversal)}</div>
+        </div>
+        <div class="metric">
+          <div class="metricName">DOWNTREND</div>
+          <div class="metricValue">${Math.round(a.downtrend.score)}</div>
+        </div>
+      </div>
+    </div>
 
-  $('reasonList').innerHTML=
-    reasonHTML(d);
+    <div class="sectionTitle">BOTTOM SIGNAL 변화</div>
+    <div class="card">
+      <div class="metricRow">
+        <div class="metric">
+          <div class="metricName">PREVIOUS DAY</div>
+          <div class="metricValue">${Math.round(a.previousBottom)}</div>
+        </div>
 
+        <div class="metric">
+          <div class="metricName">LATEST DAY</div>
+          <div class="metricValue">${Math.round(a.dailyBottom)}</div>
+        </div>
 
-  /* ADVANCED */
+        <div class="metric">
+          <div class="metricName">CHANGE</div>
+          <div class="metricValue">
+            ${delta>0?'+':''}${Math.round(delta)}
+          </div>
+        </div>
+      </div>
 
-  $('currentBottom').textContent=
-    d.currentBottom+'/100';
+      <div class="change ${deltaClass}">
+        ${deltaText}
+      </div>
+    </div>
 
-  $('currentTop').textContent=
-    d.currentTop+'/100';
+    <div class="sectionTitle">왜 이렇게 판단했나</div>
+    <div class="card">
+      <ul class="reasonList">
+        ${d.reasons.map(x=>`<li>${x}</li>`).join('')}
+      </ul>
+    </div>
 
+    <div class="sectionTitle">큰 추세</div>
+    <div class="card">
+      <div class="infoLine">
+        <span class="infoLabel">주봉 상승 추세</span>
+        <span class="infoValue">${Math.round(a.weeklyBull)}/100</span>
+      </div>
+      <div class="infoLine">
+        <span class="infoLabel">주봉 하락 추세</span>
+        <span class="infoValue">${Math.round(a.weeklyBear)}/100</span>
+      </div>
+      <div class="infoLine">
+        <span class="infoLabel">일봉 하락 지속</span>
+        <span class="infoValue">${Math.round(a.downtrend.score)}/100</span>
+      </div>
+    </div>
 
-  const net=
-    d.currentBottom-
-    d.currentTop;
+    <div class="card">
+      <button class="advancedBtn" onclick="toggleAdvanced()">
+        상세 분석 보기 ↓
+      </button>
 
+      <div class="advanced" id="advanced">
+        <div class="sectionTitle">CURRENT DAILY SIGNAL</div>
 
-  $('netDirection').textContent=
-    (net>=0?'+':'')+net;
+        <div class="infoLine">
+          <span class="infoLabel">Buy Composite</span>
+          <span class="infoValue">${Math.round(a.buyScore)}/100</span>
+        </div>
 
+        <div class="infoLine">
+          <span class="infoLabel">Sell Composite</span>
+          <span class="infoValue">${Math.round(a.sellScore)}/100</span>
+        </div>
 
-  $('netDirection').className=
-    net>10
-    ?'good'
-    :net<-10
-    ?'bad'
-    :'';
+        <div class="infoLine">
+          <span class="infoLabel">Daily Bottom</span>
+          <span class="infoValue">${Math.round(a.dailyBottom)}/100</span>
+        </div>
 
+        <div class="infoLine">
+          <span class="infoLabel">Daily Top</span>
+          <span class="infoValue">${Math.round(a.dailyTop)}/100</span>
+        </div>
 
-  $('bottomSimilarity').textContent=
-    d.bottomPattern.score+'/100';
+        <div class="infoLine">
+          <span class="infoLabel">Reversal</span>
+          <span class="infoValue">${Math.round(a.reversal)}/100</span>
+        </div>
 
-  $('topSimilarity').textContent=
-    d.topPattern.score+'/100';
+        <div class="infoLine">
+          <span class="infoLabel">Bearish Reversal</span>
+          <span class="infoValue">${Math.round(a.bearishReversal)}/100</span>
+        </div>
 
+        <div class="sectionTitle">CURRENT INDICATORS</div>
 
-  $('bottomQuality').textContent=
-    d.majorBottom
-    ?d.majorBottom.quality+'/100'
-    :'—';
+        <div class="infoLine">
+          <span class="infoLabel">RSI 14</span>
+          <span class="infoValue">${fmt(a.feature.rsi,1)}</span>
+        </div>
 
+        <div class="infoLine">
+          <span class="infoLabel">RSI Slope</span>
+          <span class="infoValue">${fmt(a.feature.rsiSlope,2)}</span>
+        </div>
 
-  $('dailyBottom').textContent=
-    d.dailyBottom+'/100';
+        <div class="infoLine">
+          <span class="infoLabel">Stochastic</span>
+          <span class="infoValue">${fmt(a.feature.stochastic,1)}</span>
+        </div>
 
-  $('dailyTop').textContent=
-    d.dailyTop+'/100';
+        <div class="infoLine">
+          <span class="infoLabel">MACD Histogram</span>
+          <span class="infoValue">${fmt(a.feature.macdHist,3)}</span>
+        </div>
 
+        <div class="infoLine">
+          <span class="infoLabel">MACD Slope</span>
+          <span class="infoValue">${fmt(a.feature.macdSlope,3)}</span>
+        </div>
 
-  $('indicatorList').innerHTML=
-    indicatorsHTML(d);
+        <div class="infoLine">
+          <span class="infoLabel">Bollinger Position</span>
+          <span class="infoValue">${fmt(a.feature.bbPos,2)}</span>
+        </div>
 
+        <div class="infoLine">
+          <span class="infoLabel">Relative Volume</span>
+          <span class="infoValue">${fmt(a.feature.relVol,2)}x</span>
+        </div>
 
-  $('indicatorBottomTotal').textContent=
-    d.currentBottom+'/100';
+        <div class="infoLine">
+          <span class="infoLabel">5D Return</span>
+          <span class="infoValue">${fmt(a.feature.ret5,1)}%</span>
+        </div>
 
-  $('indicatorTopTotal').textContent=
-    d.currentTop+'/100';
+        <div class="infoLine">
+          <span class="infoLabel">20D Return</span>
+          <span class="infoValue">${fmt(a.feature.ret20,1)}%</span>
+        </div>
 
+        <div class="sectionTitle">HISTORICAL DAILY PATTERN</div>
 
-  $('activeBottom').innerHTML=
-    turnCard(
-      d.majorBottom,
-      'bottom',
-      d.price
-    );
+        <div class="infoLine">
+          <span class="infoLabel">Bottom Similarity</span>
+          <span class="infoValue">${Math.round(a.bottomPattern.score)}/100</span>
+        </div>
 
+        <div class="infoLine">
+          <span class="infoLabel">Top Similarity</span>
+          <span class="infoValue">${Math.round(a.topPattern.score)}/100</span>
+        </div>
 
-  $('activeTop').innerHTML=
-    turnCard(
-      d.majorTop,
-      'top',
-      d.price
-    );
+        ${
+          bottomRef
+          ? `
+            <div class="turn">
+              <div class="turnTitle">
+                최근 유사 바닥 · ${bottomRef.date}
+              </div>
+              <div class="turnSub">
+                $${fmt(bottomRef.price)} · 이후 +${fmt(bottomRef.move,1)}%
+                · Quality ${Math.round(bottomRef.quality)}
+              </div>
+            </div>
+          `
+          : ''
+        }
 
+        ${
+          topRef
+          ? `
+            <div class="turn">
+              <div class="turnTitle">
+                최근 유사 고점 · ${topRef.date}
+              </div>
+              <div class="turnSub">
+                $${fmt(topRef.price)} · 이후 -${fmt(topRef.move,1)}%
+                · Quality ${Math.round(topRef.quality)}
+              </div>
+            </div>
+          `
+          : ''
+        }
 
-  $('majorBottoms').innerHTML=
-    turnsHTML(
-      d.turns.bottoms,
-      'bottom',
-      d.price
-    );
+        <div class="sectionTitle">DETECTED TURNS</div>
 
+        <div class="infoLine">
+          <span class="infoLabel">Confirmed Daily Bottoms</span>
+          <span class="infoValue">${a.turns.bottoms.length}</span>
+        </div>
 
-  $('majorTops').innerHTML=
-    turnsHTML(
-      d.turns.tops,
-      'top',
-      d.price
-    );
+        <div class="infoLine">
+          <span class="infoLabel">Confirmed Daily Tops</span>
+          <span class="infoValue">${a.turns.tops.length}</span>
+        </div>
+      </div>
+    </div>
+  `;
 
-
-  $('advanced')
-  .classList
-  .remove('open');
-
-
-  $('analysisToggle').textContent=
-    '상세 분석 보기 ↓';
-
-
-  $('detail')
-  .classList
-  .add('open');
+  document.getElementById('detailOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
 }
 
-
-/* =====================================================
-   ADVANCED
-===================================================== */
-
-$('analysisToggle').onclick=()=>{
-
-  const open=
-    $('advanced')
-    .classList
-    .toggle('open');
-
-
-  $('analysisToggle').textContent=
-
-    open
-    ?'상세 분석 닫기 ↑'
-    :'상세 분석 보기 ↓';
-};
-
-
-/* =====================================================
-   STATUS
-===================================================== */
-
-function lastCacheTime(){
-
-  let t=0;
-
-
-  symbols.forEach(s=>{
-
-    const x=
-      cache[
-        s+'__1day'
-      ]?.time||0;
-
-
-    if(x>t)
-      t=x;
-  });
-
-
-  return t;
+function closeDetail(){
+  document.getElementById('detailOverlay').classList.remove('open');
+  document.body.style.overflow='';
 }
 
-
-function ageText(ms){
-
-  const m=
-    Math.floor(
-      ms/60000
-    );
-
-
-  if(m<1)
-    return '방금 전';
-
-
-  if(m<60)
-    return m+'분 전';
-
-
-  const h=
-    Math.floor(
-      m/60
-    );
-
-
-  if(h<24)
-    return h+'시간 전';
-
-
-  return(
-    Math.floor(
-      h/24
-    )+'일 전'
-  );
+function toggleAdvanced(){
+  document.getElementById('advanced')?.classList.toggle('open');
 }
 
+document.getElementById('addBtn').addEventListener('click',addSymbol);
 
-function renderStatus(){
-
-  const t=
-    lastCacheTime();
-
-
-  if(!symbols.length){
-
-    $('sync').textContent=
-      'NO SYMBOL';
-
-    $('dataStatus').textContent=
-      'NO SYMBOL';
-
-    $('dataMode').textContent=
-      '—';
-
-    $('lastUpdate').textContent=
-      '—';
-
-    return;
-  }
-
-
-  if(t){
-
-    $('lastUpdate').textContent=
-
-      new Date(t)
-      .toLocaleString()
-
-      +' · '+
-
-      ageText(
-        Date.now()-t
-      );
-  }
-
-
-  $('dataMode').textContent=
-    lastMode;
-
-
-  if(lastMode==='LIVE'){
-
-    $('sync').textContent=
-      'LIVE';
-
-    $('dataStatus').textContent=
-      'CONNECTED';
-
-  }
-
-  else if(t){
-
-    $('sync').textContent=
-      'CACHED';
-
-    $('dataStatus').textContent=
-      'CONNECTED';
-
-  }
-
-  else{
-
-    $('sync').textContent=
-      'DATA WAIT';
-
-    $('dataStatus').textContent=
-      'WAIT';
-  }
-}
-
-
-/* =====================================================
-   UPDATE DATA
-===================================================== */
-
-async function updateData(
-  force=false
-){
-
-  if(!symbols.length){
-
-    render();
-
-    return;
-  }
-
-
-  $('sync').textContent=
-    'SYNCING';
-
-
-  $('dataStatus').textContent=
-    'SYNCING';
-
-
-  let live=false;
-
-  let any=false;
-
-
-  for(
-    const symbol
-    of symbols
-  ){
-
-    const result=
-      await fetchDaily(
-        symbol,
-        force
-      );
-
-
-    if(
-      result.mode==='LIVE'
-    ){
-      live=true;
-    }
-
-
-    if(
-      result.values.length
-    ){
-
-      data[symbol]=
-        analyse(
-          symbol,
-          result.values
-        );
-
-
-      any=true;
-
-      render();
-    }
-
-
-    await new Promise(
-      resolve=>
-        setTimeout(
-          resolve,
-          1100
-        )
-    );
-  }
-
-
-  lastMode=
-    live
-    ?'LIVE'
-    :any
-    ?'CACHED'
-    :'ERROR';
-
-
-  render();
-
-
-  if(
-    currentSymbol &&
-    data[currentSymbol]
-  ){
-
-    openDetail(
-      currentSymbol
-    );
-  }
-}
-
-
-/* =====================================================
-   SYMBOLS
-===================================================== */
-
-$('addSymbol').onclick=()=>{
-
-  const symbol=
-    $('ticker')
-    .value
-    .trim()
-    .toUpperCase();
-
-
-  if(!symbol)
-    return;
-
-
-  if(
-    !symbols.includes(symbol)
-  ){
-
-    symbols.push(symbol);
-
-
-    store.set(
-      SYMBOL_KEY,
-      symbols
-    );
-  }
-
-
-  $('ticker').value='';
-
-
-  render();
-
-  updateData(false);
-};
-
-
-$('ticker')
-.addEventListener(
-  'keydown',
-  e=>{
-
-    if(e.key==='Enter'){
-
-      $('addSymbol')
-      .click();
-    }
-  }
-);
-
-
-$('deleteSymbol').onclick=()=>{
-
-  if(!currentSymbol)
-    return;
-
-
-  if(
-    confirm(
-      currentSymbol+
-      ' 종목을 삭제할까요?'
-    )
-  ){
-
-    symbols=
-      symbols.filter(
-        x=>x!==currentSymbol
-      );
-
-
-    store.set(
-      SYMBOL_KEY,
-      symbols
-    );
-
-
-    delete data[
-      currentSymbol
-    ];
-
-
-    currentSymbol=null;
-
-
-    $('detail')
-    .classList
-    .remove('open');
-
-
-    render();
-  }
-};
-
-
-$('refresh').onclick=
-  ()=>updateData(true);
-
-
-$('back').onclick=
-  ()=>
-    $('detail')
-    .classList
-    .remove('open');
-
-
-/* =====================================================
-   SMOOTH BOOK SWIPE
-===================================================== */
-
-const track=
-  $('track');
-
-const viewport=
-  $('viewport');
-
-
-function viewportWidth(){
-
-  return viewport.clientWidth;
-}
-
-
-function setTrackPosition(
-  px,
-  animate=false
-){
-
-  if(animate){
-
-    track.classList.add(
-      'snap'
-    );
-
-  }else{
-
-    track.classList.remove(
-      'snap'
-    );
-  }
-
-
-  track.style.transform=
-    `translate3d(${px}px,0,0)`;
-}
-
-
-function updateTabs(){
-
-  document
-  .querySelectorAll('.tab')
-  .forEach((b,n)=>{
-
-    b.classList.toggle(
-      'active',
-      n===page
-    );
-  });
-}
-
-
-function go(
-  i,
-  animate=true
-){
-
-  page=
-    Math.max(
-      0,
-      Math.min(
-        2,
-        i
-      )
-    );
-
-
-  setTrackPosition(
-    -page*
-    viewportWidth(),
-    animate
-  );
-
-
-  updateTabs();
-}
-
-
-document
-.querySelectorAll('.tab')
-.forEach(b=>{
-
-  b.onclick=
-    ()=>go(
-      +b.dataset.page,
-      true
-    );
+document.getElementById('symbolInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter')addSymbol();
 });
 
+document.getElementById('refreshBtn').addEventListener('click',()=>{
+  refreshAll(true);
+});
 
-let gesture={
+let page=0;
+const track=document.getElementById('track');
+const viewport=document.getElementById('viewport');
+const navBtns=[...document.querySelectorAll('.navBtn')];
 
-  active:false,
+function setPage(p,animate=true){
+  page=clamp(p,0,2);
 
-  locked:false,
+  if(animate)track.classList.add('snap');
+  else track.classList.remove('snap');
 
-  horizontal:false,
+  track.style.transform=
+    `translate3d(${-page*viewport.clientWidth}px,0,0)`;
 
-  startX:0,
-
-  startY:0,
-
-  lastX:0,
-
-  lastTime:0,
-
-  velocity:0,
-
-  baseX:0
-};
-
-
-function rubberBand(distance){
-
-  const sign=
-    distance<0
-    ?-1
-    :1;
-
-
-  const abs=
-    Math.abs(
-      distance
-    );
-
-
-  return(
-    sign*
-    (
-      1-
-      1/
-      (
-        abs*.003+
-        1
-      )
-    )*
-    115
-  );
+  navBtns.forEach((b,i)=>{
+    b.classList.toggle('active',i===page);
+  });
 }
 
-
-viewport.addEventListener(
-  'touchstart',
-  e=>{
-
-    if(
-      $('detail')
-      .classList
-      .contains('open')
-    ){
-      return;
-    }
-
-
-    if(
-      e.touches.length!==1
-    ){
-      return;
-    }
-
-
-    const t=
-      e.touches[0];
-
-
-    gesture.active=true;
-
-    gesture.locked=false;
-
-    gesture.horizontal=false;
-
-    gesture.startX=
-      t.clientX;
-
-    gesture.startY=
-      t.clientY;
-
-    gesture.lastX=
-      t.clientX;
-
-    gesture.lastTime=
-      performance.now();
-
-    gesture.velocity=0;
-
-    gesture.baseX=
-      -page*
-      viewportWidth();
-
-
-    track.classList.remove(
-      'snap'
-    );
-
-  },
-  {
-    passive:true
-  }
-);
-
-
-viewport.addEventListener(
-  'touchmove',
-  e=>{
-
-    if(
-      !gesture.active ||
-      e.touches.length!==1
-    ){
-      return;
-    }
-
-
-    if(
-      $('detail')
-      .classList
-      .contains('open')
-    ){
-      return;
-    }
-
-
-    const t=
-      e.touches[0];
-
-
-    const dx=
-      t.clientX-
-      gesture.startX;
-
-
-    const dy=
-      t.clientY-
-      gesture.startY;
-
-
-    if(
-      !gesture.locked
-    ){
-
-      if(
-        Math.abs(dx)<7 &&
-        Math.abs(dy)<7
-      ){
-        return;
-      }
-
-
-      gesture.locked=true;
-
-
-      gesture.horizontal=
-        Math.abs(dx)>
-        Math.abs(dy)*1.15;
-
-
-      if(
-        !gesture.horizontal
-      ){
-
-        gesture.active=false;
-
-        return;
-      }
-    }
-
-
-    if(
-      !gesture.horizontal
-    ){
-      return;
-    }
-
-
-    e.preventDefault();
-
-
-    const now=
-      performance.now();
-
-
-    const dt=
-      Math.max(
-        1,
-        now-
-        gesture.lastTime
-      );
-
-
-    const instantVelocity=
-      (
-        t.clientX-
-        gesture.lastX
-      )/dt;
-
-
-    gesture.velocity=
-      gesture.velocity*.72+
-      instantVelocity*.28;
-
-
-    gesture.lastX=
-      t.clientX;
-
-
-    gesture.lastTime=
-      now;
-
-
-    let dragX=
-      dx;
-
-
-    if(
-      page===0 &&
-      dx>0
-    ){
-
-      dragX=
-        rubberBand(dx);
-    }
-
-
-    if(
-      page===2 &&
-      dx<0
-    ){
-
-      dragX=
-        rubberBand(dx);
-    }
-
-
-    setTrackPosition(
-      gesture.baseX+
-      dragX,
-      false
-    );
-
-  },
-  {
-    passive:false
-  }
-);
-
-
-function finishSwipe(
-  clientX
-){
-
-  if(
-    !gesture.active ||
-    !gesture.horizontal
-  ){
-
-    gesture.active=false;
-
-    return;
+navBtns.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    setPage(+btn.dataset.page,true);
+  });
+});
+
+let sx=0;
+let sy=0;
+let dx=0;
+let startTime=0;
+let horizontal=null;
+
+viewport.addEventListener('touchstart',e=>{
+  if(document.getElementById('detailOverlay').classList.contains('open'))return;
+
+  const t=e.touches[0];
+  sx=t.clientX;
+  sy=t.clientY;
+  dx=0;
+  horizontal=null;
+  startTime=performance.now();
+
+  track.classList.remove('snap');
+},{passive:true});
+
+viewport.addEventListener('touchmove',e=>{
+  if(document.getElementById('detailOverlay').classList.contains('open'))return;
+
+  const t=e.touches[0];
+  dx=t.clientX-sx;
+  const dy=t.clientY-sy;
+
+  if(horizontal===null && (Math.abs(dx)>7 || Math.abs(dy)>7)){
+    horizontal=Math.abs(dx)>Math.abs(dy)*1.15;
   }
 
+  if(!horizontal)return;
 
-  const dx=
-    clientX-
-    gesture.startX;
+  e.preventDefault();
 
+  let move=dx;
 
-  const width=
-    viewportWidth();
-
-
-  const distanceTrigger=
-    width*.18;
-
-
-  const fastFlick=
-    Math.abs(
-      gesture.velocity
-    )>.34;
-
-
-  let target=
-    page;
-
-
-  if(
-    dx<
-    -distanceTrigger
-
-    ||
-
-    (
-      fastFlick &&
-      gesture.velocity<0
-    )
-  ){
-
-    target=
-      Math.min(
-        2,
-        page+1
-      );
+  if((page===0 && dx>0)||(page===2 && dx<0)){
+    move=dx*.28;
   }
 
+  track.style.transform=
+    `translate3d(${(-page*viewport.clientWidth)+move}px,0,0)`;
 
-  else if(
-    dx>
-    distanceTrigger
+},{passive:false});
 
-    ||
+viewport.addEventListener('touchend',()=>{
+  if(horizontal){
+    const elapsed=Math.max(performance.now()-startTime,1);
+    const velocity=Math.abs(dx)/elapsed;
+    const threshold=viewport.clientWidth*.18;
 
-    (
-      fastFlick &&
-      gesture.velocity>0
-    )
-  ){
-
-    target=
-      Math.max(
-        0,
-        page-1
-      );
-  }
-
-
-  gesture.active=false;
-
-
-  go(
-    target,
-    true
-  );
-}
-
-
-viewport.addEventListener(
-  'touchend',
-  e=>{
-
-    if(
-      !gesture.active
-    ){
-      return;
+    if((Math.abs(dx)>threshold || velocity>.34)){
+      if(dx<0 && page<2)page++;
+      if(dx>0 && page>0)page--;
     }
-
-
-    finishSwipe(
-      e.changedTouches[0]
-      .clientX
-    );
-
-  },
-  {
-    passive:true
   }
-);
 
+  setPage(page,true);
+});
 
-viewport.addEventListener(
-  'touchcancel',
-  ()=>{
+window.addEventListener('resize',()=>{
+  setPage(page,false);
+});
 
-    if(
-      !gesture.active
-    ){
-      return;
-    }
-
-
-    gesture.active=false;
-
-
-    go(
-      page,
-      true
-    );
-  },
-  {
-    passive:true
-  }
-);
-
-
-window.addEventListener(
-  'resize',
-  ()=>go(
-    page,
-    false
-  )
-);
-
-
-/* =====================================================
-   START
-===================================================== */
-
-function hydrate(){
-
-  symbols.forEach(
-    symbol=>{
-
-      const values=
-        cache[
-          symbol+
-          '__1day'
-        ]?.values||[];
-
-
-      if(
-        values.length
-      ){
-
-        data[symbol]=
-          analyse(
-            symbol,
-            values
-          );
-      }
-    }
-  );
-}
-
-
-hydrate();
-
-render();
-
-go(
-  0,
-  false
-);
-
-setInterval(
-  renderStatus,
-  60000
-);
-
-updateData(false);
-
+renderAll();
+setPage(0,false);
+refreshAll(false);
 </script>
 </body>
 </html>
