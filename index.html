@@ -6,7 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#090b0e">
-<title>STOCKPM v0.5.2</title>
+
+<title>STOCKPM v0.5.3</title>
 
 <style>
 :root{
@@ -14,14 +15,17 @@
   --surface:#0f1318;
   --card:#12161b;
   --card2:#181d24;
+  --card3:#202630;
   --text:#f6f8fb;
   --sub:#8d97a6;
   --line:#252c35;
+
   --green:#31d07c;
   --yellow:#f5b942;
   --orange:#ff914d;
   --red:#ff6678;
   --blue:#75aaff;
+  --purple:#ac8cff;
 }
 
 *{
@@ -29,12 +33,19 @@
   -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
+html,
+body{
   margin:0;
   min-height:100%;
   background:var(--bg);
   color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Pretendard",Arial,sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "Pretendard",
+    Arial,
+    sans-serif;
 }
 
 body{
@@ -42,7 +53,8 @@ body{
   overscroll-behavior-y:none;
 }
 
-button,input{
+button,
+input{
   font:inherit;
 }
 
@@ -59,7 +71,10 @@ button{
 }
 
 .header{
-  padding:calc(env(safe-area-inset-top) + 18px) 20px 14px;
+  padding:
+    calc(env(safe-area-inset-top) + 18px)
+    20px
+    14px;
   background:var(--bg);
 }
 
@@ -71,9 +86,9 @@ button{
 
 .version{
   margin-top:4px;
+  color:var(--sub);
   font-size:11px;
   font-weight:850;
-  color:var(--sub);
   letter-spacing:.8px;
 }
 
@@ -91,69 +106,131 @@ button{
 }
 
 .track.snap{
-  transition:transform .48s cubic-bezier(.22,.8,.22,1);
+  transition:
+    transform
+    .48s
+    cubic-bezier(.22,.8,.22,1);
 }
 
 .page{
   width:33.333333%;
   flex:0 0 33.333333%;
-  padding:0 16px 110px;
-  min-height:calc(100vh - 145px);
+  min-height:
+    calc(100vh - 145px);
+  padding:
+    0
+    16px
+    110px;
   background:var(--bg);
 }
 
 .sectionTitle{
-  margin:19px 4px 9px;
+  margin:
+    19px
+    4px
+    9px;
+  color:var(--sub);
   font-size:11px;
   font-weight:950;
-  color:var(--sub);
   letter-spacing:.75px;
 }
 
 .card{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:22px;
-  padding:17px;
   margin-bottom:12px;
-  box-shadow:0 8px 28px rgba(0,0,0,.24);
+  padding:17px;
+  background:var(--card);
+  border:
+    1px
+    solid
+    var(--line);
+  border-radius:22px;
+  box-shadow:
+    0
+    8px
+    28px
+    rgba(0,0,0,.24);
 }
 
 .status{
-  margin:0 4px 11px;
+  margin:
+    0
+    4px
+    11px;
   color:var(--sub);
   font-size:11px;
   font-weight:850;
 }
 
-.status.live{color:var(--green)}
-.status.error{color:var(--red)}
+.status.live{
+  color:var(--green);
+}
+
+.status.error{
+  color:var(--red);
+}
 
 .board{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:
+    repeat(3,1fr);
   gap:8px;
 }
 
 .boardItem{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:12px 6px;
+  padding:
+    12px
+    6px;
   text-align:center;
+  background:var(--card);
+  border:
+    1px
+    solid
+    var(--line);
+  border-radius:16px;
 }
 
 .boardNum{
   font-size:22px;
-  line-height:1;
   font-weight:950;
+  line-height:1;
 }
 
 .boardLabel{
   margin-top:5px;
+  color:var(--sub);
   font-size:9px;
   font-weight:900;
+}
+
+.filterRow{
+  display:flex;
+  gap:7px;
+  margin:
+    10px
+    0
+    15px;
+}
+
+.filterBtn{
+  flex:1;
+  padding:
+    10px
+    5px;
   color:var(--sub);
+  background:var(--card);
+  border:
+    1px
+    solid
+    var(--line);
+  border-radius:13px;
+  font-size:10px;
+  font-weight:950;
+}
+
+.filterBtn.active{
+  color:#09100c;
+  background:var(--green);
+  border-color:var(--green);
 }
 
 .symbolCard{
@@ -188,8 +265,8 @@ button{
 
 .commandScore{
   margin-top:4px;
-  text-align:right;
   color:var(--sub);
+  text-align:right;
   font-size:10px;
   font-weight:850;
 }
@@ -198,21 +275,25 @@ button{
   margin-top:13px;
   color:#c1c7d0;
   font-size:13px;
-  line-height:1.45;
+  line-height:1.5;
 }
 
 .miniGrid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:
+    repeat(3,1fr);
   gap:7px;
   margin-top:13px;
 }
 
 .mini{
   padding:9px;
-  border-radius:13px;
   background:var(--card2);
-  border:1px solid rgba(255,255,255,.025);
+  border:
+    1px
+    solid
+    rgba(255,255,255,.025);
+  border-radius:13px;
 }
 
 .miniLabel{
@@ -227,14 +308,78 @@ button{
   font-weight:950;
 }
 
-.trendLine{
-  margin-top:10px;
-  padding:9px 11px;
-  border-radius:12px;
+.engineGrid{
+  display:grid;
+  grid-template-columns:
+    repeat(2,1fr);
+  gap:7px;
+  margin-top:7px;
+}
+
+.engineBox{
+  padding:
+    10px
+    11px;
   background:var(--card2);
+  border-radius:13px;
+}
+
+.engineLabel{
+  color:var(--sub);
+  font-size:8px;
+  font-weight:950;
+}
+
+.engineValue{
+  margin-top:4px;
+  font-size:13px;
+  font-weight:950;
+}
+
+.trendLine{
+  margin-top:8px;
+  padding:
+    9px
+    11px;
   color:#aeb6c2;
+  background:var(--card2);
+  border-radius:12px;
   font-size:10px;
   font-weight:850;
+}
+
+.signalTag{
+  display:inline-flex;
+  align-items:center;
+  margin:
+    9px
+    5px
+    0
+    0;
+  padding:
+    6px
+    8px;
+  color:#d6dce5;
+  background:var(--card3);
+  border-radius:9px;
+  font-size:9px;
+  font-weight:900;
+}
+
+.signalTag.green{
+  color:var(--green);
+}
+
+.signalTag.yellow{
+  color:var(--yellow);
+}
+
+.signalTag.red{
+  color:var(--red);
+}
+
+.signalTag.purple{
+  color:var(--purple);
 }
 
 .addRow{
@@ -245,11 +390,14 @@ button{
 .symbolInput{
   flex:1;
   min-width:0;
-  border:1px solid var(--line);
-  background:var(--surface);
-  color:var(--text);
-  border-radius:15px;
   padding:14px;
+  color:var(--text);
+  background:var(--surface);
+  border:
+    1px
+    solid
+    var(--line);
+  border-radius:15px;
   outline:none;
   text-transform:uppercase;
   font-weight:900;
@@ -260,31 +408,41 @@ button{
 }
 
 .primaryBtn{
+  padding:
+    0
+    18px;
+  color:#090b0e;
+  background:#f5f7fa;
   border:0;
   border-radius:15px;
-  padding:0 18px;
-  background:#f5f7fa;
-  color:#090b0e;
   font-weight:950;
 }
 
 .refreshBtn{
   width:100%;
   margin-top:9px;
-  border:1px solid var(--line);
-  border-radius:15px;
   padding:13px;
-  background:var(--card2);
   color:var(--text);
+  background:var(--card2);
+  border:
+    1px
+    solid
+    var(--line);
+  border-radius:15px;
   font-weight:900;
 }
 
 .deleteBtn{
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:6px 9px;
-  background:var(--card2);
+  padding:
+    6px
+    9px;
   color:#9aa3af;
+  background:var(--card2);
+  border:
+    1px
+    solid
+    var(--line);
+  border-radius:10px;
   font-size:11px;
 }
 
@@ -296,19 +454,28 @@ button{
   transform:translateX(-50%);
   width:min(520px,100%);
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  padding:8px 14px calc(env(safe-area-inset-bottom) + 8px);
-  border-top:1px solid rgba(255,255,255,.08);
+  grid-template-columns:
+    repeat(3,1fr);
+  padding:
+    8px
+    14px
+    calc(env(safe-area-inset-bottom) + 8px);
   background:rgba(18,22,27,.94);
+  border-top:
+    1px
+    solid
+    rgba(255,255,255,.08);
   backdrop-filter:blur(22px);
   -webkit-backdrop-filter:blur(22px);
 }
 
 .navBtn{
-  border:0;
-  background:transparent;
+  padding:
+    8px
+    3px;
   color:#69727f;
-  padding:8px 3px;
+  background:transparent;
+  border:0;
   font-size:10px;
   font-weight:900;
 }
@@ -324,9 +491,11 @@ button{
 }
 
 .empty{
-  padding:35px 10px;
-  text-align:center;
+  padding:
+    35px
+    10px;
   color:var(--sub);
+  text-align:center;
   font-size:13px;
   line-height:1.6;
 }
@@ -334,7 +503,7 @@ button{
 .help{
   color:#c1c7d0;
   font-size:13px;
-  line-height:1.65;
+  line-height:1.7;
 }
 
 .help b{
@@ -358,7 +527,10 @@ button{
   max-width:520px;
   min-height:100vh;
   margin:auto;
-  padding:calc(env(safe-area-inset-top) + 10px) 16px 60px;
+  padding:
+    calc(env(safe-area-inset-top) + 10px)
+    16px
+    60px;
   background:var(--bg);
 }
 
@@ -371,10 +543,13 @@ button{
 .backBtn{
   width:40px;
   height:40px;
-  border:1px solid var(--line);
-  border-radius:13px;
-  background:var(--card);
   color:var(--text);
+  background:var(--card);
+  border:
+    1px
+    solid
+    var(--line);
+  border-radius:13px;
   font-size:20px;
 }
 
@@ -385,7 +560,9 @@ button{
 
 .hero{
   margin-top:15px;
-  padding:24px 15px;
+  padding:
+    24px
+    15px;
   text-align:center;
 }
 
@@ -411,15 +588,18 @@ button{
 
 .metricRow{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:
+    repeat(3,1fr);
   gap:8px;
 }
 
 .metric{
-  padding:12px 6px;
+  padding:
+    12px
+    6px;
   text-align:center;
-  border-radius:14px;
   background:var(--card2);
+  border-radius:14px;
 }
 
 .metricName{
@@ -441,12 +621,23 @@ button{
   font-weight:950;
 }
 
-.up{color:var(--green)}
-.down{color:var(--red)}
-.flat{color:var(--sub)}
+.up{
+  color:var(--green);
+}
+
+.down{
+  color:var(--red);
+}
+
+.flat{
+  color:var(--sub);
+}
 
 .reasonList{
-  margin:5px 0 0;
+  margin:
+    5px
+    0
+    0;
   padding-left:20px;
   color:#c1c7d0;
   font-size:13px;
@@ -457,8 +648,13 @@ button{
   display:flex;
   justify-content:space-between;
   gap:12px;
-  padding:9px 0;
-  border-bottom:1px solid var(--line);
+  padding:
+    9px
+    0;
+  border-bottom:
+    1px
+    solid
+    var(--line);
   font-size:12px;
 }
 
@@ -478,11 +674,14 @@ button{
 
 .advancedBtn{
   width:100%;
-  border:1px solid var(--line);
-  border-radius:13px;
   padding:12px;
-  background:var(--card2);
   color:var(--text);
+  background:var(--card2);
+  border:
+    1px
+    solid
+    var(--line);
+  border-radius:13px;
   font-weight:950;
 }
 
@@ -496,8 +695,13 @@ button{
 }
 
 .turn{
-  padding:10px 0;
-  border-bottom:1px solid var(--line);
+  padding:
+    10px
+    0;
+  border-bottom:
+    1px
+    solid
+    var(--line);
 }
 
 .turn:last-child{
@@ -523,7 +727,9 @@ button{
 
 <header class="header">
   <div class="brand">STOCKPM</div>
-  <div class="version">DAILY-FIRST SIGNAL ENGINE · v0.5.2</div>
+  <div class="version">
+    DAILY + TRENDLINE + FIB · v0.5.3
+  </div>
 </header>
 
 <div class="viewport" id="viewport">
@@ -531,37 +737,87 @@ button{
 
 <main class="page">
 
-  <div class="status" id="status">READY</div>
+  <div
+    class="status"
+    id="status"
+  >
+    READY
+  </div>
 
-  <div class="sectionTitle">DECISION BOARD</div>
-  <div class="board" id="board"></div>
+  <div class="sectionTitle">
+    DECISION BOARD
+  </div>
 
-  <div class="sectionTitle">DAILY SIGNALS</div>
+  <div
+    class="board"
+    id="board"
+  ></div>
+
+  <div class="filterRow">
+    <button
+      class="filterBtn active"
+      data-filter="ALL"
+    >
+      전체
+    </button>
+
+    <button
+      class="filterBtn"
+      data-filter="BOTTOM"
+    >
+      바닥 신호
+    </button>
+
+    <button
+      class="filterBtn"
+      data-filter="RISK"
+    >
+      위험
+    </button>
+  </div>
+
+  <div class="sectionTitle">
+    DAILY SIGNALS
+  </div>
+
   <div id="scanner"></div>
 
 </main>
 
 <main class="page">
 
-  <div class="sectionTitle">SYMBOLS</div>
+  <div class="sectionTitle">
+    SYMBOLS
+  </div>
 
   <div class="card">
+
     <div class="addRow">
+
       <input
         id="symbolInput"
         class="symbolInput"
-        placeholder="NVDA"
+        placeholder="INTC"
         autocomplete="off"
         autocapitalize="characters"
       >
-      <button class="primaryBtn" id="addBtn">
+
+      <button
+        class="primaryBtn"
+        id="addBtn"
+      >
         추가
       </button>
+
     </div>
 
-    <button class="refreshBtn" id="refreshBtn">
+    <button
+      class="refreshBtn"
+      id="refreshBtn"
+    >
       전체 새로고침
     </button>
+
   </div>
 
   <div id="symbolList"></div>
@@ -570,42 +826,92 @@ button{
 
 <main class="page">
 
-  <div class="sectionTitle">ENGINE</div>
-
-  <div class="card help">
-    <b>v0.5.2 · DAILY-FIRST</b><br><br>
-
-    실제 매수·매도 판단은
-    <b>일봉 중심</b>으로 계산합니다.<br>
-    주봉은 큰 방향을 확인하는
-    보조 필터입니다.<br><br>
-
-    일봉 현재 신호 <b>60%</b><br>
-    주봉 추세 <b>20%</b><br>
-    과거 일봉 패턴 <b>10%</b><br>
-    가격 위치·모멘텀 <b>10%</b>
+  <div class="sectionTitle">
+    ENGINE
   </div>
 
   <div class="card help">
-    🟢 <b>매수해</b> — 바닥 + 반전 강함<br>
-    🟢 <b>1차 매수</b> — 바닥 가능성 상승 + 반전 시작<br>
-    🟡 <b>매수 관심</b> — 바닥 후보 형성 중<br>
-    ⚪ <b>기다려</b> — 방향 불명확<br>
-    🔴 <b>하락 지속</b> — 신저가/하락추세, 바닥 미확인<br>
-    🟠 <b>매수하지 마</b> — 고점 위험 우세<br>
-    🔴 <b>매도해</b> — 고점 + 하락 전환
+    <b>
+      v0.5.3 · DAILY-FIRST
+    </b>
+    <br><br>
+
+    기존 일봉 바닥·반전 분석에
+    <b>차트 빗각</b>과
+    <b>피보나치 되돌림</b>을
+    추가했습니다.
+    <br><br>
+
+    RSI가 아직 강하게 반전하지 않았더라도
+    하락 추세선을 종가로 돌파하면
+    초동 진입 신호로 반영합니다.
   </div>
 
   <div class="card help">
-    <b>신저가 필터</b><br><br>
+    <b>TRENDLINE ENGINE</b>
+    <br><br>
 
-    RSI가 과매도여도 계속 신저가를 만들고
-    MACD·RSI가 하락 중이면 바닥으로
-    인정하지 않습니다.<br><br>
+    최근 주요 고점들을 찾아
+    자동으로 하락 빗각을 계산합니다.
+    <br><br>
 
-    이런 종목은 단순
-    <b>기다려</b>가 아니라
-    <b>하락 지속</b>으로 분류합니다.
+    빗각 돌파<br>
+    종가 안착<br>
+    거래량 증가<br>
+    돌파 후 리테스트 지지
+    <br><br>
+
+    조건이 겹칠수록
+    Trendline Score가 높아집니다.
+  </div>
+
+  <div class="card help">
+    <b>FIBONACCI ENGINE</b>
+    <br><br>
+
+    최근 상승 파동의
+    저점 → 고점을 자동 탐색하여
+    현재 조정 위치를 계산합니다.
+    <br><br>
+
+    0.382<br>
+    0.500<br>
+    0.618<br>
+    0.786
+    <br><br>
+
+    주요 Fib 구간에 가까우면서
+    반전·빗각 돌파가 같이 나오면
+    매수 신뢰도를 높입니다.
+  </div>
+
+  <div class="card help">
+    🟢 <b>매수해</b>
+    — 강한 바닥 + 반전 또는 강한 빗각 돌파
+    <br>
+
+    🟢 <b>1차 매수</b>
+    — 초기 반전 또는 하락 빗각 돌파
+    <br>
+
+    🟡 <b>매수 관심</b>
+    — 바닥 후보 / 빗각 돌파 대기
+    <br>
+
+    ⚪ <b>기다려</b>
+    — 방향 불명확
+    <br>
+
+    🔴 <b>하락 지속</b>
+    — 신저가 + 하락 추세
+    <br>
+
+    🟠 <b>매수하지 마</b>
+    — 고점 위험 우세
+    <br>
+
+    🔴 <b>매도해</b>
+    — 고점 + 하락 전환
   </div>
 
 </main>
@@ -615,18 +921,33 @@ button{
 
 <nav class="bottomNav">
 
-  <button class="navBtn active" data-page="0">
-    <span class="navIcon">◉</span>
+  <button
+    class="navBtn active"
+    data-page="0"
+  >
+    <span class="navIcon">
+      ◉
+    </span>
     SCANNER
   </button>
 
-  <button class="navBtn" data-page="1">
-    <span class="navIcon">＋</span>
+  <button
+    class="navBtn"
+    data-page="1"
+  >
+    <span class="navIcon">
+      ＋
+    </span>
     SYMBOLS
   </button>
 
-  <button class="navBtn" data-page="2">
-    <span class="navIcon">•••</span>
+  <button
+    class="navBtn"
+    data-page="2"
+  >
+    <span class="navIcon">
+      •••
+    </span>
     MORE
   </button>
 
@@ -634,8 +955,14 @@ button{
 
 </div>
 
-<div class="detailOverlay" id="detailOverlay">
-  <div class="detailWrap" id="detailWrap"></div>
+<div
+  class="detailOverlay"
+  id="detailOverlay"
+>
+  <div
+    class="detailWrap"
+    id="detailWrap"
+  ></div>
 </div>
 
 <script>
@@ -660,13 +987,23 @@ const DAILY_TTL=
 
 const MIN_HISTORY=35;
 const TURN_LOOKAHEAD=20;
+
 const BOTTOM_CONFIRM_MOVE=15;
 const TOP_CONFIRM_MOVE=15;
+
+const TREND_LOOKBACK=70;
+const FIB_LOOKBACK=90;
+
+let currentFilter='ALL';
 
 let symbols=
   loadJSON(
     SYMBOL_KEY,
-    ['TSLA','NVDA','NKE']
+    [
+      'TSLA',
+      'NVDA',
+      'NKE'
+    ]
   );
 
 let cache=
@@ -677,7 +1014,10 @@ let cache=
 
 let analyses={};
 
-function loadJSON(key,fallback){
+function loadJSON(
+  key,
+  fallback
+){
   try{
     const value=
       JSON.parse(
@@ -690,142 +1030,193 @@ function loadJSON(key,fallback){
   }
 }
 
-function saveJSON(key,value){
+function saveJSON(
+  key,
+  value
+){
   localStorage.setItem(
     key,
     JSON.stringify(value)
   );
 }
 
-function clamp(value,min=0,max=100){
+function clamp(
+  value,
+  min=0,
+  max=100
+){
   return Math.max(
     min,
-    Math.min(max,value)
+    Math.min(
+      max,
+      value
+    )
   );
 }
 
 function avg(values){
   const valid=
-    values.filter(Number.isFinite);
+    values.filter(
+      Number.isFinite
+    );
 
-  if(!valid.length)return 0;
+  if(!valid.length){
+    return 0;
+  }
 
   return valid.reduce(
     (a,b)=>a+b,
     0
-  )/valid.length;
+  )/
+  valid.length;
 }
 
-function pct(from,to){
+function pct(
+  from,
+  to
+){
   return from
-    ? (to/from-1)*100
+    ? (
+        to/from-1
+      )*100
     : 0;
 }
 
-function fmt(value,digits=2){
-  return Number.isFinite(value)
-    ? Number(value).toFixed(digits)
+function fmt(
+  value,
+  digits=2
+){
+  return Number.isFinite(
+    value
+  )
+    ? Number(value)
+        .toFixed(digits)
     : '-';
 }
 
 function normalize(values){
-  return [...values]
+  return [
+    ...values
+  ]
     .reverse()
-    .map(x=>({
-      datetime:x.datetime,
-      open:+x.open,
-      high:+x.high,
-      low:+x.low,
-      close:+x.close,
-      volume:
-        Number.isFinite(+x.volume)
-          ? +x.volume
-          : 0
-    }));
+    .map(
+      x=>({
+        datetime:x.datetime,
+        open:+x.open,
+        high:+x.high,
+        low:+x.low,
+        close:+x.close,
+        volume:
+          Number.isFinite(
+            +x.volume
+          )
+            ? +x.volume
+            : 0
+      })
+    );
 }
 
-function dailyToWeekly(daily){
-  const groups=new Map();
+function dailyToWeekly(
+  daily
+){
+  const groups=
+    new Map();
 
-  daily.forEach(bar=>{
-    const date=
-      new Date(
-        bar.datetime+
-        'T12:00:00'
-      );
-
-    const weekday=
-      date.getDay() || 7;
-
-    const monday=
-      new Date(date);
-
-    monday.setDate(
-      date.getDate()-
-      weekday+
-      1
-    );
-
-    const key=[
-      monday.getFullYear(),
-      String(
-        monday.getMonth()+1
-      ).padStart(2,'0'),
-      String(
-        monday.getDate()
-      ).padStart(2,'0')
-    ].join('-');
-
-    if(!groups.has(key)){
-      groups.set(
-        key,
-        {
-          datetime:key,
-          open:bar.open,
-          high:bar.high,
-          low:bar.low,
-          close:bar.close,
-          volume:bar.volume
-        }
-      );
-    }else{
-      const week=
-        groups.get(key);
-
-      week.high=
-        Math.max(
-          week.high,
-          bar.high
+  daily.forEach(
+    bar=>{
+      const date=
+        new Date(
+          bar.datetime+
+          'T12:00:00'
         );
 
-      week.low=
-        Math.min(
-          week.low,
-          bar.low
+      const weekday=
+        date.getDay() || 7;
+
+      const monday=
+        new Date(date);
+
+      monday.setDate(
+        date.getDate()-
+        weekday+
+        1
+      );
+
+      const key=[
+        monday.getFullYear(),
+        String(
+          monday.getMonth()+1
+        ).padStart(2,'0'),
+        String(
+          monday.getDate()
+        ).padStart(2,'0')
+      ].join('-');
+
+      if(
+        !groups.has(key)
+      ){
+        groups.set(
+          key,
+          {
+            datetime:key,
+            open:bar.open,
+            high:bar.high,
+            low:bar.low,
+            close:bar.close,
+            volume:bar.volume
+          }
         );
+      }else{
+        const week=
+          groups.get(key);
 
-      week.close=
-        bar.close;
+        week.high=
+          Math.max(
+            week.high,
+            bar.high
+          );
 
-      week.volume+=
-        bar.volume;
+        week.low=
+          Math.min(
+            week.low,
+            bar.low
+          );
+
+        week.close=
+          bar.close;
+
+        week.volume+=
+          bar.volume;
+      }
     }
-  });
+  );
 
   return [
     ...groups.values()
   ];
 }
 
-function emaSeries(values,period){
+function emaSeries(
+  values,
+  period
+){
   const output=[];
   const k=
-    2/(period+1);
+    2/
+    (
+      period+
+      1
+    );
 
   let ema=null;
 
-  for(const value of values){
-    if(ema===null){
+  for(
+    const value
+    of values
+  ){
+    if(
+      ema===null
+    ){
       ema=value;
     }else{
       ema=
@@ -833,13 +1224,18 @@ function emaSeries(values,period){
         ema*(1-k);
     }
 
-    output.push(ema);
+    output.push(
+      ema
+    );
   }
 
   return output;
 }
 
-function rsiSeries(values,period=14){
+function rsiSeries(
+  values,
+  period=14
+){
   const output=
     new Array(
       values.length
@@ -886,18 +1282,18 @@ function rsiSeries(values,period=14){
     avgLoss===0
       ? 100
       : 100-
+        100/
         (
-          100/
-          (
-            1+
-            avgGain/
-            avgLoss
-          )
+          1+
+          avgGain/
+          avgLoss
         );
 
   for(
-    let i=period+1;
-    i<values.length;
+    let i=
+      period+1;
+    i<
+      values.length;
     i++
   ){
     const change=
@@ -907,35 +1303,47 @@ function rsiSeries(values,period=14){
     avgGain=
       (
         avgGain*
-        (period-1)+
-        Math.max(change,0)
-      )/period;
+        (
+          period-1
+        )+
+        Math.max(
+          change,
+          0
+        )
+      )/
+      period;
 
     avgLoss=
       (
         avgLoss*
-        (period-1)+
-        Math.max(-change,0)
-      )/period;
+        (
+          period-1
+        )+
+        Math.max(
+          -change,
+          0
+        )
+      )/
+      period;
 
     output[i]=
       avgLoss===0
         ? 100
         : 100-
+          100/
           (
-            100/
-            (
-              1+
-              avgGain/
-              avgLoss
-            )
+            1+
+            avgGain/
+            avgLoss
           );
   }
 
   return output;
 }
 
-function macdSeries(values){
+function macdSeries(
+  values
+){
   const ema12=
     emaSeries(
       values,
@@ -976,7 +1384,9 @@ function macdSeries(values){
 }
 
 function std(values){
-  if(!values.length){
+  if(
+    !values.length
+  ){
     return 0;
   }
 
@@ -987,13 +1397,19 @@ function std(values){
     avg(
       values.map(
         value=>
-          (value-mean)**2
+          (
+            value-
+            mean
+          )**2
       )
     )
   );
 }
 
-function featureAt(bars,index){
+function featureAt(
+  bars,
+  index
+){
   if(index<20){
     return null;
   }
@@ -1018,10 +1434,14 @@ function featureAt(bars,index){
     bars[index];
 
   const rsi=
-    rsis[index] ?? 50;
+    rsis[index] ??
+    50;
 
   const previousRsi=
-    rsis[index-1] ?? rsi;
+    rsis[
+      index-1
+    ] ??
+    rsi;
 
   const rsiSlope=
     rsi-
@@ -1051,18 +1471,18 @@ function featureAt(bars,index){
     );
 
   const stochastic=
-    highestHigh===lowestLow
+    highestHigh===
+    lowestLow
       ? 50
       : (
-          (
-            bar.close-
-            lowestLow
-          )/
-          (
-            highestHigh-
-            lowestLow
-          )
-        )*100;
+          bar.close-
+          lowestLow
+        )/
+        (
+          highestHigh-
+          lowestLow
+        )*
+        100;
 
   const bollingerCloses=
     closes.slice(
@@ -1139,7 +1559,8 @@ function featureAt(bars,index){
       ? (
           bar.close-
           bar.low
-        )/range
+        )/
+        range
       : .5;
 
   const recent20=
@@ -1180,7 +1601,9 @@ function featureAt(bars,index){
   const ret5=
     index>=5
       ? pct(
-          bars[index-5].close,
+          bars[
+            index-5
+          ].close,
           bar.close
         )
       : 0;
@@ -1188,7 +1611,9 @@ function featureAt(bars,index){
   const ret10=
     index>=10
       ? pct(
-          bars[index-10].close,
+          bars[
+            index-10
+          ].close,
           bar.close
         )
       : 0;
@@ -1196,16 +1621,22 @@ function featureAt(bars,index){
   const ret20=
     index>=20
       ? pct(
-          bars[index-20].close,
+          bars[
+            index-20
+          ].close,
           bar.close
         )
       : 0;
 
   const hist=
-    macd.hist[index] ?? 0;
+    macd.hist[index] ??
+    0;
 
   const previousHist=
-    macd.hist[index-1] ?? hist;
+    macd.hist[
+      index-1
+    ] ??
+    hist;
 
   const macdSlope=
     hist-
@@ -1216,14 +1647,18 @@ function featureAt(bars,index){
   if(index>0){
     if(
       macd.hist[index]>0 &&
-      macd.hist[index-1]<=0
+      macd.hist[
+        index-1
+      ]<=0
     ){
       macdCross=1;
     }
 
     if(
       macd.hist[index]<0 &&
-      macd.hist[index-1]>=0
+      macd.hist[
+        index-1
+      ]>=0
     ){
       macdCross=-1;
     }
@@ -1233,16 +1668,20 @@ function featureAt(bars,index){
     index,
     date:bar.datetime,
     price:bar.close,
+
     rsi,
     rsiSlope,
     stochastic,
+
     bbPos,
     relVol,
     closeLocation,
     position20,
+
     ret5,
     ret10,
     ret20,
+
     macdHist:hist,
     macdSlope,
     macdCross
@@ -1259,14 +1698,24 @@ function dailyTechnicalScore(
 
   let score=0;
 
-  if(type==='bottom'){
-    if(feature.rsi<=25){
+  if(
+    type==='bottom'
+  ){
+    if(
+      feature.rsi<=25
+    ){
       score+=20;
-    }else if(feature.rsi<=30){
+    }else if(
+      feature.rsi<=30
+    ){
       score+=17;
-    }else if(feature.rsi<=38){
+    }else if(
+      feature.rsi<=38
+    ){
       score+=11;
-    }else if(feature.rsi<=45){
+    }else if(
+      feature.rsi<=45
+    ){
       score+=5;
     }
 
@@ -1336,14 +1785,24 @@ function dailyTechnicalScore(
     }
   }
 
-  if(type==='top'){
-    if(feature.rsi>=75){
+  if(
+    type==='top'
+  ){
+    if(
+      feature.rsi>=75
+    ){
       score+=20;
-    }else if(feature.rsi>=70){
+    }else if(
+      feature.rsi>=70
+    ){
       score+=17;
-    }else if(feature.rsi>=62){
+    }else if(
+      feature.rsi>=62
+    ){
       score+=11;
-    }else if(feature.rsi>=55){
+    }else if(
+      feature.rsi>=55
+    ){
       score+=5;
     }
 
@@ -1413,10 +1872,14 @@ function dailyTechnicalScore(
     }
   }
 
-  return clamp(score);
+  return clamp(
+    score
+  );
 }
 
-function reversalScore(feature){
+function reversalScore(
+  feature
+){
   if(!feature){
     return 0;
   }
@@ -1517,7 +1980,7 @@ function weeklyTrendScore(
   type
 ){
   if(
-    weekly.length<10
+    weekly.length<21
   ){
     return 50;
   }
@@ -1558,7 +2021,9 @@ function weeklyTrendScore(
 
   let score=50;
 
-  if(type==='bull'){
+  if(
+    type==='bull'
+  ){
     current>ma4
       ? score+=12
       : score-=12;
@@ -1677,11 +2142,11 @@ function detectDowntrend(
     );
 
   let score=0;
-
   const reasons=[];
 
   if(newLow20){
     score+=28;
+
     reasons.push(
       '최근 20거래일 신저가 갱신'
     );
@@ -1689,6 +2154,7 @@ function detectDowntrend(
 
   if(newLow40){
     score+=12;
+
     reasons.push(
       '최근 40거래일 저점도 갱신'
     );
@@ -1698,6 +2164,7 @@ function detectDowntrend(
     current.close<ma10
   ){
     score+=10;
+
     reasons.push(
       '종가가 10일 평균 아래'
     );
@@ -1707,6 +2174,7 @@ function detectDowntrend(
     ma10<ma20
   ){
     score+=12;
+
     reasons.push(
       '단기 하락 추세 지속'
     );
@@ -1716,6 +2184,7 @@ function detectDowntrend(
     ma20<ma50
   ){
     score+=10;
+
     reasons.push(
       '중기 하락 추세 지속'
     );
@@ -1725,6 +2194,7 @@ function detectDowntrend(
     feature.ret5<0
   ){
     score+=8;
+
     reasons.push(
       '최근 5일 수익률 음수'
     );
@@ -1740,6 +2210,7 @@ function detectDowntrend(
     feature.macdSlope<0
   ){
     score+=7;
+
     reasons.push(
       'MACD 하락 모멘텀'
     );
@@ -1749,6 +2220,7 @@ function detectDowntrend(
     feature.rsiSlope<0
   ){
     score+=5;
+
     reasons.push(
       'RSI도 아직 하락 중'
     );
@@ -1775,6 +2247,677 @@ function detectDowntrend(
   };
 }
 
+function findPivotHighs(
+  bars,
+  lookback=70,
+  radius=2
+){
+  const start=
+    Math.max(
+      radius,
+      bars.length-
+      lookback
+    );
+
+  const end=
+    bars.length-
+    radius;
+
+  const pivots=[];
+
+  for(
+    let i=start;
+    i<end;
+    i++
+  ){
+    let isHigh=true;
+
+    for(
+      let j=
+        i-radius;
+      j<=
+        i+radius;
+      j++
+    ){
+      if(
+        j===i
+      ){
+        continue;
+      }
+
+      if(
+        bars[j].high>
+        bars[i].high
+      ){
+        isHigh=false;
+        break;
+      }
+    }
+
+    if(isHigh){
+      pivots.push({
+        index:i,
+        price:
+          bars[i].high,
+        date:
+          bars[i].datetime
+      });
+    }
+  }
+
+  return pivots;
+}
+
+function findDescendingLine(
+  bars
+){
+  const pivots=
+    findPivotHighs(
+      bars,
+      TREND_LOOKBACK,
+      2
+    );
+
+  if(
+    pivots.length<2
+  ){
+    return null;
+  }
+
+  let best=null;
+
+  for(
+    let b=
+      pivots.length-1;
+    b>=1;
+    b--
+  ){
+    const p2=
+      pivots[b];
+
+    for(
+      let a=
+        b-1;
+      a>=0;
+      a--
+    ){
+      const p1=
+        pivots[a];
+
+      if(
+        p2.index-
+        p1.index<
+        5
+      ){
+        continue;
+      }
+
+      if(
+        p2.price>=
+        p1.price
+      ){
+        continue;
+      }
+
+      const slope=
+        (
+          p2.price-
+          p1.price
+        )/
+        (
+          p2.index-
+          p1.index
+        );
+
+      const currentIndex=
+        bars.length-1;
+
+      const projected=
+        p1.price+
+        slope*
+        (
+          currentIndex-
+          p1.index
+        );
+
+      const previousProjected=
+        p1.price+
+        slope*
+        (
+          currentIndex-
+          1-
+          p1.index
+        );
+
+      if(
+        projected<=0
+      ){
+        continue;
+      }
+
+      best={
+        p1,
+        p2,
+        slope,
+        projected,
+        previousProjected
+      };
+
+      break;
+    }
+
+    if(best){
+      break;
+    }
+  }
+
+  return best;
+}
+
+function detectTrendline(
+  bars,
+  feature
+){
+  const line=
+    findDescendingLine(
+      bars
+    );
+
+  if(
+    !line ||
+    !feature
+  ){
+    return{
+      exists:false,
+      score:0,
+      state:'NONE',
+      label:'빗각 없음',
+      breakout:false,
+      above:false,
+      near:false,
+      retest:false,
+      volumeConfirm:false,
+      linePrice:null,
+      distance:null,
+      reasons:[]
+    };
+  }
+
+  const currentIndex=
+    bars.length-1;
+
+  const current=
+    bars[
+      currentIndex
+    ];
+
+  const previous=
+    bars[
+      currentIndex-1
+    ];
+
+  const lineNow=
+    line.projected;
+
+  const linePrev=
+    line.previousProjected;
+
+  const distance=
+    (
+      current.close-
+      lineNow
+    )/
+    lineNow*
+    100;
+
+  const breakout=
+    previous.close<=
+      linePrev*1.003 &&
+    current.close>
+      lineNow*1.003;
+
+  const above=
+    current.close>
+      lineNow*1.003;
+
+  const near=
+    Math.abs(
+      distance
+    )<=1.5;
+
+  const volumeConfirm=
+    feature.relVol>=1.2;
+
+  let retest=false;
+
+  for(
+    let i=
+      Math.max(
+        line.p2.index+1,
+        currentIndex-4
+      );
+    i<=
+      currentIndex;
+    i++
+  ){
+    const projected=
+      line.p1.price+
+      line.slope*
+      (
+        i-
+        line.p1.index
+      );
+
+    if(
+      bars[i].low<=
+        projected*1.015 &&
+      bars[i].close>=
+        projected*.995
+    ){
+      if(
+        i>
+        line.p2.index
+      ){
+        retest=true;
+      }
+    }
+  }
+
+  let score=20;
+
+  const reasons=[
+    '자동 하락 추세선 감지'
+  ];
+
+  if(breakout){
+    score+=45;
+
+    reasons.push(
+      '종가 기준 하락 빗각 돌파'
+    );
+  }else if(above){
+    score+=28;
+
+    reasons.push(
+      '현재가가 하락 빗각 위에 위치'
+    );
+  }else if(near){
+    score+=12;
+
+    reasons.push(
+      '현재가가 하락 빗각 돌파 구간 근처'
+    );
+  }
+
+  if(volumeConfirm){
+    score+=15;
+
+    reasons.push(
+      '거래량이 최근 평균보다 증가'
+    );
+  }
+
+  if(
+    retest &&
+    above
+  ){
+    score+=17;
+
+    reasons.push(
+      '돌파 후 추세선 리테스트 지지'
+    );
+  }
+
+  if(
+    feature.closeLocation>.65
+  ){
+    score+=6;
+  }
+
+  score=
+    clamp(score);
+
+  let state='BELOW';
+  let label='빗각 아래';
+
+  if(
+    breakout &&
+    volumeConfirm
+  ){
+    state='BREAKOUT';
+    label='강한 빗각 돌파';
+  }else if(
+    breakout
+  ){
+    state='BREAKOUT';
+    label='빗각 돌파';
+  }else if(
+    above &&
+    retest
+  ){
+    state='RETEST';
+    label='돌파 후 지지';
+  }else if(above){
+    state='ABOVE';
+    label='빗각 위 안착';
+  }else if(near){
+    state='NEAR';
+    label='돌파 임박';
+  }
+
+  return{
+    exists:true,
+    score,
+    state,
+    label,
+
+    breakout,
+    above,
+    near,
+    retest,
+    volumeConfirm,
+
+    linePrice:
+      lineNow,
+
+    distance,
+
+    line,
+
+    reasons
+  };
+}
+
+function fibonacciEngine(
+  bars
+){
+  if(
+    bars.length<35
+  ){
+    return{
+      valid:false,
+      score:0,
+      level:null,
+      retracement:null,
+      label:'Fib 없음',
+      swingLow:null,
+      swingHigh:null,
+      levels:{},
+      reasons:[]
+    };
+  }
+
+  const start=
+    Math.max(
+      0,
+      bars.length-
+      FIB_LOOKBACK
+    );
+
+  const recent=
+    bars.slice(start);
+
+  let lowIndex=0;
+
+  for(
+    let i=1;
+    i<
+      recent.length;
+    i++
+  ){
+    if(
+      recent[i].low<
+      recent[
+        lowIndex
+      ].low
+    ){
+      lowIndex=i;
+    }
+  }
+
+  if(
+    lowIndex>=
+    recent.length-5
+  ){
+    return{
+      valid:false,
+      score:0,
+      level:null,
+      retracement:null,
+      label:'Fib 파동 미확정',
+      swingLow:null,
+      swingHigh:null,
+      levels:{},
+      reasons:[]
+    };
+  }
+
+  let highIndex=
+    lowIndex+1;
+
+  for(
+    let i=
+      lowIndex+1;
+    i<
+      recent.length;
+    i++
+  ){
+    if(
+      recent[i].high>
+      recent[
+        highIndex
+      ].high
+    ){
+      highIndex=i;
+    }
+  }
+
+  const swingLow=
+    recent[
+      lowIndex
+    ].low;
+
+  const swingHigh=
+    recent[
+      highIndex
+    ].high;
+
+  if(
+    swingHigh<=
+    swingLow
+  ){
+    return{
+      valid:false,
+      score:0,
+      level:null,
+      retracement:null,
+      label:'Fib 없음',
+      swingLow:null,
+      swingHigh:null,
+      levels:{},
+      reasons:[]
+    };
+  }
+
+  const current=
+    bars[
+      bars.length-1
+    ].close;
+
+  const range=
+    swingHigh-
+    swingLow;
+
+  const levels={
+    0.382:
+      swingHigh-
+      range*.382,
+
+    0.5:
+      swingHigh-
+      range*.5,
+
+    0.618:
+      swingHigh-
+      range*.618,
+
+    0.786:
+      swingHigh-
+      range*.786
+  };
+
+  const retracement=
+    (
+      swingHigh-
+      current
+    )/
+    range;
+
+  const fibValues=[
+    .382,
+    .5,
+    .618,
+    .786
+  ];
+
+  let nearest=
+    fibValues[0];
+
+  let nearestDistance=
+    Infinity;
+
+  for(
+    const value
+    of fibValues
+  ){
+    const levelPrice=
+      levels[value];
+
+    const distance=
+      Math.abs(
+        current-
+        levelPrice
+      )/
+      levelPrice*
+      100;
+
+    if(
+      distance<
+      nearestDistance
+    ){
+      nearestDistance=
+        distance;
+
+      nearest=
+        value;
+    }
+  }
+
+  let score=0;
+  const reasons=[];
+
+  if(
+    nearestDistance<=.7
+  ){
+    score=88;
+  }else if(
+    nearestDistance<=1.5
+  ){
+    score=76;
+  }else if(
+    nearestDistance<=2.5
+  ){
+    score=64;
+  }else if(
+    nearestDistance<=4
+  ){
+    score=48;
+  }else{
+    score=25;
+  }
+
+  if(
+    nearest===.618
+  ){
+    score+=8;
+
+    reasons.push(
+      '0.618 주요 되돌림 구간'
+    );
+  }else if(
+    nearest===.5
+  ){
+    score+=5;
+
+    reasons.push(
+      '0.500 되돌림 구간'
+    );
+  }else if(
+    nearest===.382
+  ){
+    score+=3;
+
+    reasons.push(
+      '0.382 얕은 조정 구간'
+    );
+  }else if(
+    nearest===.786
+  ){
+    score+=3;
+
+    reasons.push(
+      '0.786 깊은 조정 구간'
+    );
+  }
+
+  if(
+    current<
+    swingLow*.98
+  ){
+    score=5;
+
+    reasons.push(
+      '기준 스윙 저점 이탈'
+    );
+  }else{
+    reasons.push(
+      `Fib ${nearest.toFixed(3)}까지 ${fmt(nearestDistance,1)}%`
+    );
+  }
+
+  score=
+    clamp(score);
+
+  return{
+    valid:true,
+    score,
+    level:nearest,
+    retracement,
+    label:
+      `Fib ${nearest.toFixed(3)}`,
+
+    swingLow:{
+      price:swingLow,
+      date:
+        recent[
+          lowIndex
+        ].datetime
+    },
+
+    swingHigh:{
+      price:swingHigh,
+      date:
+        recent[
+          highIndex
+        ].datetime
+    },
+
+    levels,
+    nearestDistance,
+    reasons
+  };
+}
+
 function discoverDailyTurns(
   bars
 ){
@@ -1782,8 +2925,10 @@ function discoverDailyTurns(
   const tops=[];
 
   for(
-    let i=MIN_HISTORY;
-    i<bars.length-2;
+    let i=
+      MIN_HISTORY;
+    i<
+      bars.length-2;
     i++
   ){
     const bar=
@@ -1796,19 +2941,24 @@ function discoverDailyTurns(
       bars[i+1];
 
     const localBottom=
-      bar.low<=previous.low &&
-      bar.low<=next.low;
+      bar.low<=
+        previous.low &&
+      bar.low<=
+        next.low;
 
     const localTop=
-      bar.high>=previous.high &&
-      bar.high>=next.high;
+      bar.high>=
+        previous.high &&
+      bar.high>=
+        next.high;
 
     const future=
       bars.slice(
         i+1,
         Math.min(
           bars.length,
-          i+1+
+          i+
+          1+
           TURN_LOOKAHEAD
         )
       );
@@ -1927,7 +3077,9 @@ function clusterTurns(
   turns,
   type
 ){
-  if(!turns.length){
+  if(
+    !turns.length
+  ){
     return [];
   }
 
@@ -1969,7 +3121,9 @@ function clusterTurns(
         }
       }
     }else{
-      output.push(turn);
+      output.push(
+        turn
+      );
     }
   }
 
@@ -1985,17 +3139,25 @@ function turnQuality(
 
   if(move>=40){
     score+=20;
-  }else if(move>=30){
+  }else if(
+    move>=30
+  ){
     score+=17;
-  }else if(move>=22){
+  }else if(
+    move>=22
+  ){
     score+=13;
-  }else if(move>=18){
+  }else if(
+    move>=18
+  ){
     score+=9;
   }else{
     score+=5;
   }
 
-  if(type==='bottom'){
+  if(
+    type==='bottom'
+  ){
     if(
       feature.rsi<=25
     ){
@@ -2113,7 +3275,9 @@ function turnQuality(
     }
   }
 
-  return clamp(score);
+  return clamp(
+    score
+  );
 }
 
 function similarity(
@@ -2128,7 +3292,8 @@ function similarity(
   }
 
   const scores=[
-    1-Math.min(
+    1-
+    Math.min(
       Math.abs(
         current.rsi-
         reference.rsi
@@ -2136,7 +3301,8 @@ function similarity(
       1
     ),
 
-    1-Math.min(
+    1-
+    Math.min(
       Math.abs(
         current.stochastic-
         reference.stochastic
@@ -2144,7 +3310,8 @@ function similarity(
       1
     ),
 
-    1-Math.min(
+    1-
+    Math.min(
       Math.abs(
         current.bbPos-
         reference.bbPos
@@ -2152,7 +3319,8 @@ function similarity(
       1
     ),
 
-    1-Math.min(
+    1-
+    Math.min(
       Math.abs(
         current.relVol-
         reference.relVol
@@ -2160,7 +3328,8 @@ function similarity(
       1
     ),
 
-    1-Math.min(
+    1-
+    Math.min(
       Math.abs(
         current.closeLocation-
         reference.closeLocation
@@ -2168,7 +3337,8 @@ function similarity(
       1
     ),
 
-    1-Math.min(
+    1-
+    Math.min(
       Math.abs(
         current.position20-
         reference.position20
@@ -2176,7 +3346,8 @@ function similarity(
       1
     ),
 
-    1-Math.min(
+    1-
+    Math.min(
       Math.abs(
         current.ret5-
         reference.ret5
@@ -2204,7 +3375,8 @@ function similarity(
   ];
 
   return clamp(
-    avg(scores)*100
+    avg(scores)*
+    100
   );
 }
 
@@ -2241,16 +3413,25 @@ function patternMatch(
       );
 
   const top=
-    list.slice(0,3);
+    list.slice(
+      0,
+      3
+    );
 
-  const weights=
-    [3,2,1];
+  const weights=[
+    3,
+    2,
+    1
+  ];
 
   let total=0;
   let weight=0;
 
   top.forEach(
-    (item,index)=>{
+    (
+      item,
+      index
+    )=>{
       total+=
         item.similarity*
         weights[index];
@@ -2279,7 +3460,9 @@ function priceLocationScore(
   const recent=
     daily.slice(-60);
 
-  if(!recent.length){
+  if(
+    !recent.length
+  ){
     return 50;
   }
 
@@ -2316,14 +3499,21 @@ function priceLocationScore(
 
   return type==='bottom'
     ? clamp(
-        (1-position)*100
+        (
+          1-
+          position
+        )*
+        100
       )
     : clamp(
-        position*100
+        position*
+        100
       );
 }
 
-function makeDecision(data){
+function makeDecision(
+  data
+){
   const B=
     data.dailyBottom;
 
@@ -2350,6 +3540,12 @@ function makeDecision(data){
 
   const topPattern=
     data.topPattern;
+
+  const trendline=
+    data.trendline;
+
+  const fib=
+    data.fib;
 
   const buyScore=
     data.buyScore;
@@ -2388,7 +3584,8 @@ function makeDecision(data){
     T>=82 &&
     sellScore>=76 &&
     bearishReversal>=55 &&
-    sellScore>=buyScore+8
+    sellScore>=
+      buyScore+8
   ){
     action='매도해';
     key='SELL';
@@ -2430,8 +3627,9 @@ function makeDecision(data){
 
   else if(
     downtrend.active &&
-    downtrend.score>=65 &&
-    reversal<45
+    downtrend.score>=72 &&
+    reversal<40 &&
+    !trendline.breakout
   ){
     action='하락 지속';
     key='DOWN';
@@ -2446,8 +3644,12 @@ function makeDecision(data){
       '신저가 또는 강한 하락 추세가 계속되고 있음'
     );
 
-    downtrend.reasons
-      .slice(0,3)
+    downtrend
+      .reasons
+      .slice(
+        0,
+        3
+      )
       .forEach(
         reason=>
           reasons.push(
@@ -2463,7 +3665,8 @@ function makeDecision(data){
   else if(
     T>=68 &&
     sellScore>=64 &&
-    sellScore>=buyScore+7
+    sellScore>=
+      buyScore+7
   ){
     action='매수하지 마';
     key='AVOID';
@@ -2478,7 +3681,9 @@ function makeDecision(data){
       '현재 고점 위험이 매수 신호보다 강함'
     );
 
-    if(T>=70){
+    if(
+      T>=70
+    ){
       reasons.push(
         `일봉 고점 신호 ${Math.round(T)}/100`
       );
@@ -2495,16 +3700,25 @@ function makeDecision(data){
 
   else if(
     (
-      B>=84 &&
+      B>=82 &&
       reversal>=55 &&
       buyScore>=70
     )
     ||
     (
-      B>=78 &&
-      reversal>=65 &&
-      buyScore>=68 &&
-      weeklyBull>=45
+      trendline.breakout &&
+      trendline.score>=78 &&
+      reversal>=50 &&
+      buyScore>=66 &&
+      downtrend.score<72
+    )
+    ||
+    (
+      trendline.retest &&
+      trendline.above &&
+      trendline.score>=72 &&
+      reversal>=45 &&
+      buyScore>=64
     )
   ){
     action='매수해';
@@ -2516,9 +3730,31 @@ function makeDecision(data){
         buyScore
       );
 
-    reasons.push(
-      '일봉 바닥 신호와 반전 신호가 강하게 겹침'
-    );
+    if(
+      trendline.breakout
+    ){
+      reasons.push(
+        '하락 빗각을 종가 기준으로 돌파'
+      );
+    }else if(
+      trendline.retest
+    ){
+      reasons.push(
+        '빗각 돌파 후 리테스트 지지 확인'
+      );
+    }else{
+      reasons.push(
+        '일봉 바닥 신호와 반전 신호가 강하게 겹침'
+      );
+    }
+
+    if(
+      trendline.volumeConfirm
+    ){
+      reasons.push(
+        '돌파 구간 거래량 증가'
+      );
+    }
 
     if(
       reversal>=60
@@ -2529,43 +3765,44 @@ function makeDecision(data){
     }
 
     if(
+      fib.valid &&
+      fib.score>=70
+    ){
+      reasons.push(
+        `${fib.label} 주요 지지 구간과 근접`
+      );
+    }
+
+    if(
       rapidlyImproving
     ){
       reasons.push(
         `바닥 점수가 전일 대비 ${Math.round(bottomDelta)}점 급상승`
       );
     }
-
-    if(
-      bottomPattern.score>=65
-    ){
-      reasons.push(
-        `과거 일봉 바닥과 ${Math.round(bottomPattern.score)}% 유사`
-      );
-    }
-
-    if(
-      weeklyBull>=60
-    ){
-      reasons.push(
-        '주봉 큰 흐름도 매수 방향을 지원'
-      );
-    }
   }
 
   else if(
     (
-      B>=72 &&
-      reversal>=45 &&
-      buyScore>=62 &&
+      B>=70 &&
+      reversal>=42 &&
+      buyScore>=60 &&
       !downtrend.active
     )
     ||
     (
-      B>=68 &&
-      reversal>=55 &&
-      improving &&
-      downtrend.score<60
+      trendline.breakout &&
+      trendline.score>=62 &&
+      reversal>=30 &&
+      downtrend.score<72
+    )
+    ||
+    (
+      trendline.above &&
+      trendline.score>=58 &&
+      reversal>=35 &&
+      buyScore>=57 &&
+      downtrend.score<65
     )
   ){
     action='1차 매수';
@@ -2577,52 +3814,80 @@ function makeDecision(data){
         buyScore
       );
 
-    reasons.push(
-      '일봉 기준 바닥 가능성이 높아지고 있음'
-    );
+    if(
+      trendline.breakout
+    ){
+      reasons.push(
+        '하락 추세선 돌파로 초동 진입 신호 발생'
+      );
+    }else if(
+      trendline.above
+    ){
+      reasons.push(
+        '하락 빗각 위에서 가격이 유지 중'
+      );
+    }else{
+      reasons.push(
+        '일봉 기준 바닥 가능성이 높아지고 있음'
+      );
+    }
 
-    if(improving){
+    if(
+      trendline.volumeConfirm
+    ){
+      reasons.push(
+        '거래량 증가가 돌파를 지원'
+      );
+    }
+
+    if(
+      fib.valid &&
+      fib.score>=60
+    ){
+      reasons.push(
+        `${fib.label} 구간과 현재가가 가까움`
+      );
+    }
+
+    if(
+      improving
+    ){
       reasons.push(
         `바닥 신호가 전일 대비 ${Math.round(bottomDelta)}점 강화`
-      );
-    }
-
-    if(
-      reversal>=50
-    ){
-      reasons.push(
-        '반전 모멘텀이 나타나기 시작'
-      );
-    }
-
-    if(
-      bottomPattern.score>=65
-    ){
-      reasons.push(
-        '과거 실제 바닥 패턴과 유사'
       );
     }
   }
 
   else if(
     (
-      B>=58 &&
+      B>=56 &&
       (
-        reversal>=35 ||
+        reversal>=30 ||
         improving
       )
     )
     ||
     (
-      B>=52 &&
-      bottomPattern.score>=70 &&
-      reversal>=30
+      trendline.near &&
+      trendline.score>=35
+    )
+    ||
+    (
+      trendline.above &&
+      trendline.score>=45
+    )
+    ||
+    (
+      fib.valid &&
+      fib.score>=75 &&
+      B>=45
     )
   ){
     if(
       downtrend.active &&
-      downtrend.score>=55 &&
-      reversal<50
+      downtrend.score>=68 &&
+      reversal<35 &&
+      !trendline.breakout
     ){
       action='하락 지속';
       key='DOWN';
@@ -2634,11 +3899,11 @@ function makeDecision(data){
         );
 
       reasons.push(
-        '바닥 점수는 높지만 아직 신저가 추세가 끝나지 않음'
+        '바닥 후보이지만 신저가 추세가 아직 더 강함'
       );
 
       reasons.push(
-        '신저가 멈춤 또는 반전 확인이 필요'
+        '신저가 정지 또는 빗각 돌파 확인 필요'
       );
     }else{
       action='매수 관심';
@@ -2650,29 +3915,39 @@ function makeDecision(data){
           buyScore
         );
 
-      reasons.push(
-        '일봉에서 바닥 후보가 형성되는 중'
-      );
-
-      if(improving){
+      if(
+        trendline.near &&
+        !trendline.above
+      ){
         reasons.push(
-          '바닥 신호가 전일보다 강화'
+          '하락 빗각 돌파 구간에 접근 중'
+        );
+      }else if(
+        trendline.above
+      ){
+        reasons.push(
+          '하락 빗각 위로 올라온 상태'
+        );
+      }else{
+        reasons.push(
+          '일봉에서 바닥 후보가 형성되는 중'
         );
       }
 
       if(
-        reversal>=35
+        fib.valid &&
+        fib.score>=70
+      ){
+        reasons.push(
+          `${fib.label} 되돌림 구간 근접`
+        );
+      }
+
+      if(
+        reversal>=30
       ){
         reasons.push(
           '초기 반전 신호가 나타남'
-        );
-      }
-
-      if(
-        bottomPattern.score>=65
-      ){
-        reasons.push(
-          `과거 바닥 패턴과 ${Math.round(bottomPattern.score)}% 유사`
         );
       }
     }
@@ -2697,6 +3972,15 @@ function makeDecision(data){
     }
 
     if(
+      trendline.exists &&
+      !trendline.above
+    ){
+      reasons.push(
+        '아직 하락 빗각 아래'
+      );
+    }
+
+    if(
       Math.abs(
         buyScore-
         sellScore
@@ -2704,15 +3988,6 @@ function makeDecision(data){
     ){
       reasons.push(
         '매수·매도 점수 차이가 작음'
-      );
-    }
-
-    if(
-      reversal<35 &&
-      bearishReversal<35
-    ){
-      reasons.push(
-        '뚜렷한 모멘텀 전환이 아직 없음'
       );
     }
   }
@@ -2793,6 +4068,17 @@ function analyze(
       feature
     );
 
+  const trendline=
+    detectTrendline(
+      daily,
+      feature
+    );
+
+  const fib=
+    fibonacciEngine(
+      daily
+    );
+
   const turns=
     discoverDailyTurns(
       daily
@@ -2823,15 +4109,12 @@ function analyze(
     );
 
   let buyScore=
-    dailyBottom*.60+
-    weeklyBull*.20+
-    bottomPattern.score*.10+
-    (
-      (
-        bottomLocation+
-        reversal
-      )/2
-    )*.10;
+    dailyBottom*.52+
+    weeklyBull*.14+
+    bottomPattern.score*.08+
+    reversal*.12+
+    trendline.score*.10+
+    fib.score*.04;
 
   let sellScore=
     dailyTop*.60+
@@ -2847,19 +4130,13 @@ function analyze(
   if(
     dailyBottom>=80
   ){
-    buyScore+=4;
-  }
-
-  if(
-    dailyBottom>=90
-  ){
-    buyScore+=4;
+    buyScore+=3;
   }
 
   if(
     reversal>=60
   ){
-    buyScore+=4;
+    buyScore+=3;
   }
 
   if(
@@ -2869,13 +4146,41 @@ function analyze(
   }
 
   if(
-    dailyTop>=80
+    trendline.breakout
   ){
-    sellScore+=4;
+    buyScore+=7;
   }
 
   if(
-    dailyTop>=90
+    trendline.breakout &&
+    trendline.volumeConfirm
+  ){
+    buyScore+=4;
+  }
+
+  if(
+    trendline.retest &&
+    trendline.above
+  ){
+    buyScore+=4;
+  }
+
+  if(
+    fib.valid &&
+    fib.score>=75
+  ){
+    buyScore+=3;
+  }
+
+  if(
+    downtrend.active &&
+    !trendline.breakout
+  ){
+    buyScore-=10;
+  }
+
+  if(
+    dailyTop>=80
   ){
     sellScore+=4;
   }
@@ -2890,12 +4195,6 @@ function analyze(
     feature.macdCross===-1
   ){
     sellScore+=3;
-  }
-
-  if(
-    downtrend.active
-  ){
-    buyScore-=12;
   }
 
   buyScore=
@@ -2932,6 +4231,9 @@ function analyze(
 
     reversal,
     bearishReversal,
+
+    trendline,
+    fib,
 
     bottomPattern,
     topPattern,
@@ -3029,7 +4331,8 @@ async function refreshAll(
 
   for(
     let i=0;
-    i<symbols.length;
+    i<
+      symbols.length;
     i++
   ){
     const symbol=
@@ -3089,7 +4392,7 @@ async function refreshAll(
   }
 
   setStatus(
-    'CONNECTED · DAILY-FIRST',
+    'CONNECTED · DAILY + TRENDLINE + FIB',
     'live'
   );
 }
@@ -3107,10 +4410,13 @@ function setStatus(
     text;
 
   element.className=
-    'status '+type;
+    'status '+
+    type;
 }
 
-function commandColor(key){
+function commandColor(
+  key
+){
   if(
     key==='BUY' ||
     key==='FIRST'
@@ -3213,13 +4519,107 @@ function renderBoard(){
 
     <div class="boardItem">
       <div class="boardNum">
-        ${counts.SELL+counts.AVOID}
+        ${
+          counts.SELL+
+          counts.AVOID
+        }
       </div>
       <div class="boardLabel">
         주의/매도
       </div>
     </div>
   `;
+}
+
+function filteredSymbols(){
+  const rank={
+    BUY:0,
+    FIRST:1,
+    WATCH:2,
+    WAIT:3,
+    DOWN:4,
+    AVOID:5,
+    SELL:6
+  };
+
+  let list=
+    symbols.filter(
+      symbol=>
+        analyses[symbol]
+    );
+
+  if(
+    currentFilter==='BOTTOM'
+  ){
+    list=
+      list.filter(
+        symbol=>{
+          const key=
+            analyses[
+              symbol
+            ].decision.key;
+
+          return[
+            'BUY',
+            'FIRST',
+            'WATCH'
+          ].includes(key);
+        }
+      );
+  }
+
+  if(
+    currentFilter==='RISK'
+  ){
+    list=
+      list.filter(
+        symbol=>{
+          const key=
+            analyses[
+              symbol
+            ].decision.key;
+
+          return[
+            'DOWN',
+            'AVOID',
+            'SELL'
+          ].includes(key);
+        }
+      );
+  }
+
+  return list.sort(
+    (a,b)=>{
+      const aa=
+        analyses[a];
+
+      const bb=
+        analyses[b];
+
+      const rankDiff=
+        (
+          rank[
+            aa.decision.key
+          ] ?? 99
+        )-
+        (
+          rank[
+            bb.decision.key
+          ] ?? 99
+        );
+
+      if(
+        rankDiff!==0
+      ){
+        return rankDiff;
+      }
+
+      return(
+        bb.decision.score-
+        aa.decision.score
+      );
+    }
+  );
 }
 
 function renderScanner(){
@@ -3237,25 +4637,55 @@ function renderScanner(){
     return;
   }
 
+  const loaded=
+    Object.keys(
+      analyses
+    ).length;
+
+  if(
+    !loaded
+  ){
+    root.innerHTML=
+      symbols.map(
+        symbol=>`
+          <div class="card symbolCard">
+            <div class="symbol">
+              ${symbol}
+            </div>
+            <div class="price">
+              데이터 로딩 중...
+            </div>
+          </div>
+        `
+      ).join('');
+
+    return;
+  }
+
+  const list=
+    filteredSymbols();
+
+  if(
+    !list.length
+  ){
+    root.innerHTML=
+      currentFilter==='BOTTOM'
+        ? '<div class="empty">현재 등록 종목 중 바닥 신호 종목이 없습니다.</div>'
+        : currentFilter==='RISK'
+        ? '<div class="empty">현재 등록 종목 중 위험 신호 종목이 없습니다.</div>'
+        : '<div class="empty">분석 결과가 없습니다.</div>';
+
+    return;
+  }
+
   root.innerHTML=
-    symbols
+    list
       .map(
         symbol=>{
           const analysis=
-            analyses[symbol];
-
-          if(!analysis){
-            return`
-              <div class="card symbolCard">
-                <div class="symbol">
-                  ${symbol}
-                </div>
-                <div class="price">
-                  데이터 로딩 중...
-                </div>
-              </div>
-            `;
-          }
+            analyses[
+              symbol
+            ];
 
           const decision=
             analysis.decision;
@@ -3264,11 +4694,31 @@ function renderScanner(){
             analysis.dailyBottom-
             analysis.previousBottom;
 
+          const trendClass=
+            analysis
+              .trendline
+              .breakout ||
+            analysis
+              .trendline
+              .above
+              ? 'green'
+              : analysis
+                  .trendline
+                  .near
+                ? 'yellow'
+                : '';
+
+          const fibClass=
+            analysis.fib.score>=70
+              ? 'purple'
+              : '';
+
           return`
             <div
               class="card symbolCard"
               onclick="openDetail('${symbol}')"
             >
+
               <div class="symbolTop">
 
                 <div>
@@ -3299,7 +4749,11 @@ function renderScanner(){
               </div>
 
               <div class="reason">
-                ${decision.reasons[0] || ''}
+                ${
+                  decision
+                    .reasons[0] ||
+                  ''
+                }
               </div>
 
               <div class="miniGrid">
@@ -3308,8 +4762,13 @@ function renderScanner(){
                   <div class="miniLabel">
                     DAILY BOTTOM
                   </div>
+
                   <div class="miniValue">
-                    ${Math.round(analysis.dailyBottom)}
+                    ${
+                      Math.round(
+                        analysis.dailyBottom
+                      )
+                    }
                   </div>
                 </div>
 
@@ -3317,8 +4776,13 @@ function renderScanner(){
                   <div class="miniLabel">
                     REVERSAL
                   </div>
+
                   <div class="miniValue">
-                    ${Math.round(analysis.reversal)}
+                    ${
+                      Math.round(
+                        analysis.reversal
+                      )
+                    }
                   </div>
                 </div>
 
@@ -3326,23 +4790,143 @@ function renderScanner(){
                   <div class="miniLabel">
                     DOWNTREND
                   </div>
+
                   <div class="miniValue">
-                    ${Math.round(analysis.downtrend.score)}
+                    ${
+                      Math.round(
+                        analysis.downtrend.score
+                      )
+                    }
                   </div>
                 </div>
 
               </div>
 
+              <div class="engineGrid">
+
+                <div class="engineBox">
+                  <div class="engineLabel">
+                    TRENDLINE
+                  </div>
+
+                  <div class="engineValue">
+                    ${
+                      analysis
+                        .trendline
+                        .label
+                    }
+                    ·
+                    ${
+                      Math.round(
+                        analysis
+                          .trendline
+                          .score
+                      )
+                    }
+                  </div>
+                </div>
+
+                <div class="engineBox">
+                  <div class="engineLabel">
+                    FIBONACCI
+                  </div>
+
+                  <div class="engineValue">
+                    ${
+                      analysis
+                        .fib
+                        .valid
+                        ? `${analysis.fib.label} · ${Math.round(analysis.fib.score)}`
+                        : '파동 미확정'
+                    }
+                  </div>
+                </div>
+
+              </div>
+
+              <div>
+                ${
+                  analysis
+                    .trendline
+                    .breakout
+                    ? `
+                      <span class="signalTag green">
+                        빗각 돌파
+                      </span>
+                    `
+                    : ''
+                }
+
+                ${
+                  analysis
+                    .trendline
+                    .retest &&
+                  analysis
+                    .trendline
+                    .above
+                    ? `
+                      <span class="signalTag green">
+                        리테스트 지지
+                      </span>
+                    `
+                    : ''
+                }
+
+                ${
+                  analysis
+                    .trendline
+                    .near &&
+                  !analysis
+                    .trendline
+                    .above
+                    ? `
+                      <span class="signalTag yellow">
+                        빗각 돌파 임박
+                      </span>
+                    `
+                    : ''
+                }
+
+                ${
+                  analysis
+                    .fib
+                    .score>=70
+                    ? `
+                      <span class="signalTag purple">
+                        ${analysis.fib.label}
+                      </span>
+                    `
+                    : ''
+                }
+
+                ${
+                  analysis
+                    .downtrend
+                    .active
+                    ? `
+                      <span class="signalTag red">
+                        신저가 추세
+                      </span>
+                    `
+                    : ''
+                }
+              </div>
+
               <div class="trendLine">
                 ${
                   delta>0
-                    ? `▲ 전일 대비 Bottom +${Math.round(delta)}`
+                    ? `▲ Bottom +${Math.round(delta)}`
                     : delta<0
-                    ? `▼ 전일 대비 Bottom ${Math.round(delta)}`
-                    : 'Bottom Score 전일과 동일'
+                    ? `▼ Bottom ${Math.round(delta)}`
+                    : 'Bottom 변화 없음'
                 }
+
                 · 주봉 상승
-                ${Math.round(analysis.weeklyBull)}
+                ${
+                  Math.round(
+                    analysis.weeklyBull
+                  )
+                }
               </div>
 
             </div>
@@ -3372,6 +4956,7 @@ function renderSymbols(){
       .map(
         symbol=>`
           <div class="card">
+
             <div class="symbolTop">
 
               <div>
@@ -3396,6 +4981,7 @@ function renderSymbols(){
               </button>
 
             </div>
+
           </div>
         `
       )
@@ -3419,7 +5005,9 @@ function addSymbol(){
       .trim()
       .toUpperCase();
 
-  if(!symbol){
+  if(
+    !symbol
+  ){
     return;
   }
 
@@ -3472,9 +5060,13 @@ function openDetail(
   symbol
 ){
   const analysis=
-    analyses[symbol];
+    analyses[
+      symbol
+    ];
 
-  if(!analysis){
+  if(
+    !analysis
+  ){
     return;
   }
 
@@ -3509,6 +5101,12 @@ function openDetail(
       .topPattern
       .reference;
 
+  const fib=
+    analysis.fib;
+
+  const trend=
+    analysis.trendline;
+
   document.getElementById(
     'detailWrap'
   ).innerHTML=`
@@ -3529,7 +5127,7 @@ function openDetail(
 
         <div class="price">
           $${fmt(analysis.price)}
-          · DAILY-FIRST
+          · DAILY
         </div>
       </div>
 
@@ -3565,11 +5163,15 @@ function openDetail(
 
         <div class="metric">
           <div class="metricName">
-            DAILY BOTTOM
+            BOTTOM
           </div>
 
           <div class="metricValue">
-            ${Math.round(analysis.dailyBottom)}
+            ${
+              Math.round(
+                analysis.dailyBottom
+              )
+            }
           </div>
         </div>
 
@@ -3579,21 +5181,249 @@ function openDetail(
           </div>
 
           <div class="metricValue">
-            ${Math.round(analysis.reversal)}
+            ${
+              Math.round(
+                analysis.reversal
+              )
+            }
           </div>
         </div>
 
         <div class="metric">
           <div class="metricName">
-            DOWNTREND
+            TRENDLINE
           </div>
 
           <div class="metricValue">
-            ${Math.round(analysis.downtrend.score)}
+            ${
+              Math.round(
+                trend.score
+              )
+            }
           </div>
         </div>
 
       </div>
+
+    </div>
+
+    <div class="sectionTitle">
+      차트 빗각
+    </div>
+
+    <div class="card">
+
+      <div class="infoLine">
+        <span class="infoLabel">
+          상태
+        </span>
+
+        <span class="infoValue">
+          ${trend.label}
+        </span>
+      </div>
+
+      <div class="infoLine">
+        <span class="infoLabel">
+          Trendline Score
+        </span>
+
+        <span class="infoValue">
+          ${Math.round(trend.score)}/100
+        </span>
+      </div>
+
+      <div class="infoLine">
+        <span class="infoLabel">
+          현재 추세선 가격
+        </span>
+
+        <span class="infoValue">
+          ${
+            trend.linePrice
+              ? '$'+
+                fmt(
+                  trend.linePrice
+                )
+              : '-'
+          }
+        </span>
+      </div>
+
+      <div class="infoLine">
+        <span class="infoLabel">
+          추세선 대비 현재가
+        </span>
+
+        <span class="infoValue">
+          ${
+            Number.isFinite(
+              trend.distance
+            )
+              ? (
+                  trend.distance>0
+                    ? '+'
+                    : ''
+                )+
+                fmt(
+                  trend.distance,
+                  1
+                )+
+                '%'
+              : '-'
+          }
+        </span>
+      </div>
+
+      <div class="infoLine">
+        <span class="infoLabel">
+          종가 돌파
+        </span>
+
+        <span class="infoValue">
+          ${
+            trend.breakout
+              ? 'YES'
+              : 'NO'
+          }
+        </span>
+      </div>
+
+      <div class="infoLine">
+        <span class="infoLabel">
+          거래량 확인
+        </span>
+
+        <span class="infoValue">
+          ${
+            trend.volumeConfirm
+              ? 'YES'
+              : 'NO'
+          }
+        </span>
+      </div>
+
+      <div class="infoLine">
+        <span class="infoLabel">
+          리테스트 지지
+        </span>
+
+        <span class="infoValue">
+          ${
+            trend.retest &&
+            trend.above
+              ? 'YES'
+              : 'NO'
+          }
+        </span>
+      </div>
+
+    </div>
+
+    <div class="sectionTitle">
+      피보나치
+    </div>
+
+    <div class="card">
+
+      ${
+        fib.valid
+          ? `
+
+            <div class="infoLine">
+              <span class="infoLabel">
+                현재 Fib
+              </span>
+
+              <span class="infoValue">
+                ${fib.label}
+              </span>
+            </div>
+
+            <div class="infoLine">
+              <span class="infoLabel">
+                Fib Score
+              </span>
+
+              <span class="infoValue">
+                ${Math.round(fib.score)}/100
+              </span>
+            </div>
+
+            <div class="infoLine">
+              <span class="infoLabel">
+                Swing Low
+              </span>
+
+              <span class="infoValue">
+                $${fmt(fib.swingLow.price)}
+                ·
+                ${fib.swingLow.date}
+              </span>
+            </div>
+
+            <div class="infoLine">
+              <span class="infoLabel">
+                Swing High
+              </span>
+
+              <span class="infoValue">
+                $${fmt(fib.swingHigh.price)}
+                ·
+                ${fib.swingHigh.date}
+              </span>
+            </div>
+
+            <div class="infoLine">
+              <span class="infoLabel">
+                Fib 0.382
+              </span>
+
+              <span class="infoValue">
+                $${fmt(fib.levels[0.382])}
+              </span>
+            </div>
+
+            <div class="infoLine">
+              <span class="infoLabel">
+                Fib 0.500
+              </span>
+
+              <span class="infoValue">
+                $${fmt(fib.levels[0.5])}
+              </span>
+            </div>
+
+            <div class="infoLine">
+              <span class="infoLabel">
+                Fib 0.618
+              </span>
+
+              <span class="infoValue">
+                $${fmt(fib.levels[0.618])}
+              </span>
+            </div>
+
+            <div class="infoLine">
+              <span class="infoLabel">
+                Fib 0.786
+              </span>
+
+              <span class="infoValue">
+                $${fmt(fib.levels[0.786])}
+              </span>
+            </div>
+
+          `
+          : `
+
+            <div class="empty">
+              아직 유효한 Fib 파동을
+              찾지 못했습니다.
+            </div>
+
+          `
+      }
 
     </div>
 
@@ -3607,21 +5437,29 @@ function openDetail(
 
         <div class="metric">
           <div class="metricName">
-            PREVIOUS DAY
+            PREVIOUS
           </div>
 
           <div class="metricValue">
-            ${Math.round(analysis.previousBottom)}
+            ${
+              Math.round(
+                analysis.previousBottom
+              )
+            }
           </div>
         </div>
 
         <div class="metric">
           <div class="metricName">
-            LATEST DAY
+            LATEST
           </div>
 
           <div class="metricValue">
-            ${Math.round(analysis.dailyBottom)}
+            ${
+              Math.round(
+                analysis.dailyBottom
+              )
+            }
           </div>
         </div>
 
@@ -3631,7 +5469,11 @@ function openDetail(
           </div>
 
           <div class="metricValue">
-            ${delta>0?'+':''}${Math.round(delta)}
+            ${
+              delta>0
+                ? '+'
+                : ''
+            }${Math.round(delta)}
           </div>
         </div>
 
@@ -3671,31 +5513,43 @@ function openDetail(
 
       <div class="infoLine">
         <span class="infoLabel">
-          주봉 상승 추세
+          주봉 상승
         </span>
 
         <span class="infoValue">
-          ${Math.round(analysis.weeklyBull)}/100
+          ${
+            Math.round(
+              analysis.weeklyBull
+            )
+          }/100
         </span>
       </div>
 
       <div class="infoLine">
         <span class="infoLabel">
-          주봉 하락 추세
+          주봉 하락
         </span>
 
         <span class="infoValue">
-          ${Math.round(analysis.weeklyBear)}/100
+          ${
+            Math.round(
+              analysis.weeklyBear
+            )
+          }/100
         </span>
       </div>
 
       <div class="infoLine">
         <span class="infoLabel">
-          일봉 하락 지속
+          하락 지속
         </span>
 
         <span class="infoValue">
-          ${Math.round(analysis.downtrend.score)}/100
+          ${
+            Math.round(
+              analysis.downtrend.score
+            )
+          }/100
         </span>
       </div>
 
@@ -3716,7 +5570,7 @@ function openDetail(
       >
 
         <div class="sectionTitle">
-          CURRENT DAILY SIGNAL
+          CURRENT SIGNAL
         </div>
 
         <div class="infoLine">
@@ -3725,7 +5579,11 @@ function openDetail(
           </span>
 
           <span class="infoValue">
-            ${Math.round(analysis.buyScore)}/100
+            ${
+              Math.round(
+                analysis.buyScore
+              )
+            }/100
           </span>
         </div>
 
@@ -3735,7 +5593,11 @@ function openDetail(
           </span>
 
           <span class="infoValue">
-            ${Math.round(analysis.sellScore)}/100
+            ${
+              Math.round(
+                analysis.sellScore
+              )
+            }/100
           </span>
         </div>
 
@@ -3745,7 +5607,11 @@ function openDetail(
           </span>
 
           <span class="infoValue">
-            ${Math.round(analysis.dailyBottom)}/100
+            ${
+              Math.round(
+                analysis.dailyBottom
+              )
+            }/100
           </span>
         </div>
 
@@ -3755,7 +5621,11 @@ function openDetail(
           </span>
 
           <span class="infoValue">
-            ${Math.round(analysis.dailyTop)}/100
+            ${
+              Math.round(
+                analysis.dailyTop
+              )
+            }/100
           </span>
         </div>
 
@@ -3765,22 +5635,16 @@ function openDetail(
           </span>
 
           <span class="infoValue">
-            ${Math.round(analysis.reversal)}/100
-          </span>
-        </div>
-
-        <div class="infoLine">
-          <span class="infoLabel">
-            Bearish Reversal
-          </span>
-
-          <span class="infoValue">
-            ${Math.round(analysis.bearishReversal)}/100
+            ${
+              Math.round(
+                analysis.reversal
+              )
+            }/100
           </span>
         </div>
 
         <div class="sectionTitle">
-          CURRENT INDICATORS
+          INDICATORS
         </div>
 
         <div class="infoLine">
@@ -3789,7 +5653,12 @@ function openDetail(
           </span>
 
           <span class="infoValue">
-            ${fmt(analysis.feature.rsi,1)}
+            ${
+              fmt(
+                analysis.feature.rsi,
+                1
+              )
+            }
           </span>
         </div>
 
@@ -3799,7 +5668,12 @@ function openDetail(
           </span>
 
           <span class="infoValue">
-            ${fmt(analysis.feature.rsiSlope,2)}
+            ${
+              fmt(
+                analysis.feature.rsiSlope,
+                2
+              )
+            }
           </span>
         </div>
 
@@ -3809,7 +5683,12 @@ function openDetail(
           </span>
 
           <span class="infoValue">
-            ${fmt(analysis.feature.stochastic,1)}
+            ${
+              fmt(
+                analysis.feature.stochastic,
+                1
+              )
+            }
           </span>
         </div>
 
@@ -3819,7 +5698,12 @@ function openDetail(
           </span>
 
           <span class="infoValue">
-            ${fmt(analysis.feature.macdHist,3)}
+            ${
+              fmt(
+                analysis.feature.macdHist,
+                3
+              )
+            }
           </span>
         </div>
 
@@ -3829,17 +5713,12 @@ function openDetail(
           </span>
 
           <span class="infoValue">
-            ${fmt(analysis.feature.macdSlope,3)}
-          </span>
-        </div>
-
-        <div class="infoLine">
-          <span class="infoLabel">
-            Bollinger Position
-          </span>
-
-          <span class="infoValue">
-            ${fmt(analysis.feature.bbPos,2)}
+            ${
+              fmt(
+                analysis.feature.macdSlope,
+                3
+              )
+            }
           </span>
         </div>
 
@@ -3849,7 +5728,12 @@ function openDetail(
           </span>
 
           <span class="infoValue">
-            ${fmt(analysis.feature.relVol,2)}x
+            ${
+              fmt(
+                analysis.feature.relVol,
+                2
+              )
+            }x
           </span>
         </div>
 
@@ -3859,7 +5743,12 @@ function openDetail(
           </span>
 
           <span class="infoValue">
-            ${fmt(analysis.feature.ret5,1)}%
+            ${
+              fmt(
+                analysis.feature.ret5,
+                1
+              )
+            }%
           </span>
         </div>
 
@@ -3869,12 +5758,17 @@ function openDetail(
           </span>
 
           <span class="infoValue">
-            ${fmt(analysis.feature.ret20,1)}%
+            ${
+              fmt(
+                analysis.feature.ret20,
+                1
+              )
+            }%
           </span>
         </div>
 
         <div class="sectionTitle">
-          HISTORICAL DAILY PATTERN
+          HISTORICAL PATTERN
         </div>
 
         <div class="infoLine">
@@ -3883,7 +5777,11 @@ function openDetail(
           </span>
 
           <span class="infoValue">
-            ${Math.round(analysis.bottomPattern.score)}/100
+            ${
+              Math.round(
+                analysis.bottomPattern.score
+              )
+            }/100
           </span>
         </div>
 
@@ -3893,7 +5791,11 @@ function openDetail(
           </span>
 
           <span class="infoValue">
-            ${Math.round(analysis.topPattern.score)}/100
+            ${
+              Math.round(
+                analysis.topPattern.score
+              )
+            }/100
           </span>
         </div>
 
@@ -3901,6 +5803,7 @@ function openDetail(
           bottomRef
             ? `
               <div class="turn">
+
                 <div class="turnTitle">
                   유사 과거 바닥 ·
                   ${bottomRef.date}
@@ -3913,6 +5816,7 @@ function openDetail(
                   · Quality
                   ${Math.round(bottomRef.quality)}
                 </div>
+
               </div>
             `
             : ''
@@ -3922,6 +5826,7 @@ function openDetail(
           topRef
             ? `
               <div class="turn">
+
                 <div class="turnTitle">
                   유사 과거 고점 ·
                   ${topRef.date}
@@ -3934,34 +5839,11 @@ function openDetail(
                   · Quality
                   ${Math.round(topRef.quality)}
                 </div>
+
               </div>
             `
             : ''
         }
-
-        <div class="sectionTitle">
-          DETECTED DAILY TURNS
-        </div>
-
-        <div class="infoLine">
-          <span class="infoLabel">
-            Confirmed Bottoms
-          </span>
-
-          <span class="infoValue">
-            ${analysis.turns.bottoms.length}
-          </span>
-        </div>
-
-        <div class="infoLine">
-          <span class="infoLabel">
-            Confirmed Tops
-          </span>
-
-          <span class="infoValue">
-            ${analysis.turns.tops.length}
-          </span>
-        </div>
 
       </div>
 
@@ -4031,7 +5913,42 @@ document
   .addEventListener(
     'click',
     ()=>{
-      refreshAll(true);
+      refreshAll(
+        true
+      );
+    }
+  );
+
+document
+  .querySelectorAll(
+    '.filterBtn'
+  )
+  .forEach(
+    button=>{
+      button.addEventListener(
+        'click',
+        ()=>{
+          currentFilter=
+            button.dataset.filter;
+
+          document
+            .querySelectorAll(
+              '.filterBtn'
+            )
+            .forEach(
+              item=>
+                item.classList.remove(
+                  'active'
+                )
+            );
+
+          button
+            .classList
+            .add('active');
+
+          renderScanner();
+        }
+      );
     }
   );
 
@@ -4065,24 +5982,33 @@ function setPage(
     );
 
   if(animate){
-    track.classList.add(
-      'snap'
-    );
+    track
+      .classList
+      .add(
+        'snap'
+      );
   }else{
-    track.classList.remove(
-      'snap'
-    );
+    track
+      .classList
+      .remove(
+        'snap'
+      );
   }
 
   track.style.transform=
     `translate3d(${-page*viewport.clientWidth}px,0,0)`;
 
   navButtons.forEach(
-    (button,index)=>{
-      button.classList.toggle(
-        'active',
-        index===page
-      );
+    (
+      button,
+      index
+    )=>{
+      button
+        .classList
+        .toggle(
+          'active',
+          index===page
+        );
     }
   );
 }
@@ -4116,7 +6042,9 @@ viewport.addEventListener(
           'detailOverlay'
         )
         .classList
-        .contains('open')
+        .contains(
+          'open'
+        )
     ){
       return;
     }
@@ -4136,9 +6064,11 @@ viewport.addEventListener(
     startTime=
       performance.now();
 
-    track.classList.remove(
-      'snap'
-    );
+    track
+      .classList
+      .remove(
+        'snap'
+      );
   },
   {
     passive:true
@@ -4154,7 +6084,9 @@ viewport.addEventListener(
           'detailOverlay'
         )
         .classList
-        .contains('open')
+        .contains(
+          'open'
+        )
     ){
       return;
     }
@@ -4173,16 +6105,27 @@ viewport.addEventListener(
     if(
       horizontal===null &&
       (
-        Math.abs(dragX)>7 ||
-        Math.abs(dragY)>7
+        Math.abs(
+          dragX
+        )>7 ||
+        Math.abs(
+          dragY
+        )>7
       )
     ){
       horizontal=
-        Math.abs(dragX)>
-        Math.abs(dragY)*1.15;
+        Math.abs(
+          dragX
+        )>
+        Math.abs(
+          dragY
+        )*
+        1.15;
     }
 
-    if(!horizontal){
+    if(
+      !horizontal
+    ){
       return;
     }
 
@@ -4277,8 +6220,13 @@ window.addEventListener(
 );
 
 renderAll();
-setPage(0,false);
-refreshAll(false);
+setPage(
+  0,
+  false
+);
+refreshAll(
+  false
+);
 </script>
 
 </body>
